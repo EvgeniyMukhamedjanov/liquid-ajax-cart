@@ -63,7 +63,11 @@ Liquid Ajax Cart is a Javascript library for Shopify that lets you build ajax-ca
 {% endform %}
 ```
 
-That's it. Liquid Ajax Cart rerenders sections with a `data-ajax-cart-section` container after user's cart state is changed, intercepts all product forms submitions and sends ajax requests instead.
+That's it. 
+
+Liquid Ajax Cart requests new HTML for all the sections with a `data-ajax-cart-section` container after user's cart state is changed. 
+
+Also Liquid Ajax Cart intercepts all product forms submitions and sends ajax requests instead.
 
 ## Demo
 [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) — the store uses "Minimal" theme and Liquid Ajax Cart on top. The theme is from the Shopify free themes list and it doesn't have any ajax-cart related functionality out of the box.
