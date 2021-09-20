@@ -1,0 +1,100 @@
+<nav role="navigation">
+  <ul id="MobileNav" class="mobile-nav post-large--hide">
+    {% for link in mobile-nav.links %}
+      {% if link.links != blank %}
+        {% assign parent_index = forloop.index %}
+        <li class="mobile-nav__link" aria-haspopup="true">
+          <a
+            href="{{ link.url }}"
+            class="mobile-nav__sublist-trigger"
+            aria-controls="MobileNav-Parent-{{ parent_index }}"
+            aria-expanded="false">
+            {{ link.title | escape }}
+            {% include 'mobile-nav-icons' %}
+          </a>
+          <ul
+            id="MobileNav-Parent-{{ parent_index }}"
+            class="mobile-nav__sublist">
+            {% if link.type == 'collection_link' or link.type == 'blog_link' or link.url == routes.all_products_collection_url %}
+              <li class="mobile-nav__sublist-link {% if link.active %}site-nav--active{% endif %}">
+                <a href="{{ link.url }}" class="site-nav__link"{% if link.active %} aria-current="page"{% endif %}>{{ 'collections.sorting.all_tags' | t }} <span class="visually-hidden">{{ link.title | escape }}</span></a>
+              </li>
+            {% endif %}
+            {% for childlink in link.links %}
+              {% if childlink.links != blank %}
+                {% assign child_index = forloop.index %}
+                <li class="mobile-nav__sublist-link">
+                  <a
+                    href="{{ childlink.url }}"
+                    class="mobile-nav__sublist-trigger"
+                    aria-controls="MobileNav-Child-{{ parent_index }}-{{ child_index }}"
+                    aria-expanded="false"
+                    >
+                    {{ childlink.title | escape }}
+                    {% include 'mobile-nav-icons' %}
+                  </a>
+                  <ul
+                    id="MobileNav-Child-{{ parent_index }}-{{ child_index }}"
+                    class="mobile-nav__sublist mobile-nav__sublist--grandchilds">
+                    {% for grandchildlink in childlink.links %}
+                      <li class="mobile-nav__sublist-link">
+                        <a
+                          href="{{ grandchildlink.url }}"
+                          {% unless request.page_type == 'index' %}{% if grandchildlink.active %}aria-current="page"{% endif %}{% endunless%}>
+                          {{ grandchildlink.title | escape }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              {% else %}
+                <li class="mobile-nav__sublist-link">
+                  <a
+                    href="{{ childlink.url }}"
+                    {% unless request.page_type == 'index' %}{% if childlink.active %}aria-current="page"{% endif %}{% endunless%}>
+                    {{ childlink.title | escape }}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </li>
+      {% else %}
+        <li class="mobile-nav__link">
+          <a
+            href="{{ link.url }}"
+            class="mobile-nav"
+            {% unless request.page_type == 'index' %}{% if link.active %}aria-current="page"{% endif %}{% endunless%}>
+            {{ link.title | escape }}
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+    {% if shop.customer_accounts_enabled %}
+      {% if customer %}
+        <li class="mobile-nav__link">
+          <a href="{{ routes.account_url }}">{{ 'layout.customer.account' | t }}</a>
+        </li>
+        <li class="mobile-nav__link">
+          {{ 'layout.customer.log_out' | t | customer_logout_link }}
+        </li>
+      {% else %}
+        <li class="mobile-nav__link">
+          {{ 'layout.customer.log_in' | t | customer_login_link }}
+        </li>
+        <li class="mobile-nav__link">
+          {{ 'layout.customer.create_account' | t | customer_register_link }}
+        </li>
+      {% endif %}
+    {% endif %}
+
+    <li class="mobile-nav__link">
+      {% if section.settings.header_search_enable %}
+        <div class="header-bar__module header-bar__search">
+          {% include 'search-bar' with 'header' %}
+        </div>
+      {% endif %}
+    </li>
+  </ul>
+</nav>

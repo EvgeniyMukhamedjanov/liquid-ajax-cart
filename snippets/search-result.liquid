@@ -1,0 +1,92 @@
+{% comment %}
+
+  This snippet defines the default structure of each search result.
+
+  'item' refers to the result, but typically mimics the product liquid tag,
+  so you can access product liquid tags with {{ item.XXX }}.
+
+  Remember that results aren't specific to products, so don't depend on
+  a featured image or item.type. Pages, for example, have a blank item.type.
+
+  Product liquid tag info:
+   - http://docs.shopify.com/themes/liquid-variables/product
+
+{% endcomment %}
+
+<div class="grid">
+
+  {%- assign has_image = false -%}
+  {% if item.featured_image or item.image %}
+    {% comment %}
+      We have a featured_image
+    {% endcomment %}
+    {% assign has_image = true %}
+    {% assign image_alt = item.title | escape %}
+    <div class="grid__item one-fifth">
+      <a href="{{ item.url }}" title="{{ image_alt }}">
+        {% capture img_id %}SearchImage-{{ item.id }}{% endcapture %}
+        {% capture wrapper_id %}SearchImageWrapper-{{ item.id }}{% endcapture %}
+        {%- if item.featured_image -%}
+          {%- assign item_image = item.featured_image -%}
+        {%- else -%}
+          {%- assign item_image = item.image.src -%}
+        {%- endif -%}
+        {%- assign img_url = item_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+        {% include 'image-style' with image: item_image, width: 170, height: 240, wrapper_id: wrapper_id, img_id: img_id %}
+        <div id="{{ wrapper_id }}" class="search__image-wrapper supports-js">
+          <div style="padding-top:{{ 1 | divided_by: item_image.aspect_ratio | times: 100}}%;">
+            <img id="{{ img_id }}"
+                 class="search__image lazyload"
+                 data-src="{{ img_url }}"
+                 data-widths="[40, 65, 90, 120, 150, 180, 360, 480, 600]"
+                 data-aspectratio="{{ item.featured_image.aspect_ratio }}"
+                 data-sizes="auto"
+                 alt="{{ image_alt }}">
+          </div>
+        </div>
+
+        <noscript>
+          {{ item | img_url: 'medium' | img_tag: image_alt }}
+        </noscript>
+      </a>
+    </div>
+  {% endif %}
+
+  {% comment %}
+    If we don't have a featured_image, add a push-- class to keep the alignment the same
+  {% endcomment %}
+  <div class="grid__item four-fifths {% unless has_image %}push--one-fifth{% endunless %}">
+    <h2 class="h3">{{ item.title | link_to: item.url }}</h2>
+    {% if item.object_type == 'product' %}
+      {%- assign variant = item.selected_or_first_available_variant -%}
+
+      {% if item.compare_at_price > item.price %}
+        <span class="visually-hidden">{{ 'products.product.sale_price' | t }}</span>
+        <span itemprop="price">
+          {{ item.price | money }}
+        </span>
+        <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+        <s><small>{{ item.compare_at_price_max | money }}</small></s>
+
+        {%- if variant.available and variant.unit_price_measurement -%}
+          {% include 'product-unit-price', variant: variant %}
+        {%- endif -%}
+      {% else %}
+        <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+        <span itemprop="price">
+          {{ item.price | money }}
+        </span>
+
+        {%- if variant.available and variant.unit_price_measurement -%}
+          {% include 'product-unit-price', variant: variant %}
+        {%- endif -%}
+      {% endif %}
+    {% endif %}
+
+    {% comment %}
+      Get a brief excerpt of raw text from the page/product
+    {% endcomment %}
+    <p>{{ item.content | strip_html | truncatewords: 20 }}</p>
+  </div>
+
+</div>

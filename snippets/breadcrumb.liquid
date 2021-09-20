@@ -1,0 +1,84 @@
+{% comment %}
+  Documentation - http://docs.shopify.com/support/your-website/navigation/creating-a-breadcrumb-navigation
+{% endcomment %}
+{% unless request.page_type == 'index' or request.page_type == 'cart' %}
+<nav class="breadcrumb" role="navigation" aria-label="breadcrumbs">
+  <a href="{{ routes.root_url }}" title="{{ 'general.breadcrumbs.home_link_title' | t }}" id="breadcrumb-home">{{ 'general.breadcrumbs.home' | t }}</a>
+
+  {% if request.page_type == 'product' %}
+    <span aria-hidden="true" class="breadcrumb__sep">&rsaquo;</span>
+    <span>{{ product.title }}</span>
+
+  {% elsif request.page_type == 'collection' and collection.handle %}
+
+    <span aria-hidden="true" class="breadcrumb__sep">&rsaquo;</span>
+    {% if current_tags %}
+      {%- if collection.url == blank -%}
+        {% assign url = routes.all_products_collection_url %}
+      {%- else -%}
+        {% assign url = collection.url %}
+      {%- endif -%}
+
+      {{ collection.title | link_to: url }}
+      <span aria-hidden="true" class="breadcrumb__sep">&rsaquo;</span>
+      <span>{{ current_tags | join: " + " }}</span>
+    {% else %}
+      <span>{{ collection.title }}</span>
+    {% endif %}
+
+  {% elsif request.page_type == 'blog' %}
+
+    <span aria-hidden="true" class="breadcrumb__sep">&rsaquo;</span>
+    {% if current_tags %}
+      {{ blog.title | link_to: blog.url }}
+      <span aria-hidden="true" class="breadcrumb__sep">&rsaquo;</span>
+      <span>{{ current_tags | join: " + " }}</span>
+    {% else %}
+    <span>{{ blog.title }}</span>
+    {% endif %}
+
+  {% elsif request.page_type == 'article' %}
+
+    <span aria-hidden="true" class="breadcrumb__sep">&rsaquo;</span>
+    {{ blog.title | link_to: blog.url }}
+    <span aria-hidden="true" class="breadcrumb__sep">&rsaquo;</span>
+    <span>{{ article.title }}</span>
+
+  {% elsif request.page_type == 'page' %}
+
+   <span aria-hidden="true" class="breadcrumb__sep">&rsaquo;</span>
+   <span>{{ page.title }}</span>
+
+  {% else %}
+
+   <span aria-hidden="true" class="breadcrumb__sep">&rsaquo;</span>
+   <span>{{ page_title }}</span>
+
+  {% endif %}
+</nav>
+
+<script>
+  if(sessionStorage.breadcrumb) {
+    theme.breadcrumbs = {};
+    theme.breadcrumbs.collection = JSON.parse(sessionStorage.breadcrumb);
+    var showCollection = false;
+    {%- if request.page_type == "product" -%}
+      var breadcrumbHTML = '<span aria-hidden="true">&nbsp;&rsaquo;&nbsp;</span><a href="' + theme.breadcrumbs.collection.link + '" title="' + theme.breadcrumbs.collection.title + '">'+ theme.breadcrumbs.collection.title +'</a>';
+      var homeBreadcrumb = document.getElementById('breadcrumb-home');
+      var productCollections = {{ product.collections | json }};
+
+      if (productCollections) {
+        productCollections.forEach(function(collection) {
+          if (collection.title === theme.breadcrumbs.collection.title) {
+            showCollection = true;
+          }
+        });
+      }
+
+      if(homeBreadcrumb && showCollection) {
+        homeBreadcrumb.insertAdjacentHTML('afterend', breadcrumbHTML);
+      }
+    {%- endif -%}
+  }
+</script>
+{% endunless %}

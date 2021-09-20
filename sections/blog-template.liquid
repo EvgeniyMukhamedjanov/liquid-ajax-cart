@@ -1,0 +1,155 @@
+{% paginate blog.articles by 5 %}
+
+<div class="grid">
+
+  <div class="grid__item post-large--four-fifths">
+
+    <div class="grid">
+      <div class="grid__item post-large--ten-twelfths">
+
+        {% comment %}{% include 'breadcrumb' %}{% endcomment %}
+        <header class="section-header">
+          <h1 class="section-header__title h3">
+            {% if current_tags %}
+              {{ blog.title | link_to: blog.url }} &mdash; {{ current_tags.first }}
+            {% else %}
+              {{ blog.title }}
+            {% endif %}
+          </h1>
+        </header>
+
+        {% for article in blog.articles %}
+
+          <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
+          <p class="blog-date">
+            <time datetime="{{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' }}">{{ article.published_at | date: format: 'date' }}</time>
+            {% if section.settings.blog_author_enable %}
+              <span class="meta-sep">&#8226;</span>
+              {{ article.author }}
+            {% endif %}
+            {% if article.tags.size > 0 %}
+              <span class="meta-sep">&#8226;</span>
+              {% for tag in article.tags %}
+                <a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>{% unless forloop.last %} <span class="meta-sep">&#8226;</span> {% endunless %}
+              {% endfor %}
+            {% endif %}
+          </p>
+
+          {% comment %}
+            Add a surrounding div with class 'rte' to anything that will come from the rich text editor.
+            Since this is just a listing page, you can either use the excerpt or truncate the full article.
+          {% endcomment %}
+          <div class="rte">
+            {% if article.image %}
+              {% capture img_id %}ArticleImage-{{ section.id }}--{{ article.image.id }}{% endcapture %}
+              {% capture wrapper_id %}ArticleImageWrapper-{{ section.id }}--{{ article.image.id }}{% endcapture %}
+              {%- assign img_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+              {%- assign image_alt = article.title | escape -%}
+              {% include 'image-style' with image: article.image, width: 845, height: 1024, wrapper_id: wrapper_id, img_id: img_id %}
+              <p>
+                <div id="{{ wrapper_id }}" class="article__image-wrapper supports-js">
+                  <div style="padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100}}%;">
+                    <img id="{{ img_id }}"
+                         class="article__image lazyload"
+                         src="{{ article.image | img_url: '300x300' }}"
+                         data-src="{{ img_url }}"
+                         data-widths="[90, 120, 150, 180, 360, 480, 600, 750, 940, 1080, 1296]"
+                         data-aspectratio="{{ article.image.aspect_ratio }}"
+                         data-sizes="auto"
+                         alt="{{ image_alt }}">
+                  </div>
+                </div>
+              </p>
+
+              <noscript>
+                <p>{{ article | img_url: '1024x1024' | img_tag: image_alt, 'article__image' | link_to: article.url }}</p>
+              </noscript>
+            {% endif %}
+            {% if article.excerpt.size > 0 %}
+              {{ article.excerpt }}
+            {% else %}
+              <p>{{ article.content | strip_html | truncatewords: 100 }}</p>
+            {% endif %}
+          </div>
+
+          <p><a href="{{ article.url }}">{{ 'blogs.article.read_more' | t }} &rarr;</a></p>
+
+          {% unless forloop.last %}<hr>{% endunless %}
+
+        {% endfor %}
+
+        {% if paginate.pages > 1 %}
+          <div class="text-center">
+            {% include 'pagination-custom' %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <aside class="sidebar grid__item post-large--one-fifth">
+    {% include 'blog-sidebar' %}
+  </aside>
+
+</div>
+
+{% endpaginate %}
+
+
+
+{% schema %}
+{
+  "name": {
+    "cs": "Blog",
+    "da": "Blog",
+    "de": "Blog",
+    "en": "Blog",
+    "es": "Blog",
+    "fi": "Blogi",
+    "fr": "Blog",
+    "it": "Blog",
+    "ja": "ブログ",
+    "ko": "블로그",
+    "nb": "Blogg",
+    "nl": "Blog",
+    "pl": "Blog",
+    "pt-BR": "Blog",
+    "pt-PT": "Blogue",
+    "sv": "Blogg",
+    "th": "บล็อก",
+    "tr": "Blog",
+    "vi": "Blog",
+    "zh-CN": "博客",
+    "zh-TW": "網誌"
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "blog_author_enable",
+      "label": {
+        "cs": "Zobrazit autora příspěvku na blogu",
+        "da": "Vis forfatter af blogopslag",
+        "de": "Autor eines Blog-Beitrags anzeigen",
+        "en": "Show blog post author",
+        "es": "Mostrar autor del artículo del blog",
+        "fi": "Näytä blogikirjoituksen tekijä",
+        "fr": "Afficher l'auteur de l'article de blog",
+        "it": "Mostra autore articolo del blog",
+        "ja": "ブログ記事の執筆者を表示する",
+        "ko": "블로그 게시물 작성자 표시",
+        "nb": "Vis forfatter av blogginnlegg",
+        "nl": "Toon auteur van blogpost",
+        "pl": "Pokaż autora posta na blogu",
+        "pt-BR": "Exibir autor do post do blog",
+        "pt-PT": "Mostrar autor(a) da publicação no blogue",
+        "sv": "Visa blogginläggets författare",
+        "th": "แสดงผู้เขียนโพสต์บล็อก",
+        "tr": "Blog gönderisinin yazarını göster",
+        "vi": "Hiển thị tác giả bài viết blog",
+        "zh-CN": "显示博客文章作者",
+        "zh-TW": "顯示網誌貼文作者"
+      }
+    }
+  ]
+}
+{% endschema %}

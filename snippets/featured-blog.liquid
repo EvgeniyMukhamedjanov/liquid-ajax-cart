@@ -1,0 +1,22 @@
+<h2 class="h3"><a href="{{ article.url }}">{{ article.title }} &rarr;</a></h2>
+{% if section.settings.blog_show_date or section.settings.blog_show_author %}
+  <div class="featured-blog__meta">
+    {% if section.settings.blog_show_date %}
+      <span class="featured-blog__date">
+        <time datetime="{{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' }}">{{ article.published_at | date: format: 'date' }}</time>
+      </span>
+    {% endif %}
+    {% if section.settings.blog_show_date and section.settings.blog_show_author %}
+      <span class="meta-sep">•</span>
+    {% endif %}
+    {% if section.settings.blog_show_author %}
+      <span class="featured-blog__author">{{ article.author }}</span>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% if section.settings.blog_show_excerpt %}
+  <div class="rte rte--indented-images">
+    {{ article.excerpt_or_content | strip_html | truncatewords: 30 }}
+  </div>
+{% endif %}

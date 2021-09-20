@@ -1,0 +1,27 @@
+<style>
+  {% if image.aspect_ratio < 1 %}
+    {% assign max_width = height | times: image.aspect_ratio %}
+    {% if image.height < height %}
+      {% assign max_height = image.height %}
+      {% assign max_width = image.width %}
+    {% else %}
+      {% assign max_height = height %}
+    {% endif %}
+  {% else %}
+    {% assign max_height = width | divided_by: image.aspect_ratio %}
+    {% if image.width < width %}
+      {% assign max_height = image.height %}
+      {% assign max_width = image.width %}
+    {% else %}
+      {% assign max_width = width %}
+    {% endif %}
+  {% endif %}
+
+  #{{ img_id }} {
+    max-width: {{ max_width }}px;
+    max-height: {{ max_height }}px;
+  }
+  #{{ wrapper_id }} {
+    max-width: {{ max_width }}px;
+  }
+</style>

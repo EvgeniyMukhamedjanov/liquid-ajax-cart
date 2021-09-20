@@ -1,0 +1,422 @@
+<div class="featured-blog featured-blog--{{ section.id }}" data-section-id="{{ section.id }}">
+
+  {%- assign blog = blogs[section.settings.blog] -%}
+
+  {% case section.settings.post_limit %}
+    {% when 4 %}
+      {%- assign width = 'small--one-whole medium--one-half post-large--one-quarter' -%}
+    {% when 3 %}
+      {%- assign width = 'small--one-whole medium--one-third post-large--one-third' -%}
+    {% when 2 %}
+      {%- assign width = 'small--one-whole medium--one-half post-large--one-half' -%}
+    {% when 1 %}
+      {% if section.settings.blog_show_image %}
+        {%- assign width = 'small--one-whole medium--one-half post-large--one-half' -%}
+      {% else %}
+        {%- assign width = 'text-center one-whole' -%}
+      {% endif %}
+    {% else %}
+      {%- assign width = 'small--one-whole medium--one-third post-large--one-third' -%}
+  {% endcase %}
+
+  {% if section.settings.title != blank %}
+    <div class="section-header section-header--small">
+      <h2 class="section-header__title">{{ section.settings.title | escape }}</h2>
+    </div>
+  {% endif %}
+
+  {% unless blog.articles_count == 0 %}
+    <div class="grid-uniform">
+      {% for article in blog.articles limit: section.settings.post_limit %}
+        <div class="grid__item {{ width }}">
+          <div class="featured-blog__post">
+
+            {% if section.settings.blog_show_image %}
+              {% unless article.image == blank %}
+                <a class="article__featured-link" href="{{ article.url }}">
+                  <noscript>
+                    {{ article.image | img_url: '1024x1024' | img_tag: article.title | escape }}
+                  </noscript>
+                  <div class="article__featured-image-wrapper" style="padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100}}%;">
+                    {% assign img_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+                    <img class="article__featured-image lazyload"
+                      src="{{ article.image | img_url: '300x300' }}"
+                      data-src="{{ img_url }}"
+                      data-widths="[310, 360, 480, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                      data-aspectratio="{{ article.image.aspect_ratio }}"
+                      data-sizes="auto"
+                      alt="{{ article.title | escape }}">
+                  </div>
+                </a>
+              {% endunless %}
+            {% endif %}
+
+            {% unless section.settings.post_limit == 1 and section.settings.blog_show_image %}
+              {% include 'featured-blog', article: article %}
+            {% endunless %}
+
+          </div>
+        </div>
+
+        {% if section.settings.post_limit == 1 and section.settings.blog_show_image %}
+          <div class="grid__item {{ width }}">
+            <div class="featured-blog__post">
+               {% include 'featured-blog', article: article %}
+            </div>
+          </div>
+        {% endif %}
+
+      {% endfor %}
+    </div>
+
+  {% else %}
+    {% include 'onboarding-featured-blog' %}
+  {% endunless %}
+
+  {% if blog == empty %}
+    {% include 'onboarding-featured-blog' %}
+  {% endif %}
+
+  {% if section.settings.show_view_all %}
+    <div class="section-header text-center">
+      <a href="{{ blog.url }}" class="btn">
+        {{ 'blogs.article.view_all' | t }}
+      </a>
+    </div>
+  {% endif %}
+
+</div>
+
+
+
+{% schema %}
+{
+  "name": {
+    "cs": "Příspěvky na blogu",
+    "da": "Blogopslag",
+    "de": "Blogposts",
+    "en": "Blog posts",
+    "es": "Artículos del blog",
+    "fi": "Blogijulkaisut",
+    "fr": "Articles de blog",
+    "it": "Articoli del blog",
+    "ja": "ブログ記事",
+    "ko": "블로그 게시물",
+    "nb": "Blogginnlegg",
+    "nl": "Blogberichten",
+    "pl": "Posty na blogu",
+    "pt-BR": "Posts do blog",
+    "pt-PT": "Publicações no blogue",
+    "sv": "Blogginlägg",
+    "th": "โพสต์บล็อก",
+    "tr": "Blog gönderileri",
+    "vi": "Bài viết blog",
+    "zh-CN": "博客文章",
+    "zh-TW": "網誌文章"
+  },
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "cs": "Nadpis",
+        "da": "Overskrift",
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fi": "Otsake",
+        "fr": "Titre",
+        "it": "Heading",
+        "ja": "見出し",
+        "ko": "제목",
+        "nb": "Overskrift",
+        "nl": "Kop",
+        "pl": "Nagłówek",
+        "pt-BR": "Título",
+        "pt-PT": "Título",
+        "sv": "Rubrik",
+        "th": "ส่วนหัว",
+        "tr": "Başlık",
+        "vi": "Tiêu đề",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+      },
+      "default": {
+        "cs": "Blog",
+        "da": "Blog",
+        "de": "Blog",
+        "en": "Blog",
+        "es": "Blog",
+        "fi": "Blogi",
+        "fr": "Blog",
+        "it": "Blog",
+        "ja": "ブログ",
+        "ko": "블로그",
+        "nb": "Blogg",
+        "nl": "Blog",
+        "pl": "Blog",
+        "pt-BR": "Blog",
+        "pt-PT": "Blogue",
+        "sv": "Blogg",
+        "th": "บล็อก",
+        "tr": "Blog",
+        "vi": "Blog",
+        "zh-CN": "博客",
+        "zh-TW": "網誌"
+      }
+    },
+    {
+      "id": "blog",
+      "type": "blog",
+      "label": {
+        "cs": "Blog",
+        "da": "Blog",
+        "de": "Blog",
+        "en": "Blog",
+        "es": "Blog",
+        "fi": "Blogi",
+        "fr": "Blog",
+        "it": "Blog",
+        "ja": "ブログ",
+        "ko": "블로그",
+        "nb": "Blogg",
+        "nl": "Blog",
+        "pl": "Blog",
+        "pt-BR": "Blog",
+        "pt-PT": "Blogue",
+        "sv": "Blogg",
+        "th": "บล็อก",
+        "tr": "Blog",
+        "vi": "Blog",
+        "zh-CN": "博客",
+        "zh-TW": "網誌"
+      }
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "label": {
+        "cs": "Příspěvky",
+        "da": "Opslag",
+        "de": "Posts",
+        "en": "Posts",
+        "es": "Publicaciones",
+        "fi": "Julkaisut",
+        "fr": "Articles",
+        "it": "Articoli",
+        "ja": "投稿",
+        "ko": "게시물",
+        "nb": "Innlegg",
+        "nl": "Berichten",
+        "pl": "Posty",
+        "pt-BR": "Posts",
+        "pt-PT": "Publicações",
+        "sv": "Inlägg",
+        "th": "โพสต์",
+        "tr": "Gönderiler",
+        "vi": "Bài viết",
+        "zh-CN": "文章",
+        "zh-TW": "貼文"
+      },
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_date",
+      "label": {
+        "cs": "Zobrazit datum",
+        "da": "Vis dato",
+        "de": "Datum anzeigen",
+        "en": "Show date",
+        "es": "Mostrar fecha",
+        "fi": "Näytä päivämäärä",
+        "fr": "Afficher la date",
+        "it": "Mostra data",
+        "ja": "日付を表示する",
+        "ko": "날짜 표시",
+        "nb": "Vis dato",
+        "nl": "Datum weergeven",
+        "pl": "Pokaż datę",
+        "pt-BR": "Exibir data",
+        "pt-PT": "Mostrar data",
+        "sv": "Visa datum",
+        "th": "แสดงวันที่",
+        "tr": "Tarihi göster",
+        "vi": "Hiển thị ngày",
+        "zh-CN": "显示日期",
+        "zh-TW": "顯示日期"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_author",
+      "label": {
+        "cs": "Zobrazit autora",
+        "da": "Vis forfatter",
+        "de": "Verfasser anzeigen",
+        "en": "Show author",
+        "es": "Mostrar autor",
+        "fi": "Näytä tekijä",
+        "fr": "Afficher l'auteur",
+        "it": "Mostra autore",
+        "ja": "執筆者を表示する",
+        "ko": "작성자 표시",
+        "nb": "Vis forfatter",
+        "nl": "Auteur weergeven",
+        "pl": "Pokaż autora",
+        "pt-BR": "Exibir autor",
+        "pt-PT": "Mostrar autor",
+        "sv": "Visa författare",
+        "th": "แสดงผู้เขียน",
+        "tr": "Yazarı göster",
+        "vi": "Hiển thị tác giả",
+        "zh-CN": "显示作者",
+        "zh-TW": "顯示作者"
+      },
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_image",
+      "label": {
+        "cs": "Zobrazit titulní obrázek",
+        "da": "Vis coverbillede",
+        "de": "Titelbild anzeigen",
+        "en": "Show cover image",
+        "es": "Mostrar imagen de portada",
+        "fi": "Näytä kansikuva",
+        "fr": "Afficher l'image de couverture",
+        "it": "Mostra immagine di copertina",
+        "ja": "表紙画像を表示する",
+        "ko": "커버 이미지 표시",
+        "nb": "Vis forsidebilde",
+        "nl": "Coverafbeelding weergeven",
+        "pl": "Pokaż obraz w tle",
+        "pt-BR": "Exibir imagem da capa",
+        "pt-PT": "Mostrar imagem da capa",
+        "sv": "Visa omslagsbild",
+        "th": "แสดงรูปภาพหน้าปก",
+        "tr": "Kapak görselini göster",
+        "vi": "Hiển thị ảnh bìa",
+        "zh-CN": "显示封面图片",
+        "zh-TW": "顯示封面圖片"
+      },
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_excerpt",
+      "label": {
+        "cs": "Zobrazit úryvek",
+        "da": "Vis uddrag",
+        "de": "Auszug anzeigen",
+        "en": "Show excerpt",
+        "es": "Mostrar extracto",
+        "fi": "Näytä ote",
+        "fr": "Afficher l'extrait",
+        "it": "Mostra riassunto",
+        "ja": "抜粋を表示する",
+        "ko": "요약 표시",
+        "nb": "Vis utdrag",
+        "nl": "Uittreksel weergeven",
+        "pl": "Pokaż fragment",
+        "pt-BR": "Exibir resumo",
+        "pt-PT": "Mostrar resumo",
+        "sv": "Visa utdrag",
+        "th": "แสดงเนื้อหาบางส่วน",
+        "tr": "Alıntıyı göster",
+        "vi": "Hiển thị đoạn trích",
+        "zh-CN": "显示摘录",
+        "zh-TW": "顯示摘要"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": {
+        "cs": "Zobrazit tlačítko Zobrazit vše",
+        "da": "Vis knappen \"Se flere\"",
+        "de": "Schaltfläche \"Alle anzeigen\" anzeigen",
+        "en": "Show 'View all' button",
+        "es": "Mostrar el botón 'Ver todo'",
+        "fi": "Näytä \"Näytä kaikki\" -painike",
+        "fr": "Afficher le bouton « Tout afficher »",
+        "it": "Mostra il pulsante \"Visualizza tutto\"",
+        "ja": "「すべて表示」ボタンを表示する",
+        "ko": "'모두 보기' 버튼 표시",
+        "nb": "Vis «Se alle»-knapp",
+        "nl": "Knop 'Alles weergeven' weergeven",
+        "pl": "Pokaż przycisk „Wyświetl wszystkie”",
+        "pt-BR": "Exibir botão \"Ver tudo\"",
+        "pt-PT": "Mostrar botão 'Ver tudo'",
+        "sv": "Visa \"Visa alla\"-knappen",
+        "th": "แสดงปุ่ม 'ดูทั้งหมด'",
+        "tr": "\"Tümünü görüntüle\" düğmesini göster",
+        "vi": "Hiển thị nút \"Xem tất cả\"",
+        "zh-CN": "显示“查看全部”按钮",
+        "zh-TW": "顯示「檢視全部」按鈕"
+      },
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "cs": "Příspěvky na blogu",
+        "da": "Blogopslag",
+        "de": "Blogposts",
+        "en": "Blog posts",
+        "es": "Entradas del blog",
+        "fi": "Blogijulkaisut",
+        "fr": "Articles de blog",
+        "it": "Articoli del blog",
+        "ja": "ブログ記事",
+        "ko": "블로그 게시물",
+        "nb": "Blogginnlegg",
+        "nl": "Blogberichten",
+        "pl": "Posty na blogu",
+        "pt-BR": "Posts do blog",
+        "pt-PT": "Publicações no blogue",
+        "sv": "Blogginlägg",
+        "th": "โพสต์บล็อก",
+        "tr": "Blog gönderileri",
+        "vi": "Bài viết blog",
+        "zh-CN": "博客文章",
+        "zh-TW": "網誌文章"
+      },
+      "category": {
+        "cs": "Blog",
+        "da": "Blog",
+        "de": "Blog",
+        "en": "Blog",
+        "es": "Blog",
+        "fi": "Blogi",
+        "fr": "Blog",
+        "it": "Blog",
+        "ja": "ブログ",
+        "ko": "블로그",
+        "nb": "Blogg",
+        "nl": "Blog",
+        "pl": "Blog",
+        "pt-BR": "Blog",
+        "pt-PT": "Blogue",
+        "sv": "Blogg",
+        "th": "บล็อก",
+        "tr": "Blog",
+        "vi": "Blog",
+        "zh-CN": "博客",
+        "zh-TW": "網誌"
+      },
+      "settings": {
+        "blog": "News"
+      }
+    }
+  ]
+}
+{% endschema %}

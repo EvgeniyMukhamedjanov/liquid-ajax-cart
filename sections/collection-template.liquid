@@ -1,0 +1,275 @@
+{% paginate collection.products by 20 %}
+
+<div id="CollectionSection" data-section-id="{{ section.id }}" data-section-type="collection-template" data-sort-enabled="{{ section.settings.sort_enable }}" data-tags-enabled="{{ section.settings.tags_enable }}">
+  <div class="section-header section-header--breadcrumb">
+    {% include 'breadcrumb' %}
+  </div>
+
+  <header class="section-header section-header--large">
+    <h1 class="section-header__title{% if section.settings.tags_enable or section.settings.sort_enable %} section-header__title--left{% endif %}">{{ collection.title }}</h1>
+    {% if section.settings.tags_enable or section.settings.sort_enable %}
+    <div class="section-header__link--right">
+      {% if section.settings.tags_enable %}
+        {% include 'collection-tags' %}
+      {% endif %}
+      {% if section.settings.sort_enable %}
+        {% include 'collection-sorting' %}
+      {% endif %}
+    </div>
+    {% endif %}
+  </header>
+
+  {% if collection.description != blank %}
+    <div class="rte rte--header">
+      {{ collection.description }}
+    </div>
+    <hr class="hr--clear hr--small">
+  {% endif %}
+
+  <div class="grid-uniform grid-link__container">
+    {% assign grid_item_width = 'wide--one-fifth large--one-quarter medium-down--one-half' %}
+    {%- assign product_width = 335 -%}
+
+    {% for product in collection.products %}
+      {% assign featured = product %}
+      <div class="grid__item {{grid_item_width}}">
+        {% include 'product-grid-item' %}
+      </div>
+    {% else %}
+
+      {% if shop.products_count == 0 %}
+        <div class="grid__item">
+          <div class="helper-section">
+            <div class="grid-uniform helper-content{% if section.settings.center_grid_link %} text-center{% endif %}">
+              {% for i in (1..8) %}
+                <div class="grid__item one-half post-large--one-quarter">
+                  <a href="/admin/products" class="grid-link">
+                    <span class="grid-link__image grid-link__image--product">
+                      <span class="grid-link__image-centered">
+                        {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                        {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                      </span>
+                    </span>
+                    <p class="grid-link__title">{{ 'home_page.onboarding.product_title' | t }}</p>
+                    <p class="grid-link__meta">
+                      <strong>$19.99</strong>
+                    </p>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="grid__item">
+          <p><em>{{ 'collections.general.no_matches' | t }}</em></p>
+        </div>
+      {% endif %}
+
+    {% endfor %}
+
+  </div>
+
+  {% if paginate.pages > 1 %}
+    <hr class="hr--clear">
+
+    <div class="text-center">
+      {% include 'pagination-custom' %}
+    </div>
+  {% endif %}
+</div>
+{% endpaginate %}
+
+
+
+{% schema %}
+{
+  "name": {
+    "cs": "Stránky s kolekcemi",
+    "da": "Kollektionssider",
+    "de": "Kategorieseiten",
+    "en": "Collection pages",
+    "es": "Páginas de colección",
+    "fi": "Kokoelman sivut",
+    "fr": "Pages de collections",
+    "it": "Pagine di collezioni",
+    "ja": "コレクションページ",
+    "ko": "컬렉션 페이지",
+    "nb": "Samlingssider",
+    "nl": "Collectiepagina's",
+    "pl": "Strony kolekcji",
+    "pt-BR": "Páginas de coleções",
+    "pt-PT": "Páginas de coleções",
+    "sv": "Produktseriesidor",
+    "th": "หน้าคอลเลกชัน",
+    "tr": "Koleksiyon sayfaları",
+    "vi": "Trang bộ sưu tập",
+    "zh-CN": "产品系列页面",
+    "zh-TW": "商品系列頁面"
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "vendor_enable",
+      "label": {
+        "cs": "Zobrazit dodavatele produktu",
+        "da": "Vis produktleverandør",
+        "de": "Produktanbieter anzeigen",
+        "en": "Show product vendor",
+        "es": "Mostrar proveedor del producto",
+        "fi": "Näytä tuotteen myyjä",
+        "fr": "Afficher le distributeur du produit",
+        "it": "Mostra fornitore prodotto",
+        "ja": "商品の販売元を表示する",
+        "ko": "제품 공급 업체 표시",
+        "nb": "Vis produktleverandør",
+        "nl": "Productleverancier weergeven",
+        "pl": "Pokaż dostawcę produktu",
+        "pt-BR": "Exibir o fabricante do produto",
+        "pt-PT": "Mostrar o fornecedor do produto",
+        "sv": "Visa produktsäljare",
+        "th": "แสดงผู้ขายสินค้า",
+        "tr": "Ürün satıcısını göster",
+        "vi": "Hiển thị nhà cung cấp sản phẩm",
+        "zh-CN": "显示产品厂商",
+        "zh-TW": "顯示產品廠商"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sale_circle",
+      "label": {
+        "cs": "Zobrazit kroužek slevy na produkt",
+        "da": "Vis udsalgscirkel for produkt",
+        "de": "Kreis bei Produkten im Angebot anzeigen",
+        "en": "Show product sale circle",
+        "es": "Mostrar el círculo de oferta del producto",
+        "fi": "Näytä tuotteen alennusmyyntiympyrä",
+        "fr": "Afficher la vignette produit en réduction",
+        "it": "Mostra cerchio \"In Offerta\" sul prodotto",
+        "ja": "商品のセールを丸で囲んで表示する",
+        "ko": "제품 판매 서클 표시",
+        "nb": "Vis sirkel for produktsalg",
+        "nl": "Toon de cirkel voor de verkoop van producten",
+        "pl": "Pokaż kółko wyprzedaży produktu",
+        "pt-BR": "Exibir círculo de produto em oferta",
+        "pt-PT": "Mostrar círculo de oferta de produtos",
+        "sv": "Visa produktförsäljningscirkel",
+        "th": "แสดงวงกลมที่ระบุว่าสินค้าลดราคา",
+        "tr": "Ürün indirim dairesini göster",
+        "vi": "Hiển thị biểu tượng giảm giá sản phẩm",
+        "zh-CN": "显示产品销售圆圈",
+        "zh-TW": "顯示產品特價圓圈"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sold_out_circle",
+      "label": {
+        "cs": "Zobrazit kroužek vyprodání produktu",
+        "da": "Vis udsolgt-cirkel for produkt",
+        "de": "Kreis bei ausverkauften Produkte anzeigen",
+        "en": "Show product sold out circle",
+        "es": "Mostrar el círculo de agotado del producto",
+        "fi": "Näytä tuotteen loppuunmyyty-ympyrä",
+        "fr": "Afficher la vignette produit épuisé",
+        "it": "Mostra cerchio \"Esaurito\" sul prodotto",
+        "ja": "丸で囲んだ売り切れを表示する",
+        "ko": "매진 제품 서클 표시",
+        "nb": "Vis sirkel for utsolgte produkter",
+        "nl": "Toon de cirkel van de uitverkochte producten",
+        "pl": "Pokaż kółko wyprzedanego produktu",
+        "pt-BR": "Exibir círculo de produto esgotado",
+        "pt-PT": "Mostrar círculo de produto esgotado",
+        "sv": "Visa cirkel för utsåld produkt",
+        "th": "แสดงวงกลมที่ระบุว่าสินค้าหมด",
+        "tr": "Ürün tükendi dairesini göster",
+        "vi": "Hiển thị biểu tượng hết hàng",
+        "zh-CN": "显示产品售罄圆圈",
+        "zh-TW": "顯示產品售罄圓圈"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "sort_enable",
+      "label": {
+        "cs": "Povolit řazení kolekcí",
+        "da": "Aktivér sortering af kollektioner",
+        "de": "Kategoriesortierung aktivieren",
+        "en": "Enable collection sorting",
+        "es": "Habilitar la función ordenar colecciones",
+        "fi": "Ota kokoelman lajittelu käyttöön",
+        "fr": "Activer le tri de la collection",
+        "it": "Abilita ordinamento collezione",
+        "ja": "コレクションの並べ替えを有効にする",
+        "ko": "컬렉션 정렬 사용",
+        "nb": "Aktiver sortering av samlinger",
+        "nl": "Sorteren op collectie inschakelen",
+        "pl": "Włącz sortowanie kolekcji",
+        "pt-BR": "Habilitar a organização de coleções",
+        "pt-PT": "Ativar a ordenação de coleções",
+        "sv": "Aktivera produktseriesortering",
+        "th": "เปิดใช้การเรียงลำดับคอลเลกชัน",
+        "tr": "Koleksiyon sıralamayı etkinleştir",
+        "vi": "Bật sắp xếp bộ sưu tập",
+        "zh-CN": "启用产品系列排序",
+        "zh-TW": "啟用商品系列排序功能"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "tags_enable",
+      "label": {
+        "cs": "Povolit filtrování podle produktového štítku",
+        "da": "Aktivér filtrering efter produkttag",
+        "de": "Filterung nach Produkt-Tag aktivieren",
+        "en": "Enable filtering by product tag",
+        "es": "Habilitar filtro por etiqueta de producto",
+        "fi": "Ota suodatus tuotetunnisteen perusteella käyttöön",
+        "fr": "Activer le filtrage par balise de produit",
+        "it": "Abilita filtri per tag di prodotto",
+        "ja": "商品タグによる絞り込みを有効にする",
+        "ko": "제품 태그별로 필터링 사용",
+        "nb": "Aktiver filtrering etter produkttagg",
+        "nl": "Schakel filteren in per producttag",
+        "pl": "Włącz filtrowanie według tagu produktu",
+        "pt-BR": "Habilitar filtragem por tag de produto",
+        "pt-PT": "Ativar filtragem por etiqueta de produto",
+        "sv": "Aktivera filtrering efter produkttagg",
+        "th": "เปิดใช้การกรองตามแท็กสินค้า",
+        "tr": "Ürün etiketine göre filtrelemeyi etkinleştir",
+        "vi": "Bật lọc theo thẻ sản phẩm",
+        "zh-CN": "启用按产品标记筛选",
+        "zh-TW": "啟用產品標籤篩選功能"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "center_grid_link",
+      "label": {
+        "cs": "Zarovnat text pod obrázky produktu na střed",
+        "da": "Centrer tekst under produktbilleder",
+        "de": "Text unter Produktbildern zentrieren",
+        "en": "Center text below product images",
+        "es": "Centrar el texto debajo de las imágenes del producto",
+        "fi": "Keskitä teksti tuotekuvien alla",
+        "fr": "Centrer le texte sous les images des produits",
+        "it": "Centra il testo sotto le immagini del prodotto",
+        "ja": "商品画像下のテキストを中央に寄せる",
+        "ko": "제품 이미지 아래 가운데 텍스트",
+        "nb": "Sentrer tekst under produktbilder",
+        "nl": "Centreer de tekst onder de productafbeeldingen",
+        "pl": "Wyśrodkuj tekst pod obrazami produktów",
+        "pt-BR": "Centralizar texto abaixo das imagens do produto",
+        "pt-PT": "Centrar texto abaixo das imagens de produto",
+        "sv": "Centrera text under produktbilder",
+        "th": "จัดข้อความใต้ภาพสินค้าให้อยู่ตรงกลาง",
+        "tr": "Metni ürün görsellerinin alt kısmına ortala",
+        "vi": "Căn giữa văn bản bên dưới hình ảnh sản phẩm",
+        "zh-CN": "使产品图片下方的文本居中显示",
+        "zh-TW": "將文字置中並置於產品圖片下方"
+      }
+    }
+  ]
+}
+{% endschema %}

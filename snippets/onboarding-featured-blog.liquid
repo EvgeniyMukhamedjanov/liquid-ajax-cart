@@ -1,0 +1,36 @@
+<div class="grid-uniform placeholder">
+  {% for i in (1..section.settings.post_limit)  %}
+    <div class="grid__item {{ width }}{% if forloop.index > 3 %} hide-post__mobile{% endif %}">
+      <div class="featured-blog__post">
+        {% if section.settings.blog_show_image %}
+          <div class="article__featured-link">
+            {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+            {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {% endif %}
+        {% unless section.settings.post_limit == 1 and section.settings.blog_show_image %}
+          <h2 class="h3{% if section.settings.post_limit == 1 and section.settings.blog_show_image == false %} title--one-post{% endif %}"><a href="#">{{ 'home_page.onboarding.blog_title' | t }} &rarr;</a></h2>
+          {% if section.settings.blog_show_excerpt %}
+            <div class="rte rte--indented-images">
+              {{ 'home_page.onboarding.blog_excerpt' | t }}
+            </div>
+          {% endif %}
+        {% endunless %}
+      </div>
+    </div>
+
+    {% if section.settings.post_limit == 1 and section.settings.blog_show_image %}
+      <div class="grid__item {{ width }}">
+        <div class="featured-blog__post">
+          <h2 class="h3"><a href="#">{{ 'home_page.onboarding.blog_title' | t }} &rarr;</a></h2>
+          {% if section.settings.blog_show_excerpt %}
+            <div class="rte rte--indented-images">
+              {{ 'home_page.onboarding.blog_excerpt' | t }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+  {% endfor %}
+</div>

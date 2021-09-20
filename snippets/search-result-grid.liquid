@@ -1,0 +1,72 @@
+{% comment %}
+
+  This snippet gives you a grid layout for each search result.
+
+  It is encouraged to only use this approach for product results,
+  as page results don't look great in a grid without a featured image.
+
+  To use this grid layout, change the grid_results variable
+  in search.liquid to true.
+
+{% endcomment %}
+
+{% comment %}
+  Set the default grid_item_width if no variable is set
+{% endcomment %}
+{% unless grid_item_width %}
+  {% assign grid_item_width = 'wide--one-quarter large--one-third medium--one-half' %}
+{% endunless %}
+
+<div class="grid__item search-result {{ grid_item_width }}{% if settings.collections_center_grid_link %} text-center{% endif %}">
+
+  {% if item.featured_image or item.image %}
+    {% assign image_alt = item.title | escape %}
+    <a href="{{ item.url }}" title="{{ image_alt  }}">
+      {% capture img_id %}SearchImage-{{ item.id }}{% endcapture %}
+      {% capture wrapper_id %}SearchImageWrapper-{{ item.id }}{% endcapture %}
+      {%- if item.featured_image -%}
+        {%- assign item_image = item.featured_image -%}
+      {%- else -%}
+        {%- assign item_image = item.image.src -%}
+      {%- endif -%}
+      {%- assign img_url = item_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+      {% include 'image-style' with image: item_image, width: 210, height: 240, wrapper_id: wrapper_id, img_id: img_id %}
+      <div id="{{ wrapper_id }}" class="search__image-wrapper supports-js">
+        <div style="padding-top:{{ 1 | divided_by: item_image.aspect_ratio | times: 100}}%;">
+          <img id="{{ img_id }}"
+               class="search__image lazyload"
+               data-src="{{ img_url }}"
+               data-widths="[40, 65, 90, 120, 150, 180, 360, 480, 600]"
+               data-aspectratio="{{ item.featured_image.aspect_ratio }}"
+               data-sizes="auto"
+               alt="{{ image_alt }}">
+        </div>
+      </div>
+
+      <noscript>
+        {{ item | img_url: 'medium' | img_tag: image_alt }}
+      </noscript>
+    </a>
+  {% endif %}
+
+    <h5>{{ item.title | link_to: item.url }}</h5>
+
+    {% if item.object_type == 'product' %}
+    <h6>
+      {% if item.compare_at_price > item.price %}
+        <span class="on-sale" itemprop="price">
+          {{ item.price | money }}
+        </span>
+        <small>
+          {{ 'products.product.compare_at' | t }}
+          {{ item.compare_at_price_max | money }}
+        </small>
+      {% else %}
+        <span itemprop="price">
+          {{ item.price | money }}
+        </span>
+      {% endif %}
+    </h6>
+    {% endif %}
+
+</div>

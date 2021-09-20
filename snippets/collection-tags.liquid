@@ -1,0 +1,38 @@
+{%- if collection.all_tags.size > 0 -%}
+  <div class="form-horizontal">
+    <label for="BrowseBy">{{ 'collections.sorting.browse' | t }}</label>
+    {% comment %}Good for /collections/all collection and regular collections{% endcomment %}
+    {%- if collection.handle -%}
+      {%- capture collection_url -%}
+        {%- if collection.url == blank -%}
+          {{ routes.all_products_collection_url }}{%- unless collection.sort_by == blank -%}?sort_by={{ collection.sort_by }}{%- endunless -%}
+        {%- else -%}
+          {{ collection.url }}{%- unless collection.sort_by == blank -%}?sort_by={{ collection.sort_by }}{%- endunless -%}
+        {%- endif -%}
+      {%- endcapture -%}
+    {% comment %}Good for automatic type collections{% endcomment %}
+    {%- elsif collection.current_type -%}
+      {% assign collection_url = collection.current_type | url_for_type | sort_by: collection.sort_by  %}
+    {% comment %}Good for automatic vendor collections{% endcomment %}
+    {%- elsif collection.current_vendor -%}
+      {% assign collection_url = collection.current_vendor | url_for_vendor | sort_by: collection.sort_by %}
+    {%- endif -%}
+    <select name="BrowseBy" id="BrowseBy" class="btn--tertiary">
+      <option value="{{ collection_url }}">{{ 'collections.sorting.all_tags' | t }}</option>
+      {%- for tag in collection.all_tags -%}
+        {% capture new_url %}{{ tag | link_to_tag: tag | split: 'href="' | last | split: '"' | first }}{% endcapture %}
+        <option{% if current_tags contains tag %} selected{% endif %} value="{{ new_url }}">{{ tag }}</option>
+      {%- endfor -%}
+    </select>
+  </div>
+{%- endif -%}
+
+<script>
+  $(function() {
+    $('#BrowseBy')
+      .bind('change', function() {
+        location.href = jQuery(this).val();
+      }
+    );
+  });
+</script>

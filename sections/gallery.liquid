@@ -1,0 +1,225 @@
+{% assign index = section.blocks.size %}
+
+{% case index %}
+  {% when 1 %}
+    {% assign featured_image_width = 'one-whole' %}
+  {% when 2 %}
+    {% assign featured_image_width = 'one-half' %}
+  {% when 3 %}
+    {% assign featured_image_width = 'small--one-whole one-third' %}
+  {% when 4 %}
+    {% assign featured_image_width = 'small--one-whole medium--one-half one-quarter' %}
+{% endcase %}
+
+{% unless index == 0 %}
+<div class="grid-uniform featured-images">
+
+  {% for block in section.blocks limit: section.blocks.size %}
+
+    {% if block.settings.image != blank %}
+      <div class="grid__item {{ featured_image_width }}" {{ block.shopify_attributes }}>
+        {% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}
+          <noscript>
+            {{ block.settings.image | img_url: '1024x' | img_tag: block.settings.image.alt }}
+          </noscript>
+          <div class="gallery__image-container">
+            <div class="gallery__image-wrapper" style="padding-top:{{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100}}%;">
+              {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+              <img class="gallery__image lazyload"
+                src="{{ block.settings.image | img_url: '300x300' }}"
+                data-src="{{ img_url }}"
+                data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+                data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+                data-sizes="auto"
+                alt="{{ block.settings.image.alt | escape }}">
+            </div>
+          </div>
+        {% if block.settings.link != blank %}</a>{% endif %}
+      </div>
+    {% else %}
+      <div class="grid__item {{ featured_image_width }}" {{ block.shopify_attributes }}>
+        {{ 'image' | placeholder_svg_tag: 'icon icon--placeholder' }}
+      </div>
+    {% endif %}
+
+  {% endfor %}
+</div>
+
+{% endunless %}
+
+
+
+{% schema %}
+{
+  "name": {
+    "cs": "Galerie",
+    "da": "Galleri",
+    "de": "Galerie",
+    "en": "Gallery",
+    "es": "Galería",
+    "fi": "Galleria",
+    "fr": "Galerie",
+    "it": "Galleria",
+    "ja": "ギャラリー",
+    "ko": "갤러리",
+    "nb": "Galleri",
+    "nl": "Galerie",
+    "pl": "Galeria",
+    "pt-BR": "Galeria",
+    "pt-PT": "Galeria",
+    "sv": "Galleri",
+    "th": "แกลเลอรี",
+    "tr": "Galeri",
+    "vi": "Bộ sưu tập ảnh",
+    "zh-CN": "图库",
+    "zh-TW": "圖庫"
+  },
+  "class": "index-section",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "image",
+      "name": {
+        "cs": "Obrázek",
+        "da": "Billede",
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fi": "Kuva",
+        "fr": "Image",
+        "it": "Immagine",
+        "ja": "画像",
+        "ko": "이미지",
+        "nb": "Bilde",
+        "nl": "Afbeelding",
+        "pl": "Obraz",
+        "pt-BR": "Imagem",
+        "pt-PT": "Imagem",
+        "sv": "Bild",
+        "th": "รูปภาพ",
+        "tr": "Görsel",
+        "vi": "Hình ảnh",
+        "zh-CN": "图片",
+        "zh-TW": "圖片"
+      },
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "cs": "Obrázek",
+            "da": "Billede",
+            "de": "Foto",
+            "en": "Image",
+            "es": "Imagen",
+            "fi": "Kuva",
+            "fr": "Image",
+            "it": "Immagine",
+            "ja": "画像",
+            "ko": "이미지",
+            "nb": "Bilde",
+            "nl": "Afbeelding",
+            "pl": "Obraz",
+            "pt-BR": "Imagem",
+            "pt-PT": "Imagem",
+            "sv": "Bild",
+            "th": "รูปภาพ",
+            "tr": "Görsel",
+            "vi": "Hình ảnh",
+            "zh-CN": "图片",
+            "zh-TW": "圖片"
+          }
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": {
+            "cs": "Odkaz na obrázek",
+            "da": "Billedlink",
+            "de": "Bild-Link",
+            "en": "Image link",
+            "es": "Enlace de imagen",
+            "fi": "Kuvan linkki",
+            "fr": "Lien vers l'image",
+            "it": "Link immagine",
+            "ja": "画像リンク",
+            "ko": "이미지 링크",
+            "nb": "Bildekobling",
+            "nl": "Afbeeldingslink",
+            "pl": "Link obrazu",
+            "pt-BR": "Link da imagem",
+            "pt-PT": "Ligação de imagens",
+            "sv": "Bildlänk",
+            "th": "ลิงก์รูปภาพ",
+            "tr": "Görsel bağlantısı",
+            "vi": "Liên kết hình ảnh",
+            "zh-CN": "图片链接",
+            "zh-TW": "圖片連結"
+          }
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "cs": "Galerie",
+        "da": "Galleri",
+        "de": "Galerie",
+        "en": "Gallery",
+        "es": "Galería",
+        "fi": "Galleria",
+        "fr": "Galerie",
+        "it": "Galleria",
+        "ja": "ギャラリー",
+        "ko": "갤러리",
+        "nb": "Galleri",
+        "nl": "Galerie",
+        "pl": "Galeria",
+        "pt-BR": "Galeria",
+        "pt-PT": "Galeria",
+        "sv": "Galleri",
+        "th": "แกลเลอรี",
+        "tr": "Galeri",
+        "vi": "Bộ sưu tập ảnh",
+        "zh-CN": "图库",
+        "zh-TW": "圖庫"
+      },
+      "category": {
+        "cs": "Obrázek",
+        "da": "Billede",
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fi": "Kuva",
+        "fr": "Image",
+        "it": "Immagine",
+        "ja": "画像",
+        "ko": "이미지",
+        "nb": "Bilde",
+        "nl": "Afbeelding",
+        "pl": "Obraz",
+        "pt-BR": "Imagem",
+        "pt-PT": "Imagem",
+        "sv": "Bild",
+        "th": "รูปภาพ",
+        "tr": "Görsel",
+        "vi": "Hình ảnh",
+        "zh-CN": "图片",
+        "zh-TW": "圖片"
+      },
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

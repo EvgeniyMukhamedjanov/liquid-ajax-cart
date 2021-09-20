@@ -1,0 +1,8 @@
+<div class="form-horizontal">
+  <label for="SortBy">{{ 'collections.sorting.title' | t }}</label>
+  <select name="sort_by" id="SortBy" class="btn--tertiary" aria-describedby="a11y-refresh-page-message">
+  {% for option in collection.sort_options %}
+     <option value="{{ option.value }}"{% if sort_by == option.value %} selected="selected"{% endif %}>{{ option.name }}</option>
+  {% endfor %}
+  </select>
+</div>

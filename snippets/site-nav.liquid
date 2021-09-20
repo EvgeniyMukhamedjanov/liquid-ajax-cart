@@ -1,0 +1,91 @@
+{% comment %}
+  List out your main-menu linklist (default)
+
+  More info on linklists:
+    - http://docs.shopify.com/themes/liquid-variables/linklists
+{% endcomment %}
+<nav>
+  <ul class="site-nav" id="AccessibleNav">
+    {% for link in site-nav.links %}
+      {% if link.links != blank %}
+      {% assign parent_index = forloop.index %}
+        <li
+          class="site-nav--has-dropdown {% if link.active %}site-nav--active{% endif %}"
+          aria-haspopup="true">
+          <a
+            href="{{ link.url }}"
+            class="site-nav__link"
+            data-meganav-type="parent"
+            aria-controls="MenuParent-{{ parent_index }}"
+            aria-expanded="false"
+            {% unless request.page_type == 'index' %}{% if link.active %}aria-current="page"{% endif %}{% endunless%}>
+              {{ link.title | escape }}
+              <span class="icon icon-arrow-down" aria-hidden="true"></span>
+          </a>
+          <ul
+            id="MenuParent-{{ parent_index }}"
+            class="site-nav__dropdown {% if link.levels == 2 %}site-nav--has-grandchildren{% endif %}"
+            data-meganav-dropdown>
+            {% for childlink in link.links %}
+              {% if childlink.links != blank %}
+              {% assign child_index = forloop.index %}
+                <li
+                  class="site-nav--has-dropdown site-nav--has-dropdown-grandchild {% if childlink.active %}site-nav--active{% endif %}"
+                  aria-haspopup="true">
+                  <a
+                    href="{{ childlink.url }}"
+                    class="site-nav__link"
+                    aria-controls="MenuChildren-{{ parent_index }}-{{ child_index }}"
+                    data-meganav-type="parent"
+                    {% unless request.page_type == 'index' %}{% if childlink.active %}aria-current="page"{% endif %}{% endunless%}
+                    tabindex="-1">
+                      {{ childlink.title | escape }}
+                      <span class="icon icon-arrow-down" aria-hidden="true"></span>
+                  </a>
+                  <ul
+                    id="MenuChildren-{{ parent_index }}-{{ child_index }}"
+                    class="site-nav__dropdown-grandchild"
+                    data-meganav-dropdown>
+                    {% for grandchildlink in childlink.links %}
+                      <li{% if grandchildlink.active %} class="site-nav--active"{% endif %}>
+                        <a
+                          href="{{ grandchildlink.url }}"
+                          class="site-nav__link"
+                          data-meganav-type="child"
+                          {% unless request.page_type == 'index' %}{% if grandchildlink.active %}aria-current="page"{% endif %}{% endunless %}
+                          tabindex="-1">
+                            {{ grandchildlink.title | escape }}
+                          </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              {% else %}
+                <li{% if childlink.active %} class="site-nav--active"{% endif %}>
+                  <a
+                    href="{{ childlink.url }}"
+                    class="site-nav__link"
+                    data-meganav-type="child"
+                    {% if childlink.active %}aria-current="page"{% endif %}
+                    tabindex="-1">
+                      {{ childlink.title | escape }}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </li>
+      {% else %}
+        <li{% if link.active %} class="site-nav--active"{% endif %}>
+          <a
+            href="{{ link.url }}"
+            class="site-nav__link"
+            data-meganav-type="child"
+            {% unless request.page_type == 'index' %}{% if link.active %}aria-current="page"{% endif %}{% endunless%}>
+              {{ link.title | escape }}
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</nav>

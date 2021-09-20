@@ -1,0 +1,54 @@
+{% if collections[featured] == empty %}
+  {% comment %}add default state for collection block in storefront editor{% endcomment %}
+  {% capture collection_title %}{{ 'home_page.onboarding.collection_title' | t }}{% endcapture %}
+{% else %}
+  {% capture collection_title %}{{ collections[featured].title | escape }}{% endcapture %}
+{% endif %}
+
+<a href="{{ collections[featured].url }}" title="{{ 'collections.general.link_title' | t: title: collection_title }}" class="grid-link{% if settings.collections_center_grid_link %} text-center{% endif %}">
+  <span class="grid-link__image grid-link__image--collection">
+    <span class="grid-link__image-centered">
+      {% if collections[featured] == empty %}
+        {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+        {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+      {% else %}
+        {% if collections[featured].image %}
+          {%- assign collection_image = collections[featured].image -%}
+        {% else %}
+          {%- assign collection_image = collections[featured].products.first.featured_image -%}
+        {% endif %}
+
+        {% unless collection_image == blank %}
+          {% capture img_id %}CollectionImage-{{ collection_image.id }}--{{ collection_width }}{% endcapture %}
+          {% capture img_wrapper_id %}CollectionImageWrapper-{{ collection_image.id }}--{{ collection_width }}{% endcapture %}
+          {%- assign img_url = collection_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+          {% include 'image-style' with image: collection_image, width: collection_width, height: 600, wrapper_id: img_wrapper_id, img_id: img_id %}
+
+          <div id="{{ img_wrapper_id }}" class="collection__grid-image-wrapper supports-js">
+            <div style="padding-top:{{ 1 | divided_by: collection_image.aspect_ratio | times: 100}}%;">
+              <img id="{{ img_id }}"
+                   class="collection__grid-image lazyload"
+                   src="{{ collection_image | img_url: '300x300' }}"
+                   data-src="{{ img_url }}"
+                   data-widths="[180, 235, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                   data-aspectratio="{{ collection_image.aspect_ratio }}"
+                   data-sizes="auto"
+                   alt="{{ collection_image.alt | escape }}">
+            </div>
+          </div>
+        {% else %}
+          {%- capture image_size -%}{{ collection_width }}x{{ collection_width }}{%- endcapture -%}
+          <div class="supports-js">
+            {{ collection_image | img_url: image_size | img_tag: collection_title }}
+          </div>
+        {% endunless %}
+
+        <noscript>
+          {%- capture image_size -%}{{ collection_width }}x{{ collection_width }}{%- endcapture -%}
+          {{ collection_image | img_url: image_size, scale: 2 | img_tag: collection_title }}
+        </noscript>
+      {% endif %}
+    </span>
+  </span>
+  <p class="grid-link__title">{{ collection_title }}</p>
+</a>

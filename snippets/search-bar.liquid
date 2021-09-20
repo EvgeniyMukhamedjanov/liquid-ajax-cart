@@ -1,0 +1,36 @@
+{% comment %}
+
+  A snippet to include a search bar anywhere in your theme.
+  Note we are using 'input-group' for the layout. Look under Forms > Input Groups for some demos.
+
+  More information:
+   - http://docs.shopify.com/themes/liquid-variables/search
+
+  To return only products in results:
+    - http://docs.shopify.com/manual/configuration/store-customization/return-only-product-in-storefront-search-results
+    - Or manually add type=product to the search URL as a query parameter
+    - Uncomment hidden input with value="product" below
+
+{% endcomment %}
+
+{% if search-bar == 'header' %}
+  <form action="{{ routes.search_url }}" method="get" class="header-bar__search-form clearfix" role="search">
+    {% comment %}<input type="hidden" name="type" value="product">{% endcomment %}
+    <button type="submit" class="btn btn--search icon-fallback-text header-bar__search-submit">
+      <span class="icon icon-search" aria-hidden="true"></span>
+      <span class="fallback-text">{{ 'general.search.submit' | t }}</span>
+    </button>
+    <input type="search" name="q" value="{{ search.terms | escape }}" aria-label="{{ 'general.search.placeholder' | t }}" class="header-bar__search-input" placeholder="{{ 'general.search.placeholder' | t }}">
+  </form>
+{% else %}
+  <form action="{{ routes.search_url }}" method="get" class="input-group search-bar" role="search">
+    {% comment %}<input type="hidden" name="type" value="product">{% endcomment %}
+    <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" class="input-group-field" aria-label="{{ 'general.search.placeholder' | t }}" placeholder="{{ 'general.search.placeholder' | t }}">
+    <span class="input-group-btn">
+      <button type="submit" class="btn btn--search icon-fallback-text">
+        <span class="icon icon-search" aria-hidden="true"></span>
+        <span class="fallback-text">{{ 'general.search.submit' | t }}</span>
+      </button>
+    </span>
+  </form>
+{% endif %}

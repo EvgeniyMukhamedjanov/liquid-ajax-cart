@@ -1,0 +1,2653 @@
+/*============================================================================
+  Shopify Timber v2.0.0 | github.com/shopify/timber
+  Copyright 2014 Shopify Inc.
+  Author Carson Shold @cshold
+  Built with Sass - http://sass-lang.com/
+
+  Some things to know about this file:
+    - Sass is compiled on Shopify's server so you don't need to convert it to CSS yourself
+    - The output CSS is compressed and comments are removed
+    - This file merges your stylesheets into one master at assets/timber.scss.liquid
+==============================================================================*/
+
+/*================ Variables, theme settings, and Sass mixins ================*/
+/*================ Global | Sass Mixins ================*/
+@mixin clearfix() {
+  &:after {
+    content: "";
+    display: table;
+    clear: both; }
+  *zoom: 1;
+}
+
+@mixin prefix($property, $value) {
+  -webkit-#{$property}: #{$value};
+  -moz-#{$property}: #{$value};
+  -ms-#{$property}: #{$value};
+  -o-#{$property}: #{$value};
+  #{$property}: #{$value};
+}
+
+/*============================================================================
+  Prefix mixin for generating vendor prefixes.
+  Based on https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/addons/_prefixer.scss
+  Usage:
+    // Input:
+    .element {
+      @include prefix(transform, scale(1), ms webkit spec);
+    }
+    // Output:
+    .element {
+      -ms-transform: scale(1);
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+==============================================================================*/
+@mixin prefixFlex($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+    @if $prefix == webkit {
+      -webkit-#{$property}: $value;
+    } @else if $prefix == moz {
+      -moz-#{$property}: $value;
+    } @else if $prefix == ms {
+      -ms-#{$property}: $value;
+    } @else if $prefix == o {
+      -o-#{$property}: $value;
+    } @else if $prefix == spec {
+      #{$property}: $value;
+    } @else  {
+      @warn 'Unrecognized prefix: #{$prefix}';
+    }
+  }
+}
+
+@mixin transition($transition: 0.1s all) {
+  @include prefix('transition', #{$transition});
+}
+
+@mixin transform($transform: 0.1s all) {
+  @include prefix('transform', #{$transform});
+}
+
+@mixin gradient($from, $to, $fallback) {
+  background: $fallback;
+  background: -moz-linear-gradient(top, $from 0%, $to 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$from), color-stop(100%,$to));
+  background: -webkit-linear-gradient(top, $from 0%, $to 100%);
+  background: -o-linear-gradient(top, $from 0%, $to 100%);
+  background: -ms-linear-gradient(top, $from 0%, $to 100%);
+  background: linear-gradient(top bottom, $from 0%, $to 100%);
+}
+
+@mixin backface($visibility: hidden) {
+  @include prefix('backface-visibility', #{$visibility});
+}
+
+@mixin visuallyHidden {
+  clip: rect(0 0 0 0);
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+  position: absolute;
+  height: 1px;
+  width: 1px;
+}
+
+@mixin box-sizing($box-sizing: border-box) {
+  -webkit-box-sizing: #{$box-sizing};
+  -moz-box-sizing: #{$box-sizing};
+  box-sizing: #{$box-sizing};
+}
+
+@function em($target, $context: $baseFontSize) {
+  @if $target == 0 {
+    @return 0;
+  }
+  @return $target / $context + 0em;
+}
+
+@function color-control($color) {
+  @if (lightness( $color ) > 50) {
+    @return #000;
+  }
+  @else {
+    @return #fff;
+  }
+}
+
+/*============================================================================
+  Dependency-free breakpoint mixin
+    - http://blog.grayghostvisuals.com/sass/sass-media-query-mixin/
+==============================================================================*/
+$min: min-width;
+$max: max-width;
+@mixin at-query ($constraint, $viewport1, $viewport2:null) {
+  @if $constraint == $min {
+    @media screen and ($min: $viewport1) {
+      @content;
+    }
+  } @else if $constraint == $max {
+    @media screen and ($max: $viewport1) {
+      @content;
+    }
+  } @else {
+    @media screen and ($min: $viewport1) and ($max: $viewport2) {
+      @content;
+    }
+  }
+}
+
+/*============================================================================
+  Accent text
+==============================================================================*/
+
+@mixin accentFontStack {
+  font-size: em($accentFontSize);
+  font-family: $accentFontStack;
+  font-weight: $accentFontWeight;
+  font-style: $accentFontStyle;
+  @if $typeAccentSpacing {
+    letter-spacing: 0.1em;
+  }
+  @if $typeAccentTransform {
+    text-transform: uppercase;
+  }
+}
+
+/*============================================================================
+  Flexbox prefix mixins from Bourbon
+    https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/css3/_flex-box.scss
+==============================================================================*/
+@mixin display-flexbox() {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%; // necessary for ie10
+}
+
+@mixin flex-wrap($value: nowrap) {
+  @include prefixFlex(flex-wrap, $value, webkit moz ms spec);
+}
+
+@mixin flex-direction($value) {
+  @include prefixFlex(flex-direction, $value, webkit moz ms spec);
+}
+
+@mixin align-items($value: stretch) {
+  $alt-value: $value;
+
+  @if $value == 'flex-start' {
+    $alt-value: start;
+  } @else if $value == 'flex-end' {
+    $alt-value: end;
+  }
+
+  // sass-lint:disable no-misspelled-properties
+  -ms-flex-align: $alt-value;
+  @include prefixFlex(align-items, $value, webkit moz ms o spec);
+}
+
+@mixin flex($value) {
+  @include prefixFlex(flex, $value, webkit moz ms spec);
+}
+
+@mixin flex-basis($width: auto) {
+  // sass-lint:disable no-misspelled-properties
+  -ms-flex-preferred-size: $width;
+  @include prefixFlex(flex-basis, $width, webkit moz spec);
+}
+
+@mixin align-self($align: auto) {
+  // sass-lint:disable no-misspelled-properties
+  -ms-flex-item-align: $align;
+  @include prefixFlex(align-self, $align, webkit spec);
+}
+
+@mixin justify-content($justify: flex-start) {
+  @include prefixFlex(justify-content, $justify, webkit ms spec);
+}
+
+{% if settings.enable_wide_layout %}
+  $siteWidth: 1340px;
+{% else %}
+  $siteWidth: 1030px;
+{% endif %}
+
+$gutter: 30px;
+$gridGutter: 30px;
+$gridGutterMobile: 22px;
+$radius: 2px;
+
+$section-spacing: 55px;
+$section-spacing-small: 35px;
+
+$small: 480px;
+$medium: 768px;
+$large: 769px;
+{% if settings.enable_wide_layout %}
+$wide: 1250px;
+{% endif %}
+
+$viewportIncrement: 1px;
+$postSmall: $small + $viewportIncrement;
+$preMedium: $medium - $viewportIncrement;
+$preLarge: $large - $viewportIncrement;
+
+/*================ The following are dependencies of csswizardry grid ================*/
+$breakpoints: (
+  'small' '(max-width: #{$small})',
+  'medium' '(min-width: #{$postSmall}) and (max-width: #{$medium})',
+  'medium-down' '(max-width: #{$medium})',
+  {% if settings.enable_wide_layout %}
+  'large' '(min-width: #{$large}) and (max-width: #{$wide})',
+  {% else %}
+  'large' '(min-width: #{$large})',
+  {% endif %}
+  'post-large' '(min-width: #{$large})'{% if settings.enable_wide_layout %},
+  'wide' '(min-width: #{$wide})'{% endif %}
+);
+$breakpoint-has-widths: ('small', 'medium', 'medium-down', 'large', 'post-large', 'wide');
+$breakpoint-has-push:  ('medium', 'medium-down', 'large', 'post-large', 'wide');
+$breakpoint-has-pull:  ('medium', 'medium-down', 'large', 'post-large', 'wide');
+
+/*================ Color variables ================*/
+$colorPrimary: {{ settings.color_primary }};
+
+// Button colors
+$colorBtnPrimary: $colorPrimary;
+$colorBtnPrimaryHover: lighten($colorBtnPrimary, 10%);
+$colorBtnPrimaryActive: darken($colorBtnPrimaryHover, 10%);
+$colorBtnPrimaryText: {{ settings.color_button_primary_text }};
+
+$colorBtnTertiary: {{ settings.color_body_bg }};
+$colorBtnTertiaryHover: $colorPrimary;
+$colorBtnTertiaryActive: darken($colorPrimary, 10%);
+$colorBtnTertiaryText: $colorPrimary;
+
+// Text link colors
+$colorLink: $colorPrimary;
+$colorLinkHover: lighten($colorPrimary, 15%);
+
+// Text colors
+$colorTextBody: {{ settings.color_body_text }};
+$colorTopBarText: {{ settings.color_topbar_text }};
+
+// Backgrounds
+$colorBody: {{ settings.color_body_bg }};
+$colorHeader: transparent;
+$colorTopBar: {{ settings.color_topbar_bg }};
+$passwordBgImage: '{{ 'password-page-background.jpg' | asset_url }}';
+
+// Border colors
+$colorBorder: {{ settings.color_borders }};
+
+// Nav and dropdown link background
+$colorNavText: {{ settings.color_header_text }};
+
+// Site Footer
+$colorFooterBg: {{ settings.color_footer_bg }};
+$colorFooterText: {{ settings.color_footer_text }};
+$colorFooterSocialLink: {{ settings.color_footer_social_link }};
+
+// Helper colors
+$disabledGrey: #f6f6f6;
+$disabledBorder: darken($disabledGrey, 25%);
+$errorRed: #d02e2e;
+$errorRedBg: #fff6f6;
+$successGreen: #56ad6a;
+$successGreenBg: #ecfef0;
+
+// Password page
+$passwordPageUseBgImage: true;
+
+/*================ Typography variables ================*/
+{% assign accent_family = settings.type_accent_family %}
+{% assign base_family = settings.type_base_family %}
+{% assign header_family = settings.type_header_family %}
+
+{{ accent_family | font_face }}
+{{ base_family | font_face }}
+{{ header_family | font_face }}
+
+{%- assign base_family_bold = base_family | font_modify: 'weight', 'bolder' -%}
+{%- assign base_family_italic = base_family | font_modify: 'style', 'italic' -%}
+{%- assign base_family_bold_italic = base_family_bold | font_modify: 'style', 'italic' -%}
+{%- assign accent_family_bold = accent_family | font_modify: 'weight', 'bolder' -%}
+
+{{ base_family_bold | font_face }}
+{{ base_family_italic | font_face }}
+{{ base_family_bold_italic | font_face }}
+{{ accent_family_bold | font_face }}
+
+// Body Font
+$bodyFontStack: {{ base_family.family }}, {{ base_family.fallback_families }};
+$bodyFontWeight: {{ base_family.weight }};
+$bodyFontWeightBold: {{ base_family_bold.weight | default: 700 }};
+$bodyFontStyle: {{ base_family.style }};
+$bodyFontItalic: {{ base_family_italic.style | default: 'italic' }};
+$baseFontSize: {{ settings.type_base_size }};
+
+// Header Font
+$headerFontStack: {{ header_family.family }}, {{ header_family.fallback_families }};
+$headerFontWeight: {{ header_family.weight }};
+$headerFontStyle: {{ header_family.style }};
+$headerBaseFontSize: {{ settings.type_header_size }};
+
+// Navigation and buttons
+$accentFontStack: {{ accent_family.family }}, {{ accent_family.fallback_families }};
+$accentFontWeight: {{ accent_family.weight }};
+$accentFontWeightBold: {{ accent_family_bold.weight | default: 700 }};
+$accentFontStyle: {{ accent_family.style }};
+$accentFontSize: {{ settings.type_accent_size }};
+
+// Header type settings
+{% if settings.type_accent_spacing %}
+  $typeAccentSpacing: true;
+{% else %}
+  $typeAccentSpacing: false;
+{% endif %}
+
+{% if settings.type_accent_transform %}
+  $typeAccentTransform: true;
+{% else %}
+  $typeAccentTransform: false;
+{% endif %}
+
+/*================ Global | Normalize ================*/
+*, input, :before, :after {
+  @include box-sizing();
+}
+
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
+  display: block;
+}
+
+audio, canvas, progress, video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+
+/*================ Site-wide styles ================*/
+/*================ Partials | Layout Styles ================*/
+html {
+  background-color: $colorFooterBg;
+}
+
+body {
+  background-color: $colorBody;
+}
+
+.wrapper {
+  @include clearfix();
+  max-width: $siteWidth;
+  margin: 0 auto;
+  padding: 0 ($gridGutter / 2);
+
+  @include at-query ($min, $small) {
+    padding: 0 $gridGutter;
+  }
+}
+
+.main-content {
+  display: block;
+  margin-top: $gutter * 2;
+  padding-bottom: $gutter * 2;
+}
+
+hr {
+  clear: both;
+  border-top: solid $colorBorder;
+  border-width: 1px 0 0;
+  margin: $gutter 0;
+  height: 0;
+
+  &.hr--small {
+    margin: ($gutter / 2) 0;
+  }
+
+  &.hr--clear {
+    border-top-color: transparent;
+  }
+
+  .template-index .main-content .grid-uniform + &.hr--clear {
+    display: none;
+  }
+}
+
+/*================ Partials | Typography styles ================*/
+body,
+input,
+textarea,
+button,
+select {
+  font-size: $baseFontSize;
+  line-height: 1.7;
+  font-family: $bodyFontStack;
+  font-weight: $bodyFontWeight;
+  font-style: $bodyFontStyle;
+  color: $colorTextBody;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $headerFontStack;
+  font-weight: $headerFontWeight;
+  font-style: $headerFontStyle;
+  margin: 0 0 ($gutter / 2);
+  line-height: 1.4;
+
+  a {
+    text-decoration: none;
+    font-weight: inherit;
+  }
+}
+
+/*================ Use em() Sass function to declare font-size ================*/
+h1 {
+  font-size: em(36px);
+}
+
+h2 {
+  font-size: em(28px);
+}
+
+h3 {
+  font-size: em(24px);
+}
+
+h4 {
+  font-size: em(18px);
+}
+
+h5 {
+  font-size: em(16px);
+}
+
+h6 {
+  font-size: em(16px);
+}
+
+
+.h1 { @extend h1; }
+.h2 { @extend h2; }
+.h3 { @extend h3; }
+.h4 { @extend h4; }
+.h5 { @extend h5; }
+.h6 { @extend h6; }
+
+p {
+  margin: 0 0 ($gutter / 2) 0;
+
+  img {
+    margin: 0;
+  }
+}
+
+em {
+  font-style: $bodyFontItalic;
+}
+
+b, strong {
+  font-weight: $bodyFontWeightBold;
+}
+
+small {
+  font-size: 0.9em;
+}
+
+sup, sub {
+  position: relative;
+  font-size: 60%;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.5em;
+}
+
+blockquote {
+  font-size: 1.125em;
+  line-height: 1.45;
+  font-style: $bodyFontItalic;
+  margin: 0 0 $gutter;
+  padding: ($gutter / 2) $gutter;
+  border-left: 1px solid $colorBorder;
+
+  p {
+    margin-bottom: 0;
+
+    & + cite {
+      margin-top: $gutter / 2;
+    }
+  }
+
+  cite {
+    display: block;
+    font-size: 0.75em;
+
+    &:before {
+      content: "\2014 \0020";
+    }
+  }
+}
+
+code, pre {
+  background-color: #faf7f5;
+  font-family: Consolas,monospace;
+  font-size: 1em;
+  border: 0 none;
+  padding: 0 2px;
+  color: #51ab62;
+}
+
+pre {
+  overflow: auto;
+  padding: $gutter / 2;
+  margin: 0 0 $gutter;
+}
+
+/*================ Partials | Lists ================*/
+ul, ol {
+  margin: 0 0 $gutter;
+  padding: 0;
+}
+
+ul { list-style: none outside; }
+ol { list-style: decimal; }
+ul ul, ul ol,
+ol ol, ol ul { margin: 4px 0 5px 20px; }
+li { margin-bottom: 0.25em; }
+
+ol, ul.square, ul.disc { margin-left: 20px; }
+ul.square { list-style: square outside; }
+ul.disc { list-style: disc outside; }
+ol.alpha { list-style: lower-alpha outside; }
+
+.inline-list li {
+  display: inline-block;
+  margin-bottom: 0;
+}
+
+/*================ Partials | Tables ================*/
+table {
+  width: 100%;
+  margin-bottom: 1em;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.table-wrap {
+  max-width: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+th {
+  font-weight: $bodyFontWeightBold;
+}
+
+th, td {
+  text-align: left;
+  padding: $gutter / 2;
+  border: 1px solid $colorBorder;
+}
+
+/*============================================================================
+  #Grid Setup
+    - Based on csswizardry grid, but with floated columns, a fixed gutter size, and BEM classes
+    - Breakpoints defined above, under #Breakpoint and Grid Variables
+    - Note the inclusion of .grid-uniform to take care of clearfixes on evenly sized grid items
+==============================================================================*/
+$responsive:         true;
+$mobile-first:       true;
+$use-silent-classes: false;
+$push:               true;
+$pull:               false;
+
+/* Force clearfix on grids */
+.grid,
+.grid-uniform {
+  @include clearfix;
+}
+
+/* Manual grid__item clearfix */
+.grid__item.clear {
+  clear: both;
+}
+
+$class-type: unquote(".");
+
+@if $use-silent-classes == true {
+  $class-type: unquote("%");
+}
+
+@mixin grid-media-query($media-query) {
+  $breakpoint-found: false;
+
+  @each $breakpoint in $breakpoints {
+    $name: nth($breakpoint, 1);
+    $declaration: nth($breakpoint, 2);
+
+    @if $media-query == $name and $declaration {
+      $breakpoint-found: true;
+
+      @media only screen and #{$declaration} {
+        @content;
+      }
+    }
+  }
+
+  @if $breakpoint-found == false {
+    @warn "Breakpoint '#{$media-query}' does not exist";
+  }
+}
+
+/*============================================================================
+  Drop relative positioning into silent classes which can't take advantage of
+  the `[class*="push--"]` and `[class*="pull--"]` selectors.
+==============================================================================*/
+@mixin silent-relative() {
+  @if $use-silent-classes == true {
+    position:relative;
+  }
+}
+
+/*============================================================================
+  Grid Setup
+    1. Allow the grid system to be used on lists.
+    2. Remove any margins and paddings that might affect the grid system.
+    3. Apply a negative `margin-left` to negate the columns' gutters.
+==============================================================================*/
+#{$class-type}grid,
+#{$class-type}grid-uniform {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-left: -$gridGutter;
+}
+
+#{$class-type}grid__item {
+  float: left;
+  min-height: 1px;
+  padding-left: $gridGutter;
+  vertical-align: top;
+  @if $mobile-first == true {
+    width: 100%;
+  }
+  @include box-sizing();
+}
+
+/*============================================================================
+  Reversed grids allow you to structure your source in the opposite
+  order to how your rendered layout will appear.
+==============================================================================*/
+#{$class-type}grid--rev {
+  @extend #{$class-type}grid;
+  direction: rtl;
+  text-align: left;
+
+  > #{$class-type}grid__item {
+    direction: ltr;
+    text-align: left;
+    float: right;
+  }
+}
+
+/* Gutterless grids have all the properties of regular grids, minus any spacing. */
+#{$class-type}grid--full {
+  @extend #{$class-type}grid;
+  margin-left: 0;
+
+  > #{$class-type}grid__item {
+    padding-left: 0;
+  }
+}
+
+/*============================================================================
+  WIDTHS
+    - Create width classes, prefixed by the specified namespace.
+==============================================================================*/
+@mixin device-type($namespace:"") {
+  /** Whole */
+  #{$class-type}#{$namespace}one-whole       { width: 100%; }
+
+  /* Halves */
+  #{$class-type}#{$namespace}one-half        { width: 50%; }
+
+  /* Thirds */
+  #{$class-type}#{$namespace}one-third       { width: 33.333%; }
+  #{$class-type}#{$namespace}two-thirds      { width: 66.666%; }
+
+  /* Quarters */
+  #{$class-type}#{$namespace}one-quarter     { width: 25%; }
+  #{$class-type}#{$namespace}two-quarters    { width: 50%; }
+  #{$class-type}#{$namespace}three-quarters  { width: 75%; }
+
+  /* Fifths */
+  #{$class-type}#{$namespace}one-fifth       { width: 20%; }
+  #{$class-type}#{$namespace}two-fifths      { width: 40%; }
+  #{$class-type}#{$namespace}three-fifths    { width: 60%; }
+  #{$class-type}#{$namespace}four-fifths     { width: 80%; }
+
+  /* Sixths */
+  #{$class-type}#{$namespace}one-sixth       { width: 16.666%; }
+  #{$class-type}#{$namespace}two-sixths      { width: 33.333%; }
+  #{$class-type}#{$namespace}three-sixths    { width: 50%; }
+  #{$class-type}#{$namespace}four-sixths     { width: 66.666%; }
+  #{$class-type}#{$namespace}five-sixths     { width: 83.333%; }
+
+  /* Eighths */
+  #{$class-type}#{$namespace}one-eighth      { width: 12.5%; }
+  #{$class-type}#{$namespace}two-eighths     { width: 25%; }
+  #{$class-type}#{$namespace}three-eighths   { width: 37.5%; }
+  #{$class-type}#{$namespace}four-eighths    { width: 50%; }
+  #{$class-type}#{$namespace}five-eighths    { width: 62.5%; }
+  #{$class-type}#{$namespace}six-eighths     { width: 75%; }
+  #{$class-type}#{$namespace}seven-eighths   { width: 87.5%; }
+
+  /* Tenths */
+  #{$class-type}#{$namespace}one-tenth       { width: 10%; }
+  #{$class-type}#{$namespace}two-tenths      { width: 20%; }
+  #{$class-type}#{$namespace}three-tenths    { width: 30%; }
+  #{$class-type}#{$namespace}four-tenths     { width: 40%; }
+  #{$class-type}#{$namespace}five-tenths     { width: 50%; }
+  #{$class-type}#{$namespace}six-tenths      { width: 60%; }
+  #{$class-type}#{$namespace}seven-tenths    { width: 70%; }
+  #{$class-type}#{$namespace}eight-tenths    { width: 80%; }
+  #{$class-type}#{$namespace}nine-tenths     { width: 90%; }
+
+  /* Twelfths */
+  #{$class-type}#{$namespace}one-twelfth     { width: 8.333%; }
+  #{$class-type}#{$namespace}two-twelfths    { width: 16.666%; }
+  #{$class-type}#{$namespace}three-twelfths  { width: 25%; }
+  #{$class-type}#{$namespace}four-twelfths   { width: 33.333%; }
+  #{$class-type}#{$namespace}five-twelfths   { width: 41.666% }
+  #{$class-type}#{$namespace}six-twelfths    { width: 50%; }
+  #{$class-type}#{$namespace}seven-twelfths  { width: 58.333%; }
+  #{$class-type}#{$namespace}eight-twelfths  { width: 66.666%; }
+  #{$class-type}#{$namespace}nine-twelfths   { width: 75%; }
+  #{$class-type}#{$namespace}ten-twelfths    { width: 83.333%; }
+  #{$class-type}#{$namespace}eleven-twelfths { width: 91.666%; }
+}
+
+/*================ Clearfix helper on uniform grids ================*/
+@mixin clearfix-helper($namespace:"") {
+  .grid-uniform {
+    #{$class-type}#{$namespace}one-half:nth-child(2n+1),
+    #{$class-type}#{$namespace}one-third:nth-child(3n+1),
+    #{$class-type}#{$namespace}one-quarter:nth-child(4n+1),
+    #{$class-type}#{$namespace}one-fifth:nth-child(5n+1),
+    #{$class-type}#{$namespace}one-sixth:nth-child(6n+1),
+    #{$class-type}#{$namespace}two-sixths:nth-child(3n+1),
+    #{$class-type}#{$namespace}three-sixths:nth-child(2n+1),
+    #{$class-type}#{$namespace}two-eighths:nth-child(4n+1),
+    #{$class-type}#{$namespace}four-eighths:nth-child(2n+1),
+    #{$class-type}#{$namespace}five-tenths:nth-child(2n+1),
+    #{$class-type}#{$namespace}one-twelfth:nth-child(12n+1),
+    #{$class-type}#{$namespace}two-twelfths:nth-child(6n+1),
+    #{$class-type}#{$namespace}three-twelfths:nth-child(4n+1),
+    #{$class-type}#{$namespace}four-twelfths:nth-child(3n+1),
+    #{$class-type}#{$namespace}six-twelfths:nth-child(2n+1)    { clear: both; }
+  }
+}
+
+/*================ Helper show/hide classes around our breakpoints ================*/
+@mixin device-helper($namespace:"") {
+  #{$class-type}#{$namespace}show        { display: block!important; }
+  #{$class-type}#{$namespace}hide        { display: none!important; }
+
+  #{$class-type}#{$namespace}text-left   { text-align: left!important; }
+  #{$class-type}#{$namespace}text-right  { text-align: right!important; }
+  #{$class-type}#{$namespace}text-center { text-align: center!important; }
+
+  #{$class-type}#{$namespace}left        { float: left!important; }
+  #{$class-type}#{$namespace}right       { float: right!important; }
+}
+
+/*================ Our regular, non-responsive width and helper classes ================*/
+@include device-type();
+@include device-helper();
+
+/*================ Our responsive classes, if we have enabled them ================*/
+@if $responsive == true {
+  @each $name in $breakpoint-has-widths {
+    @include grid-media-query($name) {
+      @include device-type('#{$name}--');
+      @include device-helper('#{$name}--');
+      @include clearfix-helper('#{$name}--');
+    }
+  }
+}
+
+/*============================================================================
+  PUSH
+    - Push classes, to move grid items over to the right by certain amounts
+==============================================================================*/
+@mixin push-setup($namespace: "") {
+  /* Whole */
+  #{$class-type}push--#{$namespace}one-whole       { left: 100%; @include silent-relative(); }
+
+  /* Halves */
+  #{$class-type}push--#{$namespace}one-half        { left: 50%; @include silent-relative(); }
+
+  /* Thirds */
+  #{$class-type}push--#{$namespace}one-third       { left: 33.333%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}two-thirds      { left: 66.666%; @include silent-relative(); }
+
+  /* Quarters */
+  #{$class-type}push--#{$namespace}one-quarter     { left: 25%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}two-quarters    { left: 50%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}three-quarters  { left: 75%; @include silent-relative(); }
+
+  /* Fifths */
+  #{$class-type}push--#{$namespace}one-fifth       { left: 20%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}two-fifths      { left: 40%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}three-fifths    { left: 60%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}four-fifths     { left: 80%; @include silent-relative(); }
+
+  /* Sixths */
+  #{$class-type}push--#{$namespace}one-sixth       { left: 16.666%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}two-sixths      { left: 33.333%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}three-sixths    { left: 50%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}four-sixths     { left: 66.666%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}five-sixths     { left: 83.333%; @include silent-relative(); }
+
+  /* Eighths */
+  #{$class-type}push--#{$namespace}one-eighth      { left: 12.5%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}two-eighths     { left: 25%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}three-eighths   { left: 37.5%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}four-eighths    { left: 50%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}five-eighths    { left: 62.5%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}six-eighths     { left: 75%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}seven-eighths   { left: 87.5%; @include silent-relative(); }
+
+  /* Tenths */
+  #{$class-type}push--#{$namespace}one-tenth       { left: 10%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}two-tenths      { left: 20%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}three-tenths    { left: 30%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}four-tenths     { left: 40%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}five-tenths     { left: 50%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}six-tenths      { left: 60%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}seven-tenths    { left: 70%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}eight-tenths    { left: 80%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}nine-tenths     { left: 90%; @include silent-relative(); }
+
+  /* Twelfths */
+  #{$class-type}push--#{$namespace}one-twelfth     { left: 8.333%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}two-twelfths    { left: 16.666%; @include silent-relative();  }
+  #{$class-type}push--#{$namespace}three-twelfths  { left: 25%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}four-twelfths   { left: 33.333%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}five-twelfths   { left: 41.666%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}six-twelfths    { left: 50%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}seven-twelfths  { left: 58.333%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}eight-twelfths  { left: 66.666%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}nine-twelfths   { left: 75%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}ten-twelfths    { left: 83.333%; @include silent-relative(); }
+  #{$class-type}push--#{$namespace}eleven-twelfths { left: 91.666%; @include silent-relative(); }
+}
+
+@if $push == true {
+  [class*="push--"]{ position:relative; }
+
+  @include push-setup();
+
+  @if $responsive == true {
+    @each $name in $breakpoint-has-push {
+      @include grid-media-query($name) {
+        @include push-setup('#{$name}--');
+      }
+    }
+  }
+}
+
+/*============================================================================
+  PULL
+    - Pull classes, to move grid items back to the left by certain amounts
+==============================================================================*/
+@mixin pull-setup($namespace: "") {
+  /* Whole */
+  #{$class-type}pull--#{$namespace}one-whole       { right: 100%; @include silent-relative(); }
+
+  /* Halves */
+  #{$class-type}pull--#{$namespace}one-half        { right: 50%; @include silent-relative(); }
+
+  /* Thirds */
+  #{$class-type}pull--#{$namespace}one-third       { right: 33.333%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}two-thirds      { right: 66.666%; @include silent-relative(); }
+
+  /* Quarters */
+  #{$class-type}pull--#{$namespace}one-quarter     { right: 25%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}two-quarters    { right: 50%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}three-quarters  { right: 75%; @include silent-relative(); }
+
+  /* Fifths */
+  #{$class-type}pull--#{$namespace}one-fifth       { right: 20%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}two-fifths      { right: 40%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}three-fifths    { right: 60%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}four-fifths     { right: 80%; @include silent-relative(); }
+
+  /* Sixths */
+  #{$class-type}pull--#{$namespace}one-sixth       { right: 16.666%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}two-sixths      { right: 33.333%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}three-sixths    { right: 50%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}four-sixths     { right: 66.666%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}five-sixths     { right: 83.333%; @include silent-relative(); }
+
+  /* Eighths */
+  #{$class-type}pull--#{$namespace}one-eighth      { right: 12.5%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}two-eighths     { right: 25%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}three-eighths   { right: 37.5%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}four-eighths    { right: 50%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}five-eighths    { right: 62.5%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}six-eighths     { right: 75%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}seven-eighths   { right: 87.5%; @include silent-relative(); }
+
+  /* Tenths */
+  #{$class-type}pull--#{$namespace}one-tenth       { right: 10%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}two-tenths      { right: 20%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}three-tenths    { right: 30%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}four-tenths     { right: 40%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}five-tenths     { right: 50%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}six-tenths      { right: 60%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}seven-tenths    { right: 70%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}eight-tenths    { right: 80%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}nine-tenths     { right: 90%; @include silent-relative(); }
+
+  /* Twelfths */
+  #{$class-type}pull--#{$namespace}one-twelfth     { right: 8.333%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}two-twelfths    { right: 16.666%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}three-twelfths  { right: 25%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}four-twelfths   { right: 33.333%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}five-twelfths   { right: 41.666%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}six-twelfths    { right: 50%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}seven-twelfths  { right: 58.333%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}eight-twelfths  { right: 66.666%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}nine-twelfths   { right: 75%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}ten-twelfths    { right: 83.333%; @include silent-relative(); }
+  #{$class-type}pull--#{$namespace}eleven-twelfths { right: 91.666%; @include silent-relative(); }
+}
+
+@if $pull == true {
+  [class*="pull--"]{ position:relative; }
+
+  @include pull-setup();
+
+  @if $responsive == true {
+    @each $name in $breakpoint-has-pull {
+      @include grid-media-query($name) {
+        @include pull-setup('#{$name}--');
+      }
+    }
+  }
+}
+
+/*================ Partials | Helper Classes ================*/
+.clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both; }
+  *zoom: 1;
+}
+
+.display-table {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.display-table-cell {
+  display: table-cell;
+  vertical-align: middle;
+  float: none;
+}
+
+@include at-query ($min, $large) {
+  .post-large--display-table {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .post-large--display-table-cell {
+    display: table-cell;
+    vertical-align: middle;
+    float: none;
+  }
+}
+
+.visually-hidden {
+  @include visuallyHidden();
+}
+
+.hide {
+  display: none !important;
+}
+
+// Only show when JS is supported
+.supports-js {
+  .no-js & {
+    display: none !important;
+  }
+}
+
+/*============================================================================
+  #OOCSS Media Object
+    - http://www.stubbornella.org/content/2010/06/25/the-media-object-saves-hundreds-of-lines-of-code/
+==============================================================================*/
+.media,
+.media-flex {
+  overflow: hidden;
+  _overflow: visible;
+  zoom: 1;
+}
+
+.media-img {
+  float: left;
+  margin-right: $gutter;
+}
+
+.media-img-right {
+  float: right;
+  margin-left: $gutter;
+}
+
+.media-img img,
+.media-img-right img {
+  display: block;
+}
+
+/*================ Partials | Links and Buttons ================*/
+a,
+.text-link {
+  color: $colorLink;
+  text-decoration: none;
+  background: transparent;
+
+  &:hover,
+  &:focus {
+    color: $colorLinkHover;
+  }
+}
+
+button {
+  overflow: visible;
+}
+
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 0;
+  @include accentFontStack;
+  line-height: 1.8;
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+  min-height: 44px;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid transparent;
+  @include prefix('user-select', 'none');
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: $radius;
+
+  /*================ Set primary button colors - can override later ================*/
+  background-color: $colorBtnPrimary;
+  color: $colorBtnPrimaryText;
+
+  &:hover {
+    background-color: $colorBtnPrimaryHover;
+    color: $colorBtnPrimaryText;
+  }
+
+  &:active,
+  &:focus {
+    background-color: $colorBtnPrimaryActive;
+    color: $colorBtnPrimaryText;
+  }
+
+  &[disabled],
+  &.disabled {
+    cursor: default;
+    color: $disabledBorder;
+    background-color: $disabledGrey;
+  }
+}
+
+.btn--secondary,
+input.btn--secondary {
+  @extend .btn;
+  background-color: transparent;
+  color: $colorBtnPrimary;
+  border-color: $colorBtnPrimary;
+  white-space: normal;
+
+  &:hover {
+    background-color: transparent;
+    color: $colorBtnPrimaryHover;
+    border-color: $colorBtnPrimaryHover;
+  }
+
+  &:active,
+  &:focus {
+    background-color: transparent;
+    color: $colorBtnPrimaryActive;
+  }
+
+  &[disabled],
+  &.disabled {
+    background-color: $disabledGrey;
+    border-color: $disabledGrey;
+    color: $disabledBorder;
+  }
+}
+
+.btn--large {
+  padding: 12px 15px;
+  font-size: em(16px);
+}
+
+.btn--wide {
+  width: 50%;
+  @include at-query($max, $medium) {
+    width: 100%;
+  }
+}
+
+.btn--full {
+  width: 100%;
+  padding: 8px 32px;
+  font-size: em(18px);
+  font-weight: $bodyFontWeightBold;
+  min-height: 60px;
+  margin-top: 15px;
+}
+
+.product-single__quantity:not(.is-hidden) ~ .btn--full {
+  margin-top: 0;
+}
+
+.btn--tertiary,
+input.btn--tertiary {
+  @extend .btn;
+  margin: 0;
+  background-color: $colorBtnTertiary;
+  color: $colorBtnTertiaryText;
+  border: 1px solid $colorBorder;
+
+  &:hover {
+    opacity: 1;
+    background-color: $colorBtnTertiaryHover;
+  }
+
+  &:active,
+  &:focus {
+    background-color: $colorBtnTertiaryActive;
+  }
+}
+
+select.btn--tertiary {
+  padding: 6px 28px 6px 10px;
+  font-size: 0.85em;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: $colorBtnTertiary;
+    color: $colorBtnTertiaryText;
+  }
+}
+
+.btn--search {
+  min-height: auto;
+  line-height: 1.42;
+}
+
+/*================ Force an input/button to look like a text link ================*/
+.text-link {
+  display: inline;
+  border: 0 none;
+  padding: 0;
+  margin: 0;
+}
+
+/*================ Smart Payment Buttons ================*/
+.shopify-payment-button {
+  .shopify-payment-button__button--unbranded {
+    margin-top: 10px;
+    white-space: normal;
+    @extend .btn;
+
+    &:hover {
+      background-color: $colorBtnPrimaryHover !important;
+    }
+
+    &:active,
+    &:focus {
+      background-color: $colorBtnPrimaryActive !important;
+    }
+
+    .product-form--full & {
+      @extend .btn--full;
+    }
+  }
+
+  .shopify-payment-button__button--branded {
+    border-radius: $radius;
+    overflow: hidden;
+
+    .product-form--full & {
+      min-height: 60px;
+      margin-top: 15px;
+    }
+  }
+}
+
+.shopify-payment-button__button {
+  margin-top: 10px;
+
+  .product-form--wide & {
+    @extend .btn--wide;
+  }
+}
+
+.shopify-payment-button__more-options {
+  margin-top: 10px !important;
+  padding: 8px 0 6px 0;
+  font-size: em(15px) !important;
+  color: $colorLink;
+  line-height: 1;
+
+  &:hover,
+  &:focus {
+    text-decoration: none !important;
+    color: $colorLinkHover;
+  }
+
+  .product-form--wide & {
+    @extend .btn--wide;
+  }
+}
+
+/*================ Partials | Images, SVG, and iframes ================*/
+img {
+  border: 0 none;
+}
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+img.auto,
+.grid__item img,
+.grid__item iframe {
+  max-width: 100%;
+}
+
+.video-wrapper {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  height: auto;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.table-wrapper {
+  max-width: 100%;
+  overflow: auto;
+}
+
+/*================ Partials | Forms ================*/
+form {
+  margin-bottom: $gutter;
+}
+
+input,
+textarea,
+button,
+select {
+  font-size: 1em;
+}
+
+button,
+input[type="text"],
+input[type="search"],
+input[type="password"],
+input[type="email"],
+input[type="file"],
+input[type="number"],
+input[type="tel"],
+input[type="submit"],
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+input,
+textarea,
+select,
+fieldset {
+  border-radius: $radius;
+  max-width: 100%;
+
+  &.input-full {
+    width: 100%;
+  }
+}
+
+input,
+select,
+textarea {
+  padding: 8px 10px;
+  line-height: 1.42;
+}
+
+fieldset {
+  border: 1px solid $colorBorder;
+  padding: $gutter / 2;
+}
+
+legend {
+  border: 0;
+  padding: 0;
+}
+
+optgroup {
+  font-weight: $bodyFontWeightBold;
+}
+
+input {
+  display: inline-block;
+  width: auto;
+}
+
+button,
+input[type="submit"] {
+  cursor: pointer;
+}
+
+input[type="submit"] {
+  @extend .btn;
+}
+
+/*================ Input width and border ================*/
+input[type="text"],
+input[type="search"],
+input[type="password"],
+input[type="email"],
+input[type="file"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+  border: 1px solid transparentize($colorTextBody, 0.85);
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  margin: 0 0 1em;
+  color: #333;
+
+  &:focus {
+    border: 1px solid transparentize($colorTextBody, 0.7);
+  }
+
+  &[disabled],
+  &.disabled {
+    cursor: default;
+    background-color: $disabledGrey;
+    border-color: $disabledBorder;
+  }
+}
+
+textarea {
+  min-height: 100px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-position: right center;
+  background: {
+    image: url('{{ "ico-select.svg" | asset_url }}');
+    repeat: no-repeat;
+    position: right 10px center;
+    color: #fff;
+  }
+  padding-right: 28px;
+  text-indent: 0.01px;
+  text-overflow: '';
+  cursor: pointer;
+}
+
+// Force option color (affects IE only)
+option {
+  color: #000;
+  background-color: #fff;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+/*================ Form labels ================*/
+.hidden-label {
+  @include visuallyHidden;
+}
+
+label,
+legend {
+  display: block;
+  margin-bottom: 2px;
+
+  &.inline {
+    display: inline;
+  }
+
+  .form-horizontal &.label--hidden,
+  &.label--hidden {
+    height: 0;
+    width: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+  }
+
+  .form-horizontal &:not(.label--hidden) {
+    font-size: 0.9em;
+  }
+}
+
+/*================ We don't want the same label treatment for checkboxes/radios ================*/
+input[type="checkbox"] + label,
+input[type="radio"] + label {
+  font-weight: $bodyFontWeight;
+}
+
+label[for] {
+  cursor: pointer;
+}
+
+.label-hint {
+  color: #999;
+}
+
+/*================ Horizontal Form ================*/
+form.form-horizontal,
+.form-horizontal {
+  margin-bottom: 0;
+
+  input[type="text"],
+  input[type="search"],
+  input[type="password"],
+  input[type="email"],
+  input[type="file"],
+  input[type="number"],
+  input[type="tel"],
+  textarea,
+  select,
+  label {
+    display: inline-block;
+    margin-bottom: 0;
+    width: auto;
+  }
+}
+
+@include at-query($min, $large) {
+  .form-horizontal ~ .form-horizontal {
+    padding-left: $gutter / 2;
+  }
+}
+
+@include at-query($max, $medium) {
+  .form-horizontal ~ .form-horizontal {
+    margin-top: $gutter / 4;
+  }
+}
+
+/*================ Error styles ================*/
+input[type="text"],
+input[type="search"],
+input[type="password"],
+input[type="email"],
+input[type="file"],
+input[type="number"],
+input[type="tel"],
+textarea {
+  &.error {
+    border-color: $errorRed;
+    background-color: $errorRedBg;
+    color: $errorRed;
+  }
+}
+
+label.error {
+  color: $errorRed;
+}
+
+
+/*================ Input Group ================*/
+.input-group {
+  position: relative;
+  display: table;
+  border-collapse: separate;
+
+  .input-group-field:first-child,
+  .input-group-btn:first-child,
+  .input-group-btn:first-child > .btn,
+  input[type="hidden"]:first-child + .input-group-field,
+  input[type="hidden"]:first-child + .input-group-btn > .btn {
+    border-radius: $radius 0 0 $radius;
+  }
+
+  .input-group-field:last-child,
+  .input-group-btn:last-child > .btn {
+   border-radius: 0 $radius $radius 0;
+  }
+
+  input {
+    // Nasty Firefox hack for inputs http://davidwalsh.name/firefox-buttons
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+      margin-top: -1px;
+      margin-bottom: -1px;
+    }
+  }
+}
+
+.input-group-field,
+.input-group-btn {
+  display: table-cell;
+  vertical-align: middle;
+  margin: 0;
+}
+
+.input-group .btn,
+.input-group .input-group-field {
+  height: 37px;
+  line-height: 1.3;
+  min-height: auto;
+}
+
+.input-group .input-group-field {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.input-group-btn {
+  position: relative;
+  white-space: nowrap;
+  width: 1%;
+  padding: 0;
+}
+
+/*================ Search bar ================*/
+.search-bar {
+  max-width: 50%;
+
+  @include at-query ($max, $medium) {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+  }
+}
+
+/*================ Partials | Icons ================*/
+@font-face {
+  font-family: "icons";
+  src: url('{{ "icons.eot" | asset_url }}');
+  src: url('{{ "icons.eot" | asset_url }}#iefix') format("embedded-opentype"),
+    url('{{ "icons.woff" | asset_url }}') format("woff"),
+    url('{{ "icons.ttf" | asset_url }}') format("truetype"),
+    url('{{ "icons.svg" | asset_url }}#timber-icons') format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+$socialIconFontStack: "icons";
+
+.icon-fallback-text .icon {
+  display: none;
+
+  .supports-fontface & {
+    display: inline-block;
+  }
+}
+
+/*============================================================================
+  A generic way to visually hide content while
+  remaining accessible to screen readers (h5bp.com)
+==============================================================================*/
+.supports-fontface .icon-fallback-text .fallback-text {
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+  position: absolute;
+  height: 1px;
+  width: 1px;
+}
+
+.icon:before {
+  display: none;
+}
+
+.supports-fontface .icon:before {
+  display: inline;
+  font-family: $socialIconFontStack;
+  text-decoration: none;
+  speak: none; // future fallback, limited in effect currently
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*================ Icon mapping ================*/
+.icon-arrow-down:before { content: "\34"; }
+.icon-arrow-left:before { content: "\e900"; }
+.icon-arrow-right:before { content: "\e901"; }
+.icon-cart:before { content: "\5b"; }
+.icon-facebook:before { content: "\66"; }
+.icon-fancy:before { content: "\46"; }
+.icon-google_plus:before { content: "\e905"; }
+.icon-grid-view:before { content: "\e603"; }
+.icon-hamburger:before { content: "\e600"; }
+.icon-instagram:before { content: "\e903"; }
+.icon-list-view:before { content: "\e604"; }
+.icon-minus:before { content: "\e602"; }
+.icon-pause:before { content: "\e902"; }
+.icon-pin:before { content: "\e909"; }
+.icon-pinterest:before { content: "\70"; }
+.icon-play:before { content: "\e904"; }
+.icon-plus:before { content: "\e605"; }
+.icon-rss:before { content: "\72"; }
+.icon-saletag:before { content: "\e907"; }
+.icon-search:before { content: "\73"; }
+.icon-snapchat:before { content: "\e906"; }
+.icon-tumblr:before { content: "\74"; }
+.icon-twitter:before { content: "\54"; }
+.icon-vimeo:before { content: "\76"; }
+.icon-x:before { content: "\78"; }
+.icon-youtube:before { content: "\79"; }
+
+.payment-icons {
+  cursor: default;
+
+  li {
+    margin: 0 ($gutter / 4) ($gutter / 4);
+    cursor: default;
+  }
+
+  .icon {
+    width: 38px;
+    height: 24px;
+  }
+}
+
+.social-icons li {
+  margin: 0 ($gutter / 3) ($gutter / 2);
+  vertical-align: middle;
+
+  @include at-query ($min, $postSmall) {
+    margin-left: 0;
+  }
+
+  .icon {
+    font-size: 22px;
+    line-height: 22px;
+  }
+
+  a {
+    color: $colorFooterSocialLink;
+
+    &:hover {
+      color: darken($colorFooterSocialLink, 10%);
+    }
+  }
+}
+
+
+/*================ Module-specific styles ================*/
+/*================ Module | Breadcrumbs and Tag Sorting ================*/
+.breadcrumb,
+.tags {
+  font-family: $accentFontStack;
+  font-weight: $accentFontWeight;
+  font-style: $accentFontStyle;
+  color: $colorTextBody;
+
+  a {
+    color: $colorTextBody;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: $colorPrimary;
+    }
+  }
+}
+
+.breadcrumb {
+  margin-bottom: $gutter / 2.5;
+  color: $colorTextBody;
+  font-size: .75em;
+
+  a,
+  span {
+    display: inline;
+    padding-right: 5px;
+    margin-right: 5px;
+
+    &:first-child {
+      padding-left: 0;
+    }
+  }
+}
+
+.breadcrumb__sep {
+  font-size: 1.4em;
+  line-height: 1;
+}
+
+.tags {
+  color: $colorPrimary;
+
+  a {
+    display: inline-block;
+    padding: 5px 7px 5px 0;
+    margin-right: 12px;
+  }
+}
+
+.tag--active a {
+  color: $colorPrimary;
+}
+
+/*================ Module | Footer ================*/
+.site-footer {
+  background-color: $colorFooterBg;
+  padding-top: $gutter;
+  padding-bottom: 20px;
+  color: $colorFooterText;
+
+  form {
+    margin-bottom: 0;
+  }
+
+  @include at-query($min, $medium) {
+    input {
+      max-width: 250px;
+    }   
+  }
+
+  .text-center input {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  p {
+    margin-bottom: 10px;
+  }
+
+  ul {
+    margin-bottom: 0;
+  }
+
+  @include at-query ($min, $large) {
+    padding-top: $gutter;
+  }
+
+  @include at-query ($max, $medium) {
+    .grid__item {
+      margin-bottom: $gutter;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.site-footer .rte p {
+  font-size: 1em;
+}
+
+.site-footer__links {
+  a {
+    color: $colorFooterText;
+
+    &:hover,
+    &:active {
+      color: $colorLink;
+    }
+  }
+
+  &.inline-list li {
+    padding: 0 10px;
+  }
+
+}
+
+/*================ Module | Notes and Form Feedback ================*/
+.note,
+.errors {
+  border-radius: $radius;
+  padding: 6px 12px;
+  margin-bottom: $gutter / 2;
+  border: 1px solid transparent;
+  font-size: 0.9em;
+  text-align: left;
+
+  ul,
+  ol {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.note {
+  border-color: $colorBorder;
+}
+
+.errors {
+  ul {
+    list-style: disc outside;
+    margin-left: 20px;
+  }
+}
+
+.form-success {
+  color: $successGreen;
+  background-color: $successGreenBg;
+  border-color: $successGreen;
+
+  a {
+    color: $successGreen;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.form-error,
+.errors {
+  color: $errorRed;
+  background-color: $errorRedBg;
+  border-color: $errorRed;
+
+  a {
+    color: $errorRed;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+/*================ Module | Pagination ================*/
+.pagination {
+  margin-bottom: 1em;
+}
+
+.pagination-custom {
+  display: inline-block;
+  padding-left: 0;
+  margin: 0;
+  border-radius: $radius;
+}
+
+.pagination-custom > li {
+  display: inline;
+}
+
+.pagination-custom > li > a,
+.pagination-custom > li > span {
+  position: relative;
+  float: left;
+  padding: 5px 10px;
+  margin-left: -1px;
+  line-height: 1.42;
+  text-decoration: none;
+}
+
+.pagination-custom > li:first-child > a,
+.pagination-custom > li:first-child > span {
+  margin-left: 0;
+}
+
+.pagination-custom > .active > a,
+.pagination-custom > .active > span,
+.pagination-custom > .active > a:hover,
+.pagination-custom > .active > span:hover,
+.pagination-custom > .active > a:focus,
+.pagination-custom > .active > span:focus {
+  z-index: 2;
+  cursor: default;
+  color: $colorTextBody;
+}
+
+.pagination-custom > .disabled > span,
+.pagination-custom > .disabled > a,
+.pagination-custom > .disabled > a:hover,
+.pagination-custom > .disabled > a:focus {
+  color: $colorTextBody;
+  cursor: not-allowed;
+}
+
+.pagination-custom-lg > li > a,
+.pagination-custom-lg > li > span {
+  padding: 10px 16px;
+  font-size: em(18px);
+}
+
+.pagination-custom-sm > li > a,
+.pagination-custom-sm > li > span {
+  padding: 5px 10px;
+  font-size: em(12px);
+}
+
+/*================ Module | Rich Text Editor ================*/
+.rte {
+
+  // Add some top margin to headers from the rich text editor
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 2em;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  > div {
+    margin-bottom: $gutter / 2;
+  }
+
+  ul, ol {
+    margin-left: 35px;
+  }
+
+  ul {
+    @extend ul.disc;
+
+    ul {
+    list-style: circle outside;
+
+      ul {
+        @extend ul.square;
+      }
+    }
+  }
+
+  li {
+    margin-bottom: 0.4em;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  table {
+    table-layout: fixed;
+  }
+}
+
+.rte--header {
+  margin-bottom: $gutter;
+}
+
+/*================ Module | Section Headers ================*/
+.section-header {
+  text-align: left;
+  margin-bottom: $gutter / 2;
+}
+
+.section-header--small {
+  margin-bottom: 0;
+}
+
+.section-header--medium {
+  margin-bottom: $gutter / 4;
+}
+
+.section-header--large {
+  margin-bottom: $gutter;
+}
+
+.section-header--breadcrumb {
+  margin-bottom: $gutter / 2;
+}
+
+.section-header__title {
+  color: $colorNavText;
+}
+
+.section-header__title--left,
+.section-header__link--right {
+  padding-bottom: $gutter / 2.5;
+  margin-bottom: 0;
+}
+
+.section-header__link--right {
+  margin-top: $gutter / 2;
+}
+
+@include at-query ($min, $large) {
+  .section-header {
+    display: table;
+    width: 100%;
+    text-align: left;
+  }
+
+  .section-header__title--left {
+    display: table-cell;
+    vertical-align: middle;
+
+    h1, h2, h3, h4,
+    .h1, .h2, .h3, .h4 {
+      margin-bottom: 0;
+    }
+  }
+
+  .section-header__link--right {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+    width: 550px;
+    margin-top: 0;
+
+    @include at-query ($max, $medium) {
+      margin-bottom: $gutter;
+    }
+  }
+}
+
+.section-header__link--right {
+
+  .form-horizontal {
+    display: inline-block;
+  }
+
+  .form-horizontal,
+  .collection-view {
+    vertical-align: middle;
+  }
+
+  select,
+  option {
+    color: $colorTextBody;
+    border-color: transparentize($colorTextBody, 0.85);
+  }
+
+  @include at-query ($min, $postSmall) {
+    label + select,
+    .collection-view {
+      margin-left: $gutter / 2;
+    }
+
+    label:not(.label--hidden) + select {
+      margin-left: $gutter / 6;
+    }
+  }
+
+  @include at-query ($min, $large) {
+    select {
+      max-width: 200px;
+    }
+  }
+}
+
+@include at-query ($max, $medium) {
+  .template-collection {
+    .section-header__link--right {
+      display: block;
+      width: 100%;
+      margin-top: 0;
+
+      .form-horizontal {
+        width: 100%;
+
+        select {
+          width: 100%;
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
+
+.view-more {
+  clear: both;
+  display: block;
+  font-size: 0.85em;
+  text-align: center;
+  margin-top: $gutter / 2;
+
+  @include at-query($min, $large) {
+    display: none;
+  }
+}
+
+/*================ Module | Site Header ================*/
+.site-header {
+  padding: 40px 0;
+  background-color: $colorHeader;
+
+  @include at-query ($min, $large) {
+    padding: $gutter 0;
+
+    .post-large--display-table {
+      min-height: 86px;
+    }
+  }
+
+  @include at-query ($min, $large) {
+    .grid {
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+
+      > .grid__item {
+        float: none;
+        display: table-cell;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+.site-header__logo {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 100%;
+
+  a {
+    color: $colorNavText;
+    margin: 0 auto;
+  }
+
+  a,
+  a:hover,
+  a:focus {
+    text-decoration: none;
+  }
+
+  a, img {
+    display: block;
+  }
+
+  img {
+    margin: 0 auto;
+  }
+}
+
+.logo__image-wrapper {
+  display: block;
+  max-width: 100%;
+  position: relative;
+}
+
+.logo__image {
+  width: 100%;
+  display: block;
+
+  .supports-js & {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .no-js & {
+    @include visuallyHidden();
+  }
+}
+
+.site-header--text-links {
+  margin-bottom: 0;
+}
+
+/*================ Module | Site Nav and Dropdowns ================*/
+.site-nav {
+  @include accentFontStack;
+  cursor: default;
+  margin: 0 auto;
+  text-align: center;
+
+  li {
+    margin: 0;
+    display: block;
+    position: relative;
+  }
+
+  & > li {
+    position: relative;
+    display: inline-block;
+
+    &:first-child > a {
+      padding-left: 0;
+    }
+
+    &:first-child .site-nav__dropdown {
+      left: - $gutter / 2;
+    }
+
+    &:last-child > a {
+      padding-right: 0;
+    }
+  }
+}
+
+.site-nav__link {
+  display: block;
+  text-decoration: none;
+  white-space: nowrap;
+  color: $colorNavText;
+  background-color: $colorBody;
+  font-weight: $accentFontWeight;
+  padding: 7px 20px 7px 15px;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $colorPrimary;
+  }
+
+  .site-nav--active > & {
+    font-weight: $accentFontWeightBold;
+  }
+
+  .icon-arrow-down {
+    font-size: 0.7em;
+    color: $colorNavText;
+
+    .site-nav--has-dropdown-grandchild & {
+      display: inline-block;
+      line-height: 1;
+      @include transform(rotate(-90deg));
+    }
+  }
+  .site-nav__dropdown-grandchild & {
+    white-space: normal;
+  }
+}
+
+/*================ Dropdowns ================*/
+.site-nav__dropdown {
+  text-transform: none;
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  margin: 0;
+  text-align: left;
+  z-index: 20;
+  font-size: 0.85em;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+
+  .supports-no-touch .site-nav--has-dropdown:hover &,
+  .site-nav--has-dropdown.nav-hover &,
+  .nav-focus + &,
+  .show-dropdown > & {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &.nav-outside {
+    left: auto;
+    right: 0;
+  }
+}
+
+.site-nav__dropdown-grandchild {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 100%;
+  margin: 0;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+
+  .supports-no-touch .site-nav--has-dropdown-grandchild:hover &,
+  .site-nav--has-dropdown-grandchild.nav-hover &,
+  .nav-focus + &,
+  .show-dropdown > & {
+    opacity: 1;
+    pointer-events: initial;
+  }
+
+  &.nav-outside {
+    left: -100%;
+  }
+}
+
+/*================ Search bar in header ================*/
+.nav-search {
+  position: relative;
+  padding: 7px 0;
+
+  @include at-query ($max, $medium) {
+    padding: 0 0 ($gutter / 2);
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .input-group,
+  .input-group-field {
+    margin-bottom: 0;
+  }
+}
+
+/*================ Header message (theme setting) ================*/
+.header-message {
+  text-align: center;
+  margin: ($gutter / 2) 0 0;
+  line-height: 1;
+
+  @include at-query($min, $large) {
+    margin-bottom: $gutter / 2;
+  }
+}
+
+
+/*================ View-specific styles ================*/
+/*================ Templates | Blog and Comments ================*/
+.comment {
+  margin-bottom: $gutter;
+
+  & + & {
+    border-top: 1px solid $colorBorder;
+    padding-top: $gutter;
+  }
+}
+
+.meta-sep {
+  position: relative;
+  top: -1px;
+  padding: 0 5px;
+  font-size: 0.7em;
+}
+
+.blog-date {
+  margin-top: -0.5em;
+}
+
+aside h4 ~ h4 {
+  margin-top: 1.5 * $gutter;
+}
+
+aside time em {
+  font-size: 0.8em;
+}
+
+@include at-query($max, $medium) {
+  article {
+    margin-bottom: $gutter;
+  }
+}
+
+.article__image-wrapper {
+  width: 100%;
+  margin: 0 auto;
+
+  &.supports-js {
+    position: relative;
+  }
+}
+
+.article__image {
+  display: block;
+  margin-bottom: 0.75 * $gutter;
+  margin: 0 auto;
+
+  .article__image-wrapper.supports-js & {
+    position: absolute;
+    top: 0;
+    width: 100%
+  }
+}
+
+/*================ Templates | Product Page ================*/
+.product-single__variants {
+  display: none;
+
+  .no-js & {
+    display: block;
+  }
+}
+
+.product-single__photos {
+  margin-bottom: $gutter;
+}
+
+.product-single__photos,
+.product-single__thumbnails {
+  a, img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+}
+
+.product-single__image-wrapper {
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+}
+
+.product-single__image {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  &.lazyload {
+    opacity: 0;
+  }
+}
+
+.zoom-lightbox {
+  cursor: -webkit-zoom-in;
+  cursor: -moz-zoom-in;
+  cursor: zoom-in;
+}
+
+.image-zoom {
+  cursor: move;
+}
+
+.product-single__thumbnails li {
+  margin-bottom: $gutter;
+}
+
+.product-single__prices {
+  font-family: $headerFontStack;
+  font-weight: $headerFontWeight;
+  font-style: $headerFontStyle;
+  margin-bottom: $gutter / 2;
+}
+
+.product-single__prices--policy-enabled {
+  margin-bottom: 5px;
+}
+
+.product-single__price {
+  color: $colorPrimary;
+  font-size: 1.4 * $baseFontSize;
+  font-weight: $headerFontWeight;
+}
+
+.product-single__sale-price {
+  opacity: 0.7;
+  margin-left: 6px;
+  font-size: 1.27 * $baseFontSize;
+  font-weight: $headerFontWeight;
+}
+
+.product-single__policies {
+  font-size: em($baseFontSize - 1);
+  margin-bottom: 25px;
+}
+
+.product__policies--no-dropdowns {
+  margin-bottom: 35px;
+}
+
+.product-single__quantity {
+  margin-bottom: $gutter / 2;
+
+  &.is-hidden {
+    display: none !important;
+  }
+
+  .quantity-selector {
+    display: inline-block;
+  }
+}
+
+.product-single__title {
+  font-weight: $bodyFontWeightBold;
+}
+
+@include at-query($min, $large) {
+  .single-option-selector,
+  .quantity-selector {
+    width: auto !important;
+  }
+}
+
+.tabs {
+  margin: $gutter 0;
+}
+
+.tab-switch__nav {
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid $colorBorder;
+  border-bottom: 1px solid $colorBorder;
+  margin: $gutter 0;
+
+  li {
+    display: inline-block;
+    padding: $gutter / 2;
+    margin-bottom: 0;
+  }
+
+  li:first-child {
+    border-right: 1px solid $colorBorder;
+  }
+}
+
+.tab-switch__trigger {
+  display: block;
+  color: $colorTextBody;
+  font-weight: $bodyFontWeight;
+  margin: 0;
+
+  &:hover,
+  &:active {
+    font-weight: $bodyFontWeight;
+  }
+
+  &.is-active {
+    font-weight: $bodyFontWeightBold;
+    color: $colorTextBody;
+  }
+}
+
+.tab-switch__content {
+  display: block;
+
+  &.is-hidden {
+    display: none;
+  }
+}
+
+/*================ Snippet | Product Grid Item ================*/
+
+.product__img-wrapper {
+  width: 100%;
+  margin: 0 auto;
+
+  &.supports-js {
+    position: relative;
+  }
+}
+
+.product__img {
+  display: block;
+  margin: 0 auto;
+
+  .product__img-wrapper.supports-js & {
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  &.lazyload {
+    opacity: 0;
+  }
+}
+
+.product-unit-price {
+  color: rgba($colorTextBody, 0.6);
+  display: block;
+  font-family: $headerFontStack;
+  font-size: em(12px);
+}
+
