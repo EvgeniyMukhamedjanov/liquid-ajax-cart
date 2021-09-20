@@ -1,64 +1,44 @@
-# Liquid Ajax Cart
-Liquid Ajax Cart is a Javascript library for Shopify that lets you build ajax-cart functionality using plain liquid templates.
-##### 1. Create a new section for Ajax Cart
+# Liquid Ajax Cart — for Shopify
+
+
+Liquid Ajax Cart — Javascript library that lets you build an Ajax cart using Liquid templates.
+
+## Quick test with your theme
+
+Before you start, ensure that you don't have any scripts which call `stopPropagation` method for `submit` events. Otherwise Liquid Ajax Cart will not be able to handle "Add to Cart" user's actions.
+
+##### 1. Create a liquid section for Ajax-cart with a `data-ajax-cart-section` container:
 
 ```liquid
-{% comment %}
-  /sections/ajax-cart.liquid
-
-  Add a wrapper with a [data-ajax-cart-section] attribute 
-  so that Liquid Ajax Cart knows that the section should be rerendered
-  after user's cart state is changed.
-{% endcomment %}
+{% comment %} sections/ajax-cart.liquid {% endcomment %}
 
 <div data-ajax-cart-section>
-  <div>
-    <h2>Section "ajax-cart"</h2>
-    <p>The section gets updated after each action because it has a content wrapper with [data-ajax-cart-section] attribute. Liquid Ajax Cart asks Shopify to render new HTML for [data-ajax-cart-section] sections with each API request.</p>
-  </div>
-
+  <h2>Cart</h2>
+  
   <div>
     {% for item in cart.items %}
       <div>
-
-        <p>
-          <a class="h3" href="{{ item.url }}">{{ item.product.title }}</a>
-
+      	<p>
+      	  <a class="h3" href="{{ item.url }}">{{ item.product.title }}</a> <br/>
           {% unless item.product.has_only_default_variant %}
-            <br />
-            <small>{{ item.variant.title }}</small>
+            <small>{{ item.variant.title }}</small> <br/>
           {% endunless %}
-
-          <br />
-          <small> Price: 
-          {% if item.original_price != item.final_price %}
-            <del>{{ item.original_price | money }}</del>
-            <span>{{ item.original_price | money }}</span>
-          {% else %}
-              <span>{{ item.original_price | money }}</span>
-            {% endif %}
-          </small>
+          <small> Price: {{ item.final_price | money }} </small>
         </p>
 
         <div>
           Quantity: 
-          <button class="ajax-cart-demo__qty-btn" data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | minus: 1 }}"><i>-</i></button>
+          <button data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | minus: 1 }}"><i>-</i></button>
           {{ item.quantity }}
           <button data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | plus: 1 }}"><i>+</i></button>
         </div>
 
-        <div>
-          Total: <strong>{{ item.final_line_price | money }}</strong>
-        </div>
-
+        <div> Total: <strong>{{ item.final_line_price | money }}</strong> </div>
         <div><a href="javascript:;" data-ajax-cart-quantity-button="{{ item.key }} | 0"><small>Remove</small></a></div>
       </div>
     {% endfor %}
   </div>
-
-  <div>
-    <a href="#checkout-route">Checkout — {{ cart.total_price | money_with_currency }}</a>
-  </div>
+  <div> <a href="#checkout-route">Checkout — {{ cart.total_price | money_with_currency }}</a> </div>
 </div>
 
 {% schema %}
@@ -68,8 +48,13 @@ Liquid Ajax Cart is a Javascript library for Shopify that lets you build ajax-ca
 {% endschema %}
 ```
 
-##### 2. Include the section and liquid-ajax-cart.js in your theme.liquid
+##### 2. Include the section and [liquid-ajax-cart.js](https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/blob/main/_dist/liquid-ajax-cart.js) in your theme.liquid 
 ```liquid
+{% comment %}
+  Put this code within <body> tag —
+  in a place where you want the ajax-cart section to appear
+{% endcomment %}
+
 {% section 'ajax-cart' %}
 
 <script type="module">
@@ -89,5 +74,64 @@ Liquid Ajax Cart is a Javascript library for Shopify that lets you build ajax-ca
   
 {% endform %}
 ```
-That's it.
 
+That's it. 
+
+Product forms will work without page reloading and the `ajax-cart` section will get updated each time when a user submits a form or clicks `+` or `−` buttons in the `ajax-cart` section.
+
+## Demo
+The [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) development store demonstrates features of Liquid Ajax Cart.
+
+Password — `liquid-ajax-cart`
+
+The store uses "Minimal" theme from Shopify that doesn't have Ajax-cart related functionality out of the box, in order to show how to build that functionality from scratch.
+
+The store's codebase lives in the main branch of this repository — folders `assets`, `config`, `layout`, `locales`, `sections`, `snippets` and `templates`.
+
+## Documentation ( in process )
+
+*in process - in process - in process*
+
+### HTML attributes
+
+data-ajax-cart-section
+
+data-ajax-cart-quantity-button
+
+data-ajax-cart-section-toggle-class-button
+
+data-ajax-cart-form-error
+
+data-ajax-cart-bind-state
+
+### Css Body classes
+
+.js-ajax-cart-set
+
+.js-ajax-cart-empty
+
+.js-ajax-cart-request-in-progress
+
+### Css Form classes
+
+.js-ajax-cart-form-in-progress
+
+.js-ajax-cart-button-in-progress
+
+
+### Javascript Ajax API
+*After each call the cart state will be updated, the ajax-cart sections will be rerendered.*
+
+cartGet() — calls /cart.js
+
+cartAdd( body ) - calls /cart/add.js
+
+cartChange( body ) — calls /cart/change.js
+
+subscribeToAjaxAPI( callback ) — callback will be called before and after each cart request
+
+### Javascript Cart State API
+
+getCartState() — returns the current state
+
+subscribeToCartState( callback ) — callback will be called after cart state is changed
