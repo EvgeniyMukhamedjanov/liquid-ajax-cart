@@ -164,6 +164,7 @@
               <button type="submit" name="add" id="AddToCart" class="btn {{ btn_class }}{% if section.settings.enable_payment_button %} btn--secondary{% endif %}"{% unless current_variant.available %} disabled="disabled"{% endunless %}>
                 <span id="AddToCartText">{{ 'products.product.add_to_cart' | t }}</span>
               </button>
+              <div><small data-ajax-cart-form-error=""></small></div>
               {% if section.settings.enable_payment_button %}
                 {{ form | payment_button }}
               {% endif %}

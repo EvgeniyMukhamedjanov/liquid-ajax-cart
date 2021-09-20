@@ -1,0 +1,26 @@
+{
+  "name": "stateful-ajax-cart",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack-watch": "rimraf _dist && webpack --watch",
+    "themekit-watch": "shopify-themekit watch --allow-live",
+    "watch": "npm-run-all --parallel themekit-watch webpack-watch",
+    "build": "webpack && copyfiles -f assets/stateful-ajax-cart.js _dist"
+  },
+  "author": "Evgeniy Mukhamedjanov",
+  "license": "ISC",
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0"
+  },
+  "dependencies": {
+    "htm": "^3.1.0",
+    "preact": "^10.5.14"
+  }
+}

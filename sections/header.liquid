@@ -112,7 +112,7 @@
           <div class="header-bar__module">
             <a href="{{ routes.cart_url }}" class="cart-page-link">
               {{ 'layout.cart.title' | t }}{% unless cart.item_count == 0 %}:{% endunless %}
-              <span class="cart-count header-bar__cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}">{{ cart.item_count }}</span>
+              <span class="cart-count header-bar__cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}" data-ajax-cart-bind-state="cart.item_count">{{ cart.item_count }}</span>
             </a>
           </div>
 
@@ -149,7 +149,7 @@
       {% endunless %}
       <a href="{{ routes.cart_url }}" class="cart-page-link mobile-cart-page-link">
         <span class="icon icon-cart header-bar__cart-icon" aria-hidden="true"></span>
-        {{ 'layout.cart.title' | t }} <span class="cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}">{{ cart.item_count }}</span>
+        {{ 'layout.cart.title' | t }} <span class="cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}" data-ajax-cart-bind-state="cart.item_count">{{ cart.item_count }}</span>
       </a>
     </div>
     {% include 'mobile-nav' with linklists[section.settings.nav_menu] %}
