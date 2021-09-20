@@ -4,7 +4,6 @@
 
 /node_modules
 /config.yml
-/config/settings_data.json
 
 # ignore packaged files
 *.7z
