@@ -1,7 +1,14 @@
 # Liquid Ajax Cart — for Shopify
 
-
-Liquid Ajax Cart — Javascript library that lets you build an Ajax cart using Liquid templates.
+Liquid Ajax Cart — a Javascript library that lets you build an Ajax cart using Liquid templates:
+- Ajaxifies "Add to Cart" forms
+  - Container for error: `[data-ajax-cart-form-error]`
+  - CSS classes: `.js-ajax-cart-form-in-progress`, `.js-ajax-cart-button-in-progress`
+- Adds `<body>` classes: 
+  - `.js-ajax-cart-set`, `.js-ajax-cart-empty`, `.js-ajax-cart-request-in-progress`
+- Provides Javascript API:
+  - Ajax: `cartGet`, `cartAdd`, `cartChange`, `subscribeToAjaxAPI`
+  - Cart State: `getCartState`, `subscribeToCartState`
 
 ## Quick test with your theme
 
