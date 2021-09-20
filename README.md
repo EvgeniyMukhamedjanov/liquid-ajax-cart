@@ -72,18 +72,16 @@ Before you start, ensure that you don't have any scripts which call `stopPropaga
 
 That's it. 
 
-Liquid Ajax Cart requests new HTML for all the sections with a `data-ajax-cart-section` container after user's cart state is changed. 
-
-Also Liquid Ajax Cart intercepts all product forms submitions and sends ajax requests instead.
+Product forms will work without page reloading and the `ajax-cart` section will get updated after a user submits a form or clicks `+` or `−` button in the `ajax-cart` section.
 
 ## Demo
-The [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) development store demonstrates features of Liquid Ajax Cart and how to build Ajax-cart functionality from scratch.
+The [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) development store demonstrates features of Liquid Ajax Cart.
 
 Password — `liquid-ajax-cart`
 
-The store uses "Minimal" theme from Shopify that doesn't have Ajax-cart related functionality out of the box.
+The store uses "Minimal" theme from Shopify that doesn't have Ajax-cart related functionality out of the box in order to show how to build that functionality from scratch.
 
-The store's codebase lives in the main branch of this repository: folders `assets`, `config`, `layout`, `locales`, `sections`, `snippets` and `templates`.
+The store's codebase lives in the main branch of this repository — folders `assets`, `config`, `layout`, `locales`, `sections`, `snippets` and `templates`.
 
 ## Documentation ( in process )
 
