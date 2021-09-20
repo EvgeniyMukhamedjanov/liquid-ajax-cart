@@ -139,7 +139,7 @@
       "featured-product": {
         "type": "featured-product",
         "settings": {
-          "featured_product": "limited-product",
+          "featured_product": "unlimited-product",
           "product_vendor_enable": false,
           "product_quantity_enable": true,
           "product_image_zoom_type": "no-zoom",
@@ -170,6 +170,10 @@
           "show_sale_circle": false,
           "center_grid_link": false
         }
+      },
+      "ajax-cart": {
+        "type": "ajax-cart",
+        "settings": {}
       }
     },
     "content_for_index": [
