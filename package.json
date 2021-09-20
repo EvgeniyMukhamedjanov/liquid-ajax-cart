@@ -1,5 +1,5 @@
 {
-  "name": "stateful-ajax-cart",
+  "name": "liquid-ajax-cart",
   "version": "1.0.0",
   "description": "",
   "private": true,
@@ -8,7 +8,7 @@
     "webpack-watch": "rimraf _dist && webpack --watch",
     "themekit-watch": "shopify-themekit watch --allow-live",
     "watch": "npm-run-all --parallel themekit-watch webpack-watch",
-    "build": "webpack && copyfiles -f assets/stateful-ajax-cart.js _dist"
+    "build": "webpack && copyfiles -f assets/liquid-ajax-cart.js _dist"
   },
   "author": "Evgeniy Mukhamedjanov",
   "license": "ISC",
