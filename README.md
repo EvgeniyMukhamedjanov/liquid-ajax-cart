@@ -1,58 +1,31 @@
 # Liquid Ajax Cart — for Shopify
 
 Liquid Ajax Cart — a Javascript library that lets you build an Ajax cart using Liquid templates:
-- Ajaxifies "Add to Cart" forms
-  - Container for error: `[data-ajax-cart-form-error]`
-  - CSS classes: `.js-ajax-cart-form-in-progress`, `.js-ajax-cart-button-in-progress`
-- Adds `<body>` classes: 
-  - `.js-ajax-cart-set`, `.js-ajax-cart-empty`, `.js-ajax-cart-request-in-progress`
-- Provides Javascript API:
-  - Ajax: `cartGet`, `cartAdd`, `cartChange`, `subscribeToAjaxAPI`
-  - Cart State: `getCartState`, `subscribeToCartState`
-
-## Quick test with your theme
-
-Before you start, ensure that you don't have any scripts which call `stopPropagation` method for `submit` events. Otherwise Liquid Ajax Cart will not be able to handle "Add to Cart" user's actions.
 
 ##### 1. Create a liquid section for Ajax-cart with a `data-ajax-cart-section` container:
 
 ```liquid
 {% comment %} sections/ajax-cart.liquid {% endcomment %}
 
-<div data-ajax-cart-section>
+<div style="padding: 2em;" data-ajax-cart-section >
   <h2>Cart</h2>
   
-  <div>
-    {% for item in cart.items %}
-      <div>
-      	<p>
-      	  <a class="h3" href="{{ item.url }}">{{ item.product.title }}</a> <br/>
-          {% unless item.product.has_only_default_variant %}
-            <small>{{ item.variant.title }}</small> <br/>
-          {% endunless %}
-          <small> Price: {{ item.final_price | money }} </small>
-        </p>
+  {% for item in cart.items %}  
+    <a href="{{ item.url }}">{{ item.title }}</a> <br />
+    Price: {{ item.final_price | money }} <br />
 
-        <div>
-          Quantity: 
-          <button data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | minus: 1 }}"><i>-</i></button>
-          {{ item.quantity }}
-          <button data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | plus: 1 }}"><i>+</i></button>
-        </div>
+    Quantity: 
+      <button data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | minus: 1 }}"><i>-</i></button>
+      {{ item.quantity }}
+      <button data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | plus: 1 }}"><i>+</i></button> <br />
 
-        <div> Total: <strong>{{ item.final_line_price | money }}</strong> </div>
-        <div><a href="javascript:;" data-ajax-cart-quantity-button="{{ item.key }} | 0"><small>Remove</small></a></div>
-      </div>
-    {% endfor %}
-  </div>
-  <div> <a href="#checkout-route">Checkout — {{ cart.total_price | money_with_currency }}</a> </div>
+    Total: <strong>{{ item.final_line_price | money }}</strong> <br /> <br />  
+  {% endfor %}
+  
+  <button> Checkout — {{ cart.total_price | money_with_currency }} </button>
 </div>
 
-{% schema %}
-{
-  "name": "Ajax Cart"
-}
-{% endschema %}
+{% schema %} { "name": "Ajax Cart" } {% endschema %}
 ```
 
 ##### 2. Include the section and [liquid-ajax-cart.js](https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/blob/main/_dist/liquid-ajax-cart.js) in your theme.liquid 
@@ -67,19 +40,6 @@ Before you start, ensure that you don't have any scripts which call `stopPropaga
 <script type="module">
   import '{{ 'liquid-ajax-cart.js' | asset_url }}';
 </script>
-```
- 
-##### 3. Specify a place for product forms error messages
-```liquid
-{% form 'product', product %}
-  
-  <!-- product form's code ... -->
-  
-  <div data-ajax-cart-form-error></div>
-  
-  <!-- ... product form's code -->
-  
-{% endform %}
 ```
 
 That's it. 
