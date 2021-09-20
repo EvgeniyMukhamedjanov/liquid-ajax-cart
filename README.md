@@ -50,6 +50,11 @@ Before you start, ensure that you don't have any scripts which call `stopPropaga
 
 ##### 2. Include the section and [liquid-ajax-cart.js](https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/blob/main/_dist/liquid-ajax-cart.js) in your theme.liquid 
 ```liquid
+{% comment %}
+  Put this code within <body> tag —
+  in a place where you want the ajax-cart section to appear
+{% endcomment %}
+
 {% section 'ajax-cart' %}
 
 <script type="module">
@@ -72,7 +77,7 @@ Before you start, ensure that you don't have any scripts which call `stopPropaga
 
 That's it. 
 
-Product forms will work without page reloading and the `ajax-cart` section will get updated after a user submits a form or clicks `+` or `−` button in the `ajax-cart` section.
+Product forms will work without page reloading and the `ajax-cart` section will get updated each time when a user submits a form or clicks `+` or `−` buttons in the `ajax-cart` section.
 
 ## Demo
 The [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) development store demonstrates features of Liquid Ajax Cart.
