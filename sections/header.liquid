@@ -111,7 +111,7 @@
 
           <div class="header-bar__module">
             <a href="{{ routes.cart_url }}" class="cart-page-link" data-ajax-cart-toggle-class-button="open">
-              {{ 'layout.cart.title' | t }}{% unless cart.item_count == 0 %}:{% endunless %}
+              {{ 'layout.cart.title' | t }}
               <span class="cart-count header-bar__cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}" data-ajax-cart-bind-state="cart.item_count">{{ cart.item_count }}</span>
             </a>
           </div>
