@@ -79,7 +79,7 @@ The [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) de
 
 Password — `liquid-ajax-cart`
 
-The store uses "Minimal" theme from Shopify that doesn't have Ajax-cart related functionality out of the box in order to show how to build that functionality from scratch.
+The store uses "Minimal" theme from Shopify that doesn't have Ajax-cart related functionality out of the box, in order to show how to build that functionality from scratch.
 
 The store's codebase lives in the main branch of this repository — folders `assets`, `config`, `layout`, `locales`, `sections`, `snippets` and `templates`.
 
