@@ -100,7 +100,7 @@ data-ajax-cart-bind-state
 
 .js-ajax-cart-form-in-progress
 
-js-ajax-cart-button-in-progress
+.js-ajax-cart-button-in-progress
 
 
 ### Javascript Ajax API
