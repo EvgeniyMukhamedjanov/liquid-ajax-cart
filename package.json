@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack-watch": "rimraf _dist && webpack --watch",
-    "themekit-watch": "shopify-themekit watch --allow-live",
+    "themekit-watch": "shopify-themekit watch",
     "watch": "npm-run-all --parallel themekit-watch webpack-watch",
     "build": "webpack && copyfiles -f assets/liquid-ajax-cart.js _dist"
   },
