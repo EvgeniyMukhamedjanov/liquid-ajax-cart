@@ -140,14 +140,7 @@
 
   {% section 'ajax-cart' %}
   {{ 'liquid-ajax-cart.css' | asset_url | stylesheet_tag }}
-  <script type="text/javascript">
-    document.querySelectorAll( '.cart-page-link' ).forEach( cartLink => {
-      cartLink.addEventListener( 'click', e => {
-        e.preventDefault();
-        document.body.classList.toggle( 'js-ajax-cart-opened' );
-      })
-    })
-  </script>
+  
   <script type="module">
     import '{{ 'liquid-ajax-cart.js' | asset_url }}';
   </script>

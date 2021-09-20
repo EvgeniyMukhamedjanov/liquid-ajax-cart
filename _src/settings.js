@@ -22,7 +22,9 @@ const configure = ( newSettings = {} ) => {
 		productFormsErrorsAttribute: `${ settings.dataAttributePrefix }-form-error`,
 		sectionsAttribute: `${ settings.dataAttributePrefix }-section`,
 		binderAttribute: `${ settings.dataAttributePrefix }-bind-state`,
-		quantityButtonAttribute: `${ settings.dataAttributePrefix }-quantity-button`
+		quantityButtonAttribute: `${ settings.dataAttributePrefix }-quantity-button`,
+		toggleClassButtonAttribute: `${ settings.dataAttributePrefix }-toggle-class-button`,
+		toggleClassPrefix: `${ settings.cssClassesPrefix }-toggle-`
 	};
 }
 configure();
