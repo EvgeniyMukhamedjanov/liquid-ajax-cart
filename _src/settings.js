@@ -1,5 +1,6 @@
 const defaultSettings = {
 	dataAttributePrefix: 'data-ajax-cart',
+	cssClassesPrefix: 'js-ajax-cart',
 	productFormsFilter: formNode => true,
 	requestInProgressBodyClass: 'js-ajax-cart-request-in-progress',
 	cartStateSetBodyClass: 'js-ajax-cart-set',
