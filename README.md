@@ -5,7 +5,7 @@ Liquid Ajax Cart — Javascript library that lets you build an Ajax cart using L
 
 ## Quick test with your theme
 
-Before you start, ensure that you don't have any scripts which call `stopPropagation` method for `submit` events. Otherwise Liquid Ajax Cart will not be able to handle the "Add to Cart" user's action.
+Before you start, ensure that you don't have any scripts which call `stopPropagation` method for `submit` events. Otherwise Liquid Ajax Cart will not be able to handle "Add to Cart" user's actions.
 
 ##### 1. Create a liquid section for Ajax-cart with a `data-ajax-cart-section` container:
 
