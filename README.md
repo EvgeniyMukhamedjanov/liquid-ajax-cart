@@ -77,13 +77,13 @@ Liquid Ajax Cart requests new HTML for all the sections with a `data-ajax-cart-s
 Also Liquid Ajax Cart intercepts all product forms submitions and sends ajax requests instead.
 
 ## Demo
-A development store [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) demonstrates all the features of Liquid Ajax Cart.
+A development store [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) demonstrates features of Liquid Ajax Cart.
 
-Password: `liquid-ajax-cart`
+Password — `liquid-ajax-cart`
 
-The store uses the "Minimal" theme from the Shopify free themes list and Liquid Ajax Cart on top. The theme doesn't have any ajax-cart related functionality out of the box.
+The store uses "Minimal" theme from the Shopify free themes list and Liquid Ajax Cart on top of it. "Minimal" theme doesn't have Ajax-cart related functionality out of the box.
 
-The store's codebase lives in the main branch of this repository: folders `assets`, `config`, `layout`, `locales`, `sections`, `snippets`, `templates`.
+The store's codebase lives in the main branch of this repository: folders `assets`, `config`, `layout`, `locales`, `sections`, `snippets` and `templates`.
 
 ## Documentation ( in process )
 
