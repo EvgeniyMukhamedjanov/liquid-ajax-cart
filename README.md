@@ -1,6 +1,6 @@
 # Liquid Ajax Cart — for Shopify
 
-Liquid Ajax Cart — a Javascript library that lets you build an Ajax cart using Liquid templates:
+Liquid Ajax Cart — a Javascript library that lets you build an Ajax cart using Liquid templates.
 
 ##### 1. Create a liquid section for Ajax-cart with a `data-ajax-cart-section` container:
 
