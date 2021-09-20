@@ -42,9 +42,7 @@ Liquid Ajax Cart — a Javascript library that lets you build an Ajax cart using
 </script>
 ```
 
-That's it. 
-
-Product forms will work without page reloading and the `ajax-cart` section will get updated each time when a user submits a form or clicks `+` or `−` buttons in the `ajax-cart` section.
+Once it is done, Liquid Ajax Cart will ajaxify "Add to Cart" forms and update the `ajax-cart` section whenever a user submits a form or clicks `+` or `−` buttons in the `ajax-cart` section.
 
 ## Demo
 The [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) development store demonstrates features of Liquid Ajax Cart.
