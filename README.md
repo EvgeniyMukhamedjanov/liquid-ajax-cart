@@ -3,8 +3,9 @@ Liquid Ajax Cart — Javascript library for Shopify.
 
 It lets you build Ajax carts using plain Liquid templates.
 
-## Quick Test with your theme
-If you have any script that calls `stopPropagation` method for product forms' `submit` event — switch it off. Otherwise Liquid Ajax Cart will not be able to handle the "Add to Cart" user's action.
+## Quick test with your theme
+
+If you have any script that calls `stopPropagation` method for `submit` events — switch it off. Otherwise Liquid Ajax Cart will not be able to handle the "Add to Cart" user's action.
 
 ##### 1. Create a liquid section for Ajax-cart with a `data-ajax-cart-section` container:
 
@@ -76,11 +77,13 @@ Liquid Ajax Cart requests new HTML for all the sections with a `data-ajax-cart-s
 Also Liquid Ajax Cart intercepts all product forms submitions and sends ajax requests instead.
 
 ## Demo
-[liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) — the store uses "Minimal" theme and Liquid Ajax Cart on top. The theme is from the Shopify free themes list and it doesn't have any ajax-cart related functionality out of the box.
+A development store [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) demonstrates all the features of Liquid Ajax Cart.
 
 Password: `liquid-ajax-cart`
 
-The store's code is connected to the main branch of this repository.
+The store uses the "Minimal" theme from the Shopify free themes list and Liquid Ajax Cart on top. The theme doesn't have any ajax-cart related functionality out of the box.
+
+The store's codebase lives in the main branch of this repository: folders `assets`, `config`, `layout`, `locales`, `sections`, `snippets`, `templates`.
 
 ## Documentation ( in process )
 
