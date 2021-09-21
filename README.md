@@ -44,7 +44,7 @@ Liquid Ajax Cart — a Javascript library that lets you build an Ajax cart using
 
 Once it is done, Liquid Ajax Cart will ajaxify product forms and update the `ajax-cart` section whenever a user submits a form or clicks `+` or `−` buttons in the `ajax-cart` section.
 
-## Demo
+### Demo
 The [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) development store demonstrates features of Liquid Ajax Cart.
 
 Password — `liquid-ajax-cart`
@@ -53,24 +53,24 @@ The store uses "Minimal" theme from Shopify that doesn't have Ajax-cart related 
 
 The store's codebase lives in the main branch of this repository — folders `assets`, `config`, `layout`, `locales`, `sections`, `snippets` and `templates`.
 
-## Documentation ( in process )
 
-*in process - in process - in process*
+## Liquid sections
 
-### Buttons
+data-ajax-cart-section
 
-#### data-ajax-cart-quantity-button
+## Buttons
+
+### data-ajax-cart-quantity-button
 
 Changes quantity of a cart item on a user's click. 
 
-As a parameter it takes a string with a [line item's key](https://shopify.dev/api/liquid/objects/line_item#line_item-key) followed by the vertical bar symbol (**|**) followed by a new quantity number:
+As a parameter it takes a string with a [line item's key](https://shopify.dev/api/liquid/objects/line_item#line_item-key) followed by the vertical bar symbol (**|**) followed by a new quantity value:
 
 ```liquid
 <button data-ajax-cart-quantity-button=" 17285644550:70ff98a797ed385f6ef25e6e974708ca | 15 " > Change quantity to 15 </button>
 
 {% comment %}
-  Mostly it doesn't look so frightening
-  because these buttons are used within a loop of cart items:
+  Mostly these buttons are used within a loop of cart items:
 {% endcomment %}
 
 {% for line_item in cart.items %}
@@ -84,7 +84,7 @@ As a parameter it takes a string with a [line item's key](https://shopify.dev/ap
 ```
 These buttons are used as `+` and `−` buttons on the demo store within the right-side cart.
 
-#### data-ajax-cart-toggle-class-button
+### data-ajax-cart-toggle-class-button
 
 Takes a CSS class as a parameter and adds the CSS class to the `body` tag on a user's click. If the `body` tag has the CSS class then it will be removed from the `body`.
 
@@ -110,7 +110,7 @@ The usecase is "Show/Hide Cart" button. It is used in the header of the demo sto
 
 ```
 
-### Product forms
+## Product forms
 
 Liquid Ajax Cart ajaxifies product forms once it is loaded. 
 
@@ -118,7 +118,7 @@ When a user submits a product form, Liquid Ajax Cart sends an Ajax "add to cart"
 
 Show a loading indicator and make the button visually disabled if the classes are attached to your product form.
 
-#### data-ajax-cart-form-error
+### data-ajax-cart-form-error
 Add a container with `data-ajax-cart-form-error` attribute within a product form and Liquid Ajax Cart will put error messages of Ajax requests in it, if happen:
 ```liquid
 {% form 'product', product %}
@@ -133,7 +133,7 @@ Add a container with `data-ajax-cart-form-error` attribute within a product form
 ```
 Live example of showing errors is on the [Limited Product](https://liquid-ajax-cart.myshopify.com/products/limited-product) page of the demo store.
 
-### Body CSS classes
+## Body CSS classes
 
 Liquid Ajax Cart adds CSS classes to the `body` tag depending on a current state of a user's cart.
 
@@ -141,7 +141,7 @@ Liquid Ajax Cart adds CSS classes to the `body` tag depending on a current state
 - `.js-ajax-cart-empty` — if a user's cart is empty;
 - `.js-ajax-cart-request-in-progress` — if Liquid Ajax Cart has an Ajax request in progress.
 
-### State
+## State
 
 State — Javascript object where Liquid Ajax Cart keeps the information of a user's cart and current Ajax requests statuses. 
 
@@ -171,7 +171,7 @@ The state of an empty cart looks like this:
 ```
 The state object gets updated after each Ajax request.
 
-#### data-ajax-cart-bind-state
+### data-ajax-cart-bind-state
 
 Add the `data-ajax-cart-bind-state` with a path to a state value as a parameter to a HTML element and Liquid Ajax Cart will keep the text content of the element to be according to the state value.
 
@@ -186,13 +186,15 @@ Add the `data-ajax-cart-bind-state` with a path to a state value as a parameter 
 
 On the demo store it is used to show the amount of cart items next to the "Cart" link in the header.
 
+### Javascript Cart State API
 
-### HTML attributes
+getCartState() — returns the current state
 
-data-ajax-cart-section
+subscribeToCartState( callback ) — callback will be called after cart state is changed
 
 
-### Javascript Ajax API
+## Perform custom requests
+
 *After each call the cart state will be updated, the ajax-cart sections will be rerendered.*
 
 cartGet() — calls /cart.js
@@ -202,9 +204,3 @@ cartAdd( body ) - calls /cart/add.js
 cartChange( body ) — calls /cart/change.js
 
 subscribeToAjaxAPI( callback ) — callback will be called before and after each cart request
-
-### Javascript Cart State API
-
-getCartState() — returns the current state
-
-subscribeToCartState( callback ) — callback will be called after cart state is changed
