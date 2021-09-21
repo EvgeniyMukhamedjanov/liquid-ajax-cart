@@ -1,8 +1,8 @@
 # Liquid Ajax Cart — for Shopify
 
-Liquid Ajax Cart — a Javascript library that lets you build an Ajax cart using Liquid templates.
+Liquid Ajax Cart — a Javascript library that lets you build an AJAX cart using Liquid templates.
 
-##### 1. Create a liquid section for Ajax-cart with a `data-ajax-cart-section` container:
+##### 1. Create a liquid section for AJAX cart with a `data-ajax-cart-section` container:
 
 ```liquid
 {% comment %} sections/ajax-cart.liquid {% endcomment %}
@@ -55,7 +55,7 @@ The store's codebase lives in the main branch of this repository — folders `as
 
 ## Content
 
-* Liquid sections for Ajax carts
+* [Ajaxified Liquid sections](#ajaxified-liquid-sections)
   * [data-ajax-cart-section](#data-ajax-cart-section)
 * [Buttons](#buttons)
   * [data-ajax-cart-quantity-button](#data-ajax-cart-quantity-button)
@@ -71,12 +71,12 @@ The store's codebase lives in the main branch of this repository — folders `as
   * [Javascript State Api](#javascript-state-api)
     * getState()
     * `subscribeToCartState( callback )`
-* Ajax Cart API requests
+* AJAX Cart API requests
 
 
-## Liquid sections ajaxified
+## Ajaxified Liquid sections
 
-Before pefroming another Ajax request, Liquid Ajax Cart runs through HTML code of a page looking for Shopify sections that should be updated after the request. 
+Before pefroming another AJAX request, Liquid Ajax Cart runs through HTML code of a page looking for Shopify sections that should be updated after the request. 
 
 Then it modifies the request in order to ask Shopify to re-render those section and provide updated HTML for them.
 
@@ -84,7 +84,7 @@ After request is performed, Liquid Ajax Cart pulls out the new HTML from the req
 
 ### data-ajax-cart-section
 
-A container with the `data-ajax-cart-section` attribute within a section is a sign for Liquid Ajax Cart that the section should be updated after another Ajax request.
+A container with the `data-ajax-cart-section` attribute within a section is a sign for Liquid Ajax Cart that the section should be updated after another AJAX request.
 
 The container must be a root HTML element in a section.
 
@@ -164,12 +164,12 @@ The usecase is "Show/Hide Cart" button. It is used in the header of the demo sto
 
 Liquid Ajax Cart ajaxifies product forms once it is loaded. 
 
-When a user submits a product form, Liquid Ajax Cart sends an Ajax "add to cart" request and blocks the form until the request is finished to prevent double submissions. Once the request is sent, Liquid Ajax Cart adds `js-ajax-cart-form-in-progress` CSS class to the form and `js-ajax-cart-button-in-progress` CSS class to the submit button of the form. The classes get removed after the request is finished.
+When a user submits a product form, Liquid Ajax Cart sends an AJAX "add to cart" request and blocks the form until the request is finished to prevent double submissions. Once the request is sent, Liquid Ajax Cart adds `js-ajax-cart-form-in-progress` CSS class to the form and `js-ajax-cart-button-in-progress` CSS class to the submit button of the form. The classes get removed after the request is finished.
 
 Show a loading indicator and make the button visually disabled if the classes are attached to your product form.
 
 ### data-ajax-cart-form-error
-Add a container with `data-ajax-cart-form-error` attribute within a product form and Liquid Ajax Cart will put error messages of Ajax requests in it, if happen:
+Add a container with `data-ajax-cart-form-error` attribute within a product form and Liquid Ajax Cart will put error messages of AJAX requests in it, if happen:
 ```liquid
 {% form 'product', product %}
 
@@ -189,11 +189,11 @@ Liquid Ajax Cart adds CSS classes to the `body` tag depending on a current state
 
 - `.js-ajax-cart-set` — if Liquid Ajax Cart has been loaded and got information about a user's cart state;
 - `.js-ajax-cart-empty` — if a user's cart is empty;
-- `.js-ajax-cart-request-in-progress` — if Liquid Ajax Cart has an Ajax request in progress.
+- `.js-ajax-cart-request-in-progress` — if Liquid Ajax Cart has an AJAX request in progress.
 
 ## State
 
-State — Javascript object where Liquid Ajax Cart keeps the information of a user's cart and current Ajax requests statuses. 
+State — Javascript object where Liquid Ajax Cart keeps the information of a user's cart and current AJAX requests statuses. 
 
 The state of an empty cart looks like this:
 ```json
