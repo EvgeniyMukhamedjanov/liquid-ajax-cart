@@ -57,7 +57,61 @@ The store's codebase lives in the main branch of this repository — folders `as
 
 *in process - in process - in process*
 
+### Buttons
+
+#### data-ajax-cart-quantity-button
+
+Changes quantity of a cart item on a user's click. 
+
+As a parameter it takes a string with a [line item's key](https://shopify.dev/api/liquid/objects/line_item#line_item-key) followed by the vertical bar symbol (**|**) followed by a new quantity number:
+
+```liquid
+<button data-ajax-cart-quantity-button=" 17285644550:70ff98a797ed385f6ef25e6e974708ca | 15 " > Change quantity to 15 </button>
+
+{% comment %}
+  Mostly it doesn't look so frightening
+  because these buttons are used within a loop of cart items:
+{% endcomment %}
+
+{% for line_item in cart.items %}
+  Quantity:
+  <button data-ajax-cart-quantity-button=" {{ line_item.key }} | {{ line_item.quantity | minus: 1 }} "> Minus 1 </button>
+  {{ line_item.quantity }}
+  <button data-ajax-cart-quantity-button=" {{ line_item.key }} | {{ line_item.quantity | plus: 1 }} "> Plus 1 </button>
+  
+  <a data-ajax-cart-quantity-button=" {{ line_item.key }} | 0 "> Remove </a>
+{% endfor %}
+```
+These buttons are used as `+` and `−` buttons on the demo store within the right-side cart.
+
+#### data-ajax-cart-toggle-class-button
+
+Takes a CSS class as a parameter and adds the CSS class to the `body` tag on a user's click. If the `body` tag has the CSS class then it will be removed from the `body`.
+
+Showcase — "Show/Hide Cart" button. It is used in the header of the demo store: "Cart" link shows and hides the right-side cart.
+
+```liquid
+
+{% comment %}
+  Liquid Ajax Cart will intercept a user's click on the following link
+  and instead of redirecting to "/cart" it will add/remove the "js-ajax-cart-opened" <body> class
+{% endcomment %}
+
+<a href="/cart" data-ajax-cart-toggle-class-button="js-ajax-cart-opened" > Cart </button>
+
+<div class="mini-cart">
+  <!-- Cart content -->
+</div>
+
+<style>
+  .mini-cart { display: none; }
+  .js-ajax-cart-opened .mini-cart { display: block; }
+</style>
+
+```
+
 ### Product forms
+
 Liquid Ajax Cart ajaxifies product forms once it is loaded. 
 
 When a user submits a product form, Liquid Ajax Cart sends an Ajax "add to cart" request and blocks the form until the request is finished to prevent double submissions. Once the request is sent, Liquid Ajax Cart adds `js-ajax-cart-form-in-progress` CSS class to the form and `js-ajax-cart-button-in-progress` CSS class to the submit button of the form. The classes get removed after the request is finished.
@@ -91,8 +145,6 @@ Liquid Ajax Cart adds CSS classes to the `body` tag depending on a current state
 ### HTML attributes
 
 data-ajax-cart-section
-
-data-ajax-cart-quantity-button
 
 data-ajax-cart-section-toggle-class-button
 
