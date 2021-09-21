@@ -88,7 +88,7 @@ These buttons are used as `+` and `−` buttons on the demo store within the rig
 
 Takes a CSS class as a parameter and adds the CSS class to the `body` tag on a user's click. If the `body` tag has the CSS class then it will be removed from the `body`.
 
-Showcase — "Show/Hide Cart" button. It is used in the header of the demo store: "Cart" link shows and hides the right-side cart.
+The usecase is "Show/Hide Cart" button. It is used in the header of the demo store: "Cart" link shows and hides the right-side cart.
 
 ```liquid
 
@@ -143,7 +143,7 @@ Liquid Ajax Cart adds CSS classes to the `body` tag depending on a current state
 
 ### State
 
-Liquid Ajax Cart keeps the information of a user's cart and current Ajax requests statuses in a Javascript object. 
+State — Javascript object where Liquid Ajax Cart keeps the information of a user's cart and current Ajax requests statuses. 
 
 The state of an empty cart looks like this:
 ```json
@@ -169,14 +169,27 @@ The state of an empty cart looks like this:
   }
 }
 ```
+The state object gets updated after each Ajax request.
+
+#### data-ajax-cart-bind-state
+
+Add the `data-ajax-cart-bind-state` with a path to a state value as a parameter to a HTML element and Liquid Ajax Cart will keep the text content of the element to be according to the state value.
+
+```liquid
+{% comment %}
+  Liquid expression {{ cart.item_count }} displays amount of items in a cart,
+  data-ajax-cart-bind-state updates the HTML of the element when the cart.item_count state value is changed
+{% endcomment %}
+
+<div data-ajax-cart-bind-state="cart.item_count" > {{ cart.item_count }} </div>
+```
+
+On the demo store it is used to show the amount of cart items next to the "Cart" link in the header.
 
 
 ### HTML attributes
 
 data-ajax-cart-section
-
-
-data-ajax-cart-bind-state
 
 
 ### Javascript Ajax API
