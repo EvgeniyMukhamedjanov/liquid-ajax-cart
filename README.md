@@ -53,6 +53,26 @@ The store uses "Minimal" theme from Shopify that doesn't have Ajax-cart related 
 
 The store's codebase lives in the main branch of this repository — folders `assets`, `config`, `layout`, `locales`, `sections`, `snippets` and `templates`.
 
+## Content
+
+* Liquid sections for Ajax carts
+  * data-ajax-cart-section
+* Buttons
+  * data-ajax-cart-quantity-button
+  * data-ajax-cart-toggle-class-button
+* [Product forms](#product-forms)
+  * data-ajax-cart-form-error
+* Body CSS classes 
+  * .js-ajax-cart-set
+  * .js-ajax-cart-empty
+  * .js-ajax-cart-request-in-progress
+* State
+  * data-ajax-cart-bind-state
+  * Javascript State Api
+    * getState()
+    * `subscribeToCartState( callback )`
+* Ajax Cart API requests
+
 
 ## Liquid sections ajaxified
 
@@ -216,7 +236,7 @@ Add the `data-ajax-cart-bind-state` with a path to a state value as a parameter 
 
 On the demo store it is used to show the amount of cart items next to the "Cart" link in the header.
 
-### Javascript Cart State API
+### Javascript State API
 
 getCartState() — returns the current state
 
