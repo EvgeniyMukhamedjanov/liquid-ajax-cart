@@ -54,9 +54,39 @@ The store uses "Minimal" theme from Shopify that doesn't have Ajax-cart related 
 The store's codebase lives in the main branch of this repository — folders `assets`, `config`, `layout`, `locales`, `sections`, `snippets` and `templates`.
 
 
-## Liquid sections
+## Liquid sections ajaxified
 
-data-ajax-cart-section
+Before pefroming another Ajax request, Liquid Ajax Cart runs through HTML code of a page looking for Shopify sections that should be updated after the request. 
+
+Then it modifies the request in order to ask Shopify to re-render those section and provide updated HTML for them.
+
+After request is performed, Liquid Ajax Cart pulls out the new HTML from the request response and updates the sections' code.
+
+### data-ajax-cart-section
+
+A container with the `data-ajax-cart-section` attribute within a section is a sign for Liquid Ajax Cart that the section should be updated after another Ajax request.
+
+The container must be a root HTML element in a section.
+
+##### Correct:
+```liquid
+{% comment %} sections/ajax-cart.liquid {% endcomment %}
+
+<div data-ajax-cart-section class="any-class">
+  <!-- section content -->
+</div>
+```
+
+##### Will not work. The [data-ajax-cart-section] container is not a root element:
+```liquid
+{% comment %} sections/ajax-cart.liquid {% endcomment %}
+
+<section class="any-class">
+  <div data-ajax-cart-section>
+    <!-- section content -->
+  </div>
+</section>
+```
 
 ## Buttons
 
