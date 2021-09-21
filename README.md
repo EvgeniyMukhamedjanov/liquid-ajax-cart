@@ -77,6 +77,16 @@ Add a container with `data-ajax-cart-form-error` attribute within a product form
   
 {% endform %}
 ```
+Live example of showing errors is on the [Limited Product](https://liquid-ajax-cart.myshopify.com/products/limited-product) page of the demo store.
+
+### Body CSS classes
+
+Liquid Ajax Cart adds CSS classes to the `body` tag depending on a current state of a user's cart.
+
+- `.js-ajax-cart-set` — if Liquid Ajax Cart has been loaded and got information about a user's cart state;
+- `.js-ajax-cart-empty` — if a user's cart is empty;
+- `.js-ajax-cart-request-in-progress` — if Liquid Ajax Cart has an Ajax request in progress.
+
 
 ### HTML attributes
 
@@ -86,23 +96,7 @@ data-ajax-cart-quantity-button
 
 data-ajax-cart-section-toggle-class-button
 
-data-ajax-cart-form-error
-
 data-ajax-cart-bind-state
-
-### Css Body classes
-
-.js-ajax-cart-set
-
-.js-ajax-cart-empty
-
-.js-ajax-cart-request-in-progress
-
-### Css Form classes
-
-.js-ajax-cart-form-in-progress
-
-.js-ajax-cart-button-in-progress
 
 
 ### Javascript Ajax API
