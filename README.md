@@ -132,7 +132,17 @@ As a parameter it takes a string with a [line item's key](https://shopify.dev/ap
   <a data-ajax-cart-quantity-button=" {{ line_item.key }} | 0 "> Remove </a>
 {% endfor %}
 ```
-These buttons are used as `+` and `−` buttons on the demo store within the right-side cart.
+The button becomes not active if Liquid Ajax Cart is performing any AJAX request. After all requests are finished, the button becomes active again.
+
+If there is an AJAX request in progress, the `body` tag has `js-ajax-cart-request-in-progress` CSS class (see [Body CSS classes](#body-css-classes)). Thus you can make `data-ajax-cart-quantity-button` buttons look disabled when they are not active:
+
+```css
+.js-ajax-cart-request-in-progress [data-ajax-cart-quantity-button] {
+  opacity: .5;
+}
+```
+
+The button is used for `+` and `−` buttons on the demo store within the right-side cart.
 
 ### data-ajax-cart-toggle-class-button
 
