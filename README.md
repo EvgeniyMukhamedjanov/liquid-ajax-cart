@@ -1,6 +1,8 @@
-# Liquid Ajax Cart — for Shopify
+# Liquid Ajax Cart — AJAX cart for Shopify
 
-Liquid Ajax Cart — a Javascript library that lets you build an AJAX cart using Liquid templates:
+Liquid Ajax Cart — a Javascript library that lets you build an AJAX cart using Liquid templates.
+
+No Javascript code needed.
 
 ##### 1. Create a liquid section for an AJAX cart with a `data-ajax-cart-section` container
 
@@ -42,11 +44,11 @@ Liquid Ajax Cart — a Javascript library that lets you build an AJAX cart using
 </script>
 ```
 
-That's it!
+:tada: That's it!
 
-Once Liquid Ajax Cart is loaded, it will ajaxify product forms and update the `ajax-cart` section whenever a user submits the forms or clicks `+`, `−` or `Remove` buttons in the `ajax-cart` section.
+Once Liquid Ajax Cart is loaded, it will ajaxify product forms and update the `ajax-cart` section whenever users submit the forms or click `+`, `−` or `Remove` buttons in the `ajax-cart` section.
 
-### Demo
+## Demo
 The [liquid-ajax-cart.myshopify.com](https://liquid-ajax-cart.myshopify.com/) development store demonstrates features of Liquid Ajax Cart.
 
 Password — `liquid-ajax-cart`
@@ -70,10 +72,14 @@ The store's codebase lives in the main branch of this repository — folders `as
   * .js-ajax-cart-request-in-progress
 * [State](#state)
   * [data-ajax-cart-bind-state](#data-ajax-cart-bind-state)
-  * [Javascript State Api](#javascript-state-api)
-    * getState()
-    * `subscribeToCartState( callback )`
-* AJAX Cart API requests
+  * [Javascript State API](#javascript-state-api)
+    * getState
+    * subscribeToCartState
+* [AJAX-cart Javascript API](#ajax-cart-javascript-api)
+  * cartGet
+  * cartAdd
+  * cartChange
+  * subscribeToAjaxAPI
 
 
 ## Ajaxified Liquid sections
@@ -255,7 +261,7 @@ getCartState() — returns the current state
 subscribeToCartState( callback ) — callback will be called after cart state is changed
 
 
-## Perform custom requests
+## AJAX-cart Javascript API
 
 *After each call the cart state will be updated, the ajax-cart sections will be rerendered.*
 
