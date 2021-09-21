@@ -193,9 +193,9 @@ Liquid Ajax Cart adds CSS classes to the `body` tag depending on a current state
 
 ## State
 
-State — Javascript object where Liquid Ajax Cart keeps the information of a user's cart and current AJAX requests statuses. 
+State is a Javascript object where Liquid Ajax Cart keeps the information related to user's cart.
 
-The state of an empty cart looks like this:
+If a cart is empty, the state will looks like this:
 ```json
 {
   "cart":{
@@ -219,7 +219,7 @@ The state of an empty cart looks like this:
   }
 }
 ```
-The state object gets updated after each Ajax request.
+The state object gets updated after each AJAX request.
 
 ### data-ajax-cart-bind-state
 
