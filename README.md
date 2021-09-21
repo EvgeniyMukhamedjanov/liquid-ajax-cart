@@ -223,7 +223,7 @@ The state object gets updated after each AJAX request.
 
 ### data-ajax-cart-bind-state
 
-Add the `data-ajax-cart-bind-state` with a path to a state value as a parameter to a HTML element and Liquid Ajax Cart will keep the text content of the element to be according to the state value.
+Add the `data-ajax-cart-bind-state` attribute to an HTML element with a path to a state value as a parameter and Liquid Ajax Cart will keep the text content of the element in sync with the state value.
 
 ```liquid
 {% comment %}
