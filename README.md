@@ -7,7 +7,7 @@ Liquid Ajax Cart — a Javascript library that lets you build an AJAX cart using
 ```liquid
 {% comment %} sections/ajax-cart.liquid {% endcomment %}
 
-<div style="padding: 2em;" data-ajax-cart-section >
+<div data-ajax-cart-section >
   <h2>Cart</h2>
   
   {% for item in cart.items %}  
