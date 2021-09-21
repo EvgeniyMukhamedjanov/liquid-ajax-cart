@@ -56,19 +56,19 @@ The store's codebase lives in the main branch of this repository — folders `as
 ## Content
 
 * Liquid sections for Ajax carts
-  * data-ajax-cart-section
-* Buttons
-  * data-ajax-cart-quantity-button
-  * data-ajax-cart-toggle-class-button
+  * [data-ajax-cart-section](#data-ajax-cart-section)
+* [Buttons](#buttons)
+  * [data-ajax-cart-quantity-button](#data-ajax-cart-quantity-button)
+  * [data-ajax-cart-toggle-class-button](#data-ajax-cart-toggle-class-button)
 * [Product forms](#product-forms)
-  * data-ajax-cart-form-error
-* Body CSS classes 
+  * [data-ajax-cart-form-error](#data-ajax-cart-form-error)
+* [Body CSS classes](#body-css-classes)
   * .js-ajax-cart-set
   * .js-ajax-cart-empty
   * .js-ajax-cart-request-in-progress
-* State
-  * data-ajax-cart-bind-state
-  * Javascript State Api
+* [State](#state)
+  * [data-ajax-cart-bind-state](#data-ajax-cart-bind-state)
+  * [Javascript State Api](#javascript-state-api)
     * getState()
     * `subscribeToCartState( callback )`
 * Ajax Cart API requests
