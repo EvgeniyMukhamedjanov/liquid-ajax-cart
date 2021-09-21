@@ -60,7 +60,23 @@ The store's codebase lives in the main branch of this repository — folders `as
 ### Product forms
 Liquid Ajax Cart ajaxifies product forms once it is loaded. 
 
-When a user submits a product form, Liquid Ajax Cart sends an Ajax "add to cart" request and blocks the form until the request is finished to prevent double submissions. While the request is in progress, the form has `js-ajax-cart-form-in-progress` CSS class and submit buttons have `js-ajax-cart-button-in-progress` CSS class. You can show a loading indicator or make the button look disabled if the classes exist.
+When a user submits a product form, Liquid Ajax Cart sends an Ajax "add to cart" request and blocks the form until the request is finished to prevent double submissions. Once the request is sent, Liquid Ajax Cart adds `js-ajax-cart-form-in-progress` CSS class to the form and `js-ajax-cart-button-in-progress` CSS class to the submit button of the form. The classes get removed after the request is finished.
+
+Show a loading indicator and make the button visually disabled if the classes are attached to your product form.
+
+#### data-ajax-cart-form-error
+Add a container with `data-ajax-cart-form-error` attribute within a product form and Liquid Ajax Cart will put error messages of Ajax requests in it, if happen:
+```liquid
+{% form 'product', product %}
+
+  <!-- form's code ... -->
+
+  <div data-ajax-cart-form-error ></div>
+  
+  <!-- ... form's code -->
+  
+{% endform %}
+```
 
 ### HTML attributes
 
