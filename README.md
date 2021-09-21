@@ -141,12 +141,40 @@ Liquid Ajax Cart adds CSS classes to the `body` tag depending on a current state
 - `.js-ajax-cart-empty` — if a user's cart is empty;
 - `.js-ajax-cart-request-in-progress` — if Liquid Ajax Cart has an Ajax request in progress.
 
+### State
+
+Liquid Ajax Cart keeps the information of a user's cart and current Ajax requests statuses in a Javascript object. 
+
+The state of an empty cart looks like this:
+```json
+{
+  "cart":{
+    "token":"b7d3743e2c398043f209c5a3a9014f9d",
+    "note":null,
+    "attributes":{},
+    "original_total_price":1000,
+    "total_price":1000,
+    "total_discount":0,
+    "total_weight":0,
+    "item_count":1,
+    "items":[],
+    "requires_shipping":false,
+    "currency":"USD",
+    "items_subtotal_price":1000,
+    "cart_level_discount_applications":[]
+  },
+  "status":{
+    "requestInProgress":false,
+    "cartStateSet":true
+  }
+}
+```
+
 
 ### HTML attributes
 
 data-ajax-cart-section
 
-data-ajax-cart-section-toggle-class-button
 
 data-ajax-cart-bind-state
 
