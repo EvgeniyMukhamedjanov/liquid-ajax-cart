@@ -141,6 +141,7 @@
   {% section 'ajax-cart' %}
   {{ 'liquid-ajax-cart.css' | asset_url | stylesheet_tag }}
   
+  <script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
   <script type="module">
     import '{{ 'liquid-ajax-cart.js' | asset_url }}';
   </script>

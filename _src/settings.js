@@ -24,7 +24,8 @@ const configure = ( newSettings = {} ) => {
 		binderAttribute: `${ settings.dataAttributePrefix }-bind-state`,
 		quantityButtonAttribute: `${ settings.dataAttributePrefix }-quantity-button`,
 		toggleClassButtonAttribute: `${ settings.dataAttributePrefix }-toggle-class-button`,
-		toggleClassPrefix: `${ settings.cssClassesPrefix }-toggle-`
+		toggleClassPrefix: `${ settings.cssClassesPrefix }-toggle-`,
+		initialStateAttribute: `${ settings.dataAttributePrefix }-initial-state`
 	};
 }
 configure();

@@ -24,13 +24,33 @@
 
         <div>
           <span>Quantity: </span>
-          <button data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | minus: 1 }}"><i>-</i></button>
+          <a 
+            href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
+            class="ajax-cart__quantity-button"
+            data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | minus: 1 }}"
+          >
+            <i>-</i>
+          </a>
           {{ item.quantity }}
-          <button data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | plus: 1 }}"><i>+</i></button>
+          <a 
+            href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
+            class="ajax-cart__quantity-button"
+            data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | plus: 1 }}"
+          >
+            <i>+</i>
+          </a>
         </div>
 
         <div> Total: <strong>{{ item.final_line_price | money }}</strong> </div>
-        <div><a href="javascript:;" data-ajax-cart-quantity-button="{{ item.key }} | 0"><small>Remove</small></a></div>
+        <div>
+          <a 
+            href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity=0" 
+            class="ajax-cart__remove-button"
+            data-ajax-cart-quantity-button="{{ item.key }} | 0"
+          >
+            <small>Remove</small>
+          </a>
+        </div>
       </div>
     {% endfor %}
   </div>

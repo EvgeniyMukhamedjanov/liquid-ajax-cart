@@ -39,6 +39,7 @@ No Javascript code needed.
 
 {% section 'ajax-cart' %}
 
+<script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
 <script type="module">
   import '{{ 'liquid-ajax-cart.js' | asset_url }}';
 </script>

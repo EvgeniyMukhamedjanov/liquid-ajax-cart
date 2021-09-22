@@ -41,7 +41,10 @@ const cartRequest = ( requestType, body ) => {
 				// if a callback is fired without 'responseData' object in the payload, 
 				// it means this is a callback before request is started
 			});
-		} catch {}
+		} catch (e) {
+			console.error('Liquid Ajax Cart: Error during callback');
+			console.error(e);
+		}
 	})
 
 	const fetchPayload = {
@@ -77,7 +80,10 @@ const cartRequest = ( requestType, body ) => {
 					// it means this is a callback after request is done
 					responseData: data
 				});
-			} catch {}
+			} catch (e) {
+				console.error('Liquid Ajax Cart: Error during callback');
+				console.error(e);
+			}
 		})
 
 		// console.log( data );

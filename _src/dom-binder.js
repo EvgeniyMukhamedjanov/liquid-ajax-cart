@@ -16,8 +16,6 @@ const updateDOM = ( state ) => {
 	}
 }
 
-subscribeToCartState( updateDOM );
-
 const computeValue = ( str ) => {
 	const [ path, ...filters ] = str.split('|');
 	let value = getStateValueByString( path );
@@ -74,3 +72,5 @@ const formatters = {
 		}
 	}
 }
+
+subscribeToCartState( updateDOM );

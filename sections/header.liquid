@@ -104,13 +104,13 @@
 
           <div class="header-bar__module">
             <span class="header-bar__sep" aria-hidden="true"></span>
-            <a href="{{ routes.cart_url }}" class="cart-page-link" data-ajax-cart-toggle-class-button="open">
+            <a href="{{ routes.cart_url }}" class="cart-page-link" data-ajax-cart-toggle-class-button="js-ajax-cart-open">
               <span class="icon icon-cart header-bar__cart-icon" aria-hidden="true"></span>
             </a>
           </div>
 
           <div class="header-bar__module">
-            <a href="{{ routes.cart_url }}" class="cart-page-link" data-ajax-cart-toggle-class-button="open">
+            <a href="{{ routes.cart_url }}" class="cart-page-link" data-ajax-cart-toggle-class-button="js-ajax-cart-open">
               {{ 'layout.cart.title' | t }}
               <span class="cart-count header-bar__cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}" data-ajax-cart-bind-state="cart.item_count">{{ cart.item_count }}</span>
             </a>

@@ -18,6 +18,7 @@ document.addEventListener('click', function(e) {
 }, false);
 
 function quantityButtonClickHandler (e) {
+	e.preventDefault();
 	const { quantityButtonAttribute } = settings.computed;
 	const state = getCartState();
 	if ( !state.status.requestInProgress ) {
@@ -30,11 +31,13 @@ function quantityButtonClickHandler (e) {
 }
 
 function toggleClassButtonClickHandler (e) {
-	const { toggleClassButtonAttribute, toggleClassPrefix } = settings.computed;
+	e.preventDefault();
+	const { toggleClassButtonAttribute } = settings.computed;
 	let cssClass = this.getAttribute( toggleClassButtonAttribute ).trim();
+	// todo: check if it is valid css class
+	
 	if ( cssClass ) {
-		cssClass = toggleClassPrefix + cssClass;
-		e.preventDefault();
         document.body.classList.toggle( cssClass );
 	}
+	// todo: throw error if something wrong with cssClass
 }
