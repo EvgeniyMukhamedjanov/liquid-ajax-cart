@@ -11,9 +11,9 @@
     <h2>Section "ajax-cart"</h2>
     <p>The section gets updated after each action because it has a content wrapper with [data-ajax-cart-section] attribute. Liquid Ajax Cart asks Shopify to render new HTML for [data-ajax-cart-section] sections with each API request.</p>
   </div>
-  <div>
+  <div data-ajax-cart-section-scroll >
     {% for item in cart.items %}
-      <div>
+      <div class="ajax-cart__line-item" >
         <p>
           <a class="h3" href="{{ item.url }}">{{ item.product.title }}</a> <br/>
           {% unless item.product.has_only_default_variant %}

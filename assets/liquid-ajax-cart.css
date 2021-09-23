@@ -148,14 +148,15 @@
 	opacity: .6;
 }
 
+
 /* Line Item */
-#shopify-section-ajax-cart > div > div:nth-child(2) > div {
+.ajax-cart__line-item {
 	border-bottom: 1px solid rgba(27,30,47,.15);
 	padding: 0 0 30px;
 	margin-bottom: 30px;
 	position: relative;
 }
-#shopify-section-ajax-cart > div > div:nth-child(2) > div:last-child {
+.ajax-cart__line-item:last-child {
 	margin-bottom: 0;
 	border-bottom: none;
 }

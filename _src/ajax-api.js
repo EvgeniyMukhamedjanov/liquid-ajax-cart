@@ -42,7 +42,7 @@ const cartRequest = ( requestType, body ) => {
 				// it means this is a callback before request is started
 			});
 		} catch (e) {
-			console.error('Liquid Ajax Cart: Error during callback');
+			console.error('Liquid Ajax Cart: Error during callback in Ajax Api');
 			console.error(e);
 		}
 	})

@@ -4,13 +4,13 @@ import { settings } from './settings';
 const shopifySectionPrefix = 'shopify-section-';
 
 subscribeToAjaxAPI ( data => {
-	const sectionsAttribute = settings.computed.sectionsAttribute;
+	const { sectionsAttribute, sectionScrollAreaAttribute } = settings.computed;
 
 	if ( !('responseData' in data) ) {
 		// this is callback before request is started
 		// we need to add 'sections' parameter to the requestBody
 		// to receive update HTML for sections
-		if ( 'requestBody' in data ) {
+		if ( data.requestBody !== undefined ) {
 			const sectionNames = [];
 			// todo: test with dynamic sections
 			document.querySelectorAll( `[${ sectionsAttribute }]` ).forEach( sectionNodeChild => {
@@ -31,7 +31,30 @@ subscribeToAjaxAPI ( data => {
 			const sections = data.responseData.body.sections;
 			for ( let sectionId in sections ) {
 				document.querySelectorAll( `#shopify-section-${ sectionId } > [${ sectionsAttribute }]` ).forEach( sectionNodeChild => {
-					sectionNodeChild.parentNode.outerHTML = sections[ sectionId ];
+					const noId = "__noId__"
+					const scrollAreasList = {};
+					const oldSectionNode = sectionNodeChild.parentNode;
+					sectionNodeChild.parentNode.querySelectorAll(` [${ sectionScrollAreaAttribute }] `).forEach( scrollAreaNode => {
+						let scrollId = scrollAreaNode.getAttribute( sectionScrollAreaAttribute ).toString().trim();
+						if ( scrollId === '' ) {
+							scrollId = noId;
+						}
+						if ( !(scrollId in scrollAreasList) ) {
+							scrollAreasList[scrollId] = [];
+						}
+						console.log(scrollId);
+						scrollAreasList[scrollId].push(scrollAreaNode.scrollTop);
+					});
+					oldSectionNode.insertAdjacentHTML('beforeBegin', sections[ sectionId ]);
+					const newSectionNode = oldSectionNode.previousSibling;
+					oldSectionNode.parentElement.removeChild(oldSectionNode);
+					for ( let scrollId in scrollAreasList ) {
+						newSectionNode.querySelectorAll(` [${ sectionScrollAreaAttribute }="${ scrollId.replace( noId, '' ) }"] `).forEach(( scrollAreaNode, scrollAreaIndex ) => {
+							if ( scrollAreaIndex + 1 <= scrollAreasList[ scrollId ].length ) {
+								scrollAreaNode.scrollTop = scrollAreasList[ scrollId ][ scrollAreaIndex ];
+							}
+						})
+					}
 				})
 			}
 		}

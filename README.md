@@ -117,6 +117,51 @@ The container must be a root HTML element in a section.
 </section>
 ```
 
+### data-ajax-cart-section-scroll
+
+If you have a scrollable area within a `data-ajax-cart-section` section, add the `data-ajax-cart-section-scroll` attribute to it and Liquid Ajax Cart will restore the scroll position every time when HTML of the section is updated.
+
+```liquid
+<div data-ajax-cart-section>
+  <h2>Cart</h2>
+
+  <div class="items" data-ajax-cart-section-scroll>
+    {% for item in cart.items %}  
+      
+      {% comment %}
+        Scrollable area
+      {% endcomment %}
+
+    {% endfor %}
+  </div>
+
+</div>
+```
+
+If you have several scrollable areas, add the `data-ajax-cart-section-scroll` attribute with unique parameters so that Liquid Ajax Cart could distinguish them after HTML update.
+
+```liquid
+<div data-ajax-cart-section>
+  <h2>Cart</h2>
+
+  <div class="items" data-ajax-cart-section-scroll="main">
+
+    {% for item in cart.items %}
+      <div class="line-item" data-ajax-cart-section-scroll="{{ item.key }}">
+        {% comment %}
+          Despite it sounds crazy, lets imagine that each line-item is scrollable.
+          Thus it needs the data-ajax-cart-section-scroll attribute with a unique parameter
+        {% endcomment %}
+      </div>
+    {% endfor %}
+
+  </div>
+
+</div>
+```
+
+
+
 ## Buttons
 
 ### data-ajax-cart-quantity-button
@@ -176,6 +221,16 @@ The usecase is "Show/Hide Cart" button. It is used in the header of the demo sto
   .mini-cart { display: none; }
   .js-ajax-cart-opened .mini-cart { display: block; }
 </style>
+
+```
+
+If you want to create a button that will only add or only remove a class, specify an additional parameter:
+
+```liquid
+
+<a href="/cart" data-ajax-cart-toggle-class-button="js-ajax-cart-opened | add" > Open </button>
+
+<a href="/cart" data-ajax-cart-toggle-class-button="js-ajax-cart-opened | remove" > Close </button>
 
 ```
 

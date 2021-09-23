@@ -2,6 +2,10 @@ import { settings } from './settings';
 import { cartChange } from './ajax-api';
 import { getCartState } from './state';
 
+const ACTION_TOGGLE = 'toggle';
+const ACTION_ADD = 'add';
+const ACTION_REMOVE = 'remove';
+
 document.addEventListener('click', function(e) {
 	const { quantityButtonAttribute, toggleClassButtonAttribute } = settings.computed;
 
@@ -33,11 +37,31 @@ function quantityButtonClickHandler (e) {
 function toggleClassButtonClickHandler (e) {
 	e.preventDefault();
 	const { toggleClassButtonAttribute } = settings.computed;
-	let cssClass = this.getAttribute( toggleClassButtonAttribute ).trim();
-	// todo: check if it is valid css class
-	
-	if ( cssClass ) {
-        document.body.classList.toggle( cssClass );
+	const parameters = this.getAttribute( toggleClassButtonAttribute ).split( '|' );
+	if ( !parameters ) {
+		console.error('Liquid Ajax Cart: Error while toggling body class');
+		return;
 	}
-	// todo: throw error if something wrong with cssClass
+
+	const cssClass = parameters[0].trim();
+	let action = parameters[1] ? parameters[1].trim() : ACTION_TOGGLE;
+	if ( action !== ACTION_ADD && action !== ACTION_REMOVE ) {
+		action = ACTION_TOGGLE;
+	}
+
+
+	if ( cssClass ) {
+		try {
+			if ( action === ACTION_ADD ) {
+				document.body.classList.add( cssClass );
+			} else if ( action === ACTION_REMOVE ) {
+				document.body.classList.remove( cssClass );
+			} else {
+				document.body.classList.toggle( cssClass );
+			}
+        } catch (e) {
+        	console.error('Liquid Ajax Cart: Error while toggling body class:', cssClass)
+        	console.error(e);
+        }
+	}
 }

@@ -25,7 +25,8 @@ const configure = ( newSettings = {} ) => {
 		quantityButtonAttribute: `${ settings.dataAttributePrefix }-quantity-button`,
 		toggleClassButtonAttribute: `${ settings.dataAttributePrefix }-toggle-class-button`,
 		toggleClassPrefix: `${ settings.cssClassesPrefix }-toggle-`,
-		initialStateAttribute: `${ settings.dataAttributePrefix }-initial-state`
+		initialStateAttribute: `${ settings.dataAttributePrefix }-initial-state`,
+		sectionScrollAreaAttribute: `${ settings.dataAttributePrefix }-section-scroll`
 	};
 }
 configure();
