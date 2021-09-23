@@ -42,7 +42,6 @@ subscribeToAjaxAPI ( data => {
 						if ( !(scrollId in scrollAreasList) ) {
 							scrollAreasList[scrollId] = [];
 						}
-						console.log(scrollId);
 						scrollAreasList[scrollId].push(scrollAreaNode.scrollTop);
 					});
 					oldSectionNode.insertAdjacentHTML('beforeBegin', sections[ sectionId ]);
