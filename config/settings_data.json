@@ -174,10 +174,17 @@
       "ajax-cart": {
         "type": "ajax-cart",
         "settings": {}
+      },
+      "1632428792c98f42b1": {
+        "type": "custom-html",
+        "settings": {
+          "custom_html": "<h2>Show\/hide the cart<\/h2><p>\n<a href=\"\/cart\" class=\"btn btn--secondary\" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open | add\">Open<\/a> <button class=\"btn btn--secondary\" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open | remove\">Close<\/button>\n<button class=\"btn \" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open\">Toggle<\/button> \n<\/p>"
+        }
       }
     },
     "content_for_index": [
-      "featured-product"
+      "featured-product",
+      "1632428792c98f42b1"
     ]
   },
   "presets": {

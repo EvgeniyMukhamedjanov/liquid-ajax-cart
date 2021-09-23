@@ -147,7 +147,7 @@
           {{ 'layout.navigation.menu' | t }}
         </button>
       {% endunless %}
-      <a href="{{ routes.cart_url }}" class="cart-page-link mobile-cart-page-link" data-ajax-cart-toggle-class-button="open">
+      <a href="{{ routes.cart_url }}" class="cart-page-link mobile-cart-page-link" data-ajax-cart-toggle-class-button="js-ajax-cart-open">
         <span class="icon icon-cart header-bar__cart-icon" aria-hidden="true"></span>
         {{ 'layout.cart.title' | t }} <span class="cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}" data-ajax-cart-bind-state="cart.item_count">{{ cart.item_count }}</span>
       </a>
