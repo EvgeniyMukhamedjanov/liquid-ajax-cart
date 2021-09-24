@@ -1,7 +1,7 @@
 import { settings } from './settings';
-import { getCartState, subscribeToCartState } from './state';
+import { getCartState, subscribeToCartStateUpdate } from './state';
 
-subscribeToCartState( state => {
+subscribeToCartStateUpdate( state => {
 	const { 
 		cartStateSetBodyClass, 
 		requestInProgressBodyClass,

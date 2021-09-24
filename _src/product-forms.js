@@ -55,21 +55,30 @@ document.addEventListener('submit', e => {
 	processesAmount.set( form, processesAmountBefore + 1 );
 	updateFormHTML( form );
 
+	let requestState;
 	cartAdd({
 		items: [ productJson ]
 	}).then( data => {
-
-		if ( !(data.ok) ) {
-			if ( 'description' in data.body ) {
-				errorMessage = data.body.description;
-			} else if ( 'message' in data.body ) {
-				errorMessage = data.body.message;
-			} else {
-				errorMessage = `Error ${ data.status }`;
+		requestState = data;
+	}).catch( data => {
+		requestState = data;
+	}).finally(() => {
+		if ( 'responseData' in requestState ) {
+			if ( !(requestState.responseData.ok) ) {
+				if ( 'description' in requestState.responseData.body ) {
+					errorMessage = requestState.responseData.body.description;
+				} else if ( 'message' in requestState.responseData.body ) {
+					errorMessage = requestState.responseData.body.message;
+				} else {
+					errorMessage = `Error ${ requestState.responseData.status }`;
+				}
+			}
+		} else {
+			if ('fetchError' in requestState) { 
+				errorMessage = requestState.fetchError;
 			}
 		}
 
-	}).finally(() => {
 		const processesAmountAfter = processesAmount.get( form );
 		if ( processesAmountAfter > 0 ) {
 			processesAmount.set( form, processesAmountAfter - 1 );

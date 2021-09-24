@@ -143,7 +143,63 @@
   
   <script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
   <script type="module">
-    import '{{ 'liquid-ajax-cart.js' | asset_url }}';
+    import { subscribeToCartAjaxRequests, subscribeToCartStateUpdate, getCartState } from '{{ 'liquid-ajax-cart.js' | asset_url }}';
+
+    subscribeToCartAjaxRequests(( data, subscribeToResult ) => {
+      const checkbox = document.getElementById( 'subscribeToCartAjaxRequestsCheckbox' );
+      const showMessages =  checkbox && checkbox.checked;
+      const state = getCartState();
+      const itemCountBefore = state.status.cartStateSet ? state.cart.item_count : undefined;
+
+      if ( showMessages ) {
+        console.log('\n\n\n\n');
+        console.log('%c Cart AJAX requests subscriber ', 'background: #33cc69; color: white; font-weight: bold');
+        console.log('Data before request is started:');
+        console.log(data);
+        if ( itemCountBefore !== undefined ) {
+          console.log(`Items in cart (before): ${ itemCountBefore }`);
+        }
+        console.log('\n\n\n\n');
+      }
+
+      subscribeToResult( data => {
+        const state = getCartState();
+        const itemCountAfter = state.status.cartStateSet ? state.cart.item_count : undefined;
+        let itemCountDifference = undefined;
+
+        if ( itemCountBefore !== undefined && itemCountAfter !== undefined ) {
+          itemCountDifference = itemCountAfter - itemCountBefore;
+        }
+
+        if ( showMessages ) {
+          console.log('\n\n\n\n');
+          console.log('%c Cart AJAX requests subscriber ', 'background: #33cc69; color: white; font-weight: bold');
+          console.log('Data after request is finished:');
+          console.log(data);
+          if ( itemCountAfter !== undefined ) {
+            console.log(`Items in cart (after): ${ itemCountAfter }`);
+          }
+          if(itemCountDifference !== undefined) {
+            console.log(`Items in cart — difference: ${ itemCountDifference }`);
+          }
+          console.log('\n\n\n\n');
+
+        }
+
+      })
+    })
+
+    subscribeToCartStateUpdate( state => {
+      const checkbox = document.getElementById( 'subscribeToCartAjaxRequestsCheckbox' );
+      const showMessages =  checkbox && checkbox.checked;
+      if ( showMessages ) {
+        console.log('\n\n\n\n');
+        console.log('%c Cart State Update subscriber ', 'background: #764abc; color: white; font-weight: bold');
+        console.log('Updated state:');
+        console.log( state );
+        console.log('\n\n\n\n');
+      }
+    });
   </script>
 
 </body>

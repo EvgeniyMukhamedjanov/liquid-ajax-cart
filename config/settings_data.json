@@ -180,11 +180,25 @@
         "settings": {
           "custom_html": "<h2>Show\/hide the cart<\/h2><p>\n<a href=\"\/cart\" class=\"btn btn--secondary\" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open | add\">Open<\/a> <button class=\"btn btn--secondary\" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open | remove\">Close<\/button>\n<button class=\"btn \" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open\">Toggle<\/button> \n<\/p>"
         }
+      },
+      "16324720968dae6a91": {
+        "type": "custom-html",
+        "settings": {
+          "custom_html": "<h2>subscribeToCartAjaxRequests<\/h2><p><label><input type=\"checkbox\" id=\"subscribeToCartAjaxRequestsCheckbox\"> Show console.log messages from a function that subscribed to Ajax Requests<\/label><\/p>"
+        }
+      },
+      "1632473776ad1d6d59": {
+        "type": "custom-html",
+        "settings": {
+          "custom_html": "<h2>subscribeToCartStateUpdate<\/h2><p><label><input type=\"checkbox\" id=\"subscribeToCartStateUpdateCheckbox\"> Show console.log messages from a function that subscribed to State update<\/label><\/p>"
+        }
       }
     },
     "content_for_index": [
       "featured-product",
-      "1632428792c98f42b1"
+      "1632428792c98f42b1",
+      "16324720968dae6a91",
+      "1632473776ad1d6d59"
     ]
   },
   "presets": {

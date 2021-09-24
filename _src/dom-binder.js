@@ -1,4 +1,4 @@
-import { getCartState, subscribeToCartState } from './state';
+import { getCartState, subscribeToCartStateUpdate } from './state';
 import { settings } from './settings';
 
 const dataAttribute = settings.computed.binderAttribute;
@@ -73,4 +73,4 @@ const formatters = {
 	}
 }
 
-subscribeToCartState( updateDOM );
+subscribeToCartStateUpdate( updateDOM );

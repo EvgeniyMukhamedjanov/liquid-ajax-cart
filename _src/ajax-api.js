@@ -24,10 +24,15 @@ const getEndpoint = ( requestType ) => {
 	return undefined;
 }
 
-const cartRequest = ( requestType, body ) => {
+const cartRequest = ( requestType, body, firstResultCallback = undefined ) => {
 	const endpoint = getEndpoint( requestType )
 	const requestBody = requestType === REQUEST_GET ? undefined : { ...body };
 	const method = requestType === REQUEST_GET ? 'GET' : 'POST'
+	const resultSubscribers = firstResultCallback === undefined ? [] : [ firstResultCallback ];
+	const requestState = {
+		requestType,
+		endpoint
+	}
 
 	subscribers.forEach( callback => {
 		try {
@@ -40,12 +45,14 @@ const cartRequest = ( requestType, body ) => {
 
 				// if a callback is fired without 'responseData' object in the payload, 
 				// it means this is a callback before request is started
-			});
+			}, resultCallback => resultSubscribers.push( resultCallback ));
 		} catch (e) {
-			console.error('Liquid Ajax Cart: Error during callback in Ajax Api');
+			console.error('Liquid Ajax Cart: Error during Ajax request subscriber callback in ajax-api');
 			console.error(e);
 		}
 	})
+
+	requestState.requestBody = requestBody;
 
 	const fetchPayload = {
 		method,
@@ -70,45 +77,60 @@ const cartRequest = ( requestType, body ) => {
 		});
 	}).then( data => {
 
-		subscribers.forEach( callback => {
+		requestState.responseData = data;
+
+		if ( REQUEST_ADD !== requestType) {
+			return requestState;
+		}
+
+		// if requestType is REQUEST_ADD lets call 'get' also to update cart json
+		// for state and all the subscribers
+		return fetch ( getEndpoint( REQUEST_GET ), {
+			method: 'GET',
+			headers: {
+		    	'Content-Type': 'application/json'
+		  	}
+		}).then( response => response.json().then( responseBody => {
+				requestState.extraResponseData = {
+					ok: response.ok,
+					status: response.status,
+					body: responseBody
+				};
+				return requestState;
+			})
+		);
+
+	}).catch( error => {
+		console.error('Liquid Ajax Cart: Error while performing cart Ajax request')
+		console.error(error);
+		requestState.fetchError = error;
+		throw requestState;
+	}).finally(() => {
+		resultSubscribers.forEach( callback => {
 			try {
-				callback({
-					requestType,
-					endpoint,
-					requestBody,
-					// if a callback is fired with 'responseData' object, 
-					// it means this is a callback after request is done
-					responseData: data
-				});
+				callback(requestState);
 			} catch (e) {
-				console.error('Liquid Ajax Cart: Error during callback');
+				console.error('Liquid Ajax Cart: Error during Ajax request result callback in ajax-api');
 				console.error(e);
 			}
 		})
-
-		// console.log( data );
-
-		return data;
-	}).catch( data => {
-		console.log(data);
-		// todo: callbacks!!!
 	});
 }
 
-const cartGet = () => {
-	return cartRequest( REQUEST_GET )
+const cartGet = ( firstResultCallback ) => {
+	return cartRequest( REQUEST_GET, undefined, firstResultCallback );
 }
 
-const cartAdd = ( body ) => {
-	return cartRequest( REQUEST_ADD, body )
+const cartAdd = ( body, firstResultCallback ) => {
+	return cartRequest( REQUEST_ADD, body, firstResultCallback );
 }
 
-const cartChange = ( body ) => {
-	return cartRequest( REQUEST_CHANGE, body )
+const cartChange = ( body, firstResultCallback ) => {
+	return cartRequest( REQUEST_CHANGE, body, firstResultCallback );
 }
 
-const subscribeToAjaxAPI = ( callback ) => {
+const subscribeToCartAjaxRequests = ( callback ) => {
 	subscribers.push( callback );
 }
 
-export { cartAdd, cartChange, cartGet, subscribeToAjaxAPI, REQUEST_ADD }
+export { cartAdd, cartChange, cartGet, subscribeToCartAjaxRequests, REQUEST_ADD }

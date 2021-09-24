@@ -1,4 +1,4 @@
-import { subscribeToAjaxAPI, cartGet, REQUEST_ADD } from './ajax-api';
+import { subscribeToCartAjaxRequests, cartGet, REQUEST_ADD } from './ajax-api';
 import { settings } from './settings';
 
 const queryCounter = {
@@ -20,14 +20,14 @@ let status = {
 
 const init = () => {
 
-	subscribeToAjaxAPI( data => {
-		if ( !('responseData' in data) ) {
-			beforeRequestHandler( data )
-		} else {
-			afterRequestHandler( data );
-		}
+	subscribeToCartAjaxRequests(( data, subscribeToResult ) => {		
+		beforeRequestHandler( data )
 		statusUpdate();
-		notify();
+
+		subscribeToResult( data => {
+			afterRequestHandler( data );
+			statusUpdate();
+		})
 	});
 
 	const initialStateContainer = document.querySelector(`[${ settings.computed.initialStateAttribute }]`);
@@ -38,7 +38,6 @@ const init = () => {
 			if ( 'item_count' in initialState ) {
 				cart = initialState;
 				statusUpdate();
-				notify();
 			} else {
 				throw `JSON from ${ settings.computed.initialStateAttribute } script is not correct cart object`;
 			}
@@ -60,11 +59,16 @@ const beforeRequestHandler = ( data ) => {
 
 const afterRequestHandler = ( data ) => {
 	queryCounter.all--;
-	if ( data.responseData.ok ) {
-		if ( data.requestType !== REQUEST_ADD ) {
-			cart = data.responseData.body;
+	if ( 'responseData' in data && data.responseData.ok ) {
+		if ( data.requestType === REQUEST_ADD ) {
+			if ( 'extraResponseData' in data && data.extraResponseData.ok ) {
+				cart = data.extraResponseData.body;
+			} else {
+				cartGet();
+			}
+			
 		} else {
-			cartGet();
+			cart = data.responseData.body;
 		}
 	}
 }
@@ -72,9 +76,10 @@ const afterRequestHandler = ( data ) => {
 const statusUpdate = () => {
 	status.requestInProgress = queryCounter.all > 0;
 	status.cartStateSet = 'item_count' in cart; // todo: create a function for checking cart object
+	notify();
 }
 
-const subscribeToCartState = ( callback ) => {
+const subscribeToCartStateUpdate = ( callback ) => {
 	try {
 		callback({
 			cart,
@@ -103,11 +108,11 @@ const notify = () => {
 			});
 		} catch (e) {
 			console.error(e);
-			// todo: add error handler like in subscribeToCartState
+			// todo: add error handler like in subscribeToCartStateUpdate
 		}
 	})
 }
 
 init();
 
-export { subscribeToCartState, getCartState };
+export { subscribeToCartStateUpdate, getCartState };

@@ -83,7 +83,7 @@ The store's codebase lives in the main branch of this repository — folders `as
   * cartGet
   * cartAdd
   * cartChange
-  * subscribeToAjaxAPI
+  * subscribeToCartAjaxRequests
 
 
 ## Ajaxified Liquid sections
@@ -329,7 +329,21 @@ On the demo store it is used to show the amount of cart items next to the "Cart"
 
 getCartState() — returns the current state
 
-subscribeToCartState( callback ) — callback will be called after cart state is changed
+subscribeToCartState( callback ) — callback will be called after cart state is changed with the only parameter — updated state.
+
+```liquid
+<script type="module">
+  import { subscribeToCartStateUpdate } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+
+  subscribeToCartStateUpdate( state => {
+    console.log('Updated state:');
+    console.log( state );
+  });
+</script>
+
+```
+
+
 
 
 ## AJAX-cart Javascript API
@@ -342,4 +356,38 @@ cartAdd( body ) - calls /cart/add.js
 
 cartChange( body ) — calls /cart/change.js
 
-subscribeToAjaxAPI( callback ) — callback will be called before and after each cart request
+subscribeToCartAjaxRequests( callback ) — callback will be called before performing each request. 
+
+Two parameters will be passed to the callback function: 
+- data — object with information about the request
+- subscribeToResult — function to subscribe to result of the request. Pass a callback function to `subscribeToResult` and the callback will be called after the request is performed. One parameter will be passed to the callback — data with information about the performed request.
+
+```liquid
+<script type="module">
+  import { subscribeToCartAjaxRequests, getCartState } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+
+  subscribeToCartAjaxRequests(( data, subscribeToResult ) => {
+    
+    const state = getCartState();
+    const itemCountBefore = state.status.cartStateSet ? state.cart.item_count : undefined;
+
+    subscribeToResult( data => {
+      const state = getCartState();
+      const itemCountAfter = state.status.cartStateSet ? state.cart.item_count : undefined;
+      let itemCountDifference = undefined;
+
+      if ( itemCountBefore !== undefined && itemCountAfter !== undefined ) {
+        itemCountDifference = itemCountAfter - itemCountBefore;
+
+        if (itemCountDifference > 0) {
+          console.log(`Items quantity increased on ${ itemCountDifference } pcs`);
+        } else if (itemCountDifference < 0) {
+          console.log(`Items quantity decreased on ${ itemCountDifference * (-1) } pcs`);
+        }
+      }
+
+    })
+  })
+</script>
+
+```

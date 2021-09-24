@@ -25,7 +25,7 @@ function quantityButtonClickHandler (e) {
 	e.preventDefault();
 	const { quantityButtonAttribute } = settings.computed;
 	const state = getCartState();
-	if ( !state.status.requestInProgress ) {
+	if ( true || !state.status.requestInProgress ) {
 		const [ itemKey, quantity ] = this.getAttribute( quantityButtonAttribute ).split('|');
 		cartChange({
 			'id': itemKey.trim(),
