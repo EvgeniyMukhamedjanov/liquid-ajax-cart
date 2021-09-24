@@ -61,18 +61,19 @@ The store's codebase lives in the main branch of this repository — folders `as
 ## Content
 
 * [Ajaxified Liquid sections](#ajaxified-liquid-sections)
-  * [data-ajax-cart-section](#data-ajax-cart-section)
+  * [data-ajax-cart-section](#data-ajax-cart-section) — the mark for AJAX cart sections
+  * [data-ajax-cart-section-scroll](#data-ajax-cart-section-scroll) — use it if you have scrollable areas within ajaxified sections
 * [Buttons](#buttons)
-  * [data-ajax-cart-quantity-button](#data-ajax-cart-quantity-button)
-  * [data-ajax-cart-toggle-class-button](#data-ajax-cart-toggle-class-button)
-* [Product forms](#product-forms)
-  * [data-ajax-cart-form-error](#data-ajax-cart-form-error)
-* [Body CSS classes](#body-css-classes)
+  * [data-ajax-cart-quantity-button](#data-ajax-cart-quantity-button) — "plus", "minus", "remove" buttons for a cart item
+  * [data-ajax-cart-toggle-class-button](#data-ajax-cart-toggle-class-button) — adds/removes a body class. Usecase — "show/hide cart" button
+* [Product forms](#product-forms) — get ajaxified automatically 
+  * [data-ajax-cart-form-error](#data-ajax-cart-form-error) — shows error messages within product forms
+* [Body CSS classes](#body-css-classes) — helps you create friendly UI
   * .js-ajax-cart-set
   * .js-ajax-cart-empty
   * .js-ajax-cart-request-in-progress
 * [State](#state)
-  * [data-ajax-cart-bind-state](#data-ajax-cart-bind-state)
+  * [data-ajax-cart-bind-state](#data-ajax-cart-bind-state) 
   * [Javascript State API](#javascript-state-api)
     * getState
     * subscribeToCartState
