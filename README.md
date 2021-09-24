@@ -63,9 +63,11 @@ The store's codebase lives in the main branch of this repository — folders `as
 * [Ajaxified Liquid sections](#ajaxified-liquid-sections)
   * [data-ajax-cart-section](#data-ajax-cart-section) — the mark for AJAX cart sections
   * [data-ajax-cart-section-scroll](#data-ajax-cart-section-scroll) — use it if you have scrollable areas within ajaxified sections
-* [Buttons](#buttons)
+* [Form Controls](#form-controls) — buttons, input fields
   * [data-ajax-cart-quantity-button](#data-ajax-cart-quantity-button) — "plus", "minus", "remove" buttons for a cart item
   * [data-ajax-cart-toggle-class-button](#data-ajax-cart-toggle-class-button) — adds/removes a body class. Usecase — "show/hide cart" button
+  * [data-ajax-cart-quantity-input](#data-ajax-cart-quantity-input) — ** soon ** — input field for cart item quantity
+  * [data-ajax-cart-property-input](#data-ajax-cart-property-input) — ** soon ** — input field for editing cart item properties
 * [Product forms](#product-forms) — get ajaxified automatically 
   * [data-ajax-cart-form-error](#data-ajax-cart-form-error) — shows error messages within product forms
 * [Body CSS classes](#body-css-classes) — helps you create friendly UI
@@ -163,7 +165,7 @@ If you have several scrollable areas, add the `data-ajax-cart-section-scroll` at
 
 
 
-## Buttons
+## Form controls
 
 ### data-ajax-cart-quantity-button
 
@@ -234,6 +236,14 @@ If you want to create a button that will only add or only remove a class, specif
 <a href="/cart" data-ajax-cart-toggle-class-button="js-ajax-cart-opened | remove" > Close </button>
 
 ```
+
+### data-ajax-cart-quantity-input — ** soon **
+
+Provides an editable input field for cart item quantity
+
+### data-ajax-cart-property-input — ** soon **
+
+Provides an input field for editing cart item properties
 
 ## Product forms
 
