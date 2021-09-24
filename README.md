@@ -239,13 +239,13 @@ If you want to create a button that will only add or only remove a class, specif
 
 ### data-ajax-cart-quantity-input
 
-**_Will be published soon_**
+**_Will be ready soon_**
 
 Provides an editable input field for cart item quantity.
 
 ### data-ajax-cart-property-input
 
-**_Will be published soon_**
+**_Will be ready soon_**
 
 Provides an input field for editing cart item properties.
 
