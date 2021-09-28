@@ -143,7 +143,7 @@
   
   <script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
   <script type="module">
-    import { subscribeToCartAjaxRequests, subscribeToCartStateUpdate, getCartState, cartRequestGet, cartRequestAdd } from '{{ 'liquid-ajax-cart.js' | asset_url }}';
+    import { subscribeToCartAjaxRequests, subscribeToCartStateUpdate, getCartState, cartRequestGet, cartRequestAdd, cartRequestChange } from '{{ 'liquid-ajax-cart.js' | asset_url }}';
 
     subscribeToCartAjaxRequests(( data, subscribeToResult ) => {
       const checkbox = document.getElementById( 'subscribeToCartAjaxRequestsCheckbox' );
@@ -201,7 +201,7 @@
       }
     });
 
-    const cartRequestGetButton = document.getElementById( 'cartRequestGet' );
+    const cartRequestGetButton = document.getElementById( 'cartRequestGetButton' );
     if ( cartRequestGetButton ) {
       cartRequestGetButton.addEventListener( 'click', () => {
         
@@ -215,7 +215,7 @@
       });
     }
 
-    const cartRequestAddButton = document.getElementById( 'cartRequestAdd' );
+    const cartRequestAddButton = document.getElementById( 'cartRequestAddButton' );
     if ( cartRequestAddButton ) {
       cartRequestAddButton.addEventListener( 'click', () => {
         cartRequestAdd({ 
@@ -231,6 +231,31 @@
           console.log( data );
           console.log('\n\n\n\n');
         })
+      });
+    }
+
+    const cartRequestChangeButton = document.getElementById( 'cartRequestChangeButton' );
+    if ( cartRequestChangeButton ) {
+      cartRequestChangeButton.addEventListener( 'click', () => {
+        const state = getCartState();
+        if ( state.status.cartStateSet && state.cart.item_count > 0 ) {
+          const firstItemKey = state.cart.items[0].key;
+          const firstItemQuantity = state.cart.items[0].quantity;
+          cartRequestChange({ 
+            id: firstItemKey,
+            quantity: firstItemQuantity - 1
+          }).then( data => {
+            console.log('\n\n\n\n');
+            console.log('%c cartRequestChange response ', 'background: #efd81d; color: black; font-weight: bold');
+            console.log( data );
+            console.log('\n\n\n\n');
+          })
+        } else {
+          console.log('\n\n\n\n');
+          console.log('%c cartRequestChange wasn\'t performed ', 'background: #efd81d; color: black; font-weight: bold');
+          console.log( 'There is no items in the cart' );
+          console.log('\n\n\n\n');
+        }
       });
     }
 

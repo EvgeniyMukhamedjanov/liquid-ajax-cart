@@ -1,5 +1,5 @@
 import { settings } from './settings';
-import { cartChange } from './ajax-api';
+import { cartRequestChange } from './ajax-api';
 import { getCartState } from './state';
 
 const ACTION_TOGGLE = 'toggle';
@@ -27,7 +27,7 @@ function quantityButtonClickHandler (e) {
 	const state = getCartState();
 	if ( true || !state.status.requestInProgress ) {
 		const [ itemKey, quantity ] = this.getAttribute( quantityButtonAttribute ).split('|');
-		cartChange({
+		cartRequestChange({
 			'id': itemKey.trim(),
 			'quantity':  parseInt(quantity.trim()),
 		});

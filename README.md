@@ -393,7 +393,29 @@ Performs POST request to the Shopify Cart API `/cart/add.js` endpoint. Accepts r
 </script>
 ```
 
-cartChange( body ) — calls /cart/change.js
+#### `cartChange( body )`
+Performs POST request to the Shopify Cart API `/cart/change.js` endpoint. Accepts request's body as the first parameter.
+
+```liquid
+<script type="module">
+  import { cartRequestChange, getCartState } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+
+  const state = getCartState();
+
+  if ( state.status.cartStateSet && state.cart.item_count > 0 ) {
+    const firstItemKey = state.cart.items[0].key;
+    const firstItemQuantity = state.cart.items[0].quantity;
+    
+    cartRequestChange({ 
+      id: firstItemKey,
+      quantity: firstItemQuantity - 1
+    }).then( data => {
+      console.log( data );
+    })
+  }
+
+</script>
+```
 
 #### `subscribeToCartAjaxRequests( callback )`
 The callback will be called before each request gets performed. 

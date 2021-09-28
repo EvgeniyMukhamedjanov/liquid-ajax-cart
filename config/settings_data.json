@@ -196,13 +196,19 @@
       "16328358187ca71ad2": {
         "type": "custom-html",
         "settings": {
-          "custom_html": "<h2>cartRequestGet<\/h2><p><button class=\"btn\" id=\"cartRequestGet\">Call and console.log<\/button><\/p>"
+          "custom_html": "<h2>cartRequestGet<\/h2><p><button class=\"btn\" id=\"cartRequestGetButton\">Call and console.log<\/button><\/p>"
         }
       },
       "1632842855866e8451": {
         "type": "custom-html",
         "settings": {
-          "custom_html": "<h2>cartRequestAdd<\/h2><p><button class=\"btn\" id=\"cartRequestAdd\">Add \"Single product\"<\/button><\/p>"
+          "custom_html": "<h2>cartRequestAdd<\/h2><p><button class=\"btn\" id=\"cartRequestAddButton\">Add \"Single product\"<\/button><\/p>"
+        }
+      },
+      "16328560183aed5906": {
+        "type": "custom-html",
+        "settings": {
+          "custom_html": "<h2>cartRequestChange<\/h2><p><button class=\"btn\" id=\"cartRequestChangeButton\">Decrease<\/button> — decreases amount of the first item by one.<\/p>"
         }
       }
     },
@@ -212,7 +218,8 @@
       "16324720968dae6a91",
       "1632473776ad1d6d59",
       "16328358187ca71ad2",
-      "1632842855866e8451"
+      "1632842855866e8451",
+      "16328560183aed5906"
     ]
   },
   "presets": {
