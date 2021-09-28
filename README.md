@@ -77,12 +77,12 @@ The store's codebase lives in the main branch of this repository — folders `as
 * [State](#state)
   * [data-ajax-cart-bind-state](#data-ajax-cart-bind-state) 
   * [Javascript State API](#javascript-state-api)
-    * getState
-    * subscribeToCartState
+    * getCartState
+    * subscribeToCartStateUpdate
 * [AJAX-cart Javascript API](#ajax-cart-javascript-api)
   * cartRequestGet
-  * cartAdd
-  * cartChange
+  * cartRequestAdd
+  * cartRequestChange
   * subscribeToCartAjaxRequests
 
 
@@ -338,7 +338,7 @@ Returns the current state.
 </script>
 ```
 
-#### `subscribeToCartState( callback )`
+#### `subscribeToCartStateUpdate( callback )`
 Callback will be called after cart state is changed with the only parameter — updated state.
 
 ```liquid
