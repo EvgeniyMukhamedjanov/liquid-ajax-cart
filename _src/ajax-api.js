@@ -121,7 +121,7 @@ const cartRequestGet = ( firstResultCallback ) => {
 	return cartRequest( REQUEST_GET, undefined, firstResultCallback );
 }
 
-const cartAdd = ( body, firstResultCallback ) => {
+const cartRequestAdd = ( body, firstResultCallback ) => {
 	return cartRequest( REQUEST_ADD, body, firstResultCallback );
 }
 
@@ -133,4 +133,4 @@ const subscribeToCartAjaxRequests = ( callback ) => {
 	subscribers.push( callback );
 }
 
-export { cartAdd, cartChange, cartRequestGet, subscribeToCartAjaxRequests, REQUEST_ADD }
+export { cartRequestAdd, cartChange, cartRequestGet, subscribeToCartAjaxRequests, REQUEST_ADD }

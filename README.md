@@ -373,7 +373,25 @@ Performs GET request to Shopify Cart API
 </script>
 ```
 
-cartAdd( body ) - calls /cart/add.js
+#### `cartRequestAdd( body )`
+Performs POST request to the Shopify Cart API `/cart/add.js` endpoint. Accepts request's body as the first parameter.
+
+```liquid
+<script type="module">
+  import { cartRequestAdd } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+
+  cartRequestAdd({ 
+    items: [
+      {
+        id: 40934235668668,
+        quantity: 1
+      }
+    ]  
+  }).then( data => {
+    console.log( data );
+  })
+</script>
+```
 
 cartChange( body ) — calls /cart/change.js
 

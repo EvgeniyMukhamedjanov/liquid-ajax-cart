@@ -1,5 +1,5 @@
 import { settings } from './settings';
-import { cartAdd } from './ajax-api';
+import { cartRequestAdd } from './ajax-api';
 
 const processesAmount = new WeakMap();
 
@@ -56,7 +56,7 @@ document.addEventListener('submit', e => {
 	updateFormHTML( form );
 
 	let requestState;
-	cartAdd({
+	cartRequestAdd({
 		items: [ productJson ]
 	}).then( data => {
 		requestState = data;

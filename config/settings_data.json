@@ -198,6 +198,12 @@
         "settings": {
           "custom_html": "<h2>cartRequestGet<\/h2><p><button class=\"btn\" id=\"cartRequestGet\">Call and console.log<\/button><\/p>"
         }
+      },
+      "1632842855866e8451": {
+        "type": "custom-html",
+        "settings": {
+          "custom_html": "<h2>cartRequestAdd<\/h2><p><button class=\"btn\" id=\"cartRequestAdd\">Add \"Single product\"<\/button><\/p>"
+        }
       }
     },
     "content_for_index": [
@@ -205,7 +211,8 @@
       "1632428792c98f42b1",
       "16324720968dae6a91",
       "1632473776ad1d6d59",
-      "16328358187ca71ad2"
+      "16328358187ca71ad2",
+      "1632842855866e8451"
     ]
   },
   "presets": {
