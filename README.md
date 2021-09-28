@@ -80,7 +80,7 @@ The store's codebase lives in the main branch of this repository — folders `as
     * getState
     * subscribeToCartState
 * [AJAX-cart Javascript API](#ajax-cart-javascript-api)
-  * cartGet
+  * cartRequestGet
   * cartAdd
   * cartChange
   * subscribeToCartAjaxRequests
@@ -360,7 +360,18 @@ Callback will be called after cart state is changed with the only parameter — 
 
 *After each call the cart state will be updated, the ajax-cart sections will be rerendered.*
 
-cartGet() — calls /cart.js
+#### `cartRequestGet()` 
+Performs GET request to Shopify Cart API 
+
+```liquid
+<script type="module">
+  import { cartRequestGet } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+
+  cartRequestGet().then( data => {
+    console.log( data );
+  });
+</script>
+```
 
 cartAdd( body ) - calls /cart/add.js
 

@@ -192,13 +192,20 @@
         "settings": {
           "custom_html": "<h2>subscribeToCartStateUpdate<\/h2><p><label><input type=\"checkbox\" id=\"subscribeToCartStateUpdateCheckbox\"> Show console.log messages from a function that subscribed to State update<\/label><\/p>"
         }
+      },
+      "16328358187ca71ad2": {
+        "type": "custom-html",
+        "settings": {
+          "custom_html": "<h2>cartRequestGet<\/h2><p><button class=\"btn\" id=\"cartRequestGet\">Call and console.log<\/button><\/p>"
+        }
       }
     },
     "content_for_index": [
       "featured-product",
       "1632428792c98f42b1",
       "16324720968dae6a91",
-      "1632473776ad1d6d59"
+      "1632473776ad1d6d59",
+      "16328358187ca71ad2"
     ]
   },
   "presets": {

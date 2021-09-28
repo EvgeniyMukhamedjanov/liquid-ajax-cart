@@ -1,4 +1,4 @@
-import { subscribeToCartAjaxRequests, cartGet, REQUEST_ADD } from './ajax-api';
+import { subscribeToCartAjaxRequests, cartRequestGet, REQUEST_ADD } from './ajax-api';
 import { settings } from './settings';
 
 const queryCounter = {
@@ -44,10 +44,10 @@ const init = () => {
 		} catch (e) {
 			console.error(`Can't parse cart JSON from ${ settings.computed.initialStateAttribute } script`);
 			console.error(e);
-			cartGet();
+			cartRequestGet();
 		}
 	} else {
-		cartGet();
+		cartRequestGet();
 	}
 }
 
@@ -64,7 +64,7 @@ const afterRequestHandler = ( data ) => {
 			if ( 'extraResponseData' in data && data.extraResponseData.ok ) {
 				cart = data.extraResponseData.body;
 			} else {
-				cartGet();
+				cartRequestGet();
 			}
 			
 		} else {

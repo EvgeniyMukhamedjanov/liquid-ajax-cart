@@ -117,7 +117,7 @@ const cartRequest = ( requestType, body, firstResultCallback = undefined ) => {
 	});
 }
 
-const cartGet = ( firstResultCallback ) => {
+const cartRequestGet = ( firstResultCallback ) => {
 	return cartRequest( REQUEST_GET, undefined, firstResultCallback );
 }
 
@@ -133,4 +133,4 @@ const subscribeToCartAjaxRequests = ( callback ) => {
 	subscribers.push( callback );
 }
 
-export { cartAdd, cartChange, cartGet, subscribeToCartAjaxRequests, REQUEST_ADD }
+export { cartAdd, cartChange, cartRequestGet, subscribeToCartAjaxRequests, REQUEST_ADD }

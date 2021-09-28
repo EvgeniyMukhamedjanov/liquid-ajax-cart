@@ -5,5 +5,5 @@ import './product-forms';
 import './global-classes';
 
 export { configure } from './settings';
-export { subscribeToCartAjaxRequests } from './ajax-api';
+export { cartRequestGet, subscribeToCartAjaxRequests } from './ajax-api';
 export { subscribeToCartStateUpdate, getCartState } from './state';
