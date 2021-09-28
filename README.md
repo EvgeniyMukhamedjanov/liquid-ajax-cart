@@ -327,9 +327,19 @@ On the demo store it is used to show the amount of cart items next to the "Cart"
 
 ### Javascript State API
 
-getCartState() — returns the current state
+#### `getCartState()` 
+Returns the current state.
+```liquid
+<script type="module">
+  import { getCartState } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
 
-subscribeToCartState( callback ) — callback will be called after cart state is changed with the only parameter — updated state.
+  const state = getCartState();
+  console.log(state);
+</script>
+```
+
+#### `subscribeToCartState( callback )`
+Callback will be called after cart state is changed with the only parameter — updated state.
 
 ```liquid
 <script type="module">
@@ -356,11 +366,12 @@ cartAdd( body ) - calls /cart/add.js
 
 cartChange( body ) — calls /cart/change.js
 
-subscribeToCartAjaxRequests( callback ) — callback will be called before performing each request. 
+#### `subscribeToCartAjaxRequests( callback )`
+The callback will be called before each request gets performed. 
 
 Two parameters will be passed to the callback function: 
 - data — object with information about the request
-- subscribeToResult — function to subscribe to result of the request. Pass a callback function to `subscribeToResult` and the callback will be called after the request is performed. One parameter will be passed to the callback — data with information about the performed request.
+- subscribeToResult — function to subscribe to result of the request. Pass a result-callback function to `subscribeToResult` and the result-callback will be called after the request is performed. One parameter will be passed to the restult-callback — data with information about the performed request.
 
 ```liquid
 <script type="module">
