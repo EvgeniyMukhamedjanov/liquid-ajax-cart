@@ -48,43 +48,29 @@ Include the section:
 {% endraw %}
 
 
-## Product forms
+## Enhance product forms
 
-Liquid Ajax Cart ajaxifies product forms once it is loaded. 
+Liquid Ajax Cart ajaxifies product forms once it is loaded.
 
-Add a container with [`data-ajax-cart-form-error`](reference/data-ajax-cart-form-error) attribute within a product form where you want to show error messages:
+You should:
 
-{% raw %}
-```html
-{% form 'product', product %}
-
-  <!-- form's code ... -->
-
-  <div data-ajax-cart-form-error ></div>
-  
-  <!-- ... form's code -->
-  
-{% endform %}
-```
-{% endraw %}
-
-Show loading indicators or make a submit button visually disabled when adding to cart using Form CSS classes:
+* Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-form-error) attribute within product forms to show error messages.
+* Show loading indicator or make a submit button visually disabled if a product form has [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-form-in-progress) CSS class.
 
 {% raw %}
 ```html
 {% form 'product', product %}
+ <!-- form content -->
 
-  <!-- form's code ... -->
-
-  <div data-ajax-cart-form-error ></div>
-  
-  <!-- ... form's code -->
-  
+ <input type="submit" value="Add to cart">
+ <div class="your-loading-indicator">Adding to cart...</div>
+ <div data-ajax-cart-form-error > <!-- Place for error messages --> </div>
 {% endform %}
 
 <style>
-  form .loading-indicator { display: none; }  
-  form.js-ajax-cart-form-in-progress .loading-indicator { display: block; }
+ form .your-loading-indicator { display: none; }
+ form.js-ajax-cart-form-in-progress .your-loading-indicator { display: block; }
 </style>
 ```
 {% endraw %}
+
