@@ -35,13 +35,8 @@ Show loading indicators or make a submit button visually disabled when adding to
 {% endform %}
 
 <style>
-  form .loading-indicator {
-    display: none;
-  }
-  
-  form.js-ajax-cart-form-in-progress .loading-indicator {
-    display: block;
-  }
+  form .loading-indicator { display: none; }  
+  form.js-ajax-cart-form-in-progress .loading-indicator { display: block; }
 </style>
 ```
 {% endraw %}
