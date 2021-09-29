@@ -1,7 +1,6 @@
 ---
 layout: default
 title: data-ajax-cart-form-error
-nav_order: 4
 ---
 
 # data-ajax-cart-form-error
