@@ -9,8 +9,7 @@ Add a container with `data-ajax-cart-form-error` attribute within a product form
 
 
 ```liquid 
-{%- raw -%}
-{% form 'product', product %}
+{% raw %} {% form 'product', product %}
 
   <!-- form's code ... -->
 
@@ -18,8 +17,7 @@ Add a container with `data-ajax-cart-form-error` attribute within a product form
   
   <!-- ... form's code -->
   
-{% endform %}
-{%- endraw -%} 
+{% endform %} {% endraw %} 
 ```
 
 
