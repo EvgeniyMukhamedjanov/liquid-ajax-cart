@@ -1,11 +1,11 @@
 # Guide
 
 ## Create a section for AJAX cart
-* Add the [`data-ajax-cart-section`](data-ajax-cart-section) attribute to a root HTML container of a section so that Liquid Ajax Cart ajaxifies the section.
+* Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute to a root HTML container of a section so that Liquid Ajax Cart ajaxifies the section.
 * Add attributes for controls:
-  * [`data-ajax-cart-quantity-button`](data-ajax-cart-quantity-button) — for "plus", "minus" and "remove" buttons;
-  * [`data-ajax-cart-quantity-input`](data-ajax-cart-quantity-input) — _in_development_ — for quantity text input field.
-* If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](data-ajax-cart-section-scroll) attribute to it and Liquid Ajax Cart will keep the scroll position the same after each section's HTML update.
+  * [`data-ajax-cart-quantity-button`](reference/data-ajax-cart-quantity-button) — for "plus", "minus" and "remove" buttons;
+  * [`data-ajax-cart-quantity-input`](reference/data-ajax-cart-quantity-input) — _in_development_ — for quantity text input field.
+* If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](reference/data-ajax-cart-section-scroll) attribute to it and Liquid Ajax Cart will keep the scroll position the same after each section's HTML update.
 
 {% raw %}
 ```html
@@ -52,7 +52,7 @@ Include the section:
 
 Liquid Ajax Cart ajaxifies product forms once it is loaded. 
 
-Add a container with [`data-ajax-cart-form-error`](data-ajax-cart-form-error) attribute within a product form where you want to show error messages:
+Add a container with [`data-ajax-cart-form-error`](reference/data-ajax-cart-form-error) attribute within a product form where you want to show error messages:
 
 {% raw %}
 ```html
