@@ -4,12 +4,12 @@ Takes a CSS class as a parameter and adds the CSS class to the `body` tag on a u
 
 The usecase is "Show/Hide Cart" button. It is used in the header of the demo store: "Cart" link shows and hides the right-side cart.
 
-```liquid
+```html
 
-{% comment %}
+<!--
   Liquid Ajax Cart will intercept a user's click on the following link
-  and instead of redirecting to "/cart" it will add/remove the "js-ajax-cart-opened" <body> class
-{% endcomment %}
+  and instead of redirecting to "/cart" it will add/remove the "js-ajax-cart-opened" <body> class 
+-->
 
 <a href="/cart" data-ajax-cart-toggle-class-button="js-ajax-cart-opened" > Cart </button>
 
