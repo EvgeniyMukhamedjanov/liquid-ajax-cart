@@ -74,3 +74,7 @@ You should:
 ```
 {% endraw %}
 
+## Controls
+
+The [`data-ajax-cart-quantity-button`](reference/data-ajax-cart-quantity-button) button changes quantity of an item. As a parameter it takes a string from a cart line item key and a new quantity value separated by the vertical bar symbol `|`
+
