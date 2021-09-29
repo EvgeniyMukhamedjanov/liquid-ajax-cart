@@ -3,6 +3,7 @@
 ## Create a section for AJAX cart
 Add [`data-ajax-cart-section`](data-ajax-cart-section) attribute to a root HTML container so that Liquid Ajax Cart knows that this section should be updated once cart is updated.
 
+{% raw %}
 ```html
 {% comment %} sections/ajax-cart.liquid {% endcomment %}
 
@@ -32,6 +33,7 @@ Add [`data-ajax-cart-section`](data-ajax-cart-section) attribute to a root HTML 
 
 {% schema %} { "name": "Ajax Cart" } {% endschema %}
 ```
+{% endraw %}
 
 
 ## Product forms
