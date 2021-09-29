@@ -8,7 +8,7 @@ nav_order: 4
 
 Add a container with `data-ajax-cart-form-error` attribute within a product form and Liquid Ajax Cart will put error messages of AJAX requests in it, if happen:
 
-{%- raw -%}
+{% raw %}
 ```liquid
 {% form 'product', product %}
 
@@ -20,6 +20,6 @@ Add a container with `data-ajax-cart-form-error` attribute within a product form
   
 {% endform %}
 ```
-{%- endraw -%}
+{% endraw %}
 
 Live example of showing errors is on the [Limited Product](https://liquid-ajax-cart.myshopify.com/products/limited-product) page of the demo store.
