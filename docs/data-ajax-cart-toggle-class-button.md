@@ -26,10 +26,8 @@ The usecase is "Show/Hide Cart" button. It is used in the header of the demo sto
 
 If you want to create a button that will only add or only remove a class, specify an additional parameter:
 
-```liquid
-
+```html
 <a href="/cart" data-ajax-cart-toggle-class-button="js-ajax-cart-opened | add" > Open </button>
 
 <a href="/cart" data-ajax-cart-toggle-class-button="js-ajax-cart-opened | remove" > Close </button>
-
 ```
