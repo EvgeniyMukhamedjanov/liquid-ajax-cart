@@ -35,6 +35,14 @@ Add [`data-ajax-cart-section`](data-ajax-cart-section) attribute to a root HTML 
 ```
 {% endraw %}
 
+Include the section:
+{% raw %}
+```liquid
+{% comment %} Most likely somewhere in theme.liquid {% endcomment %}
+{% section 'ajax-cart' %}
+```
+{% endraw %}
+
 
 ## Product forms
 
