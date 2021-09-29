@@ -1,7 +1,11 @@
 # Guide
 
 ## Create a section for AJAX cart
-Add [`data-ajax-cart-section`](data-ajax-cart-section) attribute to a root HTML container so that Liquid Ajax Cart knows that this section should be updated once cart is updated.
+* Add [`data-ajax-cart-section`](data-ajax-cart-section) attribute to a root HTML container so that Liquid Ajax Cart knows that this section should be updated once cart is updated.
+* Add attributes for controls:
+  * `data-ajax-cart-quantity-button` — changes item's quantity on click, used for "plus", "minus", "remove" buttons;
+  * `data-ajax-cart-quantity-input` — _in_development_ — text input field for item's quantity, changes the quantity on input's change
+* If you have a scrollable area within the section, add the `data-ajax-cart-section-scroll` attribute to it and Liquid Ajax Cart will keep the scroll position the same after each section's HTML update.
 
 {% raw %}
 ```html
