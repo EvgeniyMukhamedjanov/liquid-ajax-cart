@@ -20,3 +20,4 @@ Performs POST request to the Shopify Cart API `/cart/change.js` endpoint. Accept
   }
 
 </script>
+```
