@@ -1,3 +1,7 @@
 remote_theme: pmarsceill/just-the-docs
 
 title: Liquid Ajax Cart
+kramdown:
+  syntax_highlighter_opts:
+    block:
+      line_numbers: true
