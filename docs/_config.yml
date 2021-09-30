@@ -1,6 +1,80 @@
 remote_theme: allejo/jekyll-docs-theme@v1.0.0
-ui:
+
+project:
+  version: 1.0.0
+  download_url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/blob/main/_dist/liquid-ajax-cart.js
+  download_text: Download
+
+license:
+  software: MIT License
+  software_url: https://opensource.org/licenses/MIT
+
+  docs: CC BY 3.0
+  docs_url: https://creativecommons.org/licenses/by/3.0/
+
+links:
   header:
-    color1: "#008060"
-    color2: "#008061"
+    - title: GitHub
+      icon: github
+      brand: true
+      url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
+  homepage:
+    - title: View on GitHub
+      icon: github
+      brand: true
+      url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
+  footer:
+    - title: GitHub
+      icon: github
+      brand: true
+      url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
+
+ui:
+  mode: 'auto' # 'auto', 'dark', 'light'
+  brand:
+    dark: "#00ceff"
+    light: "#a20000"
+  border_color:
+    dark: "#5f5f5f"
+    light: "#dee2e6"
+  header:
     trianglify: false
+    dark:
+      color1: "#008060"
+      color2: "#008060"
+    light:
+      color1: "#008060"
+      color2: "#008060"
+  masthead:
+    color:
+      dark: "#000"
+      light: "#000"
+    align:
+      homepage: 'center'
+      page: 'left'
+
+social:
+  github:
+    user: EvgeniyMukhamedjanov
+    repo: liquid-ajax-cart
+  twitter:
+    enabled: false
+    via:
+    hash:
+    account:
+  facebook:
+    enabled: false
+    profileUrl:
+
+analytics:
+  google: 
+
+# Build settings
+markdown: kramdown
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - jekyll-docs-theme.gemspec
+  - LICENSE.md
+  - README.md
+  - screenshot.png
