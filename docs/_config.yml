@@ -1,4 +1,4 @@
 # remote_theme: pmarsceill/just-the-docs
-remote_theme: rundocs/jekyll-rtd-theme
+remote_theme: marella/jekyll-theme-documentation
 
 title: Liquid Ajax Cart
