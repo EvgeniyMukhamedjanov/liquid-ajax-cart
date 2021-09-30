@@ -30,10 +30,10 @@ links:
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
 
 ui:
-  mode: 'auto' # 'auto', 'dark', 'light'
+  mode: 'light'
   brand:
     dark: "#00ceff"
-    light: "#a20000"
+    light: "#008060"
   border_color:
     dark: "#5f5f5f"
     light: "#dee2e6"
@@ -47,8 +47,8 @@ ui:
       color2: "#008060"
   masthead:
     color:
-      dark: "#000"
-      light: "#000"
+      dark: "#fff"
+      light: "#fff"
     align:
       homepage: 'center'
       page: 'left'
