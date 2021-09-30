@@ -8,7 +8,7 @@
 * If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](reference/data-ajax-cart-section-scroll) attribute to it and Liquid Ajax Cart will keep the scroll position the same after each section's HTML update.
 
 {% raw %}
-```html
+```liquid
 {% comment %} sections/ajax-cart.liquid {% endcomment %}
 
 <div data-ajax-cart-section >
