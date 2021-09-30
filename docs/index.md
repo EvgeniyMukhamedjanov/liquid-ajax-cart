@@ -1,7 +1,7 @@
 ---
 layout: full
 homepage: true
-description: A Javascript library for building an Ajax cart using Liquid templates in Shopify
+description: A Javascript library for building an AJAX carts using Liquid templates in Shopify
 disable_anchors: true
 ---
 
