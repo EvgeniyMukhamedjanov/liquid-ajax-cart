@@ -32,7 +32,7 @@ links:
 ui:
   mode: 'light'
   brand:
-    dark: "#00ceff"
+    dark: "#008060"
     light: "#008060"
   border_color:
     dark: "#5f5f5f"
