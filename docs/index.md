@@ -18,6 +18,9 @@ disable_anchors: false
   * [`data-ajax-cart-quantity-button`](reference/data-ajax-cart-quantity-button) — for "plus", "minus" and "remove" buttons;
   * [`data-ajax-cart-quantity-input`](reference/data-ajax-cart-quantity-input) — _in_development_ — for quantity text input field.
 * If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](reference/data-ajax-cart-section-scroll) attribute to it and Liquid Ajax Cart will keep the scroll position the same after each section's HTML update.
+ 
+ </div>
+ <div class="col-lg-6" markdown="1">
 
 {% raw %}
 ```html
@@ -60,17 +63,13 @@ Include the section:
 {% endraw %}
 
 </div>
-<div class="col-lg-6" markdown="1">
+</div>
 
-## Enhance product forms
-{:.mt-lg-0}
-Liquid Ajax Cart ajaxifies product forms once it is loaded.
+<div class="row">
 
-You should:
-
-* Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-form-error) attribute within product forms to show error messages.
-* Show loading indicator or make a submit button visually disabled if a product form has [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-form-in-progress) CSS class.
-
+ <div class="col-lg-6" markdown="1">
+  
+  
 {% raw %}
 ```html
 {% form 'product', product %}
@@ -88,6 +87,18 @@ You should:
 ```
 {% endraw %}
  
+ </div>
+ <div class="col-lg-6" markdown="1">
+
+## Enhance product forms
+
+Liquid Ajax Cart ajaxifies product forms once it is loaded.
+
+You should:
+
+* Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-form-error) attribute within product forms to show error messages.
+* Show loading indicator or make a submit button visually disabled if a product form has [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-form-in-progress) CSS class.
+
  </div>
  </div>
 
