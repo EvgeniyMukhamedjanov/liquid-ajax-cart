@@ -1,3 +1,7 @@
+---
+homepage: true
+---
+
 # Liquid Ajax Cart
 
 ```liquid
