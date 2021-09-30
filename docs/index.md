@@ -8,8 +8,11 @@ disable_anchors: false
 # Liquid Ajax Cart
 
 
+<div class="row">
+<div class="col-lg-6" markdown="1">
+
 ## Create a section for AJAX cart
-{:.mt-lg-0}
+
 * Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute to a root HTML container of a section so that Liquid Ajax Cart ajaxifies the section.
 * Add attributes for controls:
   * [`data-ajax-cart-quantity-button`](reference/data-ajax-cart-quantity-button) — for "plus", "minus" and "remove" buttons;
@@ -56,6 +59,8 @@ Include the section:
 ```
 {% endraw %}
 
+</div>
+<div class="col-lg-6" markdown="1">
 
 ## Enhance product forms
 {:.mt-lg-0}
@@ -82,4 +87,7 @@ You should:
 </style>
 ```
 {% endraw %}
+ 
+ </div>
+ </div>
 
