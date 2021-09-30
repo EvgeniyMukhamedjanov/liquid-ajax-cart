@@ -2,3 +2,4 @@
 remote_theme: vsoch/docsy-jekyll
 
 title: Liquid Ajax Cart
+baseurl: "/docs"
