@@ -1,3 +1,4 @@
-remote_theme: pmarsceill/just-the-docs
+# remote_theme: pmarsceill/just-the-docs
+remote_theme: vsoch/docsy-jekyll
 
 title: Liquid Ajax Cart
