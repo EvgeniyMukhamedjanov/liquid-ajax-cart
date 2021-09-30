@@ -1,7 +1,7 @@
 ---
 layout: full
 homepage: true
-description: If mediocrity had a Jekyll theme...
+description: A Javascript library for building an Ajax cart using Liquid templates in Shopify
 disable_anchors: true
 ---
 
