@@ -38,13 +38,13 @@ ui:
     dark: "#5f5f5f"
     light: "#dee2e6"
   header:
-    trianglify: false
+    trianglify: true
     dark:
       color1: "#008060"
       color2: "#008060"
     light:
-      color1: "#008060"
-      color2: "#008060"
+      color1: "#5e8e3e"
+      color2: "#95bf47"
   masthead:
     color:
       dark: "#fff"
