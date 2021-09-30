@@ -2,8 +2,7 @@
 remote_theme: vsoch/docsy-jekyll
 
 title: Liquid Ajax Cart
-baseurl: "/docs"
-repo: "https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart"
+repo: "https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/docs"
 github_user: "EvgeniyMukhamedjanov"
 github_repo: "liquid-ajax-cart"
 github_branch: "main"
