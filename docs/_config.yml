@@ -2,5 +2,5 @@ remote_theme: allejo/jekyll-docs-theme@v1.0.0
 ui:
   header:
     color1: "#008060"
-    color2: "#008060"
+    color2: "#008061"
     trianglify: false
