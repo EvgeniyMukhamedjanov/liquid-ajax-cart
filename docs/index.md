@@ -89,12 +89,16 @@ title: Liquid Ajax Cart
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-Controls become inactive when user's cart is getting updated. 
+##### Styling
+{:.mt-0}
+
+[Quantity button](reference/data-ajax-cart-quantity-button) and [Quantity input](reference/data-ajax-cart-quantity-input) become inactive when user's cart is getting updated. 
  
-Liquid Ajax Cart adds `js-ajax-cart-in-progress` CSS class to the `body` tag during the updating process in order you to show a loading indicator or make the controls visually disabled.
+Liquid Ajax Cart adds `js-ajax-cart-in-progress` CSS class to the `body` tag during the updating process so that you show a loading indicator or make the controls visually disabled.
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
+
 ```css
 .my-cart__items { 
   opacity: 1;
@@ -106,6 +110,7 @@ Liquid Ajax Cart adds `js-ajax-cart-in-progress` CSS class to the `body` tag dur
   opacity: .7;
 }
 ```
+
 </div>
 </div>
 
