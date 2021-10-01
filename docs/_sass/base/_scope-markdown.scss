@@ -1,0 +1,108 @@
+.scope-markdown {
+    code {
+        @include themer(color, (
+            'dark': #ffa6a6,
+            'light': #e83e8c,
+        ));
+    }
+
+    h1, h2, h3,
+    h4, h5, h6 {
+        .heading-anchor {
+            border-bottom: 0;
+            font-size: 0.8em;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        &:hover {
+            .heading-anchor {
+                opacity: 1;
+
+                &:active,
+                &:focus,
+                &:hover {
+                    @include themer(color, (
+                        'dark': $site-ui-brand-dark,
+                        'light': $site-ui-brand-light,
+                    ));
+
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+    h1 {
+        font-size: 2.25rem;
+    }
+
+    h2 {
+        @include themer(border-bottom-color, (
+            'dark': $site-ui-border-color-dark,
+            'light': $site-ui-border-color-light,
+        ));
+
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        font-size: 2rem;
+        margin-bottom: 1.25rem;
+        margin-top: 2rem;
+        padding-bottom: 0.5rem;
+    }
+
+    h3, h4, h5, h6 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 0.75rem;
+        margin-top: 1.75rem;
+    }
+
+    h4 {
+        font-size: 1.25rem;
+    }
+
+    h5 {
+        font-size: 1.15rem;
+    }
+
+    h6 {
+        font-size: 1rem;
+    }
+
+    img {
+        display: block;
+        max-width: 100%;
+    }
+
+    table {
+        width: 100%;
+
+        thead,
+        tr {
+            @include themer(border-bottom-color, (
+                'dark': $site-ui-border-color-dark,
+                'light': $site-ui-border-color-light,
+            ));
+
+            border-bottom-style: solid;
+        }
+
+        thead {
+            border-bottom-width: 2px;
+        }
+
+        tr {
+            border-bottom-width: 1px;
+
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+
+        td,
+        th {
+            padding: 0.5rem 0.25rem;
+        }
+    }
+}
