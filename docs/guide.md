@@ -9,7 +9,7 @@ show_in_menu: true
 {% assign right_column_classes = 'col-lg-7' %}
 
 
-<div class="{{ row_classes }}">
+<div class="row">
 <div class="{{ left_column_classes }}" markdown="1">
  
 ### Create a section for AJAX cart
