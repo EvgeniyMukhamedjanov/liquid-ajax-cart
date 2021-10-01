@@ -1,3 +1,9 @@
+---
+title: Guide
+show_in_menu: true
+---
+
+
 {% assign row_classes = 'row mb-4 mt-4' %}
 {% assign left_column_classes = 'col-lg-5' %}
 {% assign right_column_classes = 'col-lg-7' %}
