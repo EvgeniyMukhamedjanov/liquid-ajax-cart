@@ -253,3 +253,36 @@ If you want the button to only add or only remove the CSS class — specify the 
 
 </div>
 </div>
+
+---
+
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
+### Display the cart object's attributes outside of AJAX sections
+{:.mt-0}
+
+Add the [`data-ajax-cart-bind-state`](reference/data-ajax-cart-bind-state) attribute to an HTML element, pass a Cart state property as an attribute's value and Liquid Ajax Cart will display the state property's value within the HTML element and refresh it when cart gets updated.
+
+Explore all the properties on the [State reference](#) page
+
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+{% raw %}
+```html
+<div data-ajax-cart-bind-state="cart.item_count" > 
+  <!-- Cart item count appears here --> 
+</div>
+
+<!-- The best practice is to use [data-ajax-cart-bind-state] on top of Liquid expressions.
+The liquid expression {{ cart.item_count }} displays the amount 
+even if Liquid Ajax Cart is not loaded: -->
+<div data-ajax-cart-bind-state="cart.item_count" >
+  {{ cart.item_count }}
+</div>
+```
+{% endraw %}
+
+</div>
+</div>
