@@ -4,8 +4,9 @@ a {
         'light': $site-ui-brand-light,
     ));
 
-    border-bottom: 1px dashed currentColor;
+    border-bottom: 1px solid currentColor;
     text-decoration: none;
+    transition: border-bottom-color .2s;
 
     &:active,
     &:focus,
@@ -16,5 +17,6 @@ a {
         ));
 
         text-decoration: none;
+        border-bottom-color: rgba(255, 255, 255, 0);
     }
 }
