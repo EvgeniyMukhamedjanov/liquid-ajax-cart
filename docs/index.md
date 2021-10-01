@@ -13,15 +13,17 @@ title: Liquid Ajax Cart
 <div class="row">
 <div class="col-lg-{{ left_column }}" markdown="1">
  
-### Create a section for AJAX cart
-{:.mt-0}
+ ### Create a section for AJAX cart
+ {:.mt-0}
  
 
-* Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute to a root HTML container of a section so that Liquid Ajax Cart ajaxifies the section.
-* Add attributes for controls:
+ Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute to a root HTML container of a section so that Liquid Ajax Cart ajaxifies the section.
+ 
+ Add attributes for controls:
   * [`data-ajax-cart-quantity-button`](reference/data-ajax-cart-quantity-button) — for "plus", "minus" and "remove" buttons;
   * [`data-ajax-cart-quantity-input`](reference/data-ajax-cart-quantity-input) — _in_development_ — for quantity text input field.
-* If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](reference/data-ajax-cart-section-scroll) attribute to it and Liquid Ajax Cart will keep the scroll position the same after each section's HTML update.
+ 
+ If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](reference/data-ajax-cart-section-scroll) attribute to it and Liquid Ajax Cart will keep the scroll position the same after each section's HTML update.
  
 </div>
 <div class="col-lg-{{ right_column }}" markdown="1">
