@@ -182,3 +182,37 @@ form.js-ajax-cart-form-in-progress:after {
 </div>
 </div>
 
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
+### Show/hide a cart section on a button click
+{:.mt-0}
+
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+{% raw %}
+```html
+<!-- Floating cart -->
+<div class="my-floating-cart">
+  {% section 'my-cart' %}
+</div>
+
+<!-- Button to open/close the floating cart -->
+<button data-ajax-cart-toggle-class-button="js-ajax-cart-open">My Cart</button>
+
+<style>
+  .my-floating-cart {
+    display: none;
+  }
+
+  /* Show the floating cart if the 'js-ajax-cart-open' exists */
+  .js-ajax-cart-open .my-floating-cart {
+    display: block
+  }
+</style>
+```
+{% endraw %}
+
+</div>
+</div>
