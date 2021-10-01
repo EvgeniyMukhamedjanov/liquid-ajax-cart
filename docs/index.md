@@ -182,6 +182,8 @@ form.js-ajax-cart-form-in-progress:after {
 </div>
 </div>
 
+---
+
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
