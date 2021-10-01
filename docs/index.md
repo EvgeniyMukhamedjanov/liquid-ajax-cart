@@ -13,7 +13,7 @@ title: Liquid Ajax Cart
 <div class="row">
 <div class="col-lg-{{ left_column }}" markdown="1">
  
- ## Create a section for AJAX cart
+ ### Create a section for AJAX cart
  {:mt-0}
 
 * Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute to a root HTML container of a section so that Liquid Ajax Cart ajaxifies the section.
@@ -83,7 +83,7 @@ Include the section:
 <div class="row">
 <div class="col-lg-{{ left_column }}" markdown="1">
  
-  ## Enhance product forms
+  ### Enhance product forms
   {:mt-0}
 
   Liquid Ajax Cart ajaxifies product forms once it is loaded.
