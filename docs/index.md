@@ -16,6 +16,8 @@ title: Liquid Ajax Cart
 ### Create a section for AJAX cart
 {:.mt-0}
 
+ Create a new section
+ 
  Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute to a root HTML container of a section so that Liquid Ajax Cart ajaxifies the section.
  
  Add attributes for controls:
@@ -65,7 +67,7 @@ title: Liquid Ajax Cart
 <div class="row">
 <div class="col-lg-{{ left_column }}" markdown="1">
 
-Include the section:
+* Include the section to the place where you want to display the AJAX cart
 
 </div>
 <div class="col-lg-{{ right_column }}" markdown="1">
