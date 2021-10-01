@@ -131,7 +131,7 @@ Liquid Ajax Cart ajaxifies product forms once it is loaded.
 <div class="{{ left_column_classes }}" markdown="1">
 
 ##### Error messages
-{.mt-0}
+{:.mt-0}
   
 Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-form-error) attribute within product forms to show error messages.
 
@@ -156,7 +156,8 @@ Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-
 <div class="{{ left_column_classes }}" markdown="1">
 
 ##### Loading state
-{.mt-0}
+{:.mt-0}
+
 When a user submits a product form, it becomes inactive until the AJAX "Add to cart" request is finished to prevent accidental double submissions.
   
 Liquid Ajax Cart adds [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-form-in-progress) CSS class to the form if the request is in progress so that you show a loading indicator or make the submit button visually disabled.
