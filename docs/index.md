@@ -190,6 +190,8 @@ form.js-ajax-cart-form-in-progress:after {
 ### Show/hide a cart section on a button click
 {:.mt-0}
 
+Write some CSS to show your cart section if a specific `body` CSS class exists.
+
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
 
@@ -201,20 +203,44 @@ form.js-ajax-cart-form-in-progress:after {
 </div>
 
 <!-- Button to open/close the floating cart -->
-<button data-ajax-cart-toggle-class-button="js-ajax-cart-open">My Cart</button>
+<a 
+  href="{{ routes.cart_url }}"
+  data-ajax-cart-toggle-class-button="js-my-cart-open">
+  My Cart
+</a>
 
 <style>
   .my-floating-cart {
     display: none;
   }
 
-  /* Show the floating cart if the 'js-ajax-cart-open' exists */
-  .js-ajax-cart-open .my-floating-cart {
-    display: block
+  /* Show the floating cart if a 'js-my-cart-open' CSS class exists */
+  .js-my-cart-open .my-floating-cart {
+    display: block;
   }
 </style>
 ```
 {% endraw %}
+
+</div>
+</div>
+
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
+Add the [`data-ajax-cart-toggle-class-button`](data-ajax-cart-toggle-class-button) attribute with the CSS class as a parameter to an HTML element that will show/hide the cart on a user's click.
+
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+```html
+<!-- Button to open/close the floating cart -->
+<a 
+  href="{{ routes.cart_url }}"
+  data-ajax-cart-toggle-class-button="js-my-cart-open">
+  My Cart
+</a>
+```
 
 </div>
 </div>
