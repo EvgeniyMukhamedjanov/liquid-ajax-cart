@@ -5,9 +5,11 @@
         text-{{ site.ui.masthead.align.page | default: 'left' }}
     {%- endif -%}
 {%- endcapture %}
-<div class="site-masthead mb-5 py-5 {{ alignment_class }}">
-    <div class="container">
-        {% include masthead/title.html %}
-        {% include masthead/buttons.html %}
+<div class="container-fluid">
+    <div class="site-masthead mb-5 py-5 {{ alignment_class }}">
+        <div class="container">
+            {% include masthead/title.html %}
+            {% include masthead/buttons.html %}
+        </div>
     </div>
 </div>

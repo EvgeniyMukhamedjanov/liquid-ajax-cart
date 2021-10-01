@@ -11,19 +11,21 @@
     color: white;
     position: relative;
 
-    &::after {
-        @include themer(background, (
-            'dark': linear-gradient(135deg, transparent 50px, $background-color-dark 50px),
-            'light': linear-gradient(135deg, transparent 50px, $background-color-light 50px),
-        ));
+    border-radius: 1rem;
 
-        bottom: 0;
-        content: "";
-        height: 50px;
-        position: absolute;
-        right: 0;
-        width: 30%;
-    }
+    // &::after {
+    //     @include themer(background, (
+    //         'dark': linear-gradient(135deg, transparent 50px, $background-color-dark 50px),
+    //         'light': linear-gradient(135deg, transparent 50px, $background-color-light 50px),
+    //     ));
+
+    //     bottom: 0;
+    //     content: "";
+    //     height: 50px;
+    //     position: absolute;
+    //     right: 0;
+    //     width: 30%;
+    // }
 }
 
 .site-masthead__button {
