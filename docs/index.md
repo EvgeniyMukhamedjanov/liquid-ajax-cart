@@ -89,7 +89,7 @@ title: Liquid Ajax Cart
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-##### Styling
+##### Loading state
 {:.mt-0}
 
 [Quantity button](reference/data-ajax-cart-quantity-button) and [Quantity input](reference/data-ajax-cart-quantity-input) become inactive when user's cart is getting updated. 
@@ -105,7 +105,7 @@ Liquid Ajax Cart adds `js-ajax-cart-in-progress` CSS class to the `body` tag dur
   transition: opacity .2s;
 }
  
-/* Makes the area with controls visually disabled */
+/* Make the area with controls visually disabled */
 .js-ajax-cart-in-progress .my-cart__items {
   opacity: .7;
 }
@@ -120,35 +120,62 @@ Liquid Ajax Cart adds `js-ajax-cart-in-progress` CSS class to the `body` tag dur
 <div class="{{ left_column_classes }}" markdown="1">
  
 ### Enhance product forms
-{:mt-0}
+{:.mt-0}
 
 Liquid Ajax Cart ajaxifies product forms once it is loaded.
 
-You should:
+</div>
+</div>
 
-* Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-form-error) attribute within product forms to show error messages.
-* Show loading indicator or make a submit button visually disabled if a product form has [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-form-in-progress) CSS class.
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
 
- </div>
- <div class="{{ right_column_classes }}" markdown="1">
+##### Error messages
+{.mt-0}
+  
+Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-form-error) attribute within product forms to show error messages.
+
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
   
 {% raw %}
 ```html
 {% form 'product', product %}
- <!-- form content -->
+  <!-- form content -->
 
- <input type="submit" value="Add to cart">
- <div class="your-loading-indicator">Adding to cart...</div>
- <div data-ajax-cart-form-error > <!-- Place for error messages --> </div>
+  <input type="submit" value="Add to cart">
+  <div data-ajax-cart-form-error > <!-- Place for error messages --> </div>
 {% endform %}
-
-<style>
- form .your-loading-indicator { display: none; }
- form.js-ajax-cart-form-in-progress .your-loading-indicator { display: block; }
-</style>
 ```
 {% endraw %}
  
+</div>
+</div>
+
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
+##### Loading state
+{.mt-0}
+When a user submits a product form, it becomes inactive until the AJAX "Add to cart" request is finished to prevent accidental double submissions.
+  
+Liquid Ajax Cart adds [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-form-in-progress) CSS class to the form if the request is in progress so that you show a loading indicator or make the submit button visually disabled.
+  
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+```css
+/* Make the submit button visually disabled */
+form.js-ajax-cart-form-in-progress [type="submit] {
+  opacity: .7;  
+}
+
+/* Show a loading indicator */
+form.js-ajax-cart-form-in-progress:after { 
+  content: 'Adding to cart…'
+  display: block; 
+}
+```
 </div>
 </div>
 
