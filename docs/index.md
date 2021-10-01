@@ -144,7 +144,9 @@ Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-
   <!-- form content -->
 
   <input type="submit" value="Add to cart">
-  <div data-ajax-cart-form-error > <!-- Place for error messages --> </div>
+  <div data-ajax-cart-form-error > 
+    <!-- Error messages appear here --> 
+  </div>
 {% endform %}
 ```
 {% endraw %}
@@ -167,7 +169,7 @@ Liquid Ajax Cart adds [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-f
 
 ```css
 /* Make the submit button visually disabled */
-form.js-ajax-cart-form-in-progress [type="submit] {
+form.js-ajax-cart-form-in-progress [type="submit"] {
   opacity: .7;  
 }
 
