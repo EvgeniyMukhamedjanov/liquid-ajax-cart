@@ -20,8 +20,8 @@ disable_anchors: false
   * [`data-ajax-cart-quantity-input`](reference/data-ajax-cart-quantity-input) — _in_development_ — for quantity text input field.
 * If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](reference/data-ajax-cart-section-scroll) attribute to it and Liquid Ajax Cart will keep the scroll position the same after each section's HTML update.
  
- </div>
- <div class="col-lg-{{ right_column }}" markdown="1">
+</div>
+<div class="col-lg-{{ right_column }}" markdown="1">
 
 {% raw %}
 ```html
@@ -55,15 +55,17 @@ disable_anchors: false
 ```
 {% endraw %}
   
- </div>
- </div>
+</div>
+</div>
  
- <div class="row">
- <div class="col-lg-{{ left_column }}" markdown="1">
+<div class="row">
+<div class="col-lg-{{ left_column }}" markdown="1">
 
 Include the section:
- </div>
- <div class="col-lg-{{ right_column }}" markdown="1">
+ 
+</div>
+<div class="col-lg-{{ right_column }}" markdown="1">
+ 
 {% raw %}
 ```liquid
 {% comment %} Most likely somewhere in theme.liquid {% endcomment %}
@@ -74,10 +76,20 @@ Include the section:
 </div>
 </div>
 
-<div class="row">
+## Enhance product forms
 
- <div class="col-lg-6" markdown="1">
-  
+<div class="row">
+<div class="col-lg-{{ left_column }}" markdown="1">
+
+Liquid Ajax Cart ajaxifies product forms once it is loaded.
+
+You should:
+
+* Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-form-error) attribute within product forms to show error messages.
+* Show loading indicator or make a submit button visually disabled if a product form has [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-form-in-progress) CSS class.
+
+ </div>
+ <div class="col-lg-{{ right_column }}" markdown="1">
   
 {% raw %}
 ```html
@@ -96,18 +108,6 @@ Include the section:
 ```
 {% endraw %}
  
- </div>
- <div class="col-lg-6" markdown="1">
-
-## Enhance product forms
-
-Liquid Ajax Cart ajaxifies product forms once it is loaded.
-
-You should:
-
-* Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-form-error) attribute within product forms to show error messages.
-* Show loading indicator or make a submit button visually disabled if a product form has [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-form-in-progress) CSS class.
-
- </div>
- </div>
+</div>
+</div>
 
