@@ -6,12 +6,13 @@ disable_anchors: true
 title: Liquid Ajax Cart
 ---
 
-{% assign left_column = 5 %}
-{% assign right_column = 7 %}
+{% assing row_classes = 'row' %}
+{% assign left_column_classes = 'col-lg-5' %}
+{% assign right_column_classes = 'col-lg-7' %}
 
 
-<div class="row">
-<div class="col-lg-{{ left_column }}" markdown="1">
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
  
 ### Create a section for AJAX cart
 {:.mt-0}
@@ -28,32 +29,34 @@ title: Liquid Ajax Cart
   * [`data-ajax-cart-quantity-input`](reference/data-ajax-cart-quantity-input) — for quantity text input field.
  
 </div>
-<div class="col-lg-{{ right_column }}" markdown="1">
+<div class="{{ right_column_classes }}" markdown="1">
 
 {% raw %}
 ```html
-{% comment %} sections/ajax-cart.liquid {% endcomment %}
+{% comment %} sections/my-cart.liquid {% endcomment %}
 
 <div data-ajax-cart-section >
   <h2>Cart</h2>
   
-  {% for item in cart.items %}  
-    <a href="{{ item.url }}">{{ item.title }}</a> <br />
-    Price: {{ item.final_price | money }} <br />
+  <div class="my-cart__items" data-ajax-cart-section-scroll >
+    {% for item in cart.items %}  
+      <a href="{{ item.url }}">{{ item.title }}</a> <br />
+      Price: {{ item.final_price | money }} <br />
 
-    Quantity:
-    <a 
-       href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
-       data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | minus: 1 }}"
-    > Minus one </a>
-    <span>{{ item.quantity }}</span>
-    <a 
-       href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
-       data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | plus: 1 }}"
-    > Plus one </a>
+      Quantity:
+      <a 
+        href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
+        data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | minus: 1 }}"
+      > Minus one </a>
+      <span>{{ item.quantity }}</span>
+      <a 
+        href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
+        data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | plus: 1 }}"
+      > Plus one </a>
 
-    Total: <strong>{{ item.final_line_price | money }}</strong> <br /> <br />  
-  {% endfor %}
+      Total: <strong>{{ item.final_line_price | money }}</strong> <br /> <br />  
+    {% endfor %}
+  </div>
   
   <a href="/checkout"> Checkout — {{ cart.total_price | money_with_currency }} </button>
 </div>
@@ -65,13 +68,13 @@ title: Liquid Ajax Cart
 </div>
 </div>
  
-<div class="row">
-<div class="col-lg-{{ left_column }}" markdown="1">
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
 
 * Include the section to the place where you want to display the AJAX cart
 
 </div>
-<div class="col-lg-{{ right_column }}" markdown="1">
+<div class="{{ right_column_classes }}" markdown="1">
  
 {% raw %}
 ```liquid
@@ -83,15 +86,36 @@ title: Liquid Ajax Cart
 </div>
 </div>
 
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
+Controls become inactive when user's cart is getting updated. Liquid Ajax Cart adds `js-ajax-cart-in-progress` CSS class to the `body` tag during the updating process in order you to show a loading indicator or make the controls visually disabled.
+ 
+</div>
+<div class="{{ left_column_classes }}" markdown="1">
+```css
+.my-cart__items { 
+  opacity: 1;
+  transition: opacity .2s;
+}
+ 
+/* Makes the area with controls visually disabled */
+.js-ajax-cart-in-progress .my-cart__items {
+  opacity: .7;
+}
+```
+</div>
+</div>
+
 ---
 
-<div class="row">
-<div class="col-lg-{{ left_column }}" markdown="1">
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
  
-  ### Enhance product forms
-  {:mt-0}
+### Enhance product forms
+{:mt-0}
 
-  Liquid Ajax Cart ajaxifies product forms once it is loaded.
+Liquid Ajax Cart ajaxifies product forms once it is loaded.
 
 You should:
 
@@ -99,7 +123,7 @@ You should:
 * Show loading indicator or make a submit button visually disabled if a product form has [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-form-in-progress) CSS class.
 
  </div>
- <div class="col-lg-{{ right_column }}" markdown="1">
+ <div class="{{ right_column_classes }}" markdown="1">
   
 {% raw %}
 ```html
