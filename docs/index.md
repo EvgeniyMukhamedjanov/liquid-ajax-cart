@@ -6,7 +6,7 @@ disable_anchors: true
 title: Liquid Ajax Cart
 ---
 
-{% assign row_classes = 'row' %}
+{% assign row_classes = 'row mb-3' %}
 {% assign left_column_classes = 'col-lg-5' %}
 {% assign right_column_classes = 'col-lg-7' %}
 
@@ -79,7 +79,7 @@ title: Liquid Ajax Cart
 {% raw %}
 ```liquid
 {% comment %} Most likely somewhere in theme.liquid {% endcomment %}
-{% section 'ajax-cart' %}
+{% section 'my-cart' %}
 ```
 {% endraw %}
 
@@ -89,10 +89,12 @@ title: Liquid Ajax Cart
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-Controls become inactive when user's cart is getting updated. Liquid Ajax Cart adds `js-ajax-cart-in-progress` CSS class to the `body` tag during the updating process in order you to show a loading indicator or make the controls visually disabled.
+Controls become inactive when user's cart is getting updated. 
+ 
+Liquid Ajax Cart adds `js-ajax-cart-in-progress` CSS class to the `body` tag during the updating process in order you to show a loading indicator or make the controls visually disabled.
  
 </div>
-<div class="{{ left_column_classes }}" markdown="1">
+<div class="{{ right_column_classes }}" markdown="1">
 ```css
 .my-cart__items { 
   opacity: 1;
