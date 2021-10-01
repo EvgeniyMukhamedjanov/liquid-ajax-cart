@@ -6,7 +6,7 @@ disable_anchors: true
 title: Liquid Ajax Cart
 ---
 
-{% assing row_classes = 'row' %}
+{% assign row_classes = 'row' %}
 {% assign left_column_classes = 'col-lg-5' %}
 {% assign right_column_classes = 'col-lg-7' %}
 
