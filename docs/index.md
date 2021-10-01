@@ -215,18 +215,42 @@ Write some CSS to show your cart section if a specific `body` CSS class exists.
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-Add the [`data-ajax-cart-toggle-class-button`](data-ajax-cart-toggle-class-button) attribute with the CSS class as a parameter to an HTML element that will show/hide the cart on a user's click.
+Add the [`data-ajax-cart-toggle-class-button`](data-ajax-cart-toggle-class-button) attribute with the CSS class as a parameter to a button that have to show/hide the cart — it will add/remove the CSS class on a user's click.
+
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+{% raw %}
+```html
+<!-- Button to open/close the floating cart -->
+<a href="{{ routes.cart_url }}"
+  data-ajax-cart-toggle-class-button="js-my-cart-open">
+  My Cart
+</a>
+
+<!-- Button that only open -->
+```
+{% endraw %}
+
+</div>
+</div>
+
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
+If you want the button to only add or only remove the CSS class — specify the additional parameter.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
 
 ```html
-<!-- Button to open/close the floating cart -->
-<a 
-  href="{{ routes.cart_url }}"
-  data-ajax-cart-toggle-class-button="js-my-cart-open">
-  My Cart
-</a>
+<button data-ajax-cart-toggle-class-button="js-my-cart-open | add">
+  Open cart
+</button>
+
+<button data-ajax-cart-toggle-class-button="js-my-cart-open | remove">
+  Close cart
+</button>
 ```
 
 </div>
