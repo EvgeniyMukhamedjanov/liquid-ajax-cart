@@ -198,26 +198,13 @@ Write some CSS to show your cart section if a specific `body` CSS class exists.
 {% raw %}
 ```html
 <!-- Floating cart -->
-<div class="my-floating-cart">
-  {% section 'my-cart' %}
-</div>
-
-<!-- Button to open/close the floating cart -->
-<a 
-  href="{{ routes.cart_url }}"
-  data-ajax-cart-toggle-class-button="js-my-cart-open">
-  My Cart
-</a>
+<div class="my-floating-cart"> {% section 'my-cart' %} </div>
 
 <style>
-  .my-floating-cart {
-    display: none;
-  }
+  .my-floating-cart { display: none; }
 
   /* Show the floating cart if a 'js-my-cart-open' CSS class exists */
-  .js-my-cart-open .my-floating-cart {
-    display: block;
-  }
+  .js-my-cart-open .my-floating-cart { display: block; }
 </style>
 ```
 {% endraw %}
