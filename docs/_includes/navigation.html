@@ -25,11 +25,9 @@
                         {% assign is_homepage = true %}
                     {% endif %}
 
-                    {% assign show_in_menu = true %}
-                    {% if p.show_in_menu != nil and p.show_in_menu == false %}
-                        {% assign show_in_menu = false %}
-                    {% elsif p.hide != nil and p.hide == true %}
-                        {% assign show_in_menu = false %}
+                    {% assign show_in_menu = false %}
+                    {% if p.show_in_menu != nil and p.show_in_menu == true %}
+                        {% assign show_in_menu = true %}
                     {% endif %}
 
                     {% if is_homepage != true and show_in_menu == true and p.title %}
