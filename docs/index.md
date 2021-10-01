@@ -5,13 +5,14 @@ description: A Javascript library for building an AJAX carts using Liquid templa
 disable_anchors: false
 ---
 
-# Liquid Ajax Cart
+{% assign left_column = 5 %}
+{% assign right_column = 7 %}
 
-
-<div class="row">
-<div class="col-lg-6" markdown="1">
 
 ## Create a section for AJAX cart
+
+<div class="row">
+<div class="col-lg-{{ left_column }}" markdown="1">
 
 * Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute to a root HTML container of a section so that Liquid Ajax Cart ajaxifies the section.
 * Add attributes for controls:
@@ -20,7 +21,7 @@ disable_anchors: false
 * If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](reference/data-ajax-cart-section-scroll) attribute to it and Liquid Ajax Cart will keep the scroll position the same after each section's HTML update.
  
  </div>
- <div class="col-lg-6" markdown="1">
+ <div class="col-lg-{{ right_column }}" markdown="1">
 
 {% raw %}
 ```html
@@ -53,8 +54,16 @@ disable_anchors: false
 {% schema %} { "name": "Ajax Cart" } {% endschema %}
 ```
 {% endraw %}
+  
+ </div>
+ </div>
+ 
+ <div class="row">
+ <div class="col-lg-{{ left_column }}" markdown="1">
 
 Include the section:
+ </div>
+ <div class="col-lg-{{ right_column }}" markdown="1">
 {% raw %}
 ```liquid
 {% comment %} Most likely somewhere in theme.liquid {% endcomment %}
