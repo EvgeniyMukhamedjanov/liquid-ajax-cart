@@ -10,10 +10,11 @@ title: Liquid Ajax Cart
 {% assign right_column = 7 %}
 
 
-## Create a section for AJAX cart
-
 <div class="row">
 <div class="col-lg-{{ left_column }}" markdown="1">
+ 
+ ## Create a section for AJAX cart
+ {:mt-0}
 
 * Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute to a root HTML container of a section so that Liquid Ajax Cart ajaxifies the section.
 * Add attributes for controls:
@@ -63,7 +64,7 @@ title: Liquid Ajax Cart
 <div class="col-lg-{{ left_column }}" markdown="1">
 
 Include the section:
- 
+
 </div>
 <div class="col-lg-{{ right_column }}" markdown="1">
  
@@ -77,12 +78,15 @@ Include the section:
 </div>
 </div>
 
-## Enhance product forms
+---
 
 <div class="row">
 <div class="col-lg-{{ left_column }}" markdown="1">
+ 
+  ## Enhance product forms
+  {:mt-0}
 
-Liquid Ajax Cart ajaxifies product forms once it is loaded.
+  Liquid Ajax Cart ajaxifies product forms once it is loaded.
 
 You should:
 
