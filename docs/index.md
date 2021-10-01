@@ -227,8 +227,6 @@ Add the [`data-ajax-cart-toggle-class-button`](data-ajax-cart-toggle-class-butto
   data-ajax-cart-toggle-class-button="js-my-cart-open">
   My Cart
 </a>
-
-<!-- Button that only open -->
 ```
 {% endraw %}
 
