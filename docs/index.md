@@ -11,7 +11,7 @@ title: Liquid Ajax Cart
 <p class="lead" markdown="1">
 Add the data-ajax-cart-section attribute to your cart theme section and Liquid Ajax Cart will update the section's HTML on a page every time when the cart is changed.
 </p>
-<p class="lead" markdown="1">No javascript coded needed.</p
+<p class="lead" markdown="1">No javascript coded needed.</p>
 <p class="lead" markdown="1">Check out all the features on the Demo store.</p>
 </div>
 <div class="col-lg-4" markdown="1">
