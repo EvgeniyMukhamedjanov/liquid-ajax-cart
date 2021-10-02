@@ -13,6 +13,8 @@ Liquid Ajax Cart updates content of the theme sections that you marked with `dat
 </p>
 </div>
 <div class="col-lg-4" markdown="1">
+  
 > For building custom storefronts using React, Liquid Ajax Cart offers Ajax Requests API and the State — enriched cart object.
+  
 </div>
 </div>
