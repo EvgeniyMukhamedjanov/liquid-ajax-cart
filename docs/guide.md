@@ -1,5 +1,6 @@
 ---
 title: Guide
+layout: full
 show_in_menu: true
 ---
 
