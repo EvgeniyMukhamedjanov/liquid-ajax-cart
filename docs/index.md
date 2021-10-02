@@ -7,7 +7,7 @@ title: Liquid Ajax Cart
 ---
 
 <div class="row">
-<div class="col-8"
+<div class="col-8">
 <p class="lead" markdown="1">
 Liquid Ajax Cart updates content of the theme sections that you marked with `data-ajax-cart-section` attribute every time when the cart is changed.
 </p>
