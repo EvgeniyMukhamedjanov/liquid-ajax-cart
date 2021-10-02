@@ -19,20 +19,13 @@ Add the data-ajax-cart-section attribute to your cart theme section and Liquid A
 </div>
 </div>
 
-<div class="row">
-<div class="col-lg-8">
-<p class="lead" markdown="1">
-Test with your theme — include the library and create a section for AJAX cart:
-</p>
-</div>
-</div>
-
 {% assign row_classes = 'row mb-4 mt-4' %}
 {% assign left_column_classes = 'col-lg-5' %}
 {% assign right_column_classes = 'col-lg-7' %}
 
+<hr />
 
-<div class="row">
+<div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
  
 ### Create a section for AJAX cart
