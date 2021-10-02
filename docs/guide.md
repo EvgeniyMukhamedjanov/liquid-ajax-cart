@@ -13,7 +13,6 @@ show_in_menu: true
 <div class="{{ left_column_classes }}" markdown="1">
  
 ### Create a section for AJAX cart
-{:.mt-0}
  
 * Create a new Shopify section 
 
@@ -88,7 +87,6 @@ show_in_menu: true
 <div class="{{ left_column_classes }}" markdown="1">
 
 ##### Loading state
-{:.mt-0}
 
 [Quantity button](reference/data-ajax-cart-quantity-button) and [Quantity input](reference/data-ajax-cart-quantity-input) become inactive when user's cart is getting updated. 
  
