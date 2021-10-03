@@ -32,8 +32,8 @@ links:
 ui:
   mode: 'light'
   brand:
-    dark: "#008060"
-    light: "#008060"
+    dark: "#5e8e3e"
+    light: "#5e8e3e"
   border_color:
     dark: "#5f5f5f"
     light: "#dee2e6"
