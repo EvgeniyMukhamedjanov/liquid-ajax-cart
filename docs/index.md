@@ -39,6 +39,8 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
  
 {% raw %}
 ```html
+{% comment %} Somewhere in layout/theme.liquid {% endcomment %}
+ 
 <script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
 <script type="module">
   import '{{ 'liquid-ajax-cart.js' | asset_url }}';
@@ -48,12 +50,35 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
  
 Upload the [liquid-ajax-cart.js](https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/blob/main/_dist/liquid-ajax-cart.js) file to your theme's `asset` folder and include it in the `layout/theme.liquid` template.
 
-Provide the initial cart state in the JSON format within a script with the [`data-ajax-cart-initial-state`](reference/data-ajax-cart-initial-state) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
+Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](reference/data-ajax-cart-initial-state) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
 
 </div>
 <div class="col-lg-6" markdown="1">
-##### npm
+##### Via npm
 {:.mt-0}
+ 
+<div class="soon-blurred" markdown="1">
+```npm
+npm install liquid-ajax-cart
+```
+
+```javascript
+import 'liquid-ajax-cart/dom-binder';
+import 'liquid-ajax-cart/sections';
+import 'liquid-ajax-cart/controls';
+import 'liquid-ajax-cart/product-forms';
+import 'liquid-ajax-cart/global-classes';
+```
+ 
+{% raw %}
+```html
+<script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
+```
+{% endraw %}
+
+Import all the needed modules and provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](reference/data-ajax-cart-initial-state) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
+</div>
+ 
 </div>
 </div>
 
