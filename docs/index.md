@@ -95,16 +95,13 @@ Import all the needed modules and provide the initial cart state in the JSON for
 ### Create a section for AJAX cart
 {:.mt-0}
  
-* Create a new Shopify section 
+Feel free to use any Liquid tags, objects and filters.
 
-* Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute to a root HTML container — Liquid Ajax Cart reloads sections with this attribute every time when a cart gets updated.
+Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute to a root HTML container — Liquid Ajax Cart reloads sections with this attribute every time when a cart gets updated.
 
-* If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](reference/data-ajax-cart-section-scroll) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
+If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](reference/data-ajax-cart-section-scroll) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
 
-* Add Controls attributes:
-
-  * [`data-ajax-cart-quantity-button`](reference/data-ajax-cart-quantity-button) — for "plus", "minus" and "remove" buttons;
-  * [`data-ajax-cart-quantity-input`](reference/data-ajax-cart-quantity-input) — for quantity text input field.
+Add [`data-ajax-cart-quantity-button`](reference/data-ajax-cart-quantity-button) attribute to "plus", "minus" and "remove" buttons.
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -149,7 +146,7 @@ Import all the needed modules and provide the initial cart state in the JSON for
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-* Include the section to the place where you want to display the AJAX cart
+Include the section to the place where you want to display the AJAX cart
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
