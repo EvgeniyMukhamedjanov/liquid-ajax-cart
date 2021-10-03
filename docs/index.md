@@ -15,9 +15,9 @@ title: Liquid Ajax Cart
 <p class="lead" markdown="1">
 Add the `data-ajax-cart-section` attribute to your cart liquid section and Liquid Ajax Cart will update the section's HTML on a page every time when the cart is changed.
 </p>
-<p class="lead" markdown="1">No javascript coded needed.</p>
+<p class="lead" markdown="1">No Javascript code needed.</p>
 
-<p markdown="1">Check out the [demo store](https://liquid-ajax-cart.myshopify.com/) where all AJAX-cart functionality was built from scratch using Liquid Ajax Cart. Password — `liquid-ajax-cart`.</p>
+<p class="lead" markdown="1">Check out the [demo store](https://liquid-ajax-cart.myshopify.com/) where all AJAX-cart functionality was built from scratch using Liquid Ajax Cart. Password — `liquid-ajax-cart`.</p>
 </div>
 <div class="col-lg-4" markdown="1">
 > For building custom storefronts using React, Liquid Ajax Cart offers Ajax Requests API and the State — enriched cart object.
