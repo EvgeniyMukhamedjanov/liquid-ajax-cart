@@ -47,10 +47,15 @@
     background-color: transparent;
 
     &:hover {
+        /*
         @include themer(background-color, (
             'dark': $site-ui-masthead-color-dark,
             'light': $site-ui-masthead-color-light,
         ));
+        */
+        background-color: white;
+        background-color: rgba(255, 255, 255, .9);
+        
         @include themer(color, (
             'dark': $site-ui-brand-dark,
             'light': $site-ui-brand-light,
