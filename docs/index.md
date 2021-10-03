@@ -101,7 +101,7 @@ Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute t
 
 If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](reference/data-ajax-cart-section-scroll) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
 
-Add [`data-ajax-cart-quantity-button`](reference/data-ajax-cart-quantity-button) attribute to "plus", "minus" and "remove" buttons.
+Add the [`data-ajax-cart-quantity-button`](reference/data-ajax-cart-quantity-button) attribute to "plus", "minus" and "remove" buttons.
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
