@@ -1,22 +1,28 @@
 a {
+    /*
     @include themer(color, (
         'dark': $site-ui-brand-dark,
         'light': $site-ui-brand-light,
     ));
+    */
 
-    border-bottom: 1px solid currentColor;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
     text-decoration: none;
+    background-color: rgba($site-ui-brand-dark, .3);
     transition: all .2s;
 
     &:active,
     &:focus,
     &:hover {
+        /*
         @include themer(color, (
             'dark': darken($site-ui-brand-dark, 10%),
             'light': darken($site-ui-brand-light, 10%),
         ));
+        */
 
         text-decoration: none;
-        border-bottom-color: rgba(255, 255, 255, 0);
+        border-bottom-color: currentColor;
+        background-color: rgba($site-ui-brand-dark, .5);
     }
 }
