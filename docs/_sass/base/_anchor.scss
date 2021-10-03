@@ -5,10 +5,11 @@ a {
         'light': $site-ui-brand-light,
     ));
     */
-
+    
+    color: currentColor;
     border-bottom: 1px solid rgba(0, 0, 0, .2);
     text-decoration: none;
-    background-color: rgba($site-ui-brand-dark, .3);
+    background-color: rgba($site-ui-brand-light, .3);
     transition: all .2s;
 
     &:active,
@@ -20,9 +21,10 @@ a {
             'light': darken($site-ui-brand-light, 10%),
         ));
         */
-
+        
+        color: currentColor;
         text-decoration: none;
         border-bottom-color: currentColor;
-        background-color: rgba($site-ui-brand-dark, .5);
+        background-color: rgba($site-ui-brand-light, .5);
     }
 }
