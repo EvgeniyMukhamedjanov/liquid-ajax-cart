@@ -428,3 +428,36 @@ Use these function instead of direct Cart API calls and Liquid Ajax Cart will ke
  
 </div>
 </div>
+
+---
+
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
+### Get Cart State JSON
+{:.mt-0}
+ 
+State is a Javascript object where Liquid Ajax Cart keeps the information related to user's cart.
+
+Use the [`getCartState`](reference/getCartState) function to get the current state.
+
+If you want to run your Javascript code every time when the state is changed — use the `subscribeToCartStateUpdate` function to subscribe to state updates.
+
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+ ```html
+<script type="module">
+  import { getCartState, subscribeToCartStateUpdate } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+
+  const initialState = getCartState();
+  console.log('Initial state: ', InitialState);
+
+  subscribeToCartStateUpdate( state => {
+    console.log('Updated state: ', state);
+  });
+</script>
+```
+ 
+</div>
+</div>
