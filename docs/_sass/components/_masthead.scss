@@ -55,6 +55,10 @@
             'dark': $site-ui-brand-dark,
             'light': $site-ui-brand-light,
         ));
+        @include themer(border-color, (
+            'dark': $site-ui-masthead-color-dark,
+            'light': $site-ui-masthead-color-light,
+        ));
 
         text-decoration: none;
     }
