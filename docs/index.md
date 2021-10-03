@@ -41,7 +41,9 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 ```html
 {% comment %} Somewhere in layout/theme.liquid {% endcomment %}
  
-<script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
+<script type="application/json" data-ajax-cart-initial-state >
+  {{ cart | json }}
+</script>
 <script type="module">
   import '{{ 'liquid-ajax-cart.js' | asset_url }}';
 </script>
@@ -71,7 +73,9 @@ import 'liquid-ajax-cart/global-classes';
  
 {% raw %}
 ```html
-<script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
+<script type="application/json" data-ajax-cart-initial-state >
+  {{ cart | json }}
+</script>
 ```
 {% endraw %}
 
