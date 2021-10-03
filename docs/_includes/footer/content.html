@@ -102,6 +102,10 @@
                     <div class="site-footer__summary">
                         {% assign software_and_docs = site.license.software and site.license.docs %}
                         {% assign one_or_the_other = site.license.software or site.license.docs %}
+                        
+                        <p class="mb-0">
+                            Created by Evgeniy Mukhamedjanov
+                        </p>
 
                         <p class="mb-0">
                             {%- if site.license.software -%}
@@ -123,11 +127,6 @@
                                     {{ site.license.docs }}
                                 {%- if site.license.docs_url -%}</a>{%- endif -%}
                             {%- endif -%}
-                        </p>
-
-                        <p class="mb-0">
-                            Documentation template by <a href="http://getbootstrap.com">Bootstrap team</a>, generated with
-                            <a href="https://github.com/allejo/jekyll-docs-theme">Jekyll Docs Theme</a>
                         </p>
                     </div>
                 {% endif %}
