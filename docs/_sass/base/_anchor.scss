@@ -7,10 +7,14 @@ a {
     */
     
     color: currentColor;
-    border-bottom: 1px solid rgba(0, 0, 0, .15);
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
     text-decoration: none;
-    background-color: rgba(#bfea52, .3);
+    
     transition: all .2s;
+    
+    .scope-markdown & {
+        background-color: rgba(#bfea52, .3);
+    }
 
     &:active,
     &:focus,
@@ -25,6 +29,9 @@ a {
         color: currentColor;
         text-decoration: none;
         border-bottom-color: currentColor;
-        background-color: rgba(#bfea52, .4);
+        
+        .scope-markdown & {
+            background-color: rgba(#bfea52, .4);
+        }
     }
 }
