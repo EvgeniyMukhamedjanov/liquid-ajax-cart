@@ -58,7 +58,7 @@ Provide the initial cart state in the JSON format within a script tag with the [
 {:.mt-0}
  
 <div class="soon-blurred" markdown="1">
-```npm
+```
 npm install liquid-ajax-cart
 ```
 
