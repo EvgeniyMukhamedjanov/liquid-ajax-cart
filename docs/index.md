@@ -439,6 +439,41 @@ Use these function instead of direct Cart API calls and Liquid Ajax Cart will ke
  
 State is a Javascript object where Liquid Ajax Cart keeps the information related to user's cart.
 
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+```json
+{
+  "cart":{
+    "token":"b7d3743e2c398043f209c5a3a9014f9d",
+    "note":null,
+    "attributes":{},
+    "original_total_price":1000,
+    "total_price":1000,
+    "total_discount":0,
+    "total_weight":0,
+    "item_count":1,
+    "items":[],
+    "requires_shipping":false,
+    "currency":"USD",
+    "items_subtotal_price":1000,
+    "cart_level_discount_applications":[]
+  },
+  "status":{
+    "requestInProgress":false,
+    "cartStateSet":true
+  }
+}
+```
+ 
+</div>
+</div>
+
+---
+
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
 Use the [`getCartState`](reference/getCartState) function to get the current state.
 
 If you want to run your Javascript code every time when the state is changed — use the [`subscribeToCartStateUpdate`](reference/subscribeToCartStateUpdate) function to subscribe to state updates.
