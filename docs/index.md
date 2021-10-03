@@ -362,6 +362,8 @@ even if Liquid Ajax Cart is not loaded: -->
 </div>
 </div>
 
+---
+
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
