@@ -44,6 +44,7 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 <script type="application/json" data-ajax-cart-initial-state >
   {{ cart | json }}
 </script>
+ 
 <script type="module">
   import '{{ 'liquid-ajax-cart.js' | asset_url }}';
 </script>
