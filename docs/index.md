@@ -370,8 +370,10 @@ even if Liquid Ajax Cart is not loaded: -->
  
 Use these function instead of direct Cart API calls and Liquid Ajax Cart will keep the Ajax cart sections, the State object and body CSS classes updated:
 
-* [`cartRequestGet`](reference/cartRequestGet) to send a request to the `GET /cart.js` endpoint;
-* [`cartRequestAdd`](reference/cartRequestAdd) — to the `POST /cart.js` endpoint;
+* [`cartRequestGet`](reference/cartRequestGet) — sends a request to the `GET /cart.js` endpoint,
+ 
+* [`cartRequestAdd`](reference/cartRequestAdd) — to the `POST /cart.js` endpoint,
+ 
 * [`cartRequestChange`](reference/cartRequestChange) — to the `POST /cart/change.js` endpoint.
 
 </div>
