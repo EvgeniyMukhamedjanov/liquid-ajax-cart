@@ -44,6 +44,7 @@
     display: inline-block;
     font-size: 1.25rem;
     padding: 0.75rem 2rem;
+    background-color: none;
 
     &:hover {
         @include themer(background-color, (
