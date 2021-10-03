@@ -54,8 +54,7 @@ Provide the initial cart state in the JSON format within a script tag with the [
 
 </div>
 <div class="col-lg-6" markdown="1">
-##### Via npm
-{:.mt-0}
+<h5 class="mt-0">Via npm <span class="badge badge-secondary">soon</span></h5>
  
 <div class="soon-blurred" markdown="1">
 ```
