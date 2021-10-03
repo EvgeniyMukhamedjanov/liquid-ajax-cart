@@ -339,7 +339,7 @@ If you want the button to only add or only remove the CSS class — specify the 
  
 Add the [`data-ajax-cart-bind-state`](reference/data-ajax-cart-bind-state) attribute to an HTML element, pass a Cart state property as an attribute's value and Liquid Ajax Cart will display the state property's value within the HTML element and refresh it when cart gets updated.
 
-Explore all the properties on the [State reference](#) page
+Explore all the properties on the [State reference](#) page.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -359,5 +359,38 @@ even if Liquid Ajax Cart is not loaded: -->
 ```
 {% endraw %}
 
+</div>
+</div>
+
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
+### Make your own calls to Shopify Ajax Cart API
+{:.mt-0}
+ 
+Use these function instead of direct Cart API calls and Liquid Ajax Cart will keep the Ajax cart sections, the State object and body CSS classes updated:
+
+* [`cartRequestGet`](reference/cartRequestGet) to send a request to the `GET /cart.js` endpoint;
+* [`cartRequestAdd`](reference/cartRequestAdd) — to the `POST /cart.js` endpoint;
+* [`cartRequestChange`](reference/cartRequestChange) — to the `POST /cart/change.js` endpoint.
+
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+ ```html
+<script type="module">
+  import { cartRequestAdd } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+
+  cartRequestAdd({ 
+    items: [
+      {
+        id: 40934235668668,
+        quantity: 1
+      }
+    ]  
+  });
+</script>
+ ```
+ 
 </div>
 </div>
