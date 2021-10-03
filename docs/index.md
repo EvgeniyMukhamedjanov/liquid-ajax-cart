@@ -441,7 +441,7 @@ State is a Javascript object where Liquid Ajax Cart keeps the information relate
 
 Use the [`getCartState`](reference/getCartState) function to get the current state.
 
-If you want to run your Javascript code every time when the state is changed — use the `subscribeToCartStateUpdate` function to subscribe to state updates.
+If you want to run your Javascript code every time when the state is changed — use the [`subscribeToCartStateUpdate`](reference/subscribeToCartStateUpdate) function to subscribe to state updates.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
