@@ -6,6 +6,10 @@ disable_anchors: true
 title: Liquid Ajax Cart
 ---
 
+{% assign row_classes = 'row mb-4 mt-4' %}
+{% assign left_column_classes = 'col-lg-5' %}
+{% assign right_column_classes = 'col-lg-7' %}
+
 <div class="row">
 <div class="col-lg-8">
 <p class="lead" markdown="1">
@@ -19,11 +23,41 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 </div>
 </div>
 
-{% assign row_classes = 'row mb-4 mt-4' %}
-{% assign left_column_classes = 'col-lg-5' %}
-{% assign right_column_classes = 'col-lg-7' %}
+---
 
-<hr />
+<div class="{{ row_classes }}">
+<div class="col-lg-6" markdown="1">
+### Installation
+{:.mt-0}
+</div>
+</div>
+
+<div class="{{ row_classes }}">
+<div class="col-lg-6" markdown="1">
+##### Manual
+{:.mt-0}
+ 
+{% raw %}
+```html
+<script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
+<script type="module">
+  import '{{ 'liquid-ajax-cart.js' | asset_url }}';
+</script>
+```
+{% endraw %}
+ 
+Upload the [liquid-ajax-cart.js](https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/blob/main/_dist/liquid-ajax-cart.js) file to your theme's `asset` folder and include it in the `layout/theme.liquid` template.
+
+Provide the initial cart state in the JSON format within a script with the [`data-ajax-cart-initial-state`](reference/data-ajax-cart-initial-state) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
+
+</div>
+<div class="col-lg-6" markdown="1">
+##### npm
+{:.mt-0}
+</div>
+</div>
+
+---
 
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
