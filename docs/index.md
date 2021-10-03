@@ -453,7 +453,7 @@ State is a Javascript object where Liquid Ajax Cart keeps the information relate
     "total_discount":0,
     "total_weight":0,
     "item_count":1,
-    "items":[],
+    "items":[...],
     "requires_shipping":false,
     "currency":"USD",
     "items_subtotal_price":1000,
@@ -468,8 +468,6 @@ State is a Javascript object where Liquid Ajax Cart keeps the information relate
  
 </div>
 </div>
-
----
 
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
