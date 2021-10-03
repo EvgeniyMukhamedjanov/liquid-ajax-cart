@@ -15,6 +15,11 @@ a {
     .scope-markdown &,
     .site-footer__summary & {
         background-color: rgba(#bfea52, .3);
+        
+        code {
+            background-color: transparent;
+            border: none;
+        }
     }
 
     &:active,
