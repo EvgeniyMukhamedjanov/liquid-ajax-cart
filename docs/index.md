@@ -367,6 +367,38 @@ even if Liquid Ajax Cart is not loaded: -->
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
+### Run your Javascript code before and after each Ajax Cart API request
+{:.mt-0}
+
+Use the [`subscribeToCartAjaxRequests`](reference/subscribeToCartAjaxRequests) function to add callbacks that will be called before and after Ajax Cart API requests.
+ 
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+ ```html
+<script type="module">
+  import { subscribeToCartAjaxRequests, getCartState } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+
+  subscribeToCartAjaxRequests(( data, subscribeToResult ) => {    
+    // This function will be called before each Ajax Cart API request
+    console.log( 'Before: ', data );
+ 
+    subscribeToResult( data => {   
+      // This function will be called after the request is finished
+      console.log( 'After: ', data );
+    })
+  })
+</script>
+ ```
+ 
+</div>
+</div>
+
+---
+
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
 ### Make your own calls to Shopify Ajax Cart API
 {:.mt-0}
  
