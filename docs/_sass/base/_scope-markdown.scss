@@ -1,9 +1,14 @@
 .scope-markdown {
     code {
+        /*
         @include themer(color, (
             'dark': #ffa6a6,
             'light': #e83e8c,
         ));
+        */
+        
+        color: currentColor;
+        padding: 0 5px;
     }
 
     h1, h2, h3,
