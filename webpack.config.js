@@ -16,17 +16,24 @@ module.exports = {
   }
 };
 
-module.exports = {
-  mode: 'production',
-  entry: './_src/index.js',
-  output: {
-    filename: `liquid-ajax-cart-${PACKAGE.version}.js`,
-    path: path.resolve(__dirname, 'docs/releases'),
-    library: {
-      type: 'module',
-    },
-  },
-  experiments: {
-    outputModule: true
+module.exports = (env) => { 
+  let folder = 'docs/releases';
+  if ( env.last ) {
+    folder = 'docs/releases/last';
   }
-};
+
+  return {
+    mode: 'production',
+    entry: './_src/index.js',
+    output: {
+      filename: `liquid-ajax-cart-v${PACKAGE.version}.js`,
+      path: path.resolve(__dirname, folder),
+      library: {
+        type: 'module',
+      },
+    },
+    experiments: {
+      outputModule: true
+    }
+  };
+}

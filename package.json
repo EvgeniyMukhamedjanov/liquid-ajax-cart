@@ -1,6 +1,6 @@
 {
   "name": "liquid-ajax-cart",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "private": true,
   "scripts": {
@@ -8,7 +8,7 @@
     "webpack-watch": "webpack --mode=development --watch",
     "themekit-watch": "shopify-themekit watch",
     "watch": "npm-run-all --parallel themekit-watch webpack-watch",
-    "build": "webpack --mode=production"
+    "build": "webpack --mode=production && webpack --mode=production --env last=true"
   },
   "author": "Evgeniy Mukhamedjanov",
   "license": "ISC",
