@@ -4,7 +4,6 @@
 {% for file in site.static_files %}
     {% assign file_slice = file.path | slice: 0, last_release_slice.size %}
     {% if last_release_slice == file_slice %}
-        <li><a href="{{ file.path }}">{{ file.name }}</a></li>
         {% assign download_path = file.path %}
         {% assign file_name_split = file.basename | split: '-v' %}
         {% assign version = file_name_split[1] %}
@@ -20,6 +19,7 @@
                  url=download_path
                  icon="download"
                  title='Download'
+                 download=true
             %}
         {% endif %}
 
