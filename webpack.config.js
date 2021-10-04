@@ -26,7 +26,7 @@ module.exports = (env) => {
     mode: 'production',
     entry: './_src/index.js',
     output: {
-      filename: `liquid-ajax-cart-v${PACKAGE.version.replace('.', '-').replace('.', '-')}.js`,
+      filename: `liquid-ajax-cart-v${PACKAGE.version}.js`,
       path: path.resolve(__dirname, folder),
       library: {
         type: 'module',

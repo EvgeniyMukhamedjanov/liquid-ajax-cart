@@ -56,7 +56,7 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 </script>
  
 <script type="module">
-  import '{{ '{% endraw %}{{ last_release_file.name }}{% raw %}' | asset_url }}';
+  import '{{ "{% endraw %}{{ last_release_file.name }}{% raw %}" | asset_url }}';
 </script>
 ```
 {% endraw %}
@@ -386,7 +386,7 @@ Use the [`subscribeToCartAjaxRequests`](reference/subscribeToCartAjaxRequests) f
 
  ```html
 <script type="module">
-  import { subscribeToCartAjaxRequests, getCartState } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+  import { subscribeToCartAjaxRequests, getCartState } from '{{ "{% endraw %}{{ last_release_file.name }}{% raw %}" | asset_url }}'
 
   subscribeToCartAjaxRequests(( data, subscribeToResult ) => {    
     // This function will be called before each Ajax Cart API request
@@ -422,7 +422,7 @@ Use these function instead of direct Cart API calls and Liquid Ajax Cart will ke
 
  ```html
 <script type="module">
-  import { cartRequestAdd } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+  import { cartRequestAdd } from '{{ "{% endraw %}{{ last_release_file.name }}{% raw %}" | asset_url }}'
 
   cartRequestAdd({ 
     items: [
@@ -490,7 +490,7 @@ If you want to run your Javascript code every time when the state is changed —
 
  ```html
 <script type="module">
-  import { getCartState, subscribeToCartStateUpdate } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+  import { getCartState, subscribeToCartStateUpdate } from '{{ "{% endraw %}{{ last_release_file.name }}{% raw %}" | asset_url }}'
 
   const initialState = getCartState();
   console.log('Initial state: ', InitialState);
