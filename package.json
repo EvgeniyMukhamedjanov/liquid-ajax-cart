@@ -1,6 +1,6 @@
 {
   "name": "liquid-ajax-cart",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "private": true,
   "scripts": {
@@ -13,13 +13,9 @@
   "author": "Evgeniy Mukhamedjanov",
   "license": "ISC",
   "devDependencies": {
-    "copyfiles": "^2.4.1",
     "npm-run-all": "^4.1.5",
     "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0"
   },
-  "dependencies": {
-    "htm": "^3.1.0",
-    "preact": "^10.5.14"
-  }
+  "dependencies": {}
 }
