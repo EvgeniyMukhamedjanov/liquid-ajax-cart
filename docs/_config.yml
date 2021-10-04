@@ -1,10 +1,5 @@
 name: Liquid Ajax Cart
 
-project:
-  version: 1.0.0
-  download_url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/blob/main/_dist/liquid-ajax-cart.js
-  download_text: Download
-
 license:
   software: MIT License
   software_url: https://opensource.org/licenses/MIT

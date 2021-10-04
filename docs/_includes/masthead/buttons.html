@@ -1,14 +1,25 @@
+{% assign download_path = blank %}
+{% assign version = blank %}
+{% assign last_release_slice = '/releases/last/liquid-ajax-cart-v' %}
+{% for file in site.static_files %}
+    {% assign file_slice = file.path | slice: 0, last_release_slice.size %}
+    {% if last_release_slice == file_slice %}
+        <li><a href="{{ file.path }}">{{ file.name }}</a></li>
+        {% assign download_path = file.path %}
+        {% assign file_name_split = file.basename | split: '-v' %}
+        {% assign version = file_name_split[1] %}
+    {% endif %}
+{% endfor %}
+
+
 {% if page.homepage %}
     <div class="mt-4 mb-0">
-        {% if site.project.download_url %}
-            {% capture button_text -%}
-                {{ site.project.download_text | default: 'Download' }}
-            {%- endcapture %}
 
+        {% if download_path != blank %}
             {% include masthead/button.html
-                 url=site.project.download_url
+                 url=download_path
                  icon="download"
-                 title=button_text
+                 title='Download'
             %}
         {% endif %}
 
@@ -22,9 +33,9 @@
         {% endfor %}
     </div>
 
-    {% if site.project.version %}
+    {% if version != blank %}
         <p class="site-masthead__version my-0">
-            Latest release v{{ site.project.version }}
+            Latest release v{{ version }}
         </p>
     {% endif %}
 {% endif %}
