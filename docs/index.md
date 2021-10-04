@@ -47,7 +47,6 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 ##### Manual
 {:.mt-0}
  
-{% raw %}
 ```html
 {% comment %} Somewhere in layout/theme.liquid {% endcomment %}
  
@@ -56,12 +55,11 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 </script>
  
 <script type="module">
-  import '{{ 'liquid-ajax-cart.js' | asset_url }}';
+  import '\{\{ '{{ last_release_file.name }}' | asset_url \}\}';
 </script>
 ```
-{% endraw %}
  
-Upload the [last_release_file.name](last_release_file.path) file to your theme's `asset` folder and include it in the `layout/theme.liquid` template.
+Upload the [{{ last_release_file.name }}]({{ last_release_file.path }}) file to your theme's `asset` folder and include it in the `layout/theme.liquid` template.
 
 Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](reference/data-ajax-cart-initial-state) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
 
