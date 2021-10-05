@@ -1,5 +1,7 @@
 name: Liquid Ajax Cart
 
+permalink: pretty
+
 license:
   software: MIT License
   software_url: https://opensource.org/licenses/MIT
