@@ -114,7 +114,7 @@ If you have a scrollable area within the section, add the [`data-ajax-cart-secti
 
 Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "plus", "minus" and "remove" buttons. They will be ajaxified automatically. 
 
-The `routes.cart_add_url`, `routes.cart_clear_url`, `{{ routes.cart_update_url }}` are supported as well. See the [Request buttons reference](reference/request-buttons) for details.
+The `routes.cart_add_url`, `routes.cart_clear_url`, `routes.cart_update_url` are supported as well. See the [Request buttons reference](reference/request-buttons) for details.
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
