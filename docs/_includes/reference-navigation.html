@@ -11,7 +11,7 @@
 					{% for ref_child_link in ref_link.links %}
 					<li>
 						<a href="/reference/{{ ref_child_link.file }}/" class="{{ include.anchor_class }} {% if page.name == ref_child_link.file | append: '.md' %} active {% endif %}">
-							{% if ref_child_link.title %} {{ ref_child_link.title }} {% else %} ref_child_link.file {% endif %}
+							{% if ref_child_link.title %} {{ ref_child_link.title }} {% else %} {{ ref_child_link.file }} {% endif %}
 						</a>
 					</li>
 					{% endfor %}
