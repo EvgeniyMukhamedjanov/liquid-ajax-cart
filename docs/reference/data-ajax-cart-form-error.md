@@ -1,6 +1,5 @@
 ---
-layout: default
-title: data-ajax-cart-form-error
+layout: reference
 ---
 
 # data-ajax-cart-form-error
