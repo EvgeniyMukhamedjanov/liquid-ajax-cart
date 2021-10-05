@@ -1,80 +1,24 @@
-<ul id="{{ include.id }}" class="{{ include.class }}">
-	<li>
-		<a href="/reference/data-ajax-cart-section" class="{{ include.anchor_class }}">
-			data-ajax-cart-section
-		</a>
-	</li>
-	<li>
-		<a href="/reference/data-ajax-cart-section-scroll" class="{{ include.anchor_class }}">
-			data-ajax-cart-section-scroll
-		</a>
-	</li>
-	<li>
-		<a href="/reference/data-ajax-cart-form-error" class="{{ include.anchor_class }}">
-			data-ajax-cart-form-error
-		</a>
-	</li>
-	<li>
-		<a href="/reference/js-ajax-cart-form-in-progress" class="{{ include.anchor_class }}">
-			.js-ajax-cart-form-in-progress
-		</a>
-	</li>
-	<li>
-		<a href="/reference/data-ajax-cart-toggle-class-button" class="{{ include.anchor_class }}">
-			data-ajax-cart-toggle-class-button
-		</a>
-	</li>
-	<li>
-		<a href="/reference/state" class="{{ include.anchor_class }}">
-			State
-		</a>
-	</li>
-	<li>
-		<a href="/reference/data-ajax-cart-bind-state" class="{{ include.anchor_class }}">
-			- data-ajax-cart-bind-state
-		</a>
-	</li>
-	<li>
-		<a href="/reference/getCartState" class="{{ include.anchor_class }}">
-			- getCartState
-		</a>
-	</li>
-	<li>
-		<a href="/reference/subscribeToCartStateUpdate" class="{{ include.anchor_class }}">
-			- subscribeToCartStateUpdate
-		</a>
-	</li>
-	<li>
-		<a href="/reference/requests" class="{{ include.anchor_class }}">
-			Cart Ajax API requests
-		</a>
-		<ul>
+{% if site.links.reference %}
+	<ul id="{{ include.id }}" class="{{ include.class }}">
+		{% for ref_link in site.links.reference %}
 			<li>
-				<a href="/reference/cartRequestGet" class="{{ include.anchor_class }}">
-					cartRequestGet
+				<a href="/reference/{{ ref_link.file }}/" class="{{ include.anchor_class }} {% if page.url == '/reference/' | append: ref_link.file | append: '/' %} active {% endif %}">
+					{% if ref_link.title %} {{ ref_link.title }} {% else %} ref_link.file {% endif %}
 				</a>
+				
+				{% if ref_link.links %}
+				<ul>
+					{% for ref_child_link in ref_link.links %}
+					<li>
+						<a href="/reference/{{ ref_child_link.file }}/" class="{{ include.anchor_class }} {% if page.url == '/reference/' | append: ref_child_link.file | append: '/' %} active {% endif %}">
+							{% if ref_child_link.title %} {{ ref_child_link.title }} {% else %} ref_child_link.file {% endif %}
+						</a>
+					</li>
+					{% endfor %}
+				</ul>
+				{% endif %}	
+				
 			</li>
-			<li>
-				<a href="/reference/cartRequestAdd" class="{{ include.anchor_class }}">
-					cartRequestAdd
-				</a>
-			</li>
-			<li>
-				<a href="/reference/cartRequestChange" class="{{ include.anchor_class }}">
-					cartRequestChange
-				</a>
-			</li>
-			<li>
-				<a href="/reference/cartRequestUpdate" class="{{ include.anchor_class }}">
-					cartRequestUpdate
-				</a>
-			</li>
-			<li>
-				<a href="/reference/cartRequestClear" class="{{ include.anchor_class }}">
-					cartRequestClear
-				</a>
-			</li>
-		</ul>
-	</li>
-	
-</ul>
+		{% endfor %}
+	</ul>
+{% endif %}
