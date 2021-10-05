@@ -64,6 +64,8 @@ social:
 analytics:
   google: 
 
+disqus: false
+
 # Build settings
 markdown: kramdown
 exclude:
