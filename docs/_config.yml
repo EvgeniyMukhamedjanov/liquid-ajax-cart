@@ -25,6 +25,15 @@ links:
       icon: github
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
+  reference:
+    - title: State
+      file: state
+    - title: Cart Ajax API requests
+      file: requests
+      links: 
+        - file: cartRequestGet
+        - file: cartRequestUpdate
+          title: cartRequestUpdate()
 
 ui:
   mode: 'light'
