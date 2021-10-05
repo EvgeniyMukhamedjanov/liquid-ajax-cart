@@ -1,7 +1,7 @@
 {% assign pageTitle = page.title | default: site.name ~ ' ' ~ site.project.version | escape %}
-{% if page.homepage == false %} 
-	{% assign pageTitle = pageTitle | append: ' — ' | append: site.name %} 
-{% endif %}
+
+{% assign pageTitle = pageTitle | append: ' — ' | append: site.name %} 
+
 {% assign pageDescription = page.description | page.excerpt | default: site.description %}
 
 <title>{{ pageTitle | strip_html |  escape }}</title>
