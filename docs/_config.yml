@@ -26,14 +26,44 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   reference:
+    - title: Ajaxified section
+      file: sections
+        - file: data-ajax-cart-section
+        - file: data-ajax-cart-section-scroll
+    - title: Product Forms
+      file: product-forms
+      links:
+        - file: data-ajax-cart-form-error
+        - title: .js-ajax-cart-form-in-progress
+          file: js-ajax-cart-form-in-progress
+    - title: Controls
+      file: controls
+      links: 
+        -file: data-ajax-cart-toggle-class-button
+    - title: Body CSS classes
+      file: body-css-classes
+      links: 
+        - title: .js-ajax-cart-set
+          file: js-ajax-cart-set
+        - title: .js-ajax-cart-empty
+          file: js-ajax-cart-empty
+        - title: .js-ajax-cart-not-empty
+          file: js-ajax-cart-not-empty
+        - title: .js-ajax-cart-request-in-progress
+          file: js-ajax-cart-request-in-progress
     - title: State
       file: state
+      links:
+        - file: data-ajax-cart-initial-state
+        - file: data-ajax-cart-bind-state
+        - file: getCartState
+        - file: subscribeToCartStateUpdate
     - title: Cart Ajax API requests
       file: requests
       links: 
         - file: cartRequestGet
         - file: cartRequestUpdate
-          title: cartRequestUpdate()
+        - file: cartRequestAdd
 
 ui:
   mode: 'light'
