@@ -1,9 +1,11 @@
+{{ page.name }}
+
 {% if site.links.reference %}
 	<ul id="{{ include.id }}" class="{{ include.class }}">
 		{% for ref_link in site.links.reference %}
 			<li>
 				<a href="/reference/{{ ref_link.file }}/" class="{{ include.anchor_class }} {% if page.name == ref_link.file | append: '.md' %} active {% endif %}">
-					{% if ref_link.title %} {{ ref_link.title }} {% else %} {{ ref_link.file }} {% endif %}
+					{% if ref_link.title %} {{ ref_link.title }} {% else %} {{ ref_link.file }} {% endif %} {{ ref_link.file | append: '.md' }}
 				</a>
 				
 				{% if ref_link.links %}
