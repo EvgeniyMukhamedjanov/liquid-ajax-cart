@@ -110,7 +110,11 @@ Add the [`data-ajax-cart-section`](reference/data-ajax-cart-section) attribute t
 
 If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](reference/data-ajax-cart-section-scroll) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
 
-Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "plus", "minus" and "remove" buttons. Liquid Ajax Cart ajaxifies them automatically. 
+Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "plus", "minus" and "remove" buttons. They will be ajaxified automatically. 
+
+> The {% raw %}`{{ routes.cart_add_url }}`{% endraw %}, {% raw %}`{{ routes.cart_clear_url }}`{% endraw %}, {% raw %}`{{ routes.cart_update_url }}`{% endraw %} are also supported as well as {% raw %}`{{ routes.cart_change_url }}`{% endraw %}.
+>
+> See the (Request buttons reference)[reference/request-buttons] for details.
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
