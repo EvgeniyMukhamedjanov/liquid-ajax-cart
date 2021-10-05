@@ -19,10 +19,17 @@ layout: default
                     </button>
                 </div>
 
-                {% include jekyll-docs-theme/toc.html
-                     class="js-toc.mb-0.mt-2"
-                     id="mobileTOC"
-                %}
+                {% if page.dir == '/reference/' %}
+                    {% include reference-navigation.html
+                         class="js-toc mb-0 mt-2"
+                         id="mobileTOC"
+                    %}
+                {% else %}
+                    {% include jekyll-docs-theme/toc.html
+                         class="js-toc.mb-0.mt-2"
+                         id="mobileTOC"
+                    %}
+                {% endif %}
             </section>
 
             <section class="scope-markdown">
@@ -31,9 +38,16 @@ layout: default
         </main>
 
         <aside class="col-md-3 order-md-1 layout-page__sidebar d-none d-md-block hidden-print">
-            {% include sidebar/content-pre.html %}
-            {% include sidebar/content.html %}
-            {% include sidebar/content-pre.html %}
+            {% if page.dir == '/reference/' %}
+                {% include reference-navigation.html
+                    class="list-unstyled pl-0"
+                    anchor_class="nav-link px-3 py-1"
+                %}
+            {% else %}
+                {% include sidebar/content-pre.html %}
+                {% include sidebar/content.html %}
+                {% include sidebar/content-pre.html %}
+            {% endif %}
         </aside>
     </div>
 
