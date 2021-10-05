@@ -1,6 +1,8 @@
 {% assign pageTitle = page.title | default: site.name ~ ' ' ~ site.project.version | escape %}
 
-{% assign pageTitle = pageTitle | append: ' — ' | append: site.name %} 
+{% if page.homepage != true %}
+  {% assign pageTitle = pageTitle | append: ' — ' | append: site.name %} 
+{% endif %}
 
 {% assign pageDescription = page.description | page.excerpt | default: site.description %}
 
