@@ -25,40 +25,41 @@ document.addEventListener('submit', e => {
 		processesAmountBefore = 0;
 	}
 	
-	if ( settings.productFormsIgnoreSubmitOnProcessing && processesAmountBefore > 0 ) {
+	// if the form has ana Ajax request in progress — ignore the submit
+	if ( processesAmountBefore > 0 ) {
 		return;
 	}
 
 	const formData = new FormData(form);
-	const productJson = {}
-	for ( let pair of formData ) {
-		const key = pair[0];
-		const value = pair[1]
-		if( ['quantity', 'id', 'selling_plan'].includes( key ) ) {
-			productJson[key] = value;
-		}
-		if ( key.indexOf('properties[') === 0 && key.slice( -1 ) === ']' ) {
-			if ( !('properties' in productJson) ) {
-				productJson.properties = {};
-			}
-			productJson.properties[key.slice(11, -1)] = value;
-		}
-	}
-	if ( !('id' in productJson) ) {
-		// todo : throw error if "id" is not set
-		return;
-	}
-	if( !('quantity' in productJson) ) {
-		productJson.quantity = 1;
-	}
+	// const productJson = {}
+	// for ( let pair of formData ) {
+	// 	const key = pair[0];
+	// 	const value = pair[1]
+	// 	if( ['quantity', 'id', 'selling_plan'].includes( key ) ) {
+	// 		productJson[key] = value;
+	// 	}
+	// 	if ( key.indexOf('properties[') === 0 && key.slice( -1 ) === ']' ) {
+	// 		if ( !('properties' in productJson) ) {
+	// 			productJson.properties = {};
+	// 		}
+	// 		productJson.properties[key.slice(11, -1)] = value;
+	// 	}
+	// }
+	// if ( !('id' in productJson) ) {
+	// 	// todo : throw error if "id" is not set
+	// 	return;
+	// }
+	// if( !('quantity' in productJson) ) {
+	// 	productJson.quantity = 1;
+	// }
 
 	processesAmount.set( form, processesAmountBefore + 1 );
 	updateFormHTML( form );
 
 	let requestState;
-	cartRequestAdd({
-		items: [ productJson ]
-	}).then( data => {
+	cartRequestAdd(
+		formData
+	).then( data => {
 		requestState = data;
 	}).catch( data => {
 		requestState = data;
@@ -99,34 +100,34 @@ function updateFormHTML ( form, errorMessage = '' ) {
 	});
 	
 
-	const submitButtons = form.querySelectorAll('input[type=submit], button[type=submit]');
+	// const submitButtons = form.querySelectorAll('input[type=submit], button[type=submit]');
 	const formProcessesAmount = processesAmount.get( form );
 
-	if ( settings.productFormsProcessingClass ) {
+	if ( settings.computed.productFormsProcessingClass ) {
 		if ( formProcessesAmount > 0 ) {
-			form.classList.add( settings.productFormsProcessingClass );
+			form.classList.add( settings.computed.productFormsProcessingClass );
 		} else {
-			form.classList.remove( settings.productFormsProcessingClass );
+			form.classList.remove( settings.computed.productFormsProcessingClass );
 		}
 	}
 
-	if ( settings.productFormsButtonProcessingClass || settings.productFormsButtonProcessingDisabledAttribute ) {
-		form.querySelectorAll('input[type=submit], button[type=submit]').forEach( button => {
-			if ( formProcessesAmount > 0 ) {
-				if ( settings.productFormsButtonProcessingClass ) {
-					button.classList.add( settings.productFormsButtonProcessingClass );
-				}
-				if ( settings.productFormsButtonProcessingDisabledAttribute ) {
-					button.disabled = true;
-				}
-			} else {
-				if ( settings.productFormsButtonProcessingClass ) {
-					button.classList.remove( settings.productFormsButtonProcessingClass );
-				}
-				if ( settings.productFormsButtonProcessingDisabledAttribute ) {
-					button.disabled = false;
-				}
-			}
-		});
-	}
+	// if ( settings.productFormsButtonProcessingClass || settings.productFormsButtonProcessingDisabledAttribute ) {
+	// 	form.querySelectorAll('input[type=submit], button[type=submit]').forEach( button => {
+	// 		if ( formProcessesAmount > 0 ) {
+	// 			if ( settings.productFormsButtonProcessingClass ) {
+	// 				button.classList.add( settings.productFormsButtonProcessingClass );
+	// 			}
+	// 			if ( settings.productFormsButtonProcessingDisabledAttribute ) {
+	// 				button.disabled = true;
+	// 			}
+	// 		} else {
+	// 			if ( settings.productFormsButtonProcessingClass ) {
+	// 				button.classList.remove( settings.productFormsButtonProcessingClass );
+	// 			}
+	// 			if ( settings.productFormsButtonProcessingDisabledAttribute ) {
+	// 				button.disabled = false;
+	// 			}
+	// 		}
+	// 	});
+	// }
 }

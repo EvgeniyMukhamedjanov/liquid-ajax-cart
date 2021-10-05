@@ -1,12 +1,13 @@
 import { settings } from './settings';
 import { getCartState, subscribeToCartStateUpdate } from './state';
 
-subscribeToCartStateUpdate( state => {
+const updateClasses = state => {
 	const { 
 		cartStateSetBodyClass, 
 		requestInProgressBodyClass,
-		emptyCartBodyClass
-	} = settings;
+		emptyCartBodyClass,
+		notEmptyCartBodyClass
+	} = settings.computed;
 
 	if ( cartStateSetBodyClass ) {
 		if ( state.status.cartStateSet ) {
@@ -31,4 +32,18 @@ subscribeToCartStateUpdate( state => {
 			document.body.classList.remove( emptyCartBodyClass );
 		}
 	}
-});
+
+	if ( notEmptyCartBodyClass ) {
+		if ( state.status.cartStateSet && state.cart.item_count === 0 ) {
+			document.body.classList.remove( notEmptyCartBodyClass );
+		} else {
+			document.body.classList.add( notEmptyCartBodyClass );
+		}
+	}
+}
+
+const init = () => {
+	subscribeToCartStateUpdate( updateClasses );
+	updateClasses( getCartState() );
+}
+init();

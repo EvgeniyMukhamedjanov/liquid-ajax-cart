@@ -1,32 +1,24 @@
 const path = require('path');
 var PACKAGE = require('./package.json');
 
-module.exports = {
-  mode: 'development',
-  entry: './_src/index.js',
-  output: {
-    filename: 'liquid-ajax-cart.js',
-    path: path.resolve(__dirname, 'assets'),
-    library: {
-      type: 'module',
-    },
-  },
-  experiments: {
-    outputModule: true
-  }
-};
+module.exports = (env, argv) => { 
+  let folder = 'assets';
+  let filename = 'liquid-ajax-cart.js';
 
-module.exports = (env) => { 
-  let folder = 'docs/releases';
-  if ( env.last ) {
-    folder = 'docs/releases/last';
+  if ( argv.mode === 'production' ) {
+    folder = 'docs/releases';
+    filename = `liquid-ajax-cart-v${PACKAGE.version}.js`;
+
+    if ( env.last ) {
+      folder = 'docs/releases/last';
+    }
   }
 
   return {
-    mode: 'production',
+    mode: argv.mode,
     entry: './_src/index.js',
     output: {
-      filename: `liquid-ajax-cart-v${PACKAGE.version}.js`,
+      filename,
       path: path.resolve(__dirname, folder),
       library: {
         type: 'module',

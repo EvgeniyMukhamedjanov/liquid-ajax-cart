@@ -19,7 +19,11 @@ subscribeToCartAjaxRequests (( data, subscribeToResult ) => {
 			}
 		});
 		if ( sectionNames.length ) {
-			data.requestBody.sections = sectionNames.join( ',' );
+			if ( data.requestBody instanceof FormData ) {
+				data.requestBody.append('sections', sectionNames.join( ',' ));
+			} else {
+				data.requestBody.sections = sectionNames.join( ',' );
+			}
 		}
 	}
 

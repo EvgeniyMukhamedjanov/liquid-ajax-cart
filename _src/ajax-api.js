@@ -1,5 +1,7 @@
 const REQUEST_ADD = 'add';
 const REQUEST_CHANGE = 'change';
+const REQUEST_UPDATE = 'update';
+const REQUEST_CLEAR = 'clear';
 const REQUEST_GET = 'get';
 
 const subscribers = [];
@@ -18,6 +20,14 @@ const getEndpoint = ( requestType ) => {
 			return '/cart.js';
 			break;
 
+		case REQUEST_CLEAR:
+			return '/cart/clear.js';
+			break;
+
+		case REQUEST_UPDATE:
+			return '/cart/update.js';
+			break;
+
 		default:
 			return undefined;
 	}
@@ -25,8 +35,11 @@ const getEndpoint = ( requestType ) => {
 }
 
 const cartRequest = ( requestType, body, firstResultCallback = undefined ) => {
-	const endpoint = getEndpoint( requestType )
-	const requestBody = requestType === REQUEST_GET ? undefined : { ...body };
+	const endpoint = getEndpoint( requestType );
+	let requestBody = undefined;
+	if ( requestType !== REQUEST_GET ) {
+		requestBody = body;
+	}
 	const method = requestType === REQUEST_GET ? 'GET' : 'POST'
 	const resultSubscribers = firstResultCallback === undefined ? [] : [ firstResultCallback ];
 	const requestState = {
@@ -55,13 +68,17 @@ const cartRequest = ( requestType, body, firstResultCallback = undefined ) => {
 	requestState.requestBody = requestBody;
 
 	const fetchPayload = {
-		method,
-		headers: {
-	    	'Content-Type': 'application/json'
-	  	}
+		method
 	}
 	if ( requestType !== REQUEST_GET ) {
-		fetchPayload.body = JSON.stringify( requestBody )
+		if ( requestBody instanceof FormData ) {
+			fetchPayload.body = requestBody;
+		} else {
+			fetchPayload.body = JSON.stringify(requestBody);
+			fetchPayload.headers = {
+		    	'Content-Type': 'application/json'
+		  	}
+		}
 	}
 
 	return fetch( 
@@ -129,8 +146,24 @@ const cartRequestChange = ( body, firstResultCallback ) => {
 	return cartRequest( REQUEST_CHANGE, body, firstResultCallback );
 }
 
+const cartRequestUpdate = ( body, firstResultCallback ) => {
+	return cartRequest( REQUEST_UPDATE, body, firstResultCallback );
+}
+
+const cartRequestClear = ( firstResultCallback ) => {
+	return cartRequest( REQUEST_CLEAR, {}, firstResultCallback );
+}
+
 const subscribeToCartAjaxRequests = ( callback ) => {
 	subscribers.push( callback );
 }
 
-export { cartRequestAdd, cartRequestChange, cartRequestGet, subscribeToCartAjaxRequests, REQUEST_ADD }
+export { 
+	cartRequestAdd, 
+	cartRequestChange, 
+	cartRequestClear, 
+	cartRequestGet, 
+	cartRequestUpdate, 
+	subscribeToCartAjaxRequests, 
+	REQUEST_ADD 
+}

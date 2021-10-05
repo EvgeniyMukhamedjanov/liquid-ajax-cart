@@ -205,11 +205,11 @@ form[action="/cart/add"] button:after {
     opacity: 0;
     transition: all .3s;
 }
-form[action="/cart/add"] button.js-ajax-cart-button-in-progress {
+form[action="/cart/add"].js-ajax-cart-form-in-progress [type="submit"] {
 	opacity: .7;
 	background-color: gray;
 }
-form[action="/cart/add"] button.js-ajax-cart-button-in-progress:after {
+form[action="/cart/add"].js-ajax-cart-form-in-progress [type="submit"]:after {
 	opacity: 1;
 }
 

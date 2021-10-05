@@ -1,13 +1,13 @@
 import { getCartState, subscribeToCartStateUpdate } from './state';
 import { settings } from './settings';
 
-const dataAttribute = settings.computed.binderAttribute;
-
 const updateDOM = ( state ) => {
 
+	const binderAttribute = settings.computed.binderAttribute;
+
 	if ( state.status.cartStateSet ) {
-		document.querySelectorAll( `[${ dataAttribute }]` ).forEach( element => {
-			const path = element.getAttribute( dataAttribute );
+		document.querySelectorAll( `[${ binderAttribute }]` ).forEach( element => {
+			const path = element.getAttribute( binderAttribute );
 			const value = computeValue( path );
 			if (value !== undefined) {
 				element.innerText = value;
@@ -33,7 +33,7 @@ const computeValue = ( str ) => {
 	return value;
 }
 
-// don't pass obj parameter when you call the function — it is for reccursive calls
+// don't pass obj parameter when you call the function — the obj param is for reccursive calls
 function getStateValueByString ( str, obj = getCartState() ) {
 	const state = getCartState();
 	// todo test with "foo.bar.", ".foo.bar", ".foo.bar.", "foo..bar", "foo. .bar. "
@@ -73,4 +73,8 @@ const formatters = {
 	}
 }
 
-subscribeToCartStateUpdate( updateDOM );
+const init = () => {
+	subscribeToCartStateUpdate( updateDOM );
+	updateDOM( getCartState() );
+}
+init();

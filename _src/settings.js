@@ -1,14 +1,8 @@
+const cssClassesPrefix = 'js-ajax-cart';
+const dataAttributePrefix = 'data-ajax-cart';
+
 const defaultSettings = {
-	dataAttributePrefix: 'data-ajax-cart',
-	cssClassesPrefix: 'js-ajax-cart',
-	productFormsFilter: formNode => true,
-	requestInProgressBodyClass: 'js-ajax-cart-request-in-progress',
-	cartStateSetBodyClass: 'js-ajax-cart-set',
-	emptyCartBodyClass: 'js-ajax-cart-empty',
-	productFormsIgnoreSubmitOnProcessing: true,
-	productFormsProcessingClass: 'js-ajax-cart-form-in-progress',
-	productFormsButtonProcessingClass: 'js-ajax-cart-button-in-progress',
-	productFormsButtonProcessingDisabledAttribute: false
+	productFormsFilter: formNode => true
 }
 
 let settings = {};
@@ -19,14 +13,20 @@ const configure = ( newSettings = {} ) => {
 		...newSettings
 	};
 	settings.computed = {
-		productFormsErrorsAttribute: `${ settings.dataAttributePrefix }-form-error`,
-		sectionsAttribute: `${ settings.dataAttributePrefix }-section`,
-		binderAttribute: `${ settings.dataAttributePrefix }-bind-state`,
-		quantityButtonAttribute: `${ settings.dataAttributePrefix }-quantity-button`,
-		toggleClassButtonAttribute: `${ settings.dataAttributePrefix }-toggle-class-button`,
-		toggleClassPrefix: `${ settings.cssClassesPrefix }-toggle-`,
-		initialStateAttribute: `${ settings.dataAttributePrefix }-initial-state`,
-		sectionScrollAreaAttribute: `${ settings.dataAttributePrefix }-section-scroll`
+		productFormsErrorsAttribute: `${ dataAttributePrefix }-form-error`,
+		sectionsAttribute: `${ dataAttributePrefix }-section`,
+		binderAttribute: `${ dataAttributePrefix }-bind-state`,
+		requestButtonAttribute: `${ dataAttributePrefix }-request-button`,
+		toggleClassButtonAttribute: `${ dataAttributePrefix }-toggle-class-button`,
+		initialStateAttribute: `${ dataAttributePrefix }-initial-state`,
+		sectionScrollAreaAttribute: `${ dataAttributePrefix }-section-scroll`,
+
+		cartStateSetBodyClass: `${ cssClassesPrefix }-set`,
+		requestInProgressBodyClass: `${ cssClassesPrefix }-request-in-progress`,
+		emptyCartBodyClass: `${ cssClassesPrefix }-empty`,
+		notEmptyCartBodyClass: `${ cssClassesPrefix }-not-empty`,
+		productFormsProcessingClass: `${ cssClassesPrefix }-form-in-progress`,
+
 	};
 }
 configure();

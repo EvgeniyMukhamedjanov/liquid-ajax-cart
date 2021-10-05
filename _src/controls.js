@@ -1,42 +1,110 @@
 import { settings } from './settings';
-import { cartRequestChange } from './ajax-api';
+import { cartRequestChange, cartRequestAdd, cartRequestClear, cartRequestUpdate } from './ajax-api';
 import { getCartState } from './state';
 
 const ACTION_TOGGLE = 'toggle';
 const ACTION_ADD = 'add';
 const ACTION_REMOVE = 'remove';
 
+const CHANGE_URL = '/cart/change';
+const ADD_URL = '/cart/add';
+const CLEAR_URL = '/cart/clear';
+const UPDATE_URL = '/cart/update';
+
 document.addEventListener('click', function(e) {
-	const { quantityButtonAttribute, toggleClassButtonAttribute } = settings.computed;
 
     for (var target = e.target; target && target != this; target = target.parentNode) {
-        if (target.matches( `[${ quantityButtonAttribute }]` )) {
-            quantityButtonClickHandler.call(target, e);
-            break;
-        }
-        if (target.matches( `[${ toggleClassButtonAttribute }]` )) {
-            toggleClassButtonClickHandler.call(target, e);
-            break;
-        }
+    	requestButtonClickHandler.call(target, e);
+		toggleClassButtonClickHandler.call(target, e);
     }
+
 }, false);
 
-function quantityButtonClickHandler (e) {
+function requestButtonClickHandler (e) {
+	const { requestButtonAttribute } = settings.computed;
+	let url = undefined;
+	const validURLs = [ CHANGE_URL, ADD_URL, CLEAR_URL, UPDATE_URL ];
+
+	if ( this.hasAttribute( requestButtonAttribute ) ) {
+		const attr = this.getAttribute( requestButtonAttribute );
+		if ( attr ) {
+			let attrURL;
+			try {
+				attrURL = new URL(attr, window.location.origin);
+				if ( validURLs.includes( attrURL.pathname ) ) {
+					url = attrURL;
+				} else {
+					throw `URL should be one of the following: ${CHANGE_URL}, ${ADD_URL}, ${UPDATE_URL}, ${CLEAR_URL}`
+				}
+			} catch (error) {
+				console.error(`Liquid Ajax Cart: ${requestButtonAttribute} contains an invalid URL as a parameter.`, error);
+			}
+		}
+	}
+
+	if ( url === undefined ) {
+		if ( this.hasAttribute( 'href' ) && this.tagName.toUpperCase() === 'A' ) {
+			const linkURL = new URL(this.href);
+			if ( validURLs.includes( linkURL.pathname ) ) {
+				url = linkURL;
+			} else if ( this.hasAttribute( requestButtonAttribute ) ) {
+				console.error(
+					`Liquid Ajax Cart: a link with the ${requestButtonAttribute} contains an invalid href URL.`, 
+					`URL should be one of the following: ${CHANGE_URL}, ${ADD_URL}, ${UPDATE_URL}, ${CLEAR_URL}`
+				);
+			}
+		}
+	}
+
+	if ( url === undefined ) {
+		return;
+	}
+
+
 	e.preventDefault();
-	const { quantityButtonAttribute } = settings.computed;
-	const state = getCartState();
-	if ( true || !state.status.requestInProgress ) {
-		const [ itemKey, quantity ] = this.getAttribute( quantityButtonAttribute ).split('|');
-		cartRequestChange({
-			'id': itemKey.trim(),
-			'quantity':  parseInt(quantity.trim()),
-		});
+
+	const formData = new FormData();
+	url.searchParams.forEach(( value, key ) => {
+		formData.append(key, value);
+	});
+
+	switch ( url.pathname ) {
+		case ADD_URL:
+			cartRequestAdd( formData );
+			break;
+		case CHANGE_URL:
+			cartRequestChange( formData );
+			break;
+		case UPDATE_URL:
+			cartRequestUpdate( formData );
+			break;
+		case CLEAR_URL:
+			cartRequestClear();
+			break;
 	}
 }
 
+// function quantityButtonClickHandler (e) {
+// 	e.preventDefault();
+// 	const { quantityButtonAttribute } = settings.computed;
+// 	const state = getCartState();
+// 	if ( true || !state.status.requestInProgress ) {
+// 		const [ itemKey, quantity ] = this.getAttribute( quantityButtonAttribute ).split('|');
+// 		cartRequestChange({
+// 			'id': itemKey.trim(),
+// 			'quantity':  parseInt(quantity.trim()),
+// 		});
+// 	}
+// }
+
 function toggleClassButtonClickHandler (e) {
-	e.preventDefault();
 	const { toggleClassButtonAttribute } = settings.computed;
+
+	if (!( this.hasAttribute( toggleClassButtonAttribute ) )) {
+		return;
+	}
+
+	e.preventDefault();
 	const parameters = this.getAttribute( toggleClassButtonAttribute ).split( '|' );
 	if ( !parameters ) {
 		console.error('Liquid Ajax Cart: Error while toggling body class');
