@@ -128,14 +128,10 @@ Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "plus", "mi
       Price: {{ item.final_price | money }} <br />
 
       Quantity:
-      <a 
-        href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
-        data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | minus: 1 }}"
+      <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
       > Minus one </a>
       <span>{{ item.quantity }}</span>
-      <a 
-        href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
-        data-ajax-cart-quantity-button="{{ item.key }} | {{ item.quantity | plus: 1 }}"
+      <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
       > Plus one </a>
 
       Total: <strong>{{ item.final_line_price | money }}</strong> <br /> <br />  
