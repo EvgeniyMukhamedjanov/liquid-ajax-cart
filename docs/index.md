@@ -176,7 +176,7 @@ Include the section to the place where you want to display the AJAX cart
 ##### Loading state
 {:.mt-0}
 
-[Quantity button](reference/data-ajax-cart-quantity-button) and [Quantity input](reference/data-ajax-cart-quantity-input) become inactive when user's cart is getting updated. 
+Controls become inactive when user's cart is getting updated. 
  
 Liquid Ajax Cart adds `js-ajax-cart-in-progress` CSS class to the `body` tag during the updating process so that you show a loading indicator or make the controls visually disabled.
  
