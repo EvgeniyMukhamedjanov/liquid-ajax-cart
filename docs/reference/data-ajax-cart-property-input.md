@@ -1,3 +1,7 @@
+---
+layout: reference
+---
+
 # data-ajax-cart-property-input
 
 **_Will be ready soon_**
