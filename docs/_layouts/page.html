@@ -19,7 +19,7 @@ layout: default
                     </button>
                 </div>
 
-                {% if page.dir == '/reference/' %}
+                {% if page.url | slice: 0, 11 == '/reference/' %}
                     {% include reference-navigation.html
                          class="js-toc mb-0 mt-2"
                          id="mobileTOC"
@@ -38,12 +38,13 @@ layout: default
                 Name {{ page.name }}<br />
                 Url {{ page.url }}<br />
                 Url {{ page.dir }}<br />
+                {{ page.url | slice: 0, 11 }}
                 {% include jekyll-docs-theme/anchor_headings.html %}
             </section>
         </main>
 
         <aside class="col-md-3 order-md-1 layout-page__sidebar d-none d-md-block hidden-print">
-            {% if page.dir == '/reference/' %}
+            {% if page.url | slice: 0, 11 == '/reference/' %}
                 <nav class="page-sidebar page-sidebar--expanded">
                     {% include reference-navigation.html
                         class="list-unstyled pl-0"
