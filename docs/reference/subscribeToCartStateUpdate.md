@@ -1,4 +1,4 @@
-# `subscribeToCartStateUpdate( callback )`
+# `subscribeToCartStateUpdate`
 Callback will be called after cart state is changed with the only parameter — updated state.
 
 ```html

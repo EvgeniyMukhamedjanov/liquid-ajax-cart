@@ -1,7 +1,3 @@
----
-layout: reference
----
-
 # data-ajax-cart-bind-state
 
 Add the `data-ajax-cart-bind-state` attribute to an HTML element with a path to a state value as a parameter and Liquid Ajax Cart will keep the text content of the element in sync with the state value.

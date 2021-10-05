@@ -1,4 +1,4 @@
-# `subscribeToCartAjaxRequests( callback )`
+# `subscribeToCartAjaxRequests`
 The callback will be called before each request gets performed. 
 
 Two parameters will be passed to the callback function: 

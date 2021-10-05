@@ -1,8 +1,3 @@
----
-layout: reference
-title: cartRequestAdd — Liquid Ajax Cart
----
-
 # `cartRequestAdd( body )`
 Performs POST request to the Shopify Cart API `/cart/add.js` endpoint. Accepts request's body as the first parameter.
 

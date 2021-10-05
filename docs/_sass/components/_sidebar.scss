@@ -1,5 +1,5 @@
 // Only hide nested ULs if they are accessible via JS
-.js .page-sidebar {
+.js .page-sidebar:not(.page-sidebar--expanded) {
     ul ul {
         display: none;
     }

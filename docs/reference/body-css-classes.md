@@ -1,8 +1,3 @@
----
-layout: reference
-title: Body CSS classes — Liquid Ajax Cart
----
-
 # Body CSS classes
 
 Liquid Ajax Cart adds CSS classes to the `body` tag depending on a current state of a user's cart.

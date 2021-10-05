@@ -1,8 +1,3 @@
----
-layout: reference
-title: data-ajax-cart-form-error — Liquid Ajax Cart
----
-
 # data-ajax-cart-section
 
 A container with the `data-ajax-cart-section` attribute within a section is a sign for Liquid Ajax Cart that the section should be updated after another AJAX request.

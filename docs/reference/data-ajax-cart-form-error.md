@@ -1,7 +1,3 @@
----
-layout: reference
----
-
 # data-ajax-cart-form-error
 
 Add a container with `data-ajax-cart-form-error` attribute within a product form and Liquid Ajax Cart will put error messages of AJAX requests in it, if happen:

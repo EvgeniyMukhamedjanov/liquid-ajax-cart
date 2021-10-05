@@ -1,7 +1,3 @@
----
-layout: reference
----
-
 # `cartRequestGet` 
 Performs GET request to Shopify Cart API 
 

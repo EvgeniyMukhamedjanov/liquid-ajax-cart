@@ -33,20 +33,26 @@ layout: default
             </section>
 
             <section class="scope-markdown">
+                Id {{ page.id }}<br />
+                Path {{ page.path }}<br />
+                Name {{ page.name }}<br />
+                Url {{ page.url }}<br />
                 {% include jekyll-docs-theme/anchor_headings.html %}
             </section>
         </main>
 
         <aside class="col-md-3 order-md-1 layout-page__sidebar d-none d-md-block hidden-print">
             {% if page.dir == '/reference/' %}
-                {% include reference-navigation.html
-                    class="list-unstyled pl-0"
-                    anchor_class="nav-link px-3 py-1"
-                %}
+                <nav class="page-sidebar page-sidebar--expanded">
+                    {% include reference-navigation.html
+                        class="list-unstyled pl-0"
+                        anchor_class="nav-link px-3 py-1"
+                    %}
+                </nav>
             {% else %}
                 {% include sidebar/content-pre.html %}
                 {% include sidebar/content.html %}
-                {% include sidebar/content-pre.html %}
+                {% include sidebar/content-post.html %}
             {% endif %}
         </aside>
     </div>
