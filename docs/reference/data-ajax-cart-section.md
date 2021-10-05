@@ -1,6 +1,6 @@
 ---
 layout: reference
-title: data-ajax-cart-form-error (Liquid Ajax Cart)
+title: data-ajax-cart-form-error — Liquid Ajax Cart
 ---
 
 # data-ajax-cart-section

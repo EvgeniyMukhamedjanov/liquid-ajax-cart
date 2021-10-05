@@ -1,3 +1,7 @@
+---
+layout: reference
+---
+
 # `cartRequestChange( body )`
 Performs POST request to the Shopify Cart API `/cart/change.js` endpoint. Accepts request's body as the first parameter.
 
