@@ -136,7 +136,7 @@ The `routes.cart_add_url`, `routes.cart_clear_url`, `routes.cart_update_url` are
       > Minus one </a>
       <span>{{ item.quantity }}</span>
       <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
-      > Plus one </a>
+      > Plus one </a> <br />
 
       Total: <strong>{{ item.final_line_price | money }}</strong> <br /> <br />  
     {% endfor %}
@@ -145,7 +145,7 @@ The `routes.cart_add_url`, `routes.cart_clear_url`, `routes.cart_update_url` are
   <a href="/checkout"> Checkout — {{ cart.total_price | money_with_currency }} </button>
 </div>
 
-{% schema %} { "name": "Ajax Cart" } {% endschema %}
+{% schema %} { "name": "My Cart" } {% endschema %}
 ```
 {% endraw %}
   
@@ -415,9 +415,11 @@ Use the [`subscribeToCartAjaxRequests`](reference/subscribeToCartAjaxRequests) f
  
 Use these function instead of direct Cart API calls and Liquid Ajax Cart will keep the Ajax cart sections, the State object and body CSS classes updated:
 
-* [`cartRequestGet`](reference/cartRequestGet) — sends a request to the `GET /cart.js` endpoint,
-* [`cartRequestAdd`](reference/cartRequestAdd) — to the `POST /cart.js` endpoint,
-* [`cartRequestChange`](reference/cartRequestChange) — to the `POST /cart/change.js` endpoint.
+* [`cartRequestGet`](reference/cartRequestGet) — sends a request to the `GET /cart.js` endpoint;
+* [`cartRequestAdd`](reference/cartRequestAdd) — to the `POST /cart/add.js` endpoint;
+* [`cartRequestChange`](reference/cartRequestChange) — to the `POST /cart/change.js` endpoint;
+* [`cartRequestUpdate`](reference/cartRequestUpdate) — to the `POST /cart/update.js` endpoint;
+* [`cartRequestUpdate`](reference/cartRequestClear) — to the `POST /cart/clear.js` endpoint.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
