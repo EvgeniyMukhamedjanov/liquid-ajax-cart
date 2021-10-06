@@ -419,7 +419,7 @@ Use these function instead of direct Cart API calls and Liquid Ajax Cart will ke
 * [`cartRequestAdd`](reference/cartRequestAdd) — to the `POST /cart/add.js` endpoint;
 * [`cartRequestChange`](reference/cartRequestChange) — to the `POST /cart/change.js` endpoint;
 * [`cartRequestUpdate`](reference/cartRequestUpdate) — to the `POST /cart/update.js` endpoint;
-* [`cartRequestUpdate`](reference/cartRequestClear) — to the `POST /cart/clear.js` endpoint.
+* [`cartRequestClear`](reference/cartRequestClear) — to the `POST /cart/clear.js` endpoint.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
