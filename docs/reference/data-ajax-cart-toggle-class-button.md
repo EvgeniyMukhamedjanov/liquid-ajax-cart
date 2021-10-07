@@ -8,7 +8,6 @@ The usecase is "Show/Hide Cart" button. It is used in the header of the demo sto
 
 {% raw %}
 ```html
-
 <!-- Floating cart -->
 <div class="my-floating-cart"> {% section 'my-cart' %} </div>
 
@@ -31,7 +30,6 @@ The usecase is "Show/Hide Cart" button. It is used in the header of the demo sto
   Liquid Ajax Cart will intercept a user's click on the following link
   and instead of redirecting to "/cart" it will add/remove the "js-ajax-cart-opened" <body> class 
 -->
-
 ```
 {% endraw %}
 
