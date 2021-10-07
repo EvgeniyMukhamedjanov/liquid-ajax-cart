@@ -1,26 +1,26 @@
 # data-ajax-cart-section
 
-A container with the `data-ajax-cart-section` attribute within a section is a sign for Liquid Ajax Cart that the section should be updated after another AJAX request.
+Liquid Ajax Cart reloads HTML code of the theme sections that marked with the `data-ajax-cart-section` attribute every time when the Shopify cart is changed.
 
-The container must be a root HTML element in a section.
+The `data-ajax-cart-section` must be applied to a root container of a theme section
 
 ##### Correct:
 {% raw %}
 ```html
-{% comment %} sections/ajax-cart.liquid {% endcomment %}
+{% comment %} sections/my-cart.liquid {% endcomment %}
 
-<div data-ajax-cart-section class="any-class">
+<div data-ajax-cart-section class="my-cart">
   <!-- section content -->
 </div> 
 ```
 {% endraw %}
 
-##### Will not work. The [data-ajax-cart-section] container is not a root element:
+##### Will not work. The `data-ajax-cart-section` container is not a root element:
 {% raw %}
 ```html
-{% comment %} sections/ajax-cart.liquid {% endcomment %}
+{% comment %} sections/my-cart.liquid {% endcomment %}
 
-<section class="any-class">
+<section class="my-cart">
   <div data-ajax-cart-section>
     <!-- section content -->
   </div>
