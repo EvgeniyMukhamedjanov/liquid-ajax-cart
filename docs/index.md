@@ -119,7 +119,7 @@ The `routes.cart_add_url`, `routes.cart_clear_url`, `routes.cart_update_url` are
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
 
-{% include 'code/section.html' %}
+{% include code/section.html %}
   
 </div>
 </div>
@@ -194,7 +194,7 @@ Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
   
-{% include 'code/data-ajax-cart-form-error.html' %}
+{% include code/data-ajax-cart-form-error.html %}
  
 </div>
 </div>
@@ -212,7 +212,7 @@ Liquid Ajax Cart adds the [`js-ajax-cart-form-in-progress`](reference/js-ajax-ca
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
 
-{% include 'code/js-ajax-cart-form-in-progress.html' %}
+{% include code/js-ajax-cart-form-in-progress.html %}
 
 </div>
 </div>
