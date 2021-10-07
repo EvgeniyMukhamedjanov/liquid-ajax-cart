@@ -106,9 +106,6 @@ social:
     enabled: false
     profileUrl:
 
-analytics:
-  google: G-209C222X0M
-
 disqus: false
 
 # Build settings
