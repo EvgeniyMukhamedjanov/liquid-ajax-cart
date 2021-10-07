@@ -10,4 +10,4 @@ If you have a scrollable area within a `data-ajax-cart-section` section, the scr
 
 Since the cart sections are plain Shopify liquid theme sections, you are free to use any Liquid tags, objects and filters.
 
-{% include section-example.html %}
+{% include 'code/section.html' %}

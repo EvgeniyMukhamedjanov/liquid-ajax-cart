@@ -119,7 +119,7 @@ The `routes.cart_add_url`, `routes.cart_clear_url`, `routes.cart_update_url` are
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
 
-{% include section-example.html %}
+{% include 'code/section.html' %}
   
 </div>
 </div>
@@ -194,18 +194,7 @@ Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
   
-{% raw %}
-```html
-{% form 'product', product %}
-  <!-- form content -->
-
-  <input type="submit" value="Add to cart">
-  <div data-ajax-cart-form-error > 
-    <!-- Error messages appear here --> 
-  </div>
-{% endform %}
-```
-{% endraw %}
+{% include 'code/data-ajax-cart-form-error' %}
  
 </div>
 </div>
@@ -216,25 +205,15 @@ Add a container with the [`data-ajax-cart-form-error`](reference/data-ajax-cart-
 ##### Loading state
 {:.mt-0}
  
-When a user submits a product form, it becomes inactive until the AJAX "Add to cart" request is finished to prevent accidental double submissions.
+When a user submits a product form, it becomes inactive until the Ajax "Add to cart" request is finished to prevent accidental double submissions.
   
-Liquid Ajax Cart adds [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-form-in-progress) CSS class to the form if the request is in progress so that you show a loading indicator or make the submit button visually disabled.
+Liquid Ajax Cart adds the [`js-ajax-cart-form-in-progress`](reference/js-ajax-cart-form-in-progress) CSS class to the form if the request is in progress so you can show a loading indicator or make the submit button visually disabled.
   
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
 
-```css
-/* Make the submit button visually disabled */
-form.js-ajax-cart-form-in-progress [type="submit"] {
-  opacity: .7;  
-}
+{% include 'code/js-ajax-cart-form-in-progress' %}
 
-/* Show a loading indicator */
-form.js-ajax-cart-form-in-progress:after { 
-  content: 'Adding to cart…'
-  display: block; 
-}
-```
 </div>
 </div>
 
