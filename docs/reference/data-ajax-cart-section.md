@@ -2,7 +2,7 @@
 
 Liquid Ajax Cart reloads HTML code of the theme sections that marked with the `data-ajax-cart-section` attribute every time when the Shopify cart is changed.
 
-The `data-ajax-cart-section` must be applied to a root container of a theme section.
+The `data-ajax-cart-section` must be applied to the root container of a theme section.
 
 ###### Correct:
 {% raw %}
