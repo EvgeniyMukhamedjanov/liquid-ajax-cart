@@ -2,12 +2,14 @@
 
 Add a container with the `data-ajax-cart-form-error` attribute within a product form and Liquid Ajax Cart will put error messages in it:
 
-```liquid 
+```html 
 {% raw %} {% form 'product', product %}
 
   <!-- form's code ... -->
 
-  <div data-ajax-cart-form-error ></div>
+  <div data-ajax-cart-form-error >
+    <!-- Error messages appear here -->
+  </div>
   
   <!-- ... form's code -->
   
