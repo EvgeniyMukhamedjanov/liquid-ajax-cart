@@ -1,6 +1,6 @@
-{{ page.url | slice: 0, 11 }}
+{% assign reference_slice = page.url | slice: 0, 11 %}
 
-{% if page.url | slice: 0, 11 == '/reference/' %}
+{% if reference_slice == '/reference/' %}
     <hr class="mt-3" />
 {% else %}
 
