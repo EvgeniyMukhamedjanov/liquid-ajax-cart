@@ -1,33 +1,48 @@
 # data-ajax-cart-toggle-class-button
 
-Takes a CSS class as a parameter and adds the CSS class to the `body` tag on a user's click. If the `body` tag has the CSS class then it will be removed from the `body`.
+Add the `data-ajax-cart-toggle-class-button` attribute to an HTML element, pass a CSS class name as a parameter, and  Liquid Ajax Cart will "toggle" the CSS class for the `body` tag when a user clicks on the element.
+
+The CSS class will be added to the `body` tag if it doesn't have the CSS class. The CSS class will be removed from the `body` tag if it has the CSS class.
 
 The usecase is "Show/Hide Cart" button. It is used in the header of the demo store: "Cart" link shows and hides the right-side cart.
 
+{% raw %}
 ```html
+
+<!-- Floating cart -->
+<div class="my-floating-cart"> {% section 'my-cart' %} </div>
+
+<style>
+  .my-floating-cart { display: none; }
+
+  /* Show the floating cart if the 'js-my-cart-open' CSS class exists */
+  .js-my-cart-open .my-floating-cart { display: block; }
+</style>
+
+
+
+<!-- Button to open/close the floating cart -->
+<a href="{{ routes.cart_url }}"
+  data-ajax-cart-toggle-class-button="js-my-cart-open">
+  My Cart
+</a>
 
 <!--
   Liquid Ajax Cart will intercept a user's click on the following link
   and instead of redirecting to "/cart" it will add/remove the "js-ajax-cart-opened" <body> class 
 -->
 
-<a href="/cart" data-ajax-cart-toggle-class-button="js-ajax-cart-opened" > Cart </button>
-
-<div class="mini-cart">
-  <!-- Cart content -->
-</div>
-
-<style>
-  .mini-cart { display: none; }
-  .js-ajax-cart-opened .mini-cart { display: block; }
-</style>
-
 ```
+{% endraw %}
 
-If you want to create a button that will only add or only remove a class, specify an additional parameter:
+If you want to create a button that will only add or only remove a CSS class — specify the additional parameter:
 
 ```html
-<a href="/cart" data-ajax-cart-toggle-class-button="js-ajax-cart-opened | add" > Open </button>
+<button data-ajax-cart-toggle-class-button="js-my-cart-open | add">
+  Open cart
+</button>
 
-<a href="/cart" data-ajax-cart-toggle-class-button="js-ajax-cart-opened | remove" > Close </button>
+<button data-ajax-cart-toggle-class-button="js-my-cart-open | remove">
+  Close cart
+</button>
 ```
