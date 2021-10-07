@@ -26,7 +26,7 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   reference:
-    - title: Ajaxified section
+    - title: Ajaxified sections
       file: sections
       links:
         - file: data-ajax-cart-section

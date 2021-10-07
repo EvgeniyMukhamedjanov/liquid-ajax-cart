@@ -119,35 +119,7 @@ The `routes.cart_add_url`, `routes.cart_clear_url`, `routes.cart_update_url` are
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
 
-{% raw %}
-```html
-{% comment %} sections/my-cart.liquid {% endcomment %}
-
-<div data-ajax-cart-section >
-  <h2>Cart</h2>
-  
-  <div class="my-cart__items" data-ajax-cart-section-scroll >
-    {% for item in cart.items %}  
-      <a href="{{ item.url }}">{{ item.title }}</a> <br />
-      Price: {{ item.final_price | money }} <br />
-
-      Quantity:
-      <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
-      > Minus one </a>
-      <span>{{ item.quantity }}</span>
-      <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
-      > Plus one </a> <br />
-
-      Total: <strong>{{ item.final_line_price | money }}</strong> <br /> <br />  
-    {% endfor %}
-  </div>
-  
-  <a href="/checkout"> Checkout — {{ cart.total_price | money_with_currency }} </button>
-</div>
-
-{% schema %} { "name": "My Cart" } {% endschema %}
-```
-{% endraw %}
+{% include section-example.html %}
   
 </div>
 </div>
