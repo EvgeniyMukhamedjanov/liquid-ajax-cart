@@ -16,6 +16,6 @@ In order Liquid Ajax Cart to find the `script` tag with the cart state, it shoul
 ```
 {% endraw %}
 
-It is recommended to put the mentioned code to the `layout/theme.liquid` file so that the cart state data is accessible on all pages.
+It is highly recommended to put the mentioned code to the `layout/theme.liquid` file so that the cart state data is accessible on all pages.
 
 If Liquid Ajax Cart doesn't find the `data-ajax-cart-initial-state` script, it will make an extra call to Ajax Cart API using [`cartRequestGet`](/reference/cartRequestGet) function to get the cart state.
