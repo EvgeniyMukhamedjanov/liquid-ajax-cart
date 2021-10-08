@@ -150,7 +150,7 @@ Include the section to the place where you want to display the AJAX cart
 
 Controls become inactive when user's cart is getting updated. 
  
-Liquid Ajax Cart adds [`js-ajax-cart-request-in-progress`](/reference/js-ajax-cart-request-in-progress) CSS class to the `body` tag during the updating process so you can show a loading indicator or make the controls visually disabled.
+Liquid Ajax Cart adds the [`js-ajax-cart-request-in-progress`](/reference/js-ajax-cart-request-in-progress) CSS class to the `body` tag during the updating process so you can show a loading indicator or make the controls visually disabled.
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
