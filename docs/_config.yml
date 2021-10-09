@@ -58,16 +58,25 @@ links:
       links:
         - file: data-ajax-cart-initial-state
         - file: data-ajax-cart-bind-state
-        - file: getCartState
-        - file: subscribeToCartStateUpdate
+        - title: getCartState()
+          file: getCartState
+        - title: subscribeToCartStateUpdate()
+          file: subscribeToCartStateUpdate
     - title: Cart Ajax API requests
       file: requests
       links: 
-        - file: cartRequestGet
-        - file: cartRequestUpdate
-        - file: cartRequestAdd
-        - file: cartRequestChange
-        - file: cartRequestClear
+        - title: cartRequestGet()
+          file: cartRequestGet
+        - title: cartRequestUpdate()
+          file: cartRequestUpdate
+        - title: cartRequestAdd()
+          file: cartRequestAdd
+        - title: cartRequestChange()
+          file: cartRequestChange
+        - title: cartRequestClear()
+          file: cartRequestClear
+        - title: subscribeToCartAjaxRequests()
+          file: subscribeToCartAjaxRequests
 
 ui:
   mode: 'light'
