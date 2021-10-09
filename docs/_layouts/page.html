@@ -2,6 +2,9 @@
 layout: default
 ---
 
+{% assign reference_url = '/reference/' %}
+{% assign page_url_reference_slice = page.url | slice: 0, reference_url.size %}
+
 <div class="container">
     <div class="row">
         <main class="col-md-9 order-md-2 layout-page__main">
@@ -19,11 +22,13 @@ layout: default
                     </button>
                 </div>
 
-                {% if page.url | slice: 0, 11 == '/reference/' %}
-                    {% include reference-navigation.html
-                         class="js-toc mb-0 mt-2"
-                         id="mobileTOC"
-                    %}
+                {% if page_url_reference_slice == reference_url %}
+                    {% if page_url_reference_slice.size > reference_url.size %}
+                        {% include reference-navigation.html
+                             class="js-toc mb-0 mt-2"
+                             id="mobileTOC"
+                        %}
+                    {% endif %}
                 {% else %}
                     {% include jekyll-docs-theme/toc.html
                          class="js-toc.mb-0.mt-2"
@@ -38,13 +43,15 @@ layout: default
         </main>
 
         <aside class="col-md-3 order-md-1 layout-page__sidebar d-none d-md-block hidden-print">
-            {% if page.url | slice: 0, 11 == '/reference/' %}
-                <nav class="page-sidebar page-sidebar--expanded">
-                    {% include reference-navigation.html
-                        class="list-unstyled pl-0"
-                        anchor_class="nav-link px-3 py-1"
-                    %}
-                </nav>
+            {% if page_url_reference_slice == reference_url %}
+                {% if page_url_reference_slice.size > reference_url.size %}
+                    <nav class="page-sidebar page-sidebar--expanded">
+                        {% include reference-navigation.html
+                            class="list-unstyled pl-0"
+                            anchor_class="nav-link px-3 py-1"
+                        %}
+                    </nav>
+                {% endif %}
             {% else %}
                 {% include sidebar/content-pre.html %}
                 {% include sidebar/content.html %}
