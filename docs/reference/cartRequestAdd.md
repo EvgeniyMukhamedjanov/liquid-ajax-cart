@@ -1,9 +1,12 @@
-# `cartRequestAdd( body )`
-Performs POST request to the Shopify Cart API `/cart/add.js` endpoint. Accepts request's body as the first parameter.
+# cartRequestAdd
+
+Performs a request to the Shopify Cart API `POST /cart/add.js` endpoint.
+
+Takes the request's body as a first parameter.
 
 ```html
 <script type="module">
-  import { cartRequestAdd } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+  import { cartRequestAdd } from {% include code/last-release-file-name.html asset_url=true %}
 
   cartRequestAdd({ 
     items: [
@@ -12,8 +15,6 @@ Performs POST request to the Shopify Cart API `/cart/add.js` endpoint. Accepts r
         quantity: 1
       }
     ]  
-  }).then( data => {
-    console.log( data );
   })
 </script>
 ```

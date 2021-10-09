@@ -1,23 +1,17 @@
-# `cartRequestChange`
-Performs POST request to the Shopify Cart API `/cart/change.js` endpoint. Accepts request's body as the first parameter.
+# cartRequestChange
+
+Performs a request to the Shopify Cart API `POST /cart/change.js` endpoint.
+
+Takes the request's body as a first parameter.
 
 ```html
 <script type="module">
-  import { cartRequestChange, getCartState } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
-
-  const state = getCartState();
-
-  if ( state.status.cartStateSet && state.cart.item_count > 0 ) {
-    const firstItemKey = state.cart.items[0].key;
-    const firstItemQuantity = state.cart.items[0].quantity;
+  import { cartRequestChange } from {% include code/last-release-file-name.html asset_url=true %}
     
-    cartRequestChange({ 
-      id: firstItemKey,
-      quantity: firstItemQuantity - 1
-    }).then( data => {
-      console.log( data );
-    })
-  }
+  cartRequestChange({ 
+    id: '40934235668668:719bc4cb60310cbc4dee2ae38d8bf04c',
+    quantity: 0
+  })
 
 </script>
 ```

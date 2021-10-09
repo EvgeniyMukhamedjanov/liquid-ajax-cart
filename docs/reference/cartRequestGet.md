@@ -1,12 +1,11 @@
 # cartRequestGet() 
-Performs GET request to Shopify Cart API 
+
+Performs a request to the Shopify Cart API `GET /cart.js` endpoint
 
 ```html
 <script type="module">
   import { cartRequestGet } from {% include code/last-release-file-name.html asset_url=true %}
 
-  cartRequestGet().then( data => {
-    console.log( data );
-  });
+  cartRequestGet()
 </script>
 ```
