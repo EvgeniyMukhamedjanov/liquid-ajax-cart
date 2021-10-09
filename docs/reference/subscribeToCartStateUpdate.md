@@ -1,14 +1,18 @@
-# `subscribeToCartStateUpdate`
+# subscribeToCartStateUpdate()
 Callback will be called after cart state is changed with the only parameter — updated state.
+
+The `subscribeToCartStateUpdate` function adds your callback function to the list of functions that will be called each time after the [State object](/reference/state/) is changed. The callback should be passed as the only parameter.
+
+```javascript
+subscribeToCartStateUpdate( myCallback );
+```
 
 ```html
 <script type="module">
-  import { subscribeToCartStateUpdate } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+  import { subscribeToCartStateUpdate } from {% include code/last-release-file-name.html asset_url=true %}
 
   subscribeToCartStateUpdate( state => {
-    console.log('Updated state:');
-    console.log( state );
+    console.log('State is updated: ', state);
   });
 </script>
-
 ```
