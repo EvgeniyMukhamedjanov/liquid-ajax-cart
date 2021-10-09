@@ -42,22 +42,25 @@ layout: default
             </section>
         </main>
 
-        <aside class="col-md-3 order-md-1 layout-page__sidebar d-none d-md-block hidden-print">
-            {% if page_url_reference_slice == reference_url %}
-                {% if page_url_reference_slice.size > reference_url.size %}
+        {% if page_url_reference_slice == reference_url %}
+            {% if page_url_reference_slice.size > reference_url.size %}
+                <aside class="col-md-3 order-md-1 layout-page__sidebar d-none d-md-block hidden-print">
                     <nav class="page-sidebar page-sidebar--expanded">
                         {% include reference-navigation.html
                             class="list-unstyled pl-0"
                             anchor_class="nav-link px-3 py-1"
                         %}
                     </nav>
-                {% endif %}
-            {% else %}
+                </aside>
+            {% endif %}
+        {% else %}
+            <aside class="col-md-3 order-md-3 layout-page__sidebar d-none d-md-block hidden-print">
                 {% include sidebar/content-pre.html %}
                 {% include sidebar/content.html %}
                 {% include sidebar/content-post.html %}
-            {% endif %}
-        </aside>
+            </aside>
+        {% endif %}
+
     </div>
 
     {% include disqus.html %}
