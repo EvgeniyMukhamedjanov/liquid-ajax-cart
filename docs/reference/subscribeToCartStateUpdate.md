@@ -1,5 +1,4 @@
 # subscribeToCartStateUpdate()
-Callback will be called after cart state is changed with the only parameter — updated state.
 
 The `subscribeToCartStateUpdate` function adds your callback function to the list of functions that will be called each time after the [State object](/reference/state/) is changed. The callback should be passed as the only parameter.
 
