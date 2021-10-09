@@ -35,12 +35,12 @@ Two parameters will be passed to the callback function:
   {
     "endpoint": "/cart/add.js",
     "requestBody": {"items": [{"id": 40934235668668, "quantity": 1}], "sections": "my-cart"},
-    "requestType": "add"
+    "requestType": "add",
     "responseData": {
       "ok": true, 
       "status": 200, 
       "body": {…}
-    }
+    },
     "extraResponseData": {
       "ok": true, 
       "status": 200, 
@@ -57,7 +57,7 @@ Two parameters will be passed to the callback function:
       "requestBody": {"items": [{"id": 40934235668668, "quantity": 1}], "sections": "my-cart"},
       "requestType": "add",
       "fetchError": {
-        "message": "Failed to fetch"
+        "message": "Failed to fetch",
         "stack": "TypeError: Failed to fetch\n    at e.fetch (h..."
       }
     }
@@ -65,9 +65,10 @@ Two parameters will be passed to the callback function:
 
 ### Use with the state
 The [getCartState](/reference/getCartState) might be used within your callbacks:
+
 ```html
 <script type="module">
-  import { subscribeToCartAjaxRequests, getCartState } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+  import { subscribeToCartAjaxRequests, getCartState } from {% include code/last-release-file-name.html asset_url=true %}
 
   // Calculate how cart item count has been changed after an "Add to cart" request
   

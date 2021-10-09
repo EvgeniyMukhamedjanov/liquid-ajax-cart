@@ -56,12 +56,12 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 </script>
  
 <script type="module">
-  import '{{ "{% endraw %}{{ last_release_file.name }}{% raw %}" | asset_url }}';
+  import {% include code/last-release-file-name.html asset_url=true %};
 </script>
 ```
 {% endraw %}
  
-Upload the <a href="{{ last_release_file.path }}" download >{{ last_release_file.name }}</a> file to your theme's `asset` folder and include it in the `layout/theme.liquid` template.
+Upload the <a href="{{ last_release_file.path }}" download >{% include code/last-release-file-name.html %}</a> file to your theme's `asset` folder and include it in the `layout/theme.liquid` template.
 
 Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/reference/data-ajax-cart-initial-state) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
 
@@ -338,7 +338,7 @@ Use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests) 
 {% raw %}
  ```html
 <script type="module">
-  import { subscribeToCartAjaxRequests, getCartState } from '{{ "{% endraw %}{{ last_release_file.name }}{% raw %}" | asset_url }}'
+  import { subscribeToCartAjaxRequests, getCartState } from {% include code/last-release-file-name.html asset_url=true %}
 
   subscribeToCartAjaxRequests(( data, subscribeToResult ) => {    
     // This function will be called before each Ajax Cart API request
@@ -378,7 +378,7 @@ Use these function instead of direct Cart API calls and Liquid Ajax Cart will ke
 {% raw %}
  ```html
 <script type="module">
-  import { cartRequestAdd } from '{{ "{% endraw %}{{ last_release_file.name }}{% raw %}" | asset_url }}'
+  import { cartRequestAdd } from {% include code/last-release-file-name.html asset_url=true %}
 
   cartRequestAdd({ 
     items: [
@@ -448,7 +448,7 @@ If you want to run your Javascript code every time when the state is changed —
 {% raw %}
  ```html
 <script type="module">
-  import { getCartState, subscribeToCartStateUpdate } from '{{ "{% endraw %}{{ last_release_file.name }}{% raw %}" | asset_url }}'
+  import { getCartState, subscribeToCartStateUpdate } from {% include code/last-release-file-name.html asset_url=true %}
 
   const initialState = getCartState();
   console.log('Initial state: ', InitialState);
