@@ -1,0 +1,14 @@
+{% raw %}
+```html
+<div data-ajax-cart-bind-state="cart.item_count" > 
+  <!-- Cart item count appears here --> 
+</div>
+
+<!-- The best practice is to use [data-ajax-cart-bind-state] on top of Liquid expressions.
+The liquid expression {{ cart.item_count }} displays the amount 
+even if Liquid Ajax Cart is not loaded: -->
+<div data-ajax-cart-bind-state="cart.item_count" >
+  {{ cart.item_count }}
+</div>
+```
+{% endraw %}
