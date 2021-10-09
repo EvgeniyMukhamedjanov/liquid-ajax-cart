@@ -60,7 +60,7 @@
 
                 // In order to prevent being affected by the extra width misaligning
                 // content, we'll do position absolute the border.
-                &::before {
+                /* &::before {
                     @include themer(border-left-color, (
                         'dark': $site-ui-brand-dark,
                         'light': $site-ui-brand-light,
@@ -74,7 +74,7 @@
                     left: 0;
                     position: absolute;
                     top: 0;
-                }
+                } */
             }
 
             // Unhide any nested ULs when this TOC section is active
