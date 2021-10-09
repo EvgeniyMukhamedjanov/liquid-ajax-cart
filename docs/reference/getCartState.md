@@ -1,5 +1,5 @@
 # getCartState()
-Returns the current [State object](/reference/state/).
+The `getCartState` function returns the current [State object](/reference/state/).
 
 ```html
 <script type="module">
