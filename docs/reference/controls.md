@@ -2,7 +2,7 @@
 
 ### [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/)
 
-HTML elements with the `data-ajax-cart-request-button` attribute as well as links with the `routes.cart_*_url` URLs send an [Ajax Cart API request]() on user's click.
+HTML elements with the `data-ajax-cart-request-button` attribute as well as links with the `routes.cart_*_url` URLs send an [Ajax Cart API request](/reference/requests/) on user's click.
 
 The elements become inactive when there is Cart Ajax API request in progress (if the [State](/reference/state/) `status.requestInProgress` property is `true`).
 
