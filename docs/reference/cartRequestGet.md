@@ -1,9 +1,9 @@
-# `cartRequestGet` 
+# cartRequestGet() 
 Performs GET request to Shopify Cart API 
 
-```liquid
+```html
 <script type="module">
-  import { cartRequestGet } from '{{ 'liquid-ajax-cart.js' | asset_url }}'
+  import { cartRequestGet } from {% include code/last-release-file-name.html asset_url=true %}
 
   cartRequestGet().then( data => {
     console.log( data );
