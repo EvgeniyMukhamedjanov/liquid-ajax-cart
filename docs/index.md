@@ -56,7 +56,7 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 </script>
  
 <script type="module">
-  import {% include code/last-release-file-name.html asset_url=true %};
+  import {% endraw %}{% include code/last-release-file-name.html asset_url=true %}{% raw %};
 </script>
 ```
 {% endraw %}
@@ -335,7 +335,7 @@ Use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests) 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
 
-{% raw %}
+
  ```html
 <script type="module">
   import { subscribeToCartAjaxRequests, getCartState } from {% include code/last-release-file-name.html asset_url=true %}
@@ -351,7 +351,6 @@ Use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests) 
   })
 </script>
  ```
- {% endraw %}
  
 </div>
 </div>
@@ -375,7 +374,6 @@ Use these function instead of direct Cart API calls and Liquid Ajax Cart will ke
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
 
-{% raw %}
  ```html
 <script type="module">
   import { cartRequestAdd } from {% include code/last-release-file-name.html asset_url=true %}
@@ -390,7 +388,6 @@ Use these function instead of direct Cart API calls and Liquid Ajax Cart will ke
   });
 </script>
  ```
- {% endraw %}
  
 </div>
 </div>
@@ -445,7 +442,6 @@ If you want to run your Javascript code every time when the state is changed —
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
 
-{% raw %}
  ```html
 <script type="module">
   import { getCartState, subscribeToCartStateUpdate } from {% include code/last-release-file-name.html asset_url=true %}
@@ -458,7 +454,6 @@ If you want to run your Javascript code every time when the state is changed —
   });
 </script>
 ```
-{% endraw %}
  
 </div>
 </div>
