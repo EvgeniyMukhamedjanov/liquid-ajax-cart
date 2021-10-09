@@ -50,7 +50,7 @@ Two parameters will be passed to the callback function:
     ```
     * `responseData` — the response on the request. `ok` is `true` if the response was successful (status in the range 200-299);
     * for `/cart/add.js` requests Liquid Ajax Cart performs an extra `GET` request to the `/cart.js` endpoint to get the updated cart state. `extraResponseData` object contains the response of the extra request.
-    * If the request could be performed and response wasn't received because, for example, internet was disconnected — the `responseData` will not exist but `fetchError` will be there instead:
+    * If the request couldn't be performed and response wasn't received because, for example, internet was disconnected — the `responseData` will not exist but `fetchError` will be there instead:
       ```json
       {
         "endpoint": "/cart/add.js",
