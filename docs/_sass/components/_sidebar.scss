@@ -11,6 +11,19 @@
     position: sticky;
     overflow: auto;
     top: 20px;
+    
+    scrollbar-width: 1px;
+    scrollbar-color: #757575 #ebebeb;
+    &::-webkit-scrollbar {
+      width: 1px;
+      height: 1px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #ebebeb;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #757575;
+    }
 
     a {
         @include themer(color, (
