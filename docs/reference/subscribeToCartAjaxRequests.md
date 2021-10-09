@@ -63,6 +63,7 @@ Two parameters will be passed to the callback function:
     }
     ```
 
+### Use with the state
 The [getCartState](/reference/getCartState) might be used within your callbacks:
 ```html
 <script type="module">
