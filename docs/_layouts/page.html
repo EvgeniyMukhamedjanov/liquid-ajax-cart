@@ -5,6 +5,10 @@ layout: default
 {% assign reference_url = '/reference/' %}
 {% assign page_url_reference_slice = page.url | slice: 0, reference_url.size %}
 
+{{ page_url_reference_slice }}
+{{ page_url_reference_slice.size }}
+{{ reference_url.size }}
+
 <div class="container">
     <div class="row">
         <main class="col-md-9 order-md-2 layout-page__main">
