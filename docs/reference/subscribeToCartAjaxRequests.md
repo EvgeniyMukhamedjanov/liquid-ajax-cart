@@ -82,7 +82,7 @@ The [getCartState](/reference/getCartState) might be used within your callbacks:
         if ( "responseBody" in data && data.responseBody.ok )
           const state = getCartState();
           const itemCountAfter = state.status.cartStateSet ? state.cart.item_count : undefined;
-          let itemCountDifference = undefined;
+          // to get itemCountAfter after "Add to cart" request you can also use data.extraResponseData.body.item_count 
 
           if ( itemCountBefore !== undefined && itemCountAfter !== undefined ) {
             console.log(`Items quantity increased by ${ itemCountAfter - itemCountBefore } pcs`);
