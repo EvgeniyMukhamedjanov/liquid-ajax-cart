@@ -63,7 +63,7 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
  
 Upload the <a href="{{ last_release_file.path }}" download >{% include code/last-release-file-name.html %}</a> file to your theme's `asset` folder and include it in the `layout/theme.liquid` template.
 
-Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/reference/data-ajax-cart-initial-state) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
+Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/reference/data-ajax-cart-initial-state/) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
 
 </div>
 <div class="col-lg-6" markdown="1">
@@ -90,7 +90,7 @@ import 'liquid-ajax-cart/global-classes';
 ```
 {% endraw %}
 
-Import all the needed modules and provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/reference/data-ajax-cart-initial-state) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
+Import all the needed modules and provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/reference/data-ajax-cart-initial-state/) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
 </div>
  
 </div>
@@ -106,9 +106,9 @@ Import all the needed modules and provide the initial cart state in the JSON for
  
 Feel free to use any Liquid tags, objects and filters.
 
-Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section) attribute to a root HTML container — Liquid Ajax Cart reloads sections with this attribute every time when a cart gets updated.
+Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute to a root HTML container — Liquid Ajax Cart reloads sections with this attribute every time when a cart gets updated.
 
-If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](/reference/data-ajax-cart-section-scroll) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
+If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](/reference/data-ajax-cart-section-scroll/) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
     
 ##### Controls
 
@@ -150,7 +150,7 @@ Include the section to the place where you want to display the AJAX cart
 
 Buttons become inactive when the cart is getting updated. 
  
-Liquid Ajax Cart adds the [`js-ajax-cart-request-in-progress`](/reference/js-ajax-cart-request-in-progress) CSS class to the `body` tag during the updating process so you can show a loading indicator or make the controls visually disabled.
+Liquid Ajax Cart adds the [`js-ajax-cart-request-in-progress`](/reference/js-ajax-cart-request-in-progress/) CSS class to the `body` tag during the updating process so you can show a loading indicator or make the controls visually disabled.
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -189,7 +189,7 @@ Liquid Ajax Cart ajaxifies product forms once it is loaded.
 ##### Error messages
 {:.mt-0}
  
-Add a container with the [`data-ajax-cart-form-error`](/reference/data-ajax-cart-form-error) attribute within product forms to show error messages.
+Add a container with the [`data-ajax-cart-form-error`](/reference/data-ajax-cart-form-error/) attribute within product forms to show error messages.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -207,7 +207,7 @@ Add a container with the [`data-ajax-cart-form-error`](/reference/data-ajax-cart
  
 When a user submits a product form, it becomes inactive until the Ajax "Add to cart" request is finished to prevent accidental double submissions.
   
-Liquid Ajax Cart adds the [`js-ajax-cart-form-in-progress`](/reference/js-ajax-cart-form-in-progress) CSS class to the form if the request is in progress so you can show a loading indicator or make the submit button visually disabled.
+Liquid Ajax Cart adds the [`js-ajax-cart-form-in-progress`](/reference/js-ajax-cart-form-in-progress/) CSS class to the form if the request is in progress so you can show a loading indicator or make the submit button visually disabled.
   
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -250,7 +250,7 @@ Write some CSS to show your cart section if a specific `body` CSS class exists.
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-Add the [`data-ajax-cart-toggle-class-button`](/reference/data-ajax-cart-toggle-class-button) attribute with the CSS class as a value to the button that have to show/hide the cart — the button will add/remove the CSS class on a user's click.
+Add the [`data-ajax-cart-toggle-class-button`](/reference/data-ajax-cart-toggle-class-button/) attribute with the CSS class as a value to the button that have to show/hide the cart — the button will add/remove the CSS class on a user's click.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -317,7 +317,7 @@ Explore all the properties on the [State reference](/reference/state/) page.
 ### Run your Javascript code before and after each Ajax Cart API request
 {:.mt-0}
 
-Use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests) function to add callbacks that will be called before and after Ajax Cart API requests.
+Use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/) function to add callbacks that will be called before and after Ajax Cart API requests.
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -352,11 +352,11 @@ Use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests) 
  
 Use these function instead of direct Cart API calls and Liquid Ajax Cart will keep the Ajax cart sections, the State object and body CSS classes updated:
 
-* [`cartRequestGet`](/reference/cartRequestGet) — sends a request to the `GET /cart.js` endpoint;
-* [`cartRequestAdd`](/reference/cartRequestAdd) — to the `POST /cart/add.js` endpoint;
-* [`cartRequestChange`](/reference/cartRequestChange) — to the `POST /cart/change.js` endpoint;
-* [`cartRequestUpdate`](/reference/cartRequestUpdate) — to the `POST /cart/update.js` endpoint;
-* [`cartRequestClear`](/reference/cartRequestClear) — to the `POST /cart/clear.js` endpoint.
+* [`cartRequestGet`](/reference/cartRequestGet/) — sends a request to the `GET /cart.js` endpoint;
+* [`cartRequestAdd`](/reference/cartRequestAdd/) — to the `POST /cart/add.js` endpoint;
+* [`cartRequestChange`](/reference/cartRequestChange/) — to the `POST /cart/change.js` endpoint;
+* [`cartRequestUpdate`](/reference/cartRequestUpdate/) — to the `POST /cart/update.js` endpoint;
+* [`cartRequestClear`](/reference/cartRequestClear/) — to the `POST /cart/clear.js` endpoint.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -400,9 +400,9 @@ State is a Javascript object where Liquid Ajax Cart keeps the information relate
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-Use the [`getCartState`](/reference/getCartState) function to get the current state.
+Use the [`getCartState`](/reference/getCartState/) function to get the current state.
 
-If you want to run your Javascript code every time when the state is changed — use the [`subscribeToCartStateUpdate`](/reference/subscribeToCartStateUpdate) function to subscribe to state updates.
+If you want to run your Javascript code every time when the state is changed — use the [`subscribeToCartStateUpdate`](/reference/subscribeToCartStateUpdate/) function to subscribe to state updates.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
