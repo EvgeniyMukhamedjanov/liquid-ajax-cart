@@ -10,9 +10,9 @@ Two parameters will be passed to the callback function:
 - `data` — an object with information about the request:
   ```json
   {
-    endpoint: "/cart/add.js",
-    requestBody: {items: [{id: 40934235668668, quantity: 1}], sections: "my-cart"},
-    requestType: "add"
+    "endpoint": "/cart/add.js",
+    "requestBody": {"items": [{"id": 40934235668668, "quantity": 1}], "sections": "my-cart"},
+    "requestType": "add"
   }
   ```
   - `requestBody` is `undefined` for `GET` requests, JSON or [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) object for `POST` requests;
@@ -33,18 +33,18 @@ Two parameters will be passed to the callback function:
   The result-callback will be called with the only one parameter — `data` object with information about the request:
   ```json
   {
-    endpoint: "/cart/add.js",
-    requestBody: {items: [{id: 40934235668668, quantity: 1}], sections: "my-cart"},
-    requestType: "add"
-    responseData: {
-      ok: true, 
-      status: 200, 
-      body: {…}
+    "endpoint": "/cart/add.js",
+    "requestBody": {items: [{id: 40934235668668, quantity: 1}], sections: "my-cart"},
+    "requestType": "add"
+    "responseData": {
+      "ok": true, 
+      "status": 200, 
+      "body": {…}
     }
-    extraResponseData: {
-      ok: true, 
-      status: 200, 
-      body: {…}
+    "extraResponseData": {
+      "ok": true, 
+      "status": 200, 
+      "body": {…}
     }
   }
   ```
@@ -53,12 +53,12 @@ Two parameters will be passed to the callback function:
   - If the request could be performed and response wasn't received because, for example, internet was disconnected — the `responseData` will not exist but `fetchError` will be there instead:
     ```json
     {
-      endpoint: "/cart/add.js",
-      requestBody: {items: [{id: 40934235668668, quantity: 1}], sections: "my-cart"},
-      requestType: "add",
-      fetchError: {
-        message: "Failed to fetch"
-        stack: "TypeError: Failed to fetch\n    at e.fetch (h..."
+      "endpoint": "/cart/add.js",
+      "requestBody": {"items": [{"id": 40934235668668, "quantity": 1}], "sections": "my-cart"},
+      "requestType": "add",
+      "fetchError": {
+        "message": "Failed to fetch"
+        "stack": "TypeError: Failed to fetch\n    at e.fetch (h..."
       }
     }
     ```
