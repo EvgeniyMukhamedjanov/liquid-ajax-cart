@@ -34,7 +34,7 @@ Two parameters will be passed to the callback function:
   ```json
   {
     "endpoint": "/cart/add.js",
-    "requestBody": {items: [{id: 40934235668668, quantity: 1}], sections: "my-cart"},
+    "requestBody": {"items": [{"id": 40934235668668, "quantity": 1}], "sections": "my-cart"},
     "requestType": "add"
     "responseData": {
       "ok": true, 
