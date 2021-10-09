@@ -4,7 +4,7 @@
 
 HTML elements with the `data-ajax-cart-request-button` attribute as well as links with the `routes.cart_*_url` URLs send an [Ajax Cart API request](/reference/requests/) on user's click.
 
-The elements become inactive when there is Cart Ajax API request in progress (if the [State](/reference/state/) `status.requestInProgress` property is `true`).
+The elements become inactive when there is Cart Ajax API request in progress (if the [State](/reference/state/)'s `status.requestInProgress` property is `true`).
 
 Usecases: all the buttons that change the cart state: increace quantity of a cart item, decreace quantity of a cart item, remove a cart item, clear cart, etc.
 
