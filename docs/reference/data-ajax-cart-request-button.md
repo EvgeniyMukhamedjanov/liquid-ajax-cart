@@ -8,7 +8,6 @@ It is recommended to make buttons that change the cart state (like "Plus one", "
 
 if you can't use links, Liquid Ajax Cart still offers the same functionality for any HTML element. Add the `data-ajax-cart-request-button` attribute to a HTML element, a cart mutation route as a value, and it will work the same way as the ajaxfied links:
 
-
 {% raw %}
 ```html
 <button data-ajax-cart-request-button="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" > 
@@ -24,3 +23,9 @@ if you can't use links, Liquid Ajax Cart still offers the same functionality for
 </div>
 ``` 
 {% endraw %}
+
+## Inactive state
+
+The links or the `data-ajax-cart-request-button` elements become inactive when there is a [Cart Ajax API request](/reference/requests/) in progress.
+
+Liquid Ajax Cart adds the [`js-ajax-cart-request-in-progress`](/reference/js-ajax-cart-request-in-progress/) CSS class to the body tag so you can show a loading indicator or make the controls visually disabled.
