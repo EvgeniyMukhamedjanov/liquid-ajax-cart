@@ -12,17 +12,17 @@
     overflow: auto;
     top: 20px;
     
-    scrollbar-width: 1px;
-    scrollbar-color: #757575 #ebebeb;
+    scrollbar-width: 2px;
+    scrollbar-color: $site-ui-border-color-light #ebebeb;
     &::-webkit-scrollbar {
-      width: 1px;
-      height: 1px;
+      width: 2px;
+      height: 2px;
     }
     &::-webkit-scrollbar-track {
       background: #ebebeb;
     }
     &::-webkit-scrollbar-thumb {
-      background: #757575;
+      background: $site-ui-border-color-light;
     }
 
     a {
