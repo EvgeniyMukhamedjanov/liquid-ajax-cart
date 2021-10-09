@@ -7,7 +7,7 @@ State gets updated after each [Cart Ajax API request](/reference/requests/) due 
 
 To make sure that State is up to date, always use the functions from the [Cart Ajax API requests](/reference/requests/) reference instead of direct Cart API calls.
 
-### Properties
+## Properties
 
 ##### `cart`
 Contains JSON versions of the Shopify [`cart`](https://shopify.dev/api/liquid/objects/cart) liquid object. 
@@ -29,3 +29,9 @@ The `status.cartStateSet` is `true` if there are one or more [Cart Ajax API requ
 If the property is `true`:
   * [controls](/reference/controls/) become inactive,
   * the [`js-ajax-cart-request-in-progress`](/reference/js-ajax-cart-request-in-progress/) CSS class will be added to the `body` tag.
+
+## Interactions
+
+Use the [`getCartState`](/reference/getCartState) function to get the current state.
+
+If you want to run your Javascript code after the state is updated — use the [`subscribeToCartStateUpdate`](/reference/subscribeToCartStateUpdate/) function.
