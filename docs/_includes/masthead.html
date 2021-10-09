@@ -2,7 +2,7 @@
 {% assign page_url_reference_slice = page.url | slice: 0, reference_url.size %}
 
 {% if page_url_reference_slice == reference_url and page.url.size > reference_url.size %}
-    <hr class="mt-1" />
+    <hr class="mt-0 mb-3" />
 {% else %}
 
     {% capture alignment_class -%}
