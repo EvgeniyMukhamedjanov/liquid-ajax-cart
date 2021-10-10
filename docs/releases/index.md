@@ -35,22 +35,18 @@ title: Releases
 <div><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></div>
 
 {%- if file_version == '0.2.0' -%}
-* The `cartRequest*` functions don't return `Promise` anymore.
-* The `cartRequest*` functions has one more parameter — `options` object with the posibilty to pass `firstComplete` and `lastComplete` callbacks.
+* The `cartRequest*` functions don't return the `Promise` anymore.
+* The `cartRequest*` functions has one more parameter — the `options` object with the possibilty to pass the `firstComplete` and `lastComplete` callbacks.
 {%- endif -%}
 
 {%- if file_version == '0.1.1' -%}
-* The `'x-requested-with': 'XMLHttpRequest'` header is added to FormData and URLSearchParams requests.
-{%- endif -%}
-
-{%- if file_version == '0.1.1' -%}
-* The `'x-requested-with': 'XMLHttpRequest'` header is added to FormData and URLSearchParams requests.
+* The `'x-requested-with': 'XMLHttpRequest'` header is added to the FormData and URLSearchParams requests.
 {%- endif -%}
 
 {%- if file_version == '0.1.0' -%}
-* `data-ajax-cart-quantity-button` is removed.
-* `data-ajax-cart-request-button` is added.
-* `cartRequestAdd` and `cartRequestUpdate` functions are added.
+* The `data-ajax-cart-quantity-button` attribute is removed.
+* The `data-ajax-cart-request-button` attribute is added.
+* The `cartRequestAdd` and `cartRequestUpdate` functions are added.
 {% endif %}
 
 {% endfor %}
