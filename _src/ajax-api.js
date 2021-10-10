@@ -71,8 +71,11 @@ const cartRequest = ( requestType, body, firstResultCallback = undefined ) => {
 		method
 	}
 	if ( requestType !== REQUEST_GET ) {
-		if ( requestBody instanceof FormData ) {
+		if ( requestBody instanceof FormData || requestBody instanceof URLSearchParams ) {
 			fetchPayload.body = requestBody;
+			fetchPayload.headers = {
+		    	'x-requested-with': 'XMLHttpRequest'
+		  	}
 		} else {
 			fetchPayload.body = JSON.stringify(requestBody);
 			fetchPayload.headers = {

@@ -31,6 +31,7 @@ document.addEventListener('submit', e => {
 	}
 
 	const formData = new FormData(form);
+	// const searchParams = new URLSearchParams(formData);
 	// const productJson = {}
 	// for ( let pair of formData ) {
 	// 	const key = pair[0];

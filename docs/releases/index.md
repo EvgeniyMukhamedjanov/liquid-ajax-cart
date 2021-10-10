@@ -39,5 +39,8 @@ title: Releases
 * `data-ajax-cart-request-button` is added.
 * `cartRequestAdd` and `cartRequestUpdate` functions are added.
 {% endif %}
+{% if file_version == '0.1.1' %}
+* The `'x-requested-with': 'XMLHttpRequest'` header is added to FormData and URLSearchParams requests.
+{% endif %}
 
 {% endfor %}

@@ -19,7 +19,7 @@ subscribeToCartAjaxRequests (( data, subscribeToResult ) => {
 			}
 		});
 		if ( sectionNames.length ) {
-			if ( data.requestBody instanceof FormData ) {
+			if ( data.requestBody instanceof FormData || data.requestBody instanceof URLSearchParams ) {
 				data.requestBody.append('sections', sectionNames.join( ',' ));
 			} else {
 				data.requestBody.sections = sectionNames.join( ',' );
