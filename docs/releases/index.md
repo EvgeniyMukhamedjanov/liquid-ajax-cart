@@ -12,7 +12,9 @@ title: Releases
 	{%- if release_slice == file_release_slice -%}
 		{%- assign file_release_version = file.path | slice: release_slice.size, 15 | replace: ".js", "" -%}
 		{%- assign file_release_version_array = file_release_version | split: '.' -%}
-		{%- assign versions_joined = versions_joined | append: '|' -%}
+		{%- if versions_joined != "" -%}
+			{%- assign versions_joined = versions_joined | append: '|' -%}
+		{%- endif -%}
 		{%- for version_part in file_release_version_array -%}
 			{%- assign versions_joined = versions_joined | append: '.' -%}
 			{%- if version_part.size == 1 -%}
@@ -30,7 +32,7 @@ title: Releases
 {% assign file_version = long_version | replace: "0", "-" | replace: ".---", ".0"  | replace: ".--", "." | replace: ".-", "." | remove_first: "." | replace: "-", "0" %}
 
 ### {{ file_version }}
-[{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}]({{ release_slice | append: file_version | append: '.js' }})
+<a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a>
 
 {% if file_version == '0.1.0' %}
 * `data-ajax-cart-quantity-button` is removed.
