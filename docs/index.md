@@ -29,7 +29,8 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 <p class="lead" markdown="1">Check out the <a href="https://liquid-ajax-cart.myshopify.com/" target="_blank">demo store</a> where all AJAX-cart functionality was built from scratch using Liquid Ajax Cart. Password — `liquid-ajax-cart`.</p>
 </div>
 <div class="col-lg-4" markdown="1">
-> For building custom storefronts using React, Liquid Ajax Cart offers Ajax Requests API and the State — enriched cart object.
+> <h4 class="mt-0"><i class="fab fa-react fa-fw"></i> React integration</h4>
+> For building custom storefronts using React or Preact, Liquid Ajax Cart offers [Ajax Cart API requests](/reference/requests/) and the [State](/reference/state/) — enriched cart object. The "How to" guide will be ready soon.
 </div>
 </div>
 
