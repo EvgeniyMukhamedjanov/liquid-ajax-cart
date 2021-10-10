@@ -7,7 +7,7 @@ subscribeToCartAjaxRequests( myRequestCallback );
 ```
 
 Two parameters will be passed to the callback function: 
-1. `data` — an object with information about the request:
+1. **`requestState`** — an object with information about the request:
     ```json
     {
       "endpoint": "/cart/add.js",
@@ -17,20 +17,20 @@ Two parameters will be passed to the callback function:
     ```
     * `requestBody` is `undefined` for `GET` requests, JSON or [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) object for `POST` requests;
     * since the callback is called before the request is performed, you can mutate the `requestBody` object and the request will be run with the updated parameters.
-2. `subscribeToResult` — a function that adds your another callback to the list of functions that will be called after the current request is performed. Takes the result-callback as the only parameter:
+2. **`subscribeToResult`** — a function that adds your another callback to the list of functions that will be called after the current request is performed. Takes the result-callback as the only parameter:
     ```javascript
-    function myRequestCallback ( data, subscribeToResult ) {
-      console.log( 'Before request', data );
+    function myRequestCallback ( requestState, subscribeToResult ) {
+      console.log( 'Before request', requestState );
       
-      const myResultCallback = function ( data ) {
-        console.log( 'After request', data );
+      const myResultCallback = function ( requestState ) {
+        console.log( 'After request', requestState );
       }
       
       subscribeToResult( myResultCallback );
     }
     subscribeToCartAjaxRequests( myRequestCallback );
     ```
-    The result-callback will be called with the only one parameter — `data` object with information about the request:
+    The result-callback will be called with the only one parameter — `requestState` object with information about the request:
     ```json
     {
       "endpoint": "/cart/add.js",
