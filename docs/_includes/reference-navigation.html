@@ -33,9 +33,9 @@
 				{%- if ref_link.title -%} {{ ref_link.title }} {%- else -%} {{ ref_link.file }} {%- endif -%}
 			</a></h4>
 
-			{% if ref_link.description %}
+			{%- if ref_link.description -%}
 				<p markdown="1">{{ ref_link.description }}</p>
-			{% endif %}
+			{%- endif -%}
 			
 			{%- if ref_link.links -%}
 			<ul>
@@ -45,9 +45,9 @@
 					<h6><a href="/reference/{{ ref_child_link.file }}/">
 						{%- if ref_child_link.title -%} {{ ref_child_link.title }} {%- else -%} {{ ref_child_link.file }} {%- endif -%}
 					</a></h6>
-					{% if ref_child_link.description %}
+					{%- if ref_child_link.description -%}
 						<p markdown="1">{{ ref_child_link.description }}</p>
-					{% endif %}
+					{%- endif -%}
 				</li>
 				{%- endfor -%}
 			</ul>
