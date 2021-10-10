@@ -34,6 +34,10 @@ title: Releases
 ### {{ file_version }}
 <div><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></div>
 
+{%- if file_version == '1.0.0' -%}
+Public release.
+{%- endif -%}
+
 {%- if file_version == '0.2.0' -%}
 * The `cartRequest*` functions don't return the `Promise` anymore.
 * The `cartRequest*` functions has one more parameter — the `options` object with the possibilty to pass the `firstComplete` and `lastComplete` callbacks.
