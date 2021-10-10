@@ -41,7 +41,7 @@
 					<h5><a href="/reference/{{ ref_child_link.file }}/">
 						{%- if ref_child_link.title -%} {{ ref_child_link.title }} {%- else -%} {{ ref_child_link.file }} {%- endif -%}
 					</a></h5>
-					{% if p.description != blank %}
+					{% if p.description %}
 						<p>{{ p.description }}</p>
 					{% endif %}
 				</li>
