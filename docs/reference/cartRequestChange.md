@@ -8,7 +8,7 @@ Takes the request's body as a first parameter, the options object as the second 
 <script type="module">
   import { cartRequestChange } from {% include code/last-release-file-name.html asset_url=true %}
 
-  {% include code/request-options-object %}
+  {% include code/request-options-object.html %}
     
   cartRequestChange({ 
     id: '40934235668668:719bc4cb60310cbc4dee2ae38d8bf04c',
@@ -18,4 +18,4 @@ Takes the request's body as a first parameter, the options object as the second 
 </script>
 ```
 
-{% include code/request-options-text %}
+{% include code/request-options-text.html %}

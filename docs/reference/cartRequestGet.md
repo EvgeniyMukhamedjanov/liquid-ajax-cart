@@ -8,10 +8,10 @@ Takes the options object as the first parameter.
 <script type="module">
   import { cartRequestGet } from {% include code/last-release-file-name.html asset_url=true %}
 
-  {% include code/request-options-object %}
+  {% include code/request-options-object.html %}
 
   cartRequestGet( options );
 </script>
 ```
 
-{% include code/request-options-text %}
+{% include code/request-options-text.html %}

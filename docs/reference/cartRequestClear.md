@@ -8,11 +8,11 @@ Takes the request's body as a first parameter, the options object as the second 
 <script type="module">
   import { cartRequestClear } from {% include code/last-release-file-name.html asset_url=true %}
 
-  {% include code/request-options-object %}
+  {% include code/request-options-object.html %}
     
   cartRequestClear( {}, options );
 
 </script>
 ```
 
-{% include code/request-options-text %}
+{% include code/request-options-text.html %}

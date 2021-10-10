@@ -8,7 +8,7 @@ Takes the request's body as a first parameter, the options object as the second 
 <script type="module">
   import { cartRequestUpdate } from {% include code/last-release-file-name.html asset_url=true %}
 
-  {% include code/request-options-object %}
+  {% include code/request-options-object.html %}
     
   cartRequestUpdate({
     updates: [3, 2, 1]
@@ -17,4 +17,4 @@ Takes the request's body as a first parameter, the options object as the second 
 </script>
 ```
 
-{% include code/request-options-text %}
+{% include code/request-options-text.html %}
