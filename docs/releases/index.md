@@ -18,7 +18,7 @@ title: Releases
 * `data-ajax-cart-quantity-button` is removed.
 * `data-ajax-cart-request-button` is added.
 * `cartRequestAdd` and `cartRequestUpdate` functions are added.
-{%- endif -%}
+{% endif %}
 
 	{%- endif -%}
 {%- endfor -%}
