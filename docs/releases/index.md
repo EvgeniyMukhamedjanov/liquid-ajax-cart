@@ -29,6 +29,7 @@ title: Releases
 {{ versions_joined }}
 
 {%- for long_version in versions_array -%}
+{{ long_version }}
 {% assign file_version = long_version | replace: '.00', '.' | replace '.0', '.' | remove_first: "." %}
 
 ### {{ file_version }}
