@@ -1,0 +1,21 @@
+## Options
+
+The `options` parameter is an object and it might have the following properties:
+
+#### firstComplete
+
+The `firstComplete` parameter is a function that will be called right after the request is finished and before any other callbacks that are subscribed to the request. 
+
+This function is called before updating of the [State](/reference/state/) object, the `data-ajax-cart-section` sections, the `body` CSS classes, the `data-ajax-cart-bind-state` elements.
+
+The `firstComplete` function will be called with the only parameter — a `requestState` object. The object is described on the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/) page.
+
+#### lastComplete
+
+The `lastComplete` parameter is a function that will be called after the request is finished and after any other callbacks that are subscribed to the request. 
+
+You can use the [`getCartState`](/reference/getCartState/) function to read the [`State`](/reference/state/) object because it is already updated.
+
+Also the `data-ajax-cart-section` sections, the `body` CSS classes, the `data-ajax-cart-bind-state` are updated when the function is called.
+
+The `lastComplete` function will be called with the only parameter — a `requestState` object. The object is described on the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/) page.
