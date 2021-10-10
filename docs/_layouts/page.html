@@ -40,6 +40,15 @@ layout: default
             <section class="scope-markdown">
                 {% include jekyll-docs-theme/anchor_headings.html %}
             </section>
+
+            {% if page.url == reference_url %}
+                <section>
+                    {% include reference-navigation.html
+                        class="list-unstyled pl-0"
+                        anchor_class="nav-link px-0 py-1 d-inline-block"
+                    %}
+                </section>
+            {% endif %}
         </main>
 
         {% if page_url_reference_slice == reference_url %}
