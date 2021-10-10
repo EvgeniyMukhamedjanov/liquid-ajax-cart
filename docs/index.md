@@ -205,7 +205,7 @@ Add a container with the [`data-ajax-cart-form-error`](/reference/data-ajax-cart
 ##### Loading state
 {:.mt-0}
  
-When a user submits a product form, it becomes inactive until the Ajax "Add to cart" request is finished to prevent accidental double submissions.
+When a user submits a product form, it becomes and remains inactive until the Ajax "Add to cart" request is finished to prevent accidental double submissions.
   
 Liquid Ajax Cart adds the [`js-ajax-cart-form-in-progress`](/reference/js-ajax-cart-form-in-progress/) CSS class to the form if the request is in progress so you can show a loading indicator or make the submit button visually disabled.
   
