@@ -43,7 +43,7 @@ links:
       description: Liquid Ajax Cart ajaxifies product forms once it is loaded.
       links:
         - file: data-ajax-cart-form-error
-          description: Add a container with the `data-ajax-cart-form-error` attribute within a product form and Liquid Ajax Cart will put error messages in it.
+          description: The container for product forms error messages.
         - title: .js-ajax-cart-form-in-progress
           file: js-ajax-cart-form-in-progress
           description: Liquid Ajax Cart adds the `js-ajax-cart-form-in-progress` CSS class to the product form when its "Add to cart" request is in progress.
@@ -51,6 +51,7 @@ links:
       file: controls
       links: 
         - file: data-ajax-cart-request-button
+          description: Performs a Cart Ajax API request when a link with the `routes.cart_*_url` or an element with the `data-ajax-cart-request-button` attribute is clicked.
         - file: data-ajax-cart-toggle-class-button
           description: Adds/removes a `body` CSS class on user's click.
     - title: Body CSS classes
@@ -58,16 +59,16 @@ links:
       links: 
         - title: .js-ajax-cart-set
           file: js-ajax-cart-set
-          description: The CSS class is added if Liquid Ajax Cart has been loaded and got information about a user’s cart state.
+          description: Is added if Liquid Ajax Cart has been loaded and got information about the user’s cart state.
         - title: .js-ajax-cart-empty
           file: js-ajax-cart-empty
-          description: The CSS class is added if the cart is empty.
+          description: Is added if the cart is empty.
         - title: .js-ajax-cart-not-empty
           file: js-ajax-cart-not-empty
-          description: The CSS class is added if the cart is not empty.
+          description: Is added if the cart is not empty.
         - title: .js-ajax-cart-request-in-progress
           file: js-ajax-cart-request-in-progress
-          description: The CSS class is added if there are one or more Cart Ajax API requests in progress.
+          description: Is added if there are one or more Cart Ajax API requests in progress.
     - title: State
       file: state
       description: A Javascript object to store the cart and app state.
@@ -75,7 +76,7 @@ links:
         - file: data-ajax-cart-initial-state
           description: The container with the cart state JSON to load the initial state.
         - file: data-ajax-cart-bind-state
-          description: Renders a State property anywhere on a page.
+          description: Renders a cart state property anywhere on a page.
         - title: getCartState()
           file: getCartState
           description: Returns the cart state.
