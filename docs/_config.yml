@@ -82,7 +82,7 @@ links:
           description: Returns the cart state.
         - title: subscribeToCartStateUpdate()
           file: subscribeToCartStateUpdate
-          description: Register your callback to be called when the cart state is updated.
+          description: Registers your callback to be called when the cart state is updated.
     - title: Cart Ajax API requests
       file: requests
       links: 
@@ -103,7 +103,7 @@ links:
           description: Performs `POST /cart/cleear.js` request.
         - title: subscribeToCartAjaxRequests()
           file: subscribeToCartAjaxRequests
-          description: Register your callbacks to be called before and after each Cart Ajax API request.
+          description: Registers your callbacks to be called before and after each Cart Ajax API request.
 
 ui:
   mode: 'light'
