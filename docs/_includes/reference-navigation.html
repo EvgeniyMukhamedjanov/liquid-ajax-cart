@@ -32,17 +32,21 @@
 			<h4><a href="/reference/{{ ref_link.file }}/" class="{{ include.anchor_class }} {% if md_file_name == page.name %} active {% endif %}">
 				{%- if ref_link.title -%} {{ ref_link.title }} {%- else -%} {{ ref_link.file }} {%- endif -%}
 			</a></h4>
+
+			{% if ref_link.description %}
+				<p markdown="1">{{ ref_link.description }}</p>
+			{% endif %}
 			
 			{%- if ref_link.links -%}
 			<ul>
 				{%- for ref_child_link in ref_link.links -%}
 				{%- assign md_file_name = ref_child_link.file | append: '.md' -%}
 				<li>
-					<h5><a href="/reference/{{ ref_child_link.file }}/">
+					<h6><a href="/reference/{{ ref_child_link.file }}/">
 						{%- if ref_child_link.title -%} {{ ref_child_link.title }} {%- else -%} {{ ref_child_link.file }} {%- endif -%}
-					</a></h5>
-					{% if p.description %}
-						<p>{{ p.description }}</p>
+					</a></h6>
+					{% if ref_child_link.description %}
+						<p markdown="1">{{ ref_child_link.description }}</p>
 					{% endif %}
 				</li>
 				{%- endfor -%}
