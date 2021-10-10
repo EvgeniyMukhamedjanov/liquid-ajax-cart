@@ -10,6 +10,11 @@ license:
   docs_url: https://creativecommons.org/licenses/by/3.0/
 
 links:
+  main:
+    - title: Reference
+      url: /reference/
+    - title: Releases
+      url: /releases/
   header:
     - title: GitHub
       icon: github
