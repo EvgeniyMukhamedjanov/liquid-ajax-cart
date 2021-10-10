@@ -34,58 +34,75 @@ links:
     - title: Ajaxified sections
       file: sections
       links:
-        - title: data-ajax-cart-section 
-          file: data-ajax-cart-section
-          description: Liquid Ajax Cart reloads HTML code of the theme sections that marked with the `data-ajax-cart-section` attribute every time when the Shopify cart is changed
-        - title: data-ajax-cart-section-scroll
-          file: data-ajax-cart-section-scroll
+        - file: data-ajax-cart-section
+          description: Liquid Ajax Cart reloads HTML code of the theme sections that marked with the `data-ajax-cart-section` attribute every time when the Shopify cart is changed.
+        - file: data-ajax-cart-section-scroll
           description: Add the `data-ajax-cart-section-scroll` attribute to a scrollable area within a `data-ajax-cart-section` section and the scroll position will not be reset to top every time after HTML is updated.
     - title: Product Forms
       file: product-forms
+      description: Liquid Ajax Cart ajaxifies product forms once it is loaded.
       links:
         - file: data-ajax-cart-form-error
+          description: Add a container with the `data-ajax-cart-form-error` attribute within a product form and Liquid Ajax Cart will put error messages in it.
         - title: .js-ajax-cart-form-in-progress
           file: js-ajax-cart-form-in-progress
+          description: Liquid Ajax Cart adds the `js-ajax-cart-form-in-progress` CSS class to the product form when its "Add to cart" request is in progress.
     - title: Controls
       file: controls
       links: 
         - file: data-ajax-cart-request-button
         - file: data-ajax-cart-toggle-class-button
+          description: Adds/removes a `body` CSS class on user's click.
     - title: Body CSS classes
       file: body-css-classes
       links: 
         - title: .js-ajax-cart-set
           file: js-ajax-cart-set
+          description: The CSS class is added if Liquid Ajax Cart has been loaded and got information about a user’s cart state.
         - title: .js-ajax-cart-empty
           file: js-ajax-cart-empty
+          description: The CSS class is added if the cart is empty.
         - title: .js-ajax-cart-not-empty
           file: js-ajax-cart-not-empty
+          description: The CSS class is added if the cart is not empty.
         - title: .js-ajax-cart-request-in-progress
           file: js-ajax-cart-request-in-progress
+          description: The CSS class is added if there are one or more Cart Ajax API requests in progress.
     - title: State
       file: state
+      description: A Javascript object to store the cart and app state.
       links:
         - file: data-ajax-cart-initial-state
+          description: The container with the cart state JSON to load the initial state.
         - file: data-ajax-cart-bind-state
+          description: Renders a State property anywhere on a page.
         - title: getCartState()
           file: getCartState
+          description: Returns the cart state.
         - title: subscribeToCartStateUpdate()
           file: subscribeToCartStateUpdate
+          description: Register your callback to be called when the cart state is updated.
     - title: Cart Ajax API requests
       file: requests
       links: 
         - title: cartRequestGet()
           file: cartRequestGet
+          description: Performs `GET /cart.js` request.
         - title: cartRequestUpdate()
           file: cartRequestUpdate
+          description: Performs `POST /cart/update.js` request.
         - title: cartRequestAdd()
           file: cartRequestAdd
+          description: Performs `POST /cart/add.js` request.
         - title: cartRequestChange()
           file: cartRequestChange
+          description: Performs `POST /cart/change.js` request.
         - title: cartRequestClear()
           file: cartRequestClear
+          description: Performs `POST /cart/cleear.js` request.
         - title: subscribeToCartAjaxRequests()
           file: subscribeToCartAjaxRequests
+          description: Register your callbacks to be called before and after each Cart Ajax API request.
 
 ui:
   mode: 'light'
