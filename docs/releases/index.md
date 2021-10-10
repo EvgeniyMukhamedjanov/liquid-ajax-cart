@@ -27,7 +27,7 @@ title: Releases
 {%- assign versions_array = versions_joined | split: '|' | sort | reverse -%}
 
 {%- for long_version in versions_array -%}
-{% assign file_version = long_version | replace: "0", "-" | replace: ".---", ".0"  | replace: '.--', '.' | replace '.-', '.' | remove_first: "." | replace "-", "0" %}
+{% assign file_version = long_version | replace: "0", "-" | replace: ".---", ".0"  | replace: ".--", "." | replace: ".-", "." | remove_first: "." | replace: "-", "0" %}
 
 ### {{ file_version }}
 [{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}]({{ release_slice | append: file_version | append: '.js' }})
