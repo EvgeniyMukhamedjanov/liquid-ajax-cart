@@ -39,22 +39,7 @@ layout: default
 
             <section class="scope-markdown">
                 {% include jekyll-docs-theme/anchor_headings.html %}
-                {% if page.url == reference_url %}
-                    
-                        {% include reference-navigation.html
-                            markdown=true
-                        %}
-                   
-                {% endif %}
             </section>
-
-            {% if page.url == reference_url %}
-                <section>
-                    {% include reference-navigation.html
-                        markdown=true
-                    %}
-                </section>
-            {% endif %}
         </main>
 
         {% if page_url_reference_slice == reference_url %}
