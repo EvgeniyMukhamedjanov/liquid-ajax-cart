@@ -15,9 +15,9 @@ title: Releases
 [{{ file.name }}]({{ file.path }})
 
 {%- if file_release_version == '0.1.0' -%}
-* `data-ajax-cart-quantity-button` is removed.</li>
-* `data-ajax-cart-request-button` is added.</li>
-* `cartRequestAdd` and `cartRequestUpdate` functions are added.</li>
+* `data-ajax-cart-quantity-button` is removed.
+* `data-ajax-cart-request-button` is added.
+* `cartRequestAdd` and `cartRequestUpdate` functions are added.
 {%- endif -%}
 
 	{%- endif -%}
