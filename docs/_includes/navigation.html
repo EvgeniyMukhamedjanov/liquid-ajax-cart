@@ -19,12 +19,12 @@
         <nav class="navbar-collapse collapse" role="navigation" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 {% for p in site.links.main %}
-                    <li class="nav-item {% if page.name == p.url %}active{% endif %}">
+                    <li class="nav-item {% if page.url == p.url %}active{% endif %}">
                         <a
                             class="nav-link"
                             href="{{ p.url }}"
                         >
-                            {{ p.title }} {{ page.url }}
+                            {{ p.title }}
                         </a>
                     </li>
                 {% endfor %}
