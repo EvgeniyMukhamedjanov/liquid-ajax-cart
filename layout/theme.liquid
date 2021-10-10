@@ -138,7 +138,7 @@
 
   {{ 'theme.js' | asset_url | script_tag }}
 
-  {% section 'ajax-cart' %}
+  {% section 'my-cart' %}
   {{ 'liquid-ajax-cart.css' | asset_url | stylesheet_tag }}
   
   <script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
@@ -205,11 +205,13 @@
     if ( cartRequestGetButton ) {
       cartRequestGetButton.addEventListener( 'click', () => {
         
-        cartRequestGet().then( data => {
-          console.log('\n\n\n\n');
-          console.log('%c cartRequestGet response ', 'background: #efd81d; color: black; font-weight: bold');
-          console.log( data );
-          console.log('\n\n\n\n');
+        cartRequestGet({
+          'lastComplete': data => {
+            console.log('\n\n\n\n');
+            console.log('%c cartRequestGet response ', 'background: #efd81d; color: black; font-weight: bold');
+            console.log( data );
+            console.log('\n\n\n\n');
+          }
         });
         
       });
@@ -225,11 +227,13 @@
               quantity: 1
             }
           ]  
-        }).then( data => {
-          console.log('\n\n\n\n');
-          console.log('%c cartRequestAdd response ', 'background: #efd81d; color: black; font-weight: bold');
-          console.log( data );
-          console.log('\n\n\n\n');
+        }, {
+          'lastComplete': data => {
+            console.log('\n\n\n\n');
+            console.log('%c cartRequestAdd response ', 'background: #efd81d; color: black; font-weight: bold');
+            console.log( data );
+            console.log('\n\n\n\n');
+          }
         })
       });
     }
@@ -244,11 +248,13 @@
           cartRequestChange({ 
             id: firstItemKey,
             quantity: firstItemQuantity - 1
-          }).then( data => {
-            console.log('\n\n\n\n');
-            console.log('%c cartRequestChange response ', 'background: #efd81d; color: black; font-weight: bold');
-            console.log( data );
-            console.log('\n\n\n\n');
+          }, {
+            'lastComplete': data => {
+              console.log('\n\n\n\n');
+              console.log('%c cartRequestChange response ', 'background: #efd81d; color: black; font-weight: bold');
+              console.log( data );
+              console.log('\n\n\n\n');
+            }
           })
         } else {
           console.log('\n\n\n\n');

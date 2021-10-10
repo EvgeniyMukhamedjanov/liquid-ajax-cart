@@ -57,38 +57,33 @@ document.addEventListener('submit', e => {
 	processesAmount.set( form, processesAmountBefore + 1 );
 	updateFormHTML( form );
 
-	let requestState;
-	cartRequestAdd(
-		formData
-	).then( data => {
-		requestState = data;
-	}).catch( data => {
-		requestState = data;
-	}).finally(() => {
-		if ( 'responseData' in requestState ) {
-			if ( !(requestState.responseData.ok) ) {
-				if ( 'description' in requestState.responseData.body ) {
-					errorMessage = requestState.responseData.body.description;
-				} else if ( 'message' in requestState.responseData.body ) {
-					errorMessage = requestState.responseData.body.message;
-				} else {
-					errorMessage = `Error ${ requestState.responseData.status }`;
+	cartRequestAdd( formData, {
+		"lastComplete": requestState => {
+			if ( 'responseData' in requestState ) {
+				if ( !(requestState.responseData.ok) ) {
+					if ( 'description' in requestState.responseData.body ) {
+						errorMessage = requestState.responseData.body.description;
+					} else if ( 'message' in requestState.responseData.body ) {
+						errorMessage = requestState.responseData.body.message;
+					} else {
+						errorMessage = `Error ${ requestState.responseData.status }`;
+					}
 				}
+			} else {
+				if ('fetchError' in requestState) { 
+					errorMessage = requestState.fetchError;
+				}
+				// todo: add default error message like "Unknown Error" that will show up if no condition is true
 			}
-		} else {
-			if ('fetchError' in requestState) { 
-				errorMessage = requestState.fetchError;
-			}
-		}
 
-		const processesAmountAfter = processesAmount.get( form );
-		if ( processesAmountAfter > 0 ) {
-			processesAmount.set( form, processesAmountAfter - 1 );
+			const processesAmountAfter = processesAmount.get( form );
+			if ( processesAmountAfter > 0 ) {
+				processesAmount.set( form, processesAmountAfter - 1 );
+			}
+
+			updateFormHTML( form, errorMessage );
 		}
-		// todo check if the previous "then" is not performed, it means there was an error in ajax-api "catch"
-		// most likely internet connection error
-		updateFormHTML( form, errorMessage );
-	});
+	})
 })
 
 function updateFormHTML ( form, errorMessage = '' ) {

@@ -34,14 +34,14 @@ const getEndpoint = ( requestType ) => {
 	return undefined;
 }
 
-const cartRequest = ( requestType, body, firstResultCallback = undefined ) => {
+const cartRequest = ( requestType, body, options = {} ) => {
 	const endpoint = getEndpoint( requestType );
 	let requestBody = undefined;
 	if ( requestType !== REQUEST_GET ) {
 		requestBody = body;
 	}
 	const method = requestType === REQUEST_GET ? 'GET' : 'POST'
-	const resultSubscribers = firstResultCallback === undefined ? [] : [ firstResultCallback ];
+	const resultSubscribers = 'firstComplete' in options ? [ options.firstComplete ] : [];
 	const requestState = {
 		requestType,
 		endpoint
@@ -55,15 +55,16 @@ const cartRequest = ( requestType, body, firstResultCallback = undefined ) => {
 				// the same requestBody will be used in the fetch request, 
 				// so subscriber can make changes in it before the request
 				requestBody
-
-				// if a callback is fired without 'responseData' object in the payload, 
-				// it means this is a callback before request is started
 			}, resultCallback => resultSubscribers.push( resultCallback ));
 		} catch (e) {
 			console.error('Liquid Ajax Cart: Error during Ajax request subscriber callback in ajax-api');
 			console.error(e);
 		}
-	})
+	});
+
+	if ( 'lastComplete' in options ) {
+		resultSubscribers.push( options.lastComplete );
+	}
 
 	requestState.requestBody = requestBody;
 
@@ -84,7 +85,7 @@ const cartRequest = ( requestType, body, firstResultCallback = undefined ) => {
 		}
 	}
 
-	return fetch( 
+	fetch( 
 		endpoint, 
 		fetchPayload
 	).then( response => {
@@ -124,7 +125,7 @@ const cartRequest = ( requestType, body, firstResultCallback = undefined ) => {
 		console.error('Liquid Ajax Cart: Error while performing cart Ajax request')
 		console.error(error);
 		requestState.fetchError = error;
-		throw requestState;
+		// throw requestState;
 	}).finally(() => {
 		resultSubscribers.forEach( callback => {
 			try {
@@ -137,24 +138,24 @@ const cartRequest = ( requestType, body, firstResultCallback = undefined ) => {
 	});
 }
 
-const cartRequestGet = ( firstResultCallback ) => {
-	return cartRequest( REQUEST_GET, undefined, firstResultCallback );
+const cartRequestGet = ( options ) => {
+	cartRequest( REQUEST_GET, undefined, options );
 }
 
-const cartRequestAdd = ( body, firstResultCallback ) => {
-	return cartRequest( REQUEST_ADD, body, firstResultCallback );
+const cartRequestAdd = ( body, options ) => {
+	cartRequest( REQUEST_ADD, body, options );
 }
 
-const cartRequestChange = ( body, firstResultCallback ) => {
-	return cartRequest( REQUEST_CHANGE, body, firstResultCallback );
+const cartRequestChange = ( body, options ) => {
+	cartRequest( REQUEST_CHANGE, body, options );
 }
 
-const cartRequestUpdate = ( body, firstResultCallback ) => {
-	return cartRequest( REQUEST_UPDATE, body, firstResultCallback );
+const cartRequestUpdate = ( body, options ) => {
+	cartRequest( REQUEST_UPDATE, body, options );
 }
 
-const cartRequestClear = ( firstResultCallback ) => {
-	return cartRequest( REQUEST_CLEAR, {}, firstResultCallback );
+const cartRequestClear = ( body, options ) => {
+	cartRequest( REQUEST_CLEAR, body, options );
 }
 
 const subscribeToCartAjaxRequests = ( callback ) => {

@@ -47,7 +47,7 @@
 	color: red;
 }
 
-#shopify-section-ajax-cart > div {
+#shopify-section-my-cart > div {
 	display: flex;
 	flex-direction: column;
 	position: fixed;
@@ -60,7 +60,7 @@
 	transform: translateX(100%);
 	transition:  transform .3s;
 }
-.js-ajax-cart-open #shopify-section-ajax-cart > div {
+.js-ajax-cart-open #shopify-section-my-cart > div {
 	transform: translateX(0);	
 }
 
@@ -81,7 +81,7 @@
 	body.js-ajax-cart-open {
 		padding-right: 500px;
 	}
-	#shopify-section-ajax-cart > div {
+	#shopify-section-my-cart > div {
 		top:  0;
 	}
 	.js-ajax-cart-open .header-bar {
@@ -90,15 +90,15 @@
 }
 
 /* Header */
-#shopify-section-ajax-cart > div > div:first-child {
+#shopify-section-my-cart > div > div:first-child {
 	padding: 40px 30px 20px;
 	flex: 0 0 auto;
 	position: relative;
 }
-#shopify-section-ajax-cart > div > div:first-child h2 {
+#shopify-section-my-cart > div > div:first-child h2 {
 	margin-bottom: 0;
 }
-.js-ajax-cart-request-in-progress #shopify-section-ajax-cart > div > div:first-child:before {
+.js-ajax-cart-request-in-progress #shopify-section-my-cart > div > div:first-child:before {
 	content: '';
     position: absolute;
     top: 46px;
@@ -123,28 +123,28 @@
 }
 
 /* Content */
-#shopify-section-ajax-cart > div > div:nth-child(2) {
+#shopify-section-my-cart > div > div:nth-child(2) {
 	flex: 1 1 auto;
 	min-height: 1px;
     overflow: auto;
     margin: 0 15px 0 0;
     padding: 0 15px 0 30px;
 }
-#shopify-section-ajax-cart > div > div:nth-child(2){ 
+#shopify-section-my-cart > div > div:nth-child(2){ 
 	scrollbar-width: 3px;
 	scrollbar-color: #757575 #ebebeb;
 }
-#shopify-section-ajax-cart > div > div:nth-child(2)::-webkit-scrollbar {
+#shopify-section-my-cart > div > div:nth-child(2)::-webkit-scrollbar {
   	width: 3px;
   	height: 1px;
 }
-#shopify-section-ajax-cart > div > div:nth-child(2)::-webkit-scrollbar-track {
+#shopify-section-my-cart > div > div:nth-child(2)::-webkit-scrollbar-track {
     background: #ebebeb;
 }
-#shopify-section-ajax-cart > div > div:nth-child(2)::-webkit-scrollbar-thumb {
+#shopify-section-my-cart > div > div:nth-child(2)::-webkit-scrollbar-thumb {
     background: #757575;
 }
-.js-ajax-cart-request-in-progress #shopify-section-ajax-cart > div > div:nth-child(2) {
+.js-ajax-cart-request-in-progress #shopify-section-my-cart > div > div:nth-child(2) {
 	opacity: .6;
 }
 
@@ -162,7 +162,7 @@
 }
 
 /* Footer */
-#shopify-section-ajax-cart > div > div:last-child {
+#shopify-section-my-cart > div > div:last-child {
 	flex: 0 0 auto;
 }
 
