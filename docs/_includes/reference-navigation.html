@@ -4,7 +4,7 @@
 			{%- for ref_link in site.links.reference -%}
 				<li>
 					{%- assign md_file_name = ref_link.file | append: '.md' -%}
-					<a href="/reference/{{ ref_link.file }}/" class="{{ include.anchor_class }} {%- if md_file_name == page.name -%} active {%- endif -%}">
+					<a href="/reference/{{ ref_link.file }}/" class="{{ include.anchor_class }} {% if md_file_name == page.name %} active {% endif %}">
 						{%- if ref_link.title -%} {{ ref_link.title }} {%- else -%} {{ ref_link.file }} {%- endif -%}
 					</a>
 					
@@ -13,7 +13,7 @@
 						{%- for ref_child_link in ref_link.links -%}
 						{%- assign md_file_name = ref_child_link.file | append: '.md' -%}
 						<li>
-							<a href="/reference/{{ ref_child_link.file }}/" class="{{ include.anchor_class }} {%- if md_file_name == page.name -%} active {%- endif -%}">
+							<a href="/reference/{{ ref_child_link.file }}/" class="{{ include.anchor_class }} {% if md_file_name == page.name %} active {% endif %}">
 								{%- if ref_child_link.title -%} {{ ref_child_link.title }} {%- else -%} {{ ref_child_link.file }} {%- endif -%}
 							</a>
 						</li>
@@ -29,7 +29,7 @@
 	{%- if site.links.reference -%}
 		{%- for ref_link in site.links.reference -%}
 			{%- assign md_file_name = ref_link.file | append: '.md' -%}
-			<h3><a href="/reference/{{ ref_link.file }}/" class="{{ include.anchor_class }} {%- if md_file_name == page.name -%} active {%- endif -%}">
+			<h3><a href="/reference/{{ ref_link.file }}/" class="{{ include.anchor_class }} {% if md_file_name == page.name %} active {% endif %}">
 				{%- if ref_link.title -%} {{ ref_link.title }} {%- else -%} {{ ref_link.file }} {%- endif -%}
 			</a></h3>
 			
