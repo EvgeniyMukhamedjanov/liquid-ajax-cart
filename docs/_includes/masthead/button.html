@@ -3,9 +3,6 @@
     class="site-masthead__button mx-2 mb-2"
     {% if include.download %} download {% endif %}
 >
-    <i class="icon">
-        {% assign icon_path = "svg/" | append: include.icon | append: ".svg" %}
-        {% include {{ icon_path }} %}
-    </i>
+    {% include svg-icon.html icon=include.icon %}
     {{ include.title }}
 </a>

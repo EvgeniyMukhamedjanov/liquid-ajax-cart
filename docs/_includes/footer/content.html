@@ -85,10 +85,7 @@
                                     href="{{ link.url }}"
                                     class="site-footer__link"
                                 >
-                                    {% include fa-icon.html
-                                         icon=link.icon
-                                         brand=link.brand
-                                    %}
+                                    {% include svg-icon.html icon=link.icon %}
                                     <span>{{ link.title }}</span>
                                 </a>
                             </li>
