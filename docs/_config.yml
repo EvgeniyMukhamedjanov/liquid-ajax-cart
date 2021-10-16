@@ -54,6 +54,8 @@ links:
           description: Performs a Cart Ajax API request when a link with the `routes.cart_*_url` or an element with the `data-ajax-cart-request-button` attribute is clicked.
         - file: data-ajax-cart-toggle-class-button
           description: Adds/removes a `body` CSS class on user's click.
+        - file: data-ajax-cart-quantity-input
+          Performs a Cart Ajax API request when an input field for a cart item's quantity is changed.
     - title: Body CSS classes
       file: body-css-classes
       links: 
