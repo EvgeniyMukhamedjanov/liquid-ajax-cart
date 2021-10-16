@@ -34,6 +34,10 @@ title: Releases
 ### {{ file_version }}
 <div><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></div>
 
+{%- if file_version == '1.1.0' -%}
+The `data-ajax-cart-quantity-input` is added.
+{%- endif -%}
+
 {%- if file_version == '1.0.0' -%}
 Public release.
 {%- endif -%}
