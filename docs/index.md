@@ -111,13 +111,15 @@ Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute
 
 If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](/reference/data-ajax-cart-section-scroll/) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
     
-##### Controls
+##### Buttons
 
 Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "plus", "minus" and "remove" buttons. They will be ajaxified automatically. 
 
 The `routes.cart_add_url`, `routes.cart_clear_url`, `routes.cart_update_url` are supported as well. See the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) reference for details.
     
-<span class="badge badge-secondary">soon</span> Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-input/) to an input element and it will update the quantity of a cart item if a user changes its value.
+##### Input fields
+    
+Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-input/) attribute to an input element that displays a cart item's quantity to ajaxify it.
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
