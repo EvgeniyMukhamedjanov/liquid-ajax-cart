@@ -117,7 +117,7 @@ Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "plus", "mi
 
 The `routes.cart_add_url`, `routes.cart_clear_url`, `routes.cart_update_url` are supported as well. See the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) reference for details.
     
-##### Input fields
+##### Quantity inputs
     
 Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-input/) attribute to an input element that displays a cart item's quantity to ajaxify it.
  
