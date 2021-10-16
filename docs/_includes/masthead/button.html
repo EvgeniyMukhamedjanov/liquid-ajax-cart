@@ -3,10 +3,6 @@
     class="site-masthead__button mx-2 mb-2"
     {% if include.download %} download {% endif %}
 >
-    {% include fa-icon.html
-         icon=include.icon
-         brand=include.brand
-         class="mr-1"
-    %}
+    <img class="icon" src="/assets/{{ include.icon }}.svg" />
     {{ include.title }}
 </a>
