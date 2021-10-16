@@ -1,6 +1,6 @@
 import { settings } from './settings';
 import { cartRequestChange, cartRequestAdd, cartRequestClear, cartRequestUpdate } from './ajax-api';
-import { getCartState } from './state';
+import { getCartState, subscribeToCartStateUpdate } from './state';
 
 const ACTION_TOGGLE = 'toggle';
 const ACTION_ADD = 'add';
@@ -11,14 +11,56 @@ const ADD_URL = '/cart/add';
 const CLEAR_URL = '/cart/clear';
 const UPDATE_URL = '/cart/update';
 
-document.addEventListener('click', function(e) {
 
-    for (var target = e.target; target && target != this; target = target.parentNode) {
-    	requestButtonClickHandler.call(target, e);
-		toggleClassButtonClickHandler.call(target, e);
-    }
+function initEventListeners() {
+	document.addEventListener('click', function(e) {
+	    for (var target = e.target; target && target != this; target = target.parentNode) {
+	    	requestButtonClickHandler.call(target, e);
+			toggleClassButtonClickHandler.call(target, e);
+	    }
+	}, false);
 
-}, false);
+	document.addEventListener('change', function(e) {
+		quantityInputChangeHandler.call(e.target, e);
+	}, false);
+
+	document.addEventListener("keydown", function(e) {
+		const { quantityInputAttribute } = settings.computed;
+
+		if (e.key === "Enter") {
+			quantityInputChangeHandler.call(e.target, e);
+		}
+
+		if (e.key === "Escape") {
+			quantityInputEscHandler.call(e.target, e);
+		}
+	}, false);
+}
+
+function stateUpdateHandler ( state ) {
+	const { quantityInputAttribute } = settings.computed;
+
+	if ( state.status.requestInProgress ) {
+		document.querySelectorAll(`[${ quantityInputAttribute }]`).forEach( quantityInput => {
+			quantityInput.readOnly = true;
+		})
+	} else {
+		document.querySelectorAll(`[${ quantityInputAttribute }]`).forEach( quantityInput => {
+			
+			// Update all the inputs from state because some of them might be out of ajax-sections
+			if ( state.status.cartStateSet ) {
+				const relatedLineItem = state.cart.items.find( lineItem => lineItem.key === quantityInput.getAttribute( quantityInputAttribute ).trim() );
+				if (relatedLineItem) {
+					quantityInput.value = relatedLineItem.quantity;
+				}
+			}
+
+			quantityInput.readOnly = false;
+		})
+	}
+}
+
+
 
 function requestButtonClickHandler (e) {
 	const { requestButtonAttribute } = settings.computed;
@@ -60,8 +102,12 @@ function requestButtonClickHandler (e) {
 		return;
 	}
 
-
 	e.preventDefault();
+
+	const state = getCartState();
+	if ( state.status.requestInProgress ) {
+		return;
+	}
 
 	const formData = new FormData();
 	url.searchParams.forEach(( value, key ) => {
@@ -83,19 +129,6 @@ function requestButtonClickHandler (e) {
 			break;
 	}
 }
-
-// function quantityButtonClickHandler (e) {
-// 	e.preventDefault();
-// 	const { quantityButtonAttribute } = settings.computed;
-// 	const state = getCartState();
-// 	if ( true || !state.status.requestInProgress ) {
-// 		const [ itemKey, quantity ] = this.getAttribute( quantityButtonAttribute ).split('|');
-// 		cartRequestChange({
-// 			'id': itemKey.trim(),
-// 			'quantity':  parseInt(quantity.trim()),
-// 		});
-// 	}
-// }
 
 function toggleClassButtonClickHandler (e) {
 	const { toggleClassButtonAttribute } = settings.computed;
@@ -133,3 +166,70 @@ function toggleClassButtonClickHandler (e) {
         }
 	}
 }
+
+function quantityInputChangeHandler (e) {
+	const { quantityInputAttribute } = settings.computed;
+
+	if ( !( this.hasAttribute( quantityInputAttribute )) ) {
+		return;
+	}
+
+	e.preventDefault(); // prevent form submission
+
+	const state = getCartState();
+	if ( state.status.requestInProgress ) {
+		return;
+	}
+
+	let value = Number( this.value.trim() );
+	const itemKey = this.getAttribute( quantityInputAttribute ).trim();
+
+	if ( isNaN( value )) {
+		console.error('Liquid Ajax Cart: input value of a data-ajax-cart-quantity-input must be an Integer number');
+		return; 
+	}
+
+	if ( value < 1 ) { 
+		value = 0;
+	}
+
+	if ( !itemKey ) {
+		console.error('Liquid Ajax Cart: attribute value of a data-ajax-cart-quantity-input must be an item key');
+		return;
+	}
+
+	cartRequestChange({
+		'id': itemKey,
+		'quantity':  value,
+	});
+
+	this.blur();
+}
+
+function quantityInputEscHandler (e) {
+	const { quantityInputAttribute } = settings.computed;
+
+	if ( !( this.hasAttribute( quantityInputAttribute )) ) {
+		return;
+	}
+
+	const quantityInput = this;
+	const state = getCartState();
+
+	if ( state.status.cartStateSet ) {
+		const relatedLineItem = state.cart.items.find( lineItem => lineItem.key === quantityInput.getAttribute( quantityInputAttribute ).trim() );
+		if (relatedLineItem) {
+			quantityInput.value = relatedLineItem.quantity;
+		}
+	}
+
+	this.blur();
+}
+
+
+function init () {
+	initEventListeners();
+	subscribeToCartStateUpdate( stateUpdateHandler );
+}
+
+init();

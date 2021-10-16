@@ -8,8 +8,8 @@
 
 <div data-ajax-cart-section>
   <div>
-    <h2>Section "ajax-cart"</h2>
-    <p>The section gets updated after each action because it has a content wrapper with [data-ajax-cart-section] attribute. Liquid Ajax Cart asks Shopify to render new HTML for [data-ajax-cart-section] sections with each API request.</p>
+    <h2>Section "my-cart"</h2>
+    <p>The section gets updated after each action because it has a content wrapper with the <a href="https://liquid-ajax-cart.js.org/reference/data-ajax-cart-section/" target="_blank">data-ajax-cart-section</a> attribute.</p>
   </div>
   <div data-ajax-cart-section-scroll >
     {% for item in cart.items %}
@@ -30,7 +30,13 @@
           >
             <i>-</i>
           </a>
-          {{ item.quantity }}
+          <input 
+            class="my-cart__quantity-input"
+            type="number" 
+            value="{{ item.quantity }}" 
+            min="0" 
+            data-ajax-cart-quantity-input="{{ item.key }}"
+          />
           <a 
             href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
             class="ajax-cart__quantity-button"
@@ -59,3 +65,10 @@
   "name": "My Cart"
 }
 {% endschema %}
+
+{% style %}
+  input.my-cart__quantity-input {
+    width: 65px;
+    display: inline;
+  }
+{% endstyle %}

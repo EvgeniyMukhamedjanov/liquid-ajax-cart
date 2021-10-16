@@ -20,6 +20,7 @@ const configure = ( newSettings = {} ) => {
 		toggleClassButtonAttribute: `${ dataAttributePrefix }-toggle-class-button`,
 		initialStateAttribute: `${ dataAttributePrefix }-initial-state`,
 		sectionScrollAreaAttribute: `${ dataAttributePrefix }-section-scroll`,
+		quantityInputAttribute: `${ dataAttributePrefix }-quantity-input`,
 
 		cartStateSetBodyClass: `${ cssClassesPrefix }-set`,
 		requestInProgressBodyClass: `${ cssClassesPrefix }-request-in-progress`,
