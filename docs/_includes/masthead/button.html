@@ -3,6 +3,8 @@
     class="site-masthead__button mx-2 mb-2"
     {% if include.download %} download {% endif %}
 >
-    <i class="icon mr-2" style="background-image: url('/assets/svg/{{ include.icon }}.svg');" alt="{{ include.title }} icon"></i>
+    <i class="icon">
+        {% include 'svg/' | append: include.icon | append: '.svg' %}
+    </i>
     {{ include.title }}
 </a>
