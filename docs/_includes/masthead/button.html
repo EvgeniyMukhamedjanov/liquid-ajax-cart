@@ -4,7 +4,7 @@
     {% if include.download %} download {% endif %}
 >
     <i class="icon">
-        {% include 'svg/' | append: include.icon | append: '.svg' %}
+        {% include {{ 'svg/' | append: include.icon | append: '.svg' }} %}
     </i>
     {{ include.title }}
 </a>
