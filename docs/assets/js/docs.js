@@ -1,17 +1,17 @@
-$(function() {
-    $('html').toggleClass('no-js js');
+//$(function() {
+    // $('html').toggleClass('no-js js');
 
     // Update sidebar highlighting based on Scrollspy
-    $(window).on('activate.bs.scrollspy', function () {
+    /*$(window).on('activate.bs.scrollspy', function () {
         const spyTarget = $('[data-spy="scroll"]').data('target');
         const $activeSpy = $(spyTarget).find('.nav-link.active');
         const $tree = $activeSpy.parentsUntil('.bs-docs-sidenav', 'li');
 
         $tree.find('> a').addClass('active');
-    });
+    });/
 
     // Toggleable mobile table of contents button
-    $('.toggle-toc').on('click', function () {
+    /*$('.toggle-toc').on('click', function () {
         const $this = $(this);
         const $toc = $("#mobileTOC");
 
@@ -25,5 +25,9 @@ $(function() {
         } else {
             $btn.text('Hide');
         }
-    });
+    });*/
+//});
+
+document.querySelector('[data-nav-toggle]').addEventListener('click', function() {
+    document.querySelector('[data-nav]').classList.toggle('show');
 });
