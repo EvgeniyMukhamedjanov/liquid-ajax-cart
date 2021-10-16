@@ -13,7 +13,7 @@
       Quantity:
       <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
       > Minus one </a>
-      <span>{{ item.quantity }}</span>
+      <input type="number" value="{{ item.quantity }}" data-ajax-cart-quantity-input="{{ item.key }}" />
       <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
       > Plus one </a> <br />
 
