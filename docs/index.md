@@ -31,7 +31,7 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 <div class="col-lg-4">
 <blockquote>
 <h4 class="mt-0">{% include svg-icon.html icon="react" %} React integration</h4>
-For building custom storefronts using React or Preact, Liquid Ajax Cart offers [Ajax Cart API requests](/reference/requests/) and the [State](/reference/state/) — enriched cart object. The "How to" guide will be ready soon.
+<p markdown="1">For building custom storefronts using React or Preact, Liquid Ajax Cart offers [Ajax Cart API requests](/reference/requests/) and the [State](/reference/state/) — enriched cart object. The "How to" guide will be ready soon.</p>
 </blockquote>
 </div>
 </div>
