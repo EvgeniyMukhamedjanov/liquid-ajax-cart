@@ -9,8 +9,6 @@
 <title>{{ pageTitle | strip_html |  escape }}</title>
 <meta name="description" content="{{ pageDescription | strip_html | normalize_whitespace | truncate: 160 | escape }}">
 
-<meta name="yandex-verification" content="6f8ab7a8c27acd7c" />
-
 <link rel="canonical" href="{{ page.url | replace: 'index.html', '' | absolute_url }}">
 <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
 
