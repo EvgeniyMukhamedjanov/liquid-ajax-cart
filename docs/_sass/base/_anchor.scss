@@ -1,4 +1,4 @@
-a {
+a:not(.site-masthead__button) {
     /*
     @include themer(color, (
         'dark': $site-ui-brand-dark,
