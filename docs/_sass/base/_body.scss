@@ -62,6 +62,9 @@ body {
     bottom: 0;
     margin: auto;
     transition: all .3s;
+    @media only screen and (max-width: 767px) {
+        transform: scale(.8);
+    }  
 }
 .video:hover:before {
     transform: scale(.9);
@@ -89,6 +92,10 @@ body {
     margin-top: 0;
     padding-bottom: 0;
     line-height: 1.4;
+    
+    @media only screen and (max-width: 767px) {
+        font-size: 1.5rem;   
+    }   
 }
 
 .video__btn:after {
