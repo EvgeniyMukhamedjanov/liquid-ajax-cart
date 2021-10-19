@@ -44,9 +44,27 @@ body {
     justify-content: space-between;
     min-height: 300px;
     position: relative;
+    color: white;
+}
+.video:before {
+    content: '';
+    position: absolute;
+    width: 179px;
+    height: 168px;
+    background-image: url("data:image/svg+xml,%3Csvg width='179' height='168' viewBox='0 0 179 168' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath opacity='0.2' d='M0 0V168L179 85.5652L0 0Z' fill='%23C4C4C4'/%3E%3C/svg%3E%0A");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
 }
 
-.video__title {
-    border-bottom: none;
+.video__title {   
     color: #CFE0A3;
+}
+h2.video__title {
+    border-bottom: none;
 }
