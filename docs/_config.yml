@@ -131,18 +131,18 @@ ui:
       homepage: 'center'
       page: 'left'
 
-social:
-  github:
-    user: EvgeniyMukhamedjanov
-    repo: liquid-ajax-cart
-  twitter:
-    enabled: false
-    via:
-    hash:
-    account:
-  facebook:
-    enabled: false
-    profileUrl:
+social: false
+#   github:
+#     user: EvgeniyMukhamedjanov
+#     repo: liquid-ajax-cart
+#   twitter:
+#     enabled: false
+#     via:
+#     hash:
+#    account:
+#  facebook:
+#    enabled: false
+#    profileUrl:
 
 disqus: false
 
