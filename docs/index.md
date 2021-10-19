@@ -39,9 +39,11 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 ---
 
 <div style="display: none" class="video mx-n4 p-4">
-	<h2 class="video__title">How to create Ajax-carts in Shopify using "Liquid Ajax Cart" Javascript library</h2>
-	<div><a href="https://youtu.be/5Dl9Wsmq130" class="btn btn-outline-light btn-lg video__btn">Watch video</a></div>
-	<p class="video__subtitle">Complete Ajax-cart from scratch in 10 minutes.</p>
+	<div>
+		<h2 class="video__title">How to create Ajax-carts in Shopify using "Liquid Ajax Cart" Javascript library</h2>
+		<div><a href="https://youtu.be/5Dl9Wsmq130" class="btn btn-outline-light btn-lg video__btn">Watch video</a></div>
+	</div>
+	<div class="video__subtitle">Complete Ajax-cart from scratch in 10 minutes.</div>
 </div>
 
 <div class="{{ row_classes }}">
