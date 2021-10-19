@@ -61,6 +61,11 @@ body {
     right: 0;
     bottom: 0;
     margin: auto;
+    transition: all .3s;
+}
+.video:hover:before {
+    transform: scale(.9);
+    filter: brightness(2);
 }
 
 .video__title,
