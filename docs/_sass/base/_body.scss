@@ -67,12 +67,28 @@ body {
     transform: scale(.9);
     filter: brightness(2);
 }
+.video:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: black;
+    z-index: -1; 
+    transition: all .3s;
+}
+.video:hover:after {
+    transform: scalex(1.02) scaleY(1.1);  
+}
 
 .video__title,
 .scope-markdown h2.video__title {   
     color: #CFE0A3;
     border-bottom: none;
     margin-top: 0;
+    padding-bottom: 0;
+    line-height: 1.4;
 }
 
 .video__btn:after {
