@@ -38,5 +38,15 @@ body {
 }
 
 .video {
-    background-color: #141414;   
+    background-color: #141414;  
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 300px;
+    position: relative;
+}
+
+.video__title {
+    border-bottom: none;
+    color: #CFE0A3;
 }
