@@ -62,9 +62,19 @@ body {
     margin: auto;
 }
 
-.video__title {   
+.video__title,
+.scope-markdown h2.video__title {   
     color: #CFE0A3;
-}
-h2.video__title {
     border-bottom: none;
+    margin-top: 0;
+    font-size: 2.5rem;
+}
+
+.video__button:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
 }
