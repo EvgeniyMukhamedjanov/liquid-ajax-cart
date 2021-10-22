@@ -42,8 +42,6 @@ links:
       file: product-forms
       description: Liquid Ajax Cart ajaxifies product forms once it is loaded.
       links:
-        - file: data-ajax-cart-form-error
-          description: The container for product forms error messages.
         - title: .js-ajax-cart-form-in-progress
           file: js-ajax-cart-form-in-progress
           description: Liquid Ajax Cart adds the `js-ajax-cart-form-in-progress` CSS class to the product form when its "Add to cart" request is in progress.
@@ -56,6 +54,11 @@ links:
           description: Adds/removes a `body` CSS class on user's click.
         - file: data-ajax-cart-quantity-input
           description: Performs a Cart Ajax API request when an input field for a cart item's quantity is changed.
+    - title: Messages
+      file: data-ajax-cart-messages
+      links:
+        - file: data-ajax-cart-messages
+          description: Show errors and messages for forms, cart items and so on.
     - title: Body CSS classes
       file: body-css-classes
       links: 

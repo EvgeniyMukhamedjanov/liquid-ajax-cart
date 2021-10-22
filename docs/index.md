@@ -127,9 +127,13 @@ Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "plus", "mi
 
 The `routes.cart_add_url`, `routes.cart_clear_url`, `routes.cart_update_url` are supported as well. See the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) reference for details.
     
-<h5>Quantity inputs <span class="badge badge-success">new in v1.1.0</span></h5>
+##### Quantity inputs
     
 Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-input/) attribute to an input element that displays a cart item's quantity to ajaxify it.
+
+<h5>Error messages <span class="badge badge-success">new in v1.2.0</span></h5>
+
+Use a container with the [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) attribute to show cart item's error messages.
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -201,10 +205,10 @@ Liquid Ajax Cart ajaxifies product forms once it is loaded.
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-##### Error messages
+<h5>Error messages <span class="badge badge-success">new in v1.2.0</span></h5>
 {:.mt-0}
  
-Add a container with the [`data-ajax-cart-form-error`](/reference/data-ajax-cart-form-error/) attribute within product forms to show error messages.
+Add the [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) attribute with the `form` value to a container within product forms to show error messages.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">

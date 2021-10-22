@@ -11,7 +11,10 @@
     color: white;
     position: relative;
     background-size: cover;
-    border-radius: 1rem;
+    
+    .container-fluid & {
+        border-radius: 1rem;
+    }
 
     // &::after {
     //     @include themer(background, (
