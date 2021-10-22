@@ -43,7 +43,11 @@
     text-indent: 0;
 }
 
-[data-ajax-cart-form-error] {
+.js-ajax-cart-message {
+	font-size: .8em;
+}
+
+.js-ajax-cart-message--error {
 	color: red;
 }
 

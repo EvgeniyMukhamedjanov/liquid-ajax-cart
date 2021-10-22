@@ -116,16 +116,16 @@ function requestButtonClickHandler (e) {
 
 	switch ( url.pathname ) {
 		case ADD_URL:
-			cartRequestAdd( formData );
+			cartRequestAdd( formData, { info: { initiator: this }} );
 			break;
 		case CHANGE_URL:
-			cartRequestChange( formData );
+			cartRequestChange( formData, { info: { initiator: this }} );
 			break;
 		case UPDATE_URL:
-			cartRequestUpdate( formData );
+			cartRequestUpdate( formData, { info: { initiator: this }} );
 			break;
 		case CLEAR_URL:
-			cartRequestClear();
+			cartRequestClear( {}, { info: { initiator: this }});
 			break;
 	}
 }
@@ -198,10 +198,11 @@ function quantityInputChangeHandler (e) {
 		return;
 	}
 
-	cartRequestChange({
-		'id': itemKey,
-		'quantity':  value,
-	});
+	const formData = new FormData();
+	formData.set('id', itemKey);
+	formData.set('quantity', value);
+
+	cartRequestChange( formData );
 
 	this.blur();
 }

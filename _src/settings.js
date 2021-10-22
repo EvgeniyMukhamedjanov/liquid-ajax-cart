@@ -2,7 +2,17 @@ const cssClassesPrefix = 'js-ajax-cart';
 const dataAttributePrefix = 'data-ajax-cart';
 
 const defaultSettings = {
-	productFormsFilter: formNode => true
+	productFormsFilter: formNode => true,
+	messageBuilder: messages => {
+		let result = '';
+		messages.forEach( element => {
+			result += `<div class="${ cssClassesPrefix }-message ${ cssClassesPrefix }-message--${ element.type }">${ element.text }</div>`;
+		})
+		return result;
+	},
+
+	lineItemQuantityErrorText: 'You can\'t add more of this item to your cart',
+	requestErrorText: 'There was an error while updating your cart. Please try again.',
 }
 
 let settings = {};
@@ -21,6 +31,7 @@ const configure = ( newSettings = {} ) => {
 		initialStateAttribute: `${ dataAttributePrefix }-initial-state`,
 		sectionScrollAreaAttribute: `${ dataAttributePrefix }-section-scroll`,
 		quantityInputAttribute: `${ dataAttributePrefix }-quantity-input`,
+		messagesAttribute: `${ dataAttributePrefix }-messages`,
 
 		cartStateSetBodyClass: `${ cssClassesPrefix }-set`,
 		requestInProgressBodyClass: `${ cssClassesPrefix }-request-in-progress`,

@@ -40,7 +40,8 @@ const cartRequest = ( requestType, body, options = {} ) => {
 	if ( requestType !== REQUEST_GET ) {
 		requestBody = body;
 	}
-	const method = requestType === REQUEST_GET ? 'GET' : 'POST'
+	const method = requestType === REQUEST_GET ? 'GET' : 'POST';
+	const info = options.info || {};
 	const resultSubscribers = 'firstComplete' in options ? [ options.firstComplete ] : [];
 	const requestState = {
 		requestType,
@@ -52,6 +53,7 @@ const cartRequest = ( requestType, body, options = {} ) => {
 			callback({
 				requestType,
 				endpoint,
+				info,
 				// the same requestBody will be used in the fetch request, 
 				// so subscriber can make changes in it before the request
 				requestBody
@@ -67,6 +69,7 @@ const cartRequest = ( requestType, body, options = {} ) => {
 	}
 
 	requestState.requestBody = requestBody;
+	requestState.info = info;
 
 	const fetchPayload = {
 		method
@@ -169,5 +172,6 @@ export {
 	cartRequestGet, 
 	cartRequestUpdate, 
 	subscribeToCartAjaxRequests, 
-	REQUEST_ADD 
+	REQUEST_ADD,
+	REQUEST_CHANGE
 }

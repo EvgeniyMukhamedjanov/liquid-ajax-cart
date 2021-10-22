@@ -2,6 +2,7 @@ import './dom-binder';
 import './sections';
 import './controls';
 import './product-forms';
+import './messages';
 import './global-classes';
 
 export { configure } from './settings';

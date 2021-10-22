@@ -214,7 +214,7 @@
             <button type="submit" name="add" id="AddToCart" class="btn {{ btn_class }}{% if section.settings.enable_payment_button and product.selling_plan_groups == empty %} btn--secondary{% endif %}">
               <span id="AddToCartText">{{ 'products.product.add_to_cart' | t }}</span>
             </button>
-            <div><small data-ajax-cart-form-error=""></small></div>
+            <div data-ajax-cart-messages="form"></div>
             {% if section.settings.enable_payment_button %}
               {{ form | payment_button }}
             {% endif %}

@@ -7,7 +7,7 @@ document.addEventListener('submit', e => {
 
 	const form = e.target;
 	let processesAmountBefore;
-	let errorMessage = '';
+	// let errorMessage = '';
 
 	const formActionUrl = new URL(e.target.action);
 	if (formActionUrl.pathname !== '/cart/add') {
@@ -59,41 +59,44 @@ document.addEventListener('submit', e => {
 
 	cartRequestAdd( formData, {
 		"lastComplete": requestState => {
-			if ( 'responseData' in requestState ) {
-				if ( !(requestState.responseData.ok) ) {
-					if ( 'description' in requestState.responseData.body ) {
-						errorMessage = requestState.responseData.body.description;
-					} else if ( 'message' in requestState.responseData.body ) {
-						errorMessage = requestState.responseData.body.message;
-					} else {
-						errorMessage = `Error ${ requestState.responseData.status }`;
-					}
-				}
-			} else {
-				if ('fetchError' in requestState) { 
-					errorMessage = requestState.fetchError;
-				}
-				// todo: add default error message like "Unknown Error" that will show up if no condition is true
-			}
+			// if ( 'responseData' in requestState ) {
+			// 	if ( !(requestState.responseData.ok) ) {
+			// 		if ( 'description' in requestState.responseData.body ) {
+			// 			errorMessage = requestState.responseData.body.description;
+			// 		} else if ( 'message' in requestState.responseData.body ) {
+			// 			errorMessage = requestState.responseData.body.message;
+			// 		} else {
+			// 			errorMessage = `Error ${ requestState.responseData.status }`;
+			// 		}
+			// 	}
+			// } else {
+			// 	if ('fetchError' in requestState) { 
+			// 		errorMessage = requestState.fetchError;
+			// 	}
+			// 	// todo: add default error message like "Unknown Error" that will show up if no condition is true
+			// }
 
 			const processesAmountAfter = processesAmount.get( form );
 			if ( processesAmountAfter > 0 ) {
 				processesAmount.set( form, processesAmountAfter - 1 );
 			}
 
-			updateFormHTML( form, errorMessage );
+			updateFormHTML( form );
+		},
+		"info": {
+			"initiator": form
 		}
 	})
 })
 
-function updateFormHTML ( form, errorMessage = '' ) {
-	form.querySelectorAll(`[${ settings.computed.productFormsErrorsAttribute }]`).forEach( errorsContainer => {
-		if ( errorMessage ) {
-			errorsContainer.innerText = errorMessage;
-		} else {
-			errorsContainer.innerText = '';
-		}
-	});
+function updateFormHTML ( form ) {
+	// form.querySelectorAll(`[${ settings.computed.productFormsErrorsAttribute }]`).forEach( errorsContainer => {
+	// 	if ( errorMessage ) {
+	// 		errorsContainer.innerText = errorMessage;
+	// 	} else {
+	// 		errorsContainer.innerText = '';
+	// 	}
+	// });
 	
 
 	// const submitButtons = form.querySelectorAll('input[type=submit], button[type=submit]');
