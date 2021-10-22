@@ -62,12 +62,10 @@ body {
     bottom: 0;
     margin: auto;
     transition: all .3s;
-    @media only screen and (max-width: 767px) {
-        transform: scale(.8);
-    }  
+    transform: scale(.8);
 }
 .video:hover:before {
-    transform: scale(.9);
+    transform: scale(.6);
     filter: brightness(2);
 }
 .video:after {
