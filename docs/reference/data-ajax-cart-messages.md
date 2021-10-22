@@ -4,11 +4,11 @@ A container with the `data-ajax-cart-messages` attribute gets populated with err
 
 ## `form`
 
-Add a container with the `data-ajax-cart-messages="form"` attribute within a product form and Liquid Ajax Cart will put the form related messages in it:
+Add a container with the `data-ajax-cart-messages="form"` attribute within a product form and Liquid Ajax Cart will put all form related messages in it:
 
 {% include code/data-ajax-cart-form-error.html %}
 
-## `{{ line_item.key }}`
+## `{% raw %}{{ line_item.key }}{% endraw %}`
 
 Add the `data-ajax-cart-messages` attribute with a cart item's key to a container and Liquid Ajax Cart will populate the container with errors and messages related to the cart item:
 

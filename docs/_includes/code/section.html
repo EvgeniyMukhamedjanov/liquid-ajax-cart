@@ -6,18 +6,22 @@
   <h2>Cart</h2>
   
   <div class="my-cart__items" data-ajax-cart-section-scroll >
-    {% for item in cart.items %}  
-      <a href="{{ item.url }}">{{ item.title }}</a> <br />
-      Price: {{ item.final_price | money }} <br />
+    {% for item in cart.items %}
+      <hr />  
+      <div><a href="{{ item.url }}">{{ item.title }}</a></div>
+      <div>Price: {{ item.final_price | money }}</div>
 
-      Quantity:
-      <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
-      > Minus one </a>
-      <input type="number" value="{{ item.quantity }}" data-ajax-cart-quantity-input="{{ item.key }}" />
-      <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
-      > Plus one </a> <br />
+      <div>
+        Quantity:
+        <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
+        > Minus one </a>
+        <input type="number" value="{{ item.quantity }}" data-ajax-cart-quantity-input="{{ item.key }}" />
+        <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
+        > Plus one </a>
+      </div>
+      <div data-ajax-cart-messages="{{ item.key }}"></div>
 
-      Total: <strong>{{ item.final_line_price | money }}</strong> <br /> <br />  
+      <div>Total: <strong>{{ item.final_line_price | money }}</strong></div>
     {% endfor %}
   </div>
   
