@@ -205,7 +205,7 @@ Liquid Ajax Cart ajaxifies product forms once it is loaded.
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-<h5>Error messages <span class="badge badge-success">new in v1.2.0</span></h5>
+<h5>Error messages <span class="badge badge-info">updated in v1.2.0</span></h5>
 {:.mt-0}
  
 Add the [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) attribute with the `form` value to a container within product forms to show error messages.
