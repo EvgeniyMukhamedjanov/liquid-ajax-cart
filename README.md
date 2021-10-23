@@ -1,6 +1,6 @@
 # Liquid Ajax Cart — Ajax carts for Shopify
 
-Liquid Ajax Cart — a Javascript library that lets you build Ajax carts using Liquid templates.
+Liquid Ajax Cart — a Javascript library that lets you build Shopify Ajax-carts using Liquid templates.
 
 No Javascript code needed.
 
@@ -12,19 +12,24 @@ No Javascript code needed.
 <div data-ajax-cart-section >
   <h2>Cart</h2>
   
-  {% for item in cart.items %}  
-    <a href="{{ item.url }}">{{ item.title }}</a> <br />
-    Price: {{ item.final_price | money }} <br />
+  <div>
+    {% for item in cart.items %}  
+      <hr/>
+      <div><a href="{{ item.url }}">{{ item.title }}</a></div>
+      <div>Price: {{ item.final_price | money }}</div>
+      <div>
+        Quantity: 
+        <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
+        > Minus one </a>
+        <input type="number" value="{{ item.quantity }}" data-ajax-cart-quantity-input="{{ item.key }}" />
+        <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
+        > Plus one </a>
+      </div>
+      <div data-ajax-cart-messages="{{ item.key }}"></div>
 
-    Quantity: 
-      <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
-      > Minus one </a>
-      {{ item.quantity }}
-      <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
-      > Plus one </a> <br />
-
-    Total: <strong>{{ item.final_line_price | money }}</strong> <br /> <br />  
-  {% endfor %}
+      <div>Total: <strong>{{ item.final_line_price | money }}</strong></div>
+    {% endfor %}
+  </div>
   
   <button> Checkout — {{ cart.total_price | money_with_currency }} </button>
 </div>
