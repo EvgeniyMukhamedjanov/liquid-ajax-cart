@@ -32,7 +32,7 @@ title: Releases
 {% assign file_version = long_version | replace: "0", "-" | replace: ".---", ".0"  | replace: ".--", "." | replace: ".-", "." | remove_first: "." | replace: "-", "0" %}
 
 ### {{ file_version }}
-<div><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></div>
+<p><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></p>
 
 {%- if file_version == '1.2.1' -%}
 The `data-ajax-cart-quantity-input` adds `initiator` property to Ajax requests.
