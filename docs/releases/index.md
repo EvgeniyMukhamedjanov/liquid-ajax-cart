@@ -35,7 +35,7 @@ title: Releases
 <div><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></div>
 
 {%- if file_version == '1.2.1' -%}
-The `data-ajax-cart-quantity-input` adds `initiator` property to Ajax request's `options.info`.
+The `data-ajax-cart-quantity-input` adds `initiator` property to Ajax requests.
 {%- endif -%}
 
 {%- if file_version == '1.2.0' -%}
