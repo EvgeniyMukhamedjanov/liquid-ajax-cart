@@ -202,7 +202,7 @@ function quantityInputChangeHandler (e) {
 	formData.set('id', itemKey);
 	formData.set('quantity', value);
 
-	cartRequestChange( formData );
+	cartRequestChange( formData, { info: { initiator: this }} );
 
 	this.blur();
 }

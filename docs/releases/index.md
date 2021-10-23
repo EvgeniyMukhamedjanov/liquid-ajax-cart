@@ -34,14 +34,17 @@ title: Releases
 ### {{ file_version }}
 <div><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></div>
 
+{%- if file_version == '1.2.1' -%}
+The `data-ajax-cart-quantity-input` adds `initiator` property to Ajax request's `options.info`.
+{%- endif -%}
+
 {%- if file_version == '1.2.0' -%}
 * The `info` property is accepted within the `options` parameter of the `cartRequest*` functions.
 * All the controls and product forms add the `initiator` property for any request.
-* The `data-ajax-cart-quantity-input` sends data in the `FormData` object.
+* The `data-ajax-cart-quantity-input` sends data as the `FormData` object.
 * The `data-ajax-cart-form-error` attribute is remove.
 * The `data-ajax-cart-messages` attribute is added.
 * The `messageBuilder`, `lineItemQuantityErrorText` and `requestErrorText` coniguration options are added.
-
 {%- endif -%}
 
 {%- if file_version == '1.1.0' -%}
