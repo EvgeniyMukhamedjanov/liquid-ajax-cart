@@ -1,7 +1,7 @@
 ---
 layout: full
 homepage: true
-description: A Javascript library for building Ajax carts using Liquid templates in Shopify
+description: A Javascript library for building Shopify Ajax carts using Liquid templates
 disable_anchors: true
 title: Liquid Ajax Cart — Ajax Cart for Shopify
 ---
@@ -40,10 +40,10 @@ Add the `data-ajax-cart-section` attribute to your cart liquid section and Liqui
 
 <div class="video mx-n5 py-4 px-5 mb-5">
 	<div>
-		<h2 class="video__title">How to create Ajax-carts in Shopify <br/>using "Liquid Ajax Cart" Javascript library</h2>
+		<h2 class="video__title">How to create Shopify Ajax-carts <br/>using "Liquid Ajax Cart" Javascript library</h2>
 		<div class="mb-5"><a href="https://youtu.be/5Dl9Wsmq130" target="_blank" class="site-masthead__button video__btn">Watch on Youtube</a></div>
 	</div>
-	<div class="video__subtitle">Complete Ajax-cart from scratch in 10 minutes.</div>
+	<div class="video__subtitle">Complete Shopify Ajax-cart from scratch in 10 minutes.</div>
 </div>
 
 <div class="{{ row_classes }}">
