@@ -58,7 +58,7 @@ links:
       file: data-ajax-cart-messages
       links:
         - file: data-ajax-cart-messages
-          description: Show errors and messages for forms, cart items and so on.
+          description: Shows errors for product forms and cart items.
     - title: Body CSS classes
       file: body-css-classes
       links: 
