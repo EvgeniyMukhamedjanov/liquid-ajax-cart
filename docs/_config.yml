@@ -58,7 +58,7 @@ links:
       file: data-ajax-cart-messages
       links:
         - file: data-ajax-cart-messages
-          description: Shows errors for product forms and cart items.
+          description: Shows error messages for product forms and cart items.
     - title: Body CSS classes
       file: body-css-classes
       links: 
@@ -109,6 +109,22 @@ links:
         - title: subscribeToCartAjaxRequests()
           file: subscribeToCartAjaxRequests
           description: Registers your callbacks to be called before and after each Cart Ajax API request.
+        - title: Request state
+          file: requestState
+          description: A Javascript object with information about each Cart Ajax API request.
+    - title: configure()
+      file: configure
+      description: The function to set configuration parameters.
+      links:
+        - file: productFormsFilter
+          description: Sets which product forms shouldn't be ajaxified.
+        - file: messageBuilder
+          description: Sets HTML layout and the logic for `data-ajax-cart-messages` messages.
+        - file: lineItemQuantityErrorText
+          description: Configures the error message text when a user tries to set a cart item's quantity higher than the available quantity of the product.
+        - file: requestErrorText
+          description: To set the error message text when a Cart Ajax API request is not successful and doesn't have any error descriptions, or if the request is not performed.
+
 
 ui:
   mode: 'light'

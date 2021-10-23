@@ -406,7 +406,7 @@ Use these function instead of direct Cart API calls and Liquid Ajax Cart will ke
 ### Get Cart State JSON
 {:.mt-0}
  
-State is a Javascript object where Liquid Ajax Cart keeps the information related to user's cart.
+[State](/reference/state/) is a Javascript object where Liquid Ajax Cart keeps the information related to user's cart.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">

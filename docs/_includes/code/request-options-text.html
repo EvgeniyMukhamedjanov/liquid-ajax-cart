@@ -8,7 +8,7 @@ The `firstComplete` parameter is a function that will be called right after the 
 
 This function is called before updating of the [State](/reference/state/) object, the `data-ajax-cart-section` sections, the `body` CSS classes, the `data-ajax-cart-bind-state` elements.
 
-The `firstComplete` function will be called with the only parameter — a `requestState` object. The object is described on the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/) page.
+The `firstComplete` function will be called with the only parameter — the [Request state](/reference/requestState) object.
 
 #### lastComplete
 
@@ -18,4 +18,8 @@ You can use the [`getCartState`](/reference/getCartState/) function to read the 
 
 Also the `data-ajax-cart-section` sections, the `body` CSS classes, the `data-ajax-cart-bind-state` are updated when the function is called.
 
-The `lastComplete` function will be called with the only parameter — a `requestState` object. The object is described on the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/) page.
+The `lastComplete` function will be called with the only parameter — the [Request state](/reference/requestState) object.
+
+#### info
+
+The `info` parameter is a simple Javascript object that will be attached to the [Request state](/reference/requestState) object. You can add your own data to the request state using the `info` parameter. For example [Product forms](/reference/product-forms/) and [Controls](/reference/controls/) that send Cart Ajax API requests attach the `initiator` property to the `info` parameter.
