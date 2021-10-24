@@ -197,7 +197,7 @@ body.js-ajax-cart-request-in-progress .my-cart__items {
 ### Enhance product forms
 {:.mt-0}
  
-Liquid Ajax Cart ajaxifies product forms once it is loaded.
+Liquid Ajax Cart ajaxifies all product forms once it is loaded. <br/> If you want to exclude some of them — use the [`productFormsFilter`](/reference/productFormsFilter/) configuration parameter.
 
 </div>
 </div>
