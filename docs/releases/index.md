@@ -34,6 +34,11 @@ title: Releases
 ### {{ file_version }}
 <p><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></p>
 
+{%- if file_version == '1.3.0' -%}
+* The `window.liquidAjaxCart` object is available.
+* Liquid Ajax Cart works correctly even if it is included more than once on a page.
+{%- endif -%}
+
 {%- if file_version == '1.2.1' -%}
 The `data-ajax-cart-quantity-input` adds `initiator` property to Ajax requests.
 {%- endif -%}
