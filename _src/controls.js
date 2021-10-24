@@ -228,9 +228,9 @@ function quantityInputEscHandler (e) {
 }
 
 
-function init () {
+function cartControlsInit () {
 	initEventListeners();
 	subscribeToCartStateUpdate( stateUpdateHandler );
 }
 
-init();
+export { cartControlsInit }

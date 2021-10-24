@@ -4,6 +4,8 @@ import { settings } from './settings';
 const queryCounter = {
 	all: 0
 	/**
+	 * for the future
+	 * 
 	 * 'item_key': {
 	 * 		quantity: 0,
 	 * 		properties: 0,
@@ -18,7 +20,7 @@ let status = {
 	cartStateSet: false,
 };
 
-const init = () => {
+const cartStateInit = () => {
 
 	subscribeToCartAjaxRequests(( data, subscribeToResult ) => {		
 		beforeRequestHandler( data )
@@ -113,6 +115,4 @@ const notify = () => {
 	})
 }
 
-init();
-
-export { subscribeToCartStateUpdate, getCartState };
+export { cartStateInit, subscribeToCartStateUpdate, getCartState };

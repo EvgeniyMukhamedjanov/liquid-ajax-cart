@@ -171,7 +171,7 @@ const getRequestError = (requestState) => {
 	}
 }
 
-const init = () => {
+const cartMessagesInit = () => {
 	subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
 		const handlers = {};
 		handlers[REQUEST_ADD] = addRequestHandler;
@@ -183,4 +183,4 @@ const init = () => {
 	});
 };
 
-init();
+export { cartMessagesInit }

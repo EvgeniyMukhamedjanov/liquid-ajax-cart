@@ -42,8 +42,9 @@ const updateClasses = state => {
 	}
 }
 
-const init = () => {
+const cartGlobalClassesInit = () => {
 	subscribeToCartStateUpdate( updateClasses );
 	updateClasses( getCartState() );
 }
-init();
+
+export { cartGlobalClassesInit }

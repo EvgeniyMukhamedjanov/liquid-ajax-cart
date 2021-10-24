@@ -73,8 +73,9 @@ const formatters = {
 	}
 }
 
-const init = () => {
+const cartDomBinderInit = () => {
 	subscribeToCartStateUpdate( updateDOM );
 	updateDOM( getCartState() );
 }
-init();
+
+export { cartDomBinderInit }

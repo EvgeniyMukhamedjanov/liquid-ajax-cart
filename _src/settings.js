@@ -41,6 +41,5 @@ const configure = ( newSettings = {} ) => {
 
 	};
 }
-configure();
 
 export { settings, configure };
