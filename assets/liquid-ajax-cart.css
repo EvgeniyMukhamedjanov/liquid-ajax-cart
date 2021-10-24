@@ -2,6 +2,19 @@
 	padding-top: 47px;
 }
 
+#shopify-section-featured-product {
+  border: 1px solid rgba(27,30,47,.15);
+  padding-left: 17.5px;
+  padding-right: 17.5px;
+}
+@media screen and (min-width: 769px) {
+  #shopify-section-featured-product {
+    padding-left: 27.5px;
+    padding-right: 27.5px;
+  }
+}
+
+
 .ajax-cart__quantity-button {
 	border: none;
 	width: 24px;

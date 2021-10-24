@@ -177,9 +177,15 @@
             </form>
           {% endunless %}
 
+          <div class="product-description rte" itemprop="description">
+            {{ product.description }}
+          </div>
+
+          {% comment %}
           <a class="product-single__full-details text-link"{% unless section_onboarding %} href="{{ product.url }}?variant={{ variant.id }}"{% endunless %}>
             {{ 'products.product.full_details' | t }} &#x2192;
           </a>
+          {% endcomment %}
 
           {% if section.settings.social_sharing %}
             <hr class="hr--clear hr--small">

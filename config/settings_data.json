@@ -139,7 +139,7 @@
       "featured-product": {
         "type": "featured-product",
         "settings": {
-          "featured_product": "unlimited-product",
+          "featured_product": "limited-product",
           "product_vendor_enable": false,
           "product_quantity_enable": true,
           "product_image_zoom_type": "no-zoom",
@@ -170,10 +170,6 @@
           "show_sale_circle": false,
           "center_grid_link": false
         }
-      },
-      "ajax-cart": {
-        "type": "ajax-cart",
-        "settings": {}
       },
       "1632428792c98f42b1": {
         "type": "custom-html",
@@ -210,9 +206,22 @@
         "settings": {
           "custom_html": "<h2>cartRequestChange<\/h2><p><button class=\"btn\" id=\"cartRequestChangeButton\">Decrease<\/button> — decreases amount of the first item by one.<\/p>"
         }
+      },
+      "my-cart": {
+        "type": "my-cart",
+        "settings": {}
+      },
+      "163511092542400c8a": {
+        "type": "rich-text",
+        "settings": {
+          "section_title": "Product forms",
+          "text": "<p><a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/product-forms\/\" target=\"_blank\">Product forms<\/a> are ajaxified automatically.<\/p><p>Form errors are put in a container that has the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-messages\/\" target=\"_blank\" title=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-messages\/\">data-ajax-cart-messages<\/a> attribute with the \"<em>form<\/em>\" value.<\/p><p>The submit button's loading indicator is connected to the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/js-ajax-cart-form-in-progress\/\" target=\"_blank\" title=\"https:\/\/liquid-ajax-cart.js.org\/reference\/js-ajax-cart-form-in-progress\/\">js-ajax-cart-form-in-progress<\/a> CSS class.<\/p>",
+          "text_size": "medium"
+        }
       }
     },
     "content_for_index": [
+      "163511092542400c8a",
       "featured-product",
       "1632428792c98f42b1",
       "16324720968dae6a91",
