@@ -27,7 +27,7 @@
 }
 
 .site-footer__link {
-    border-bottom: 0;
+    border-bottom: 0 !important;
 
     span {
         border-bottom: 1px dashed currentColor;

@@ -8,38 +8,42 @@ layout: default
 <div class="container">
     <div class="row">
         <main class="col-md-9 order-md-2 layout-page__main">
-            <section class="mobile-toc border mb-3 p-3 d-md-none">
-                <div class="d-flex align-items-center">
-                    <h2 class="mb-0">Table of Contents</h2>
+            {% if page_url_reference_slice != reference_url %}
+                <section class="mobile-toc border mb-3 p-3 d-md-none">
+                    <div class="d-flex align-items-center">
+                        <h2 class="mb-0">Table of Contents</h2>
 
-                    <button
-                        class="js-only ml-2 toggle-toc"
-                        aria-controls="mobileTOC"
-                        aria-label="Toggle table of contents"
-                        aria-expanded="true"
-                    >
-                        <span aria-hidden="true" data-role="toggle">Hide</span>
-                    </button>
-                </div>
-
-                {% if page_url_reference_slice == reference_url %}
-                    {% if page.url.size > reference_url.size %}
-                        {% include reference-navigation.html
-                             class="js-toc mb-0 mt-2"
-                             id="mobileTOC"
-                        %}
-                    {% endif %}
-                {% else %}
+                        <button
+                            class="js-only ml-2 toggle-toc"
+                            aria-controls="mobileTOC"
+                            aria-label="Toggle table of contents"
+                            aria-expanded="true"
+                        >
+                            <span aria-hidden="true" data-role="toggle">Hide</span>
+                        </button>
+                    </div>
                     {% include jekyll-docs-theme/toc.html
                          class="js-toc.mb-0.mt-2"
                          id="mobileTOC"
                     %}
-                {% endif %}
-            </section>
+                </section>
+            {% endif %}
 
             <section class="scope-markdown">
                 {% include jekyll-docs-theme/anchor_headings.html %}
             </section>
+
+            {% if page_url_reference_slice == reference_url and page.url.size > reference_url.size %}
+                <section class="mobile-toc border mb-3 p-3 d-md-none">
+                    <div class="d-flex align-items-center">
+                        <h2 class="mb-0">Reference</h2>
+                    </div>
+                    {% include reference-navigation.html
+                         class="js-toc mb-0 mt-2"
+                         id="mobileTOC"
+                    %}
+                </section>
+            {% endif %}
         </main>
 
         {% if page_url_reference_slice == reference_url %}
