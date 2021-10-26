@@ -344,7 +344,7 @@ Use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/)
 
  ```html
 <script type="module">
-  import { subscribeToCartAjaxRequests, getCartState } from {% include code/last-release-file-name.html asset_url=true %}
+  import { subscribeToCartAjaxRequests } from {% include code/last-release-file-name.html asset_url=true %}
 
   subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {    
     // This function will be called before each Ajax Cart API request
