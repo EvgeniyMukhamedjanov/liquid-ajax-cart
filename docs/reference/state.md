@@ -24,10 +24,10 @@ The [`js-ajax-cart-set`](/reference/js-ajax-cart-set/) CSS class will be added t
 
 ##### `requestInProgress`
 
-The `status.cartStateSet` is `true` if there are one or more [Cart Ajax API requests](/reference/requests/) in progress.
+The `status.requestInProgress` is `true` if there are one or more [Cart Ajax API requests](/reference/requests/) in progress.
 
 If the property is `true`:
-  * [controls](/reference/controls/) become inactive,
+  * some [controls](/reference/controls/) become inactive,
   * the [`js-ajax-cart-request-in-progress`](/reference/js-ajax-cart-request-in-progress/) CSS class will be added to the `body` tag.
 
 ## Interactions
