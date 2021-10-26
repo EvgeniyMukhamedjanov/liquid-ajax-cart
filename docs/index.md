@@ -346,13 +346,13 @@ Use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/)
 <script type="module">
   import { subscribeToCartAjaxRequests, getCartState } from {% include code/last-release-file-name.html asset_url=true %}
 
-  subscribeToCartAjaxRequests(( data, subscribeToResult ) => {    
+  subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {    
     // This function will be called before each Ajax Cart API request
-    console.log( 'Before: ', data );
+    console.log( 'Before: ', requestState );
  
-    subscribeToResult( data => {   
+    subscribeToResult( requestState => {   
       // This function will be called after the request is finished
-      console.log( 'After: ', data );
+      console.log( 'After: ', requestState );
     })
   })
 </script>
