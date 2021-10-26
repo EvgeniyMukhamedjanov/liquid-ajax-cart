@@ -34,7 +34,7 @@ Two parameters will be passed to the callback function:
     The result-callback will be called with the only one parameter — the [Request state](/reference/requestState/) object with information about the request.
 
 ##### Use with the state
-The [getCartState](/reference/getCartState) might be used within your callbacks:
+The [getCartState](/reference/getCartState/) might be used within your callbacks:
 
 ```html
 <script type="module">
