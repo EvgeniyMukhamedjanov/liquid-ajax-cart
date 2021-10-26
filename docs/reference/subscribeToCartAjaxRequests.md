@@ -51,7 +51,7 @@ The [getCartState](/reference/getCartState/) might be used within your callbacks
       const itemCountBefore = state.status.cartStateSet ? state.cart.item_count : undefined;
 
       subscribeToResult( data => {
-        if ( "responseBody" in data && data.responseBody.ok )
+        if ( data.responseBody?.ok )
           const state = getCartState();
           const itemCountAfter = state.status.cartStateSet ? state.cart.item_count : undefined;
           // to get itemCountAfter after "Add to cart" request you can also use data.extraResponseData.body.item_count 
