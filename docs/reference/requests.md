@@ -1,6 +1,6 @@
 # Cart Ajax API requests
 
-It is highly recommended to use the following functions to make Cart Ajax API calls so Liquid Ajax Cart will keep the [State](/reference/state/), [cart sections](/reference/sections/), [body CSS classes](/reference/body-css-classes) and [`data-ajax-cart-bind-state`] content up to date:
+It is highly recommended to use the following functions to make Cart Ajax API calls so Liquid Ajax Cart will keep the [State](/reference/state/), [cart sections](/reference/sections/), [body CSS classes](/reference/body-css-classes/) and [`data-ajax-cart-bind-state`](/reference/data-ajax-cart-bind-state/) content up to date:
 
 * [`cartRequestGet`](/reference/cartRequestGet/) — sends a request to the `GET /cart.js` endpoint;
 * [`cartRequestAdd`](/reference/cartRequestAdd/) — to the `POST /cart/add.js` endpoint;
