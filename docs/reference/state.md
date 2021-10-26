@@ -14,7 +14,7 @@ Contains JSON versions of the Shopify [`cart`](https://shopify.dev/api/liquid/ob
 
 The property data is getting loaded from the [`data-ajax-cart-initial-state`](/reference/data-ajax-cart-initial-state/) script.
 
-The property gets updated after each successful [Cart Ajax API request](/reference/requests).
+The property gets updated after each successful [Cart Ajax API request](/reference/requests/).
 
 ##### `status.cartStateSet`
 
@@ -32,6 +32,6 @@ If the property is `true`:
 
 ## Interactions
 
-Use the [`getCartState`](/reference/getCartState) function to get the current state.
+Use the [`getCartState`](/reference/getCartState/) function to get the current state.
 
 If you want to run your Javascript code after the state is updated — use the [`subscribeToCartStateUpdate`](/reference/subscribeToCartStateUpdate/) function.
