@@ -35,7 +35,7 @@ title: Releases
 <p><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></p>
 
 {%- if file_version == '1.4.0' -%}
-The `data-ajax-cart-section` updated so it can be added not to a root HTML container of a section, thus only a part of the section will be updated.
+If the `data-ajax-cart-section` is added not to a root HTML container then only the container with the attribute will be updated, not the whole section.
 {%- endif -%}
 
 {%- if file_version == '1.3.0' -%}
