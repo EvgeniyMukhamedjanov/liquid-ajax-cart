@@ -34,6 +34,10 @@ title: Releases
 ### {{ file_version }}
 <p><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></p>
 
+{%- if file_version == '1.4.0' -%}
+The `data-ajax-cart-section` updated so it can be added not to a root HTML container of a section, thus only a part of the section will be updated.
+{%- endif -%}
+
 {%- if file_version == '1.3.0' -%}
 * The `window.liquidAjaxCart` object is available.
 * Liquid Ajax Cart works correctly even if it is included more than once on a page.

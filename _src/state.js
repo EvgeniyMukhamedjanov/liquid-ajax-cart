@@ -44,7 +44,7 @@ const cartStateInit = () => {
 				throw `JSON from ${ settings.computed.initialStateAttribute } script is not correct cart object`;
 			}
 		} catch (e) {
-			console.error(`Can't parse cart JSON from ${ settings.computed.initialStateAttribute } script`);
+			console.error(`Liquid Ajax Cart: can't parse cart JSON from the "${ settings.computed.initialStateAttribute }" script. A /cart.js request will be performed to receive the cart state`);
 			console.error(e);
 			cartRequestGet();
 		}
