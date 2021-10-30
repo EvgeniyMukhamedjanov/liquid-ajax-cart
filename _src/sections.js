@@ -4,10 +4,10 @@ import { settings } from './settings';
 const shopifySectionPrefix = 'shopify-section-';
 
 const cartSectionsInit = () => {
-	subscribeToCartAjaxRequests (( data, subscribeToResult ) => {
+	subscribeToCartAjaxRequests (( requestState, subscribeToResult ) => {
 		const { sectionsAttribute, sectionScrollAreaAttribute } = settings.computed;
 
-		if ( data.requestBody !== undefined ) {
+		if ( requestState.requestBody !== undefined ) {
 			const sectionNames = [];
 			// todo: test with dynamic sections
 			document.querySelectorAll( `[${ sectionsAttribute }]` ).forEach( sectionNodeChild => {
@@ -27,20 +27,20 @@ const cartSectionsInit = () => {
 				}
 			});
 			if ( sectionNames.length ) {
-				if ( data.requestBody instanceof FormData || data.requestBody instanceof URLSearchParams ) {
-					data.requestBody.append('sections', sectionNames.join( ',' ));
+				if ( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) {
+					requestState.requestBody.append('sections', sectionNames.join( ',' ));
 				} else {
-					data.requestBody.sections = sectionNames.join( ',' );
+					requestState.requestBody.sections = sectionNames.join( ',' );
 				}
 			}
 		}
 
-		subscribeToResult( data => {
+		subscribeToResult( requestState => {
 			const { sectionsAttribute, sectionScrollAreaAttribute } = settings.computed;
 			const parser = new DOMParser();
 
-			if ( data.responseData?.ok && 'sections' in data.responseData.body ) {
-				const sections = data.responseData.body.sections;
+			if ( requestState.responseData?.ok && 'sections' in requestState.responseData.body ) {
+				const sections = requestState.responseData.body.sections;
 				for ( let sectionId in sections ) {
 					if ( !sections[ sectionId ] ) {
 						console.error(`Liquid Ajax Cart: the HTML for the "${ sectionId }" section was requested but the response is ${ sections[ sectionId ] }`)

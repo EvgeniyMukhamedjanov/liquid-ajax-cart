@@ -25,7 +25,7 @@ const computeValue = ( str ) => {
 			if ( formatterName in formatters ) {
 				value = formatters[ formatterName ]( value );
 			} else {
-				// todo: console.log
+				console.error(`Liquid Ajax Cart: the "${ formatterName }" formatter doesn't exist`);
 			}
 			
 		}
