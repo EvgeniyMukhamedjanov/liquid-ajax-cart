@@ -51,7 +51,7 @@ If you want only a specific part of the section to be updatable — apply the `d
 
 In the above example only the `.my-cart__wrapper` container will be replaced with the new one after the Shopify cart is changed. 
 
-It is useful when you have an attached animation or Javascript event listeners to the section root containers thus you don't want the root container nodes to be replaced with the new ones.
+It is useful when you have an animation or Javascript event listeners that are attached to the section root containers, thus you don't want the root container nodes to be replaced with the new ones.
 
 ### Make multiple parts of a section updatable
 
@@ -88,7 +88,7 @@ In the above example only the `.my-cart__wrapper` and `.my-cart__footer` contain
 
 It is useful when you have HTML nodes that must not be updated and they are placed between updateble containers.
 
-If you have multiple `data-ajax-cart-section` containers, make sure that your section always renders the constant amount of the `data-ajax-cart-section` containers in the same order. If the amount varies, it is considered as exception situation and the section's HTML will be replaced completely with the new HTML to try to resolve it. 
+If you have multiple `data-ajax-cart-section` containers, make sure that your section always renders the constant amount of the `data-ajax-cart-section` containers in the same order. If the amount varies, it is considered as an exception situation and the section's HTML will be replaced completely with the new HTML to try to resolve it. 
 
 ###### Wrong! The second `data-ajax-cart-section` container sometimes appears, sometimes — doesn't: 
 {% raw %}

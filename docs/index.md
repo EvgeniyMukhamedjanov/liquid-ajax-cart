@@ -119,7 +119,7 @@ Feel free to use any Liquid tags, objects and filters.
 
 Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute to a root HTML container — Liquid Ajax Cart reloads whole HTML of the sections with this attribute every time when a cart gets updated.
 
-<p markup="1"><span class="badge badge-success">New in 1.4.0</span> If you want to update only a specific container that is not a root container — apply the attribute to it. See the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) reference for details.</p>
+<p markdown="1"><span class="badge badge-success">New in 1.4.0</span> If you want to update only a specific container that is not a root container — apply the attribute to it. See the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) reference for details.</p>
     
 ##### Buttons
 
