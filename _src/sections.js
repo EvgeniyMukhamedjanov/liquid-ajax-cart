@@ -37,15 +37,21 @@ const cartSectionsInit = () => {
 
 		subscribeToResult( data => {
 			const { sectionsAttribute, sectionScrollAreaAttribute } = settings.computed;
+			const parser = new DOMParser();
 
 			if ( data.responseData?.ok && 'sections' in data.responseData.body ) {
 				const sections = data.responseData.body.sections;
 				for ( let sectionId in sections ) {
+					if ( !sections[ sectionId ] ) {
+						console.error(`Liquid Ajax Cart: the HTML for the "${ sectionId }" section was requested but the response is ${ sections[ sectionId ] }`)
+						continue;
+					}
+
 					document.querySelectorAll( `#shopify-section-${ sectionId }` ).forEach( sectionNode => {
 
-						let newSectionNode = sectionNode;
+						// let newSectionNode = sectionNode;
 
-						// Save scroll positions
+						// Memorize scroll positions
 						const noId = "__noId__";
 						const scrollAreasList = {};
 						sectionNode.querySelectorAll(` [${ sectionScrollAreaAttribute }] `).forEach( scrollAreaNode => {
@@ -66,7 +72,6 @@ const cartSectionsInit = () => {
 						} else {
 							const sectionParts = sectionNode.querySelectorAll( `[${ sectionsAttribute }]` );
 							if ( sectionParts ) {
-								const parser = new DOMParser();
           						const receivedDOM = parser.parseFromString(sections[ sectionId ], "text/html");
           						const receivedParts = receivedDOM.querySelectorAll( `[${ sectionsAttribute }]` );
           						if ( sectionParts.length !== receivedParts.length ) {
@@ -81,14 +86,19 @@ const cartSectionsInit = () => {
 							}
 						}
 						if ( updateFullSection ) {
-							sectionNode.insertAdjacentHTML('beforeBegin', sections[ sectionId ]);
-							newSectionNode = sectionNode.previousSibling;
-							sectionNode.parentElement.removeChild(sectionNode);
+							const receivedDOM = parser.parseFromString(sections[ sectionId ], "text/html");
+							const receivedSection = receivedDOM.querySelector(`#${ shopifySectionPrefix }${ sectionId }`);
+							if ( receivedSection ) {
+								sectionNode.innerHTML = receivedSection.innerHTML;
+							}
+							// sectionNode.insertAdjacentHTML('beforeBegin', sections[ sectionId ]);
+							// newSectionNode = sectionNode.previousSibling;
+							// sectionNode.parentElement.removeChild(sectionNode);
 						}
 
 						// Restore scroll positions
 						for ( let scrollId in scrollAreasList ) {
-							newSectionNode.querySelectorAll(` [${ sectionScrollAreaAttribute }="${ scrollId.replace( noId, '' ) }"] `).forEach(( scrollAreaNode, scrollAreaIndex ) => {
+							sectionNode.querySelectorAll(` [${ sectionScrollAreaAttribute }="${ scrollId.replace( noId, '' ) }"] `).forEach(( scrollAreaNode, scrollAreaIndex ) => {
 								if ( scrollAreaIndex + 1 <= scrollAreasList[ scrollId ].length ) {
 									scrollAreaNode.scrollTop = scrollAreasList[ scrollId ][ scrollAreaIndex ];
 								}
