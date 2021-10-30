@@ -117,9 +117,9 @@ Import all the needed modules and provide the initial cart state in the JSON for
  
 Feel free to use any Liquid tags, objects and filters.
 
-Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute to a root HTML container — Liquid Ajax Cart reloads sections with this attribute every time when a cart gets updated.
+Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute to a root HTML container — Liquid Ajax Cart reloads whole HTML of the sections with this attribute every time when a cart gets updated.
 
-If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](/reference/data-ajax-cart-section-scroll/) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
+<p><span class="badge badge-success">new in 1.4.0</span> If you want to update only a specific container that is not a root container — apply the attribute to it. See the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) reference for details.</p>
     
 ##### Buttons
 
@@ -134,6 +134,10 @@ Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-inp
 ##### Error messages
 
 Use a container with the [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) attribute to show cart item's error messages.
+
+##### Scrollable areas
+
+If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](/reference/data-ajax-cart-section-scroll/) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">

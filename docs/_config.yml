@@ -36,7 +36,7 @@ links:
       file: sections
       links:
         - file: data-ajax-cart-section
-          description: Liquid Ajax Cart reloads HTML code of the theme sections that marked with the `data-ajax-cart-section` attribute every time when the Shopify cart is changed.
+          description: Liquid Ajax Cart reloads HTML code of the theme sections that have containers with the `data-ajax-cart-section` attribute every time when the Shopify cart is changed.
         - file: data-ajax-cart-section-scroll
           description: Add the `data-ajax-cart-section-scroll` attribute to a scrollable area within a `data-ajax-cart-section` section and the scroll position will not be reset to top every time after HTML is updated.
     - title: Product Forms
