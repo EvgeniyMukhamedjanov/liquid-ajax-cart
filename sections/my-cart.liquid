@@ -6,10 +6,11 @@
   after user's cart state is changed.
 {% endcomment %}
 
-<div data-ajax-cart-section >
+<div data-ajax-cart-section>
   <div>
     <h2>Section "my-cart"</h2>
     <p>The section gets updated after each action because it has a content wrapper with the <a href="https://liquid-ajax-cart.js.org/reference/data-ajax-cart-section/" target="_blank">data-ajax-cart-section</a> attribute.</p>
+    {{ "now" | date: '%S' }}
   </div>
   <div data-ajax-cart-section-scroll >
     {% for item in cart.items %}

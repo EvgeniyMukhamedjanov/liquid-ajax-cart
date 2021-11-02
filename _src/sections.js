@@ -11,14 +11,8 @@ const cartSectionsInit = () => {
 			const sectionNames = [];
 			// todo: test with dynamic sections
 			document.querySelectorAll( `[${ sectionsAttribute }]` ).forEach( sectionNodeChild => {
+				// todo: test if the attribute not within a section
 				const sectionNode = sectionNodeChild.closest(`[id^="${ shopifySectionPrefix }"]`);
-				// let sectionIdHTML = sectionNodeChild.parentElement.id;
-				// if ( sectionIdHTML.indexOf( shopifySectionPrefix ) === 0 ) {
-				// 	const sectionId = sectionIdHTML.replace( shopifySectionPrefix, '' );
-				// 	if ( sectionNames.indexOf( sectionId ) === -1 ) {
-				// 		sectionNames.push( sectionId );
-				// 	}
-				// }
 				if ( sectionNode ) {
 					const sectionId = sectionNode.id.replace( shopifySectionPrefix, '' );
 					if ( sectionNames.indexOf( sectionId ) === -1 ) {
@@ -66,34 +60,22 @@ const cartSectionsInit = () => {
 						});
 
 						// Replace HTML
-						let updateFullSection = false;
-						if ( sectionNode.querySelector(`:scope > [${ sectionsAttribute }]`) ) {
-							updateFullSection = true;
-						} else {
-							const sectionParts = sectionNode.querySelectorAll( `[${ sectionsAttribute }]` );
-							if ( sectionParts ) {
-          						const receivedDOM = parser.parseFromString(sections[ sectionId ], "text/html");
-          						const receivedParts = receivedDOM.querySelectorAll( `[${ sectionsAttribute }]` );
-          						if ( sectionParts.length !== receivedParts.length ) {
-          							updateFullSection = true;
-          							console.error(`Liquid Ajax Cart: the received HTML for the "${ sectionId }" section has a different quantity of the "${ sectionsAttribute }" containers. The section will be updated completely.`);
-          						} else {
-          							sectionParts.forEach(( sectionPartsItem, sectionPartsItemIndex ) => {
-          								sectionPartsItem.before( receivedParts[sectionPartsItemIndex] );
-										sectionPartsItem.parentElement.removeChild(sectionPartsItem);
-          							});
-          						}
-							}
-						}
-						if ( updateFullSection ) {
-							const receivedDOM = parser.parseFromString(sections[ sectionId ], "text/html");
-							const receivedSection = receivedDOM.querySelector(`#${ shopifySectionPrefix }${ sectionId }`);
-							if ( receivedSection ) {
-								sectionNode.innerHTML = receivedSection.innerHTML;
-							}
-							// sectionNode.insertAdjacentHTML('beforeBegin', sections[ sectionId ]);
-							// newSectionNode = sectionNode.previousSibling;
-							// sectionNode.parentElement.removeChild(sectionNode);
+						const sectionParts = sectionNode.querySelectorAll( `[${ sectionsAttribute }]` );
+						if ( sectionParts ) {
+      						const receivedDOM = parser.parseFromString(sections[ sectionId ], "text/html");
+      						const receivedParts = receivedDOM.querySelectorAll( `[${ sectionsAttribute }]` );
+      						if ( sectionParts.length !== receivedParts.length ) {
+      							console.error(`Liquid Ajax Cart: the received HTML for the "${ sectionId }" section has a different quantity of the "${ sectionsAttribute }" containers. The section will be updated completely.`);
+      							const receivedSection = receivedDOM.querySelector(`#${ shopifySectionPrefix }${ sectionId }`);
+								if ( receivedSection ) {
+									sectionNode.innerHTML = receivedSection.innerHTML;
+								}
+      						} else {
+      							sectionParts.forEach(( sectionPartsItem, sectionPartsItemIndex ) => {
+      								sectionPartsItem.before( receivedParts[sectionPartsItemIndex] );
+									sectionPartsItem.parentElement.removeChild(sectionPartsItem);
+      							});
+      						}
 						}
 
 						// Restore scroll positions
