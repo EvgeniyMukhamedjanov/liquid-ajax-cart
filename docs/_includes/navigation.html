@@ -6,8 +6,17 @@
             <div class="header-nav__lists-wrapper">
                 <ul class="header-nav__list">
                     {% for p in site.links.main %}
+                        {% assign p_active = false %}
+                        {% if page.url == p.url %}
+                            {% assign p_active = true %}
+                        {% elsif p.url != '/' and page.url.size > p.url.size %}
+                            {% assign page_url_slice = page.url | slice: 0, p.url.size %}
+                            {% if page_url_slice == p.url %}
+                                {% assign p_active = true %}
+                            {% endif %}
+                        {% endif %}
                         <li class="header-nav__item">
-                            <a href="{{ p.url }}" class="header-nav__link {% if page.url == p.url %}header-nav__link--active{% endif %}">
+                            <a href="{{ p.url }}" class="header-nav__link {% if p_active %}header-nav__link--active{% endif %}">
                                 <span>{{ p.title }}</span>
                             </a>
                         </li>
@@ -15,8 +24,17 @@
                 </ul>
                 <ul class="header-nav__list">
                     {% for p in site.links.header %}
+                        {% assign p_active = false %}
+                        {% if page.url == p.url %}
+                            {% assign p_active = true %}
+                        {% elsif p.url != '/' and page.url.size > p.url.size %}
+                            {% assign page_url_slice = page.url | slice: 0, p.url.size %}
+                            {% if page_url_slice == p.url %}
+                                {% assign p_active = true %}
+                            {% endif %}
+                        {% endif %}
                         <li class="header-nav__item">
-                            <a href="{{ p.url }}" class="header-nav__link {% if page.url == p.url %}header-nav__link--active{% endif %}">
+                            <a href="{{ p.url }}" class="header-nav__link {% if p_active %}header-nav__link--active{% endif %}">
                                 <span>{{ p.title }}</span>
                             </a>
                         </li>
