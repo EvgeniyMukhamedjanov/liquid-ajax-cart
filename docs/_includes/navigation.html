@@ -1,43 +1,28 @@
-<header class="navbar navbar-expand-md navbar-custom" id="top">
+<header class="header-nav">
     <div class="container">
-        <a class="navbar-brand" href="{{ '/' | relative_url }}">{{ site.name }}</a>
-
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-nav-toggle
-        >
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-
-        <nav class="navbar-collapse collapse" role="navigation" data-nav>
-            <ul class="navbar-nav">
-                {% for p in site.links.main %}
-                    <li class="nav-item {% if page.url == p.url %}active{% endif %}">
-                        <a
-                            class="nav-link"
-                            href="{{ p.url }}"
-                        >
-                            {{ p.title }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                {% for p in site.links.header %}
-                    <li class="nav-item {% if page.name == p.url %}active{% endif %}">
-                        <a
-                            class="nav-link"
-                            href="{{ p.url }}"
-                        >
-                            {% include svg-icon.html icon=p.icon %}
-                            {{ p.title }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </nav>
+        <div class="header-nav__wrapper">
+            <input type="checkbox" class="header-nav__toggle-checkbox" id="header-nav__toggle-checkbox" />
+            <label class="header-nav__toggle-button" for="header-nav__toggle-checkbox"><span></span></label>
+            <div class="header-nav__lists-wrapper">
+                <ul class="header-nav__list">
+                    {% for p in site.links.main %}
+                        <li class="header-nav__item">
+                            <a href="{{ p.url }}" class="header-nav__link {% if page.url == p.url %}header-nav__link--active{% endif %}">
+                                <span>{{ p.title }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <ul class="header-nav__list">
+                    {% for p in site.links.header %}
+                        <li class="header-nav__item">
+                            <a href="{{ p.url }}" class="header-nav__link {% if page.url == p.url %}header-nav__link--active{% endif %}">
+                                <span>{{ p.title }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 </header>

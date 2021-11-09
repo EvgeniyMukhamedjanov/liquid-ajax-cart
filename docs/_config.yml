@@ -12,14 +12,14 @@ license:
 
 links:
   main:
+    - title: Home
+      url: /
     - title: Reference
       url: /reference/
     - title: Releases
       url: /releases/
   header:
     - title: GitHub
-      icon: github
-      brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   homepage:
     - title: View on GitHub
