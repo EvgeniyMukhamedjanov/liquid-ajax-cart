@@ -145,125 +145,61 @@
   <script type="module">
     import { subscribeToCartAjaxRequests, subscribeToCartStateUpdate, getCartState, cartRequestGet, cartRequestAdd, cartRequestChange } from '{{ 'liquid-ajax-cart.js' | asset_url }}';
 
-    subscribeToCartAjaxRequests(( data, subscribeToResult ) => {
-      const checkbox = document.getElementById( 'subscribeToCartAjaxRequestsCheckbox' );
-      const showMessages =  checkbox && checkbox.checked;
-      const state = getCartState();
-      const itemCountBefore = state.status.cartStateSet ? state.cart.item_count : undefined;
-
-      if ( showMessages ) {
-        console.log('\n\n\n\n');
-        console.log('%c Cart AJAX requests subscriber ', 'background: #33cc69; color: white; font-weight: bold');
-        console.log('Data before request is started:');
-        console.log(data);
-        if ( itemCountBefore !== undefined ) {
-          console.log(`Items in cart (before): ${ itemCountBefore }`);
+    subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
+      if ( requestState.requestType === 'add' ) {
+        const checkbox = document.getElementById( 'addToCartPopupCheckbox' );
+        if ( checkbox && checkbox.checked ) {
+          subscribeToResult( requestState => {
+            if ( requestState.responseData?.ok ) {
+              let productName = requestState.responseData.body.title;
+              if ( requestState.responseData.body.items?.length === 1 ) {
+                productName = requestState.responseData.body.items[0].title;
+              }
+              alert(`${ productName ? '«' + productName + '» is' : 'Products are' } successfully added`);
+            }
+          });
         }
-        console.log('\n\n\n\n');
-      }
-
-      subscribeToResult( data => {
-        const state = getCartState();
-        const itemCountAfter = state.status.cartStateSet ? state.cart.item_count : undefined;
-        let itemCountDifference = undefined;
-
-        if ( itemCountBefore !== undefined && itemCountAfter !== undefined ) {
-          itemCountDifference = itemCountAfter - itemCountBefore;
-        }
-
-        if ( showMessages ) {
-          console.log('\n\n\n\n');
-          console.log('%c Cart AJAX requests subscriber ', 'background: #33cc69; color: white; font-weight: bold');
-          console.log('Data after request is finished:');
-          console.log(data);
-          if ( itemCountAfter !== undefined ) {
-            console.log(`Items in cart (after): ${ itemCountAfter }`);
-          }
-          if(itemCountDifference !== undefined) {
-            console.log(`Items in cart — difference: ${ itemCountDifference }`);
-          }
-          console.log('\n\n\n\n');
-
-        }
-
-      })
-    })
-
-    subscribeToCartStateUpdate( state => {
-      const checkbox = document.getElementById( 'subscribeToCartStateUpdateCheckbox' );
-      const showMessages =  checkbox && checkbox.checked;
-      if ( showMessages ) {
-        console.log('\n\n\n\n');
-        console.log('%c Cart State Update subscriber ', 'background: #764abc; color: white; font-weight: bold');
-        console.log('Updated state:');
-        console.log( state );
-        console.log('\n\n\n\n');
       }
     });
 
-    const cartRequestGetButton = document.getElementById( 'cartRequestGetButton' );
-    if ( cartRequestGetButton ) {
-      cartRequestGetButton.addEventListener( 'click', () => {
-        
-        cartRequestGet({
-          'lastComplete': data => {
-            console.log('\n\n\n\n');
-            console.log('%c cartRequestGet response ', 'background: #efd81d; color: black; font-weight: bold');
-            console.log( data );
-            console.log('\n\n\n\n');
-          }
+    subscribeToCartStateUpdate( state => {
+      const promoVariant = 40934235668668;
+      const promoSubtotal = 10000;
+
+      if ( state.status.cartStateSet && !state.status.requestInProgress ) {
+
+        let currentSubtotal = state.cart.items_subtotal_price;
+
+        const autoAddedLineItem = state.cart.items.findIndex( lineItem => { 
+          return lineItem.properties?._autoadded === 'Yes' ;
         });
-        
-      });
-    }
-
-    const cartRequestAddButton = document.getElementById( 'cartRequestAddButton' );
-    if ( cartRequestAddButton ) {
-      cartRequestAddButton.addEventListener( 'click', () => {
-        cartRequestAdd({ 
-          items: [
-            {
-              id: 40934235668668,
-              quantity: 1
-            }
-          ]  
-        }, {
-          'lastComplete': data => {
-            console.log('\n\n\n\n');
-            console.log('%c cartRequestAdd response ', 'background: #efd81d; color: black; font-weight: bold');
-            console.log( data );
-            console.log('\n\n\n\n');
-          }
-        })
-      });
-    }
-
-    const cartRequestChangeButton = document.getElementById( 'cartRequestChangeButton' );
-    if ( cartRequestChangeButton ) {
-      cartRequestChangeButton.addEventListener( 'click', () => {
-        const state = getCartState();
-        if ( state.status.cartStateSet && state.cart.item_count > 0 ) {
-          const firstItemKey = state.cart.items[0].key;
-          const firstItemQuantity = state.cart.items[0].quantity;
-          cartRequestChange({ 
-            id: firstItemKey,
-            quantity: firstItemQuantity - 1
-          }, {
-            'lastComplete': data => {
-              console.log('\n\n\n\n');
-              console.log('%c cartRequestChange response ', 'background: #efd81d; color: black; font-weight: bold');
-              console.log( data );
-              console.log('\n\n\n\n');
-            }
-          })
-        } else {
-          console.log('\n\n\n\n');
-          console.log('%c cartRequestChange wasn\'t performed ', 'background: #efd81d; color: black; font-weight: bold');
-          console.log( 'There is no item in the cart' );
-          console.log('\n\n\n\n');
+        if ( autoAddedLineItem > -1 ) {
+          currentSubtotal -= state.cart.items[autoAddedLineItem].final_line_price;
         }
-      });
-    }
+
+        if ( currentSubtotal >= promoSubtotal ) {
+          const promoVariantLineItem = state.cart.items.findIndex( lineItem => { 
+            return lineItem.variant_id === promoVariant && lineItem.discounts.length > 0;
+          });
+          if ( promoVariantLineItem === -1 ) {
+            cartRequestAdd({ 
+              items: [{
+                  id: promoVariant,
+                  quantity: 1,
+                  properties: { "_autoadded": "Yes" }
+              }]  
+            });
+          }
+        } else {
+          if ( autoAddedLineItem > -1 ) {
+            cartRequestChange({ 
+              "line": autoAddedLineItem + 1,
+              "quantity": 0
+            });
+          }
+        }
+      }
+    });
 
   </script>
 

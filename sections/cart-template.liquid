@@ -109,9 +109,11 @@
                     {% endfor %}
                   {% endif %}
 
-                  <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0" class="cart__remove">
-                    <small>{{ 'cart.general.remove' | t }}</small>
-                  </a>
+                  {% unless item.properties._autoadded == 'Yes' %}
+                    <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0" class="cart__remove">
+                      <small>{{ 'cart.general.remove' | t }}</small>
+                    </a>
+                  {% endunless %}
                 </div>
 
               </div>
@@ -147,8 +149,12 @@
                 </div>
 
                 <div class="grid__item one-quarter one-half medium-down--one-third text-center">
-                  <label for="updates_{{ item.key }}" class="cart__mini-labels">{{ 'cart.label.quantity' | t }}</label>
-                  <input type="number" class="cart__quantity-selector" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" aria-label="{{ 'cart.label.quantity' | t }}" data-ajax-cart-quantity-input="{{ item.key }}">
+                  {% if item.properties._autoadded == 'Yes' %}
+                    {{ item.quantity }}
+                  {% else %}
+                    <label for="updates_{{ item.key }}" class="cart__mini-labels">{{ 'cart.label.quantity' | t }}</label>
+                    <input type="number" class="cart__quantity-selector" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" aria-label="{{ 'cart.label.quantity' | t }}" data-ajax-cart-quantity-input="{{ item.key }}">
+                  {% endif %}
                 </div>
 
                 <div class="grid__item one-quarter one-half medium-down--one-third text-right">

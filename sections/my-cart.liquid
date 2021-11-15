@@ -8,53 +8,75 @@
 
 <div data-ajax-cart-section>
   <div>
-    <h2>Section "my-cart"</h2>
+    <h2>Cart</h2>
     <p>The section gets updated after each action because it has a content wrapper with the <a href="https://liquid-ajax-cart.js.org/reference/data-ajax-cart-section/" target="_blank">data-ajax-cart-section</a> attribute.</p>
-    {{ "now" | date: '%S' }}
   </div>
   <div data-ajax-cart-section-scroll >
     {% for item in cart.items %}
       <div class="ajax-cart__line-item" >
-        <p>
-          <a class="h3" href="{{ item.url }}">{{ item.product.title }}</a> <br/>
+        <div><a class="h3" href="{{ item.url }}">{{ item.product.title }}</a></div>
           {% unless item.product.has_only_default_variant %}
-            <small>{{ item.variant.title }}</small> <br/>
+            <div><small>{{ item.variant.title }}</small></div>
           {% endunless %}
-          <small> Price: {{ item.final_price | money }} </small>
+          <div>
+            <small>
+              Price: 
+              {% if item.original_price != item.final_price %}
+                <del>{{ item.original_price | money }}</del>
+                {{ item.final_price | money }}
+              {% else %}
+                {{ item.original_price | money }} 
+              {% endif %}
+            </small>
+          </div>
         </p>
 
         <div>
           <span>Quantity: </span>
-          <a 
-            href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
-            class="ajax-cart__quantity-button"
-          >
-            <i>-</i>
-          </a>
-          <input 
-            class="my-cart__quantity-input"
-            type="number" 
-            value="{{ item.quantity }}" 
-            min="0" 
-            data-ajax-cart-quantity-input="{{ item.key }}"
-          />
-          <a 
-            href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
-            class="ajax-cart__quantity-button"
-          >
-            <i>+</i>
-          </a>
+          {% if item.properties._autoadded == 'Yes' %}
+            <span>{{ item.quantity }}</span>
+          {% else %}       
+            <a 
+              href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" 
+              class="ajax-cart__quantity-button"
+            >
+              <i>-</i>
+            </a>
+            <input 
+              class="my-cart__quantity-input"
+              type="number" 
+              value="{{ item.quantity }}" 
+              min="0" 
+              data-ajax-cart-quantity-input="{{ forloop.index }}"
+            />
+            <a 
+              href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" 
+              class="ajax-cart__quantity-button"
+            >
+              <i>+</i>
+            </a>
+          {% endif %}
         </div>
         <div data-ajax-cart-messages="{{ item.key }}"></div>
 
-        <div> Total: <strong>{{ item.final_line_price | money }}</strong> </div>
+        <div> Total: <strong>
+          {% if item.original_line_price != item.final_line_price %}
+            <del>{{ item.original_line_price | money }}</del>
+            {{ item.final_line_price | money }}
+          {% else %}
+            {{ item.original_line_price | money }}
+          {% endif %}
+          
+        </strong> </div>
         <div>
-          <a 
-            href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity=0" 
-            class="ajax-cart__remove-button"
-          >
-            <small>Remove</small>
-          </a>
+          {% unless item.properties._autoadded == 'Yes' %}
+            <a 
+              href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" 
+              class="ajax-cart__remove-button"
+            >
+              <small>Remove</small>
+            </a>
+          {% endunless %}
         </div>
       </div>
     {% endfor %}

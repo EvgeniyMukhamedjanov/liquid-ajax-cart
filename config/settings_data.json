@@ -174,37 +174,13 @@
       "1632428792c98f42b1": {
         "type": "custom-html",
         "settings": {
-          "custom_html": "<h2>Show\/hide the cart<\/h2><p>\n<a href=\"\/cart\" class=\"btn btn--secondary\" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open | add\">Open<\/a> <button class=\"btn btn--secondary\" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open | remove\">Close<\/button>\n<button class=\"btn \" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open\">Toggle<\/button> \n<\/p>"
+          "custom_html": "<h2>Show\/hide the cart<\/h2>\n<p>The following buttons use the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-toggle-class-button\">data-ajax-cart-toggle-class-button<\/a> attribute to add or remove body CSS classes.<\/p>\n<p>\n<a href=\"\/cart\" class=\"btn btn--secondary\" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open | add\">Open<\/a> <button class=\"btn btn--secondary\" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open | remove\">Close<\/button>\n<button class=\"btn \" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open\">Toggle<\/button> \n<\/p>"
         }
       },
       "16324720968dae6a91": {
         "type": "custom-html",
         "settings": {
-          "custom_html": "<h2>Subscribe to Cart Ajax API requests<\/h2><p><label><input type=\"checkbox\" id=\"subscribeToCartAjaxRequestsCheckbox\"> Show console.log messages from a function that subscribed to Ajax Requests<\/label><\/p>"
-        }
-      },
-      "1632473776ad1d6d59": {
-        "type": "custom-html",
-        "settings": {
-          "custom_html": "<h2>Subscribe to cart state updates<\/h2><p><label><input type=\"checkbox\" id=\"subscribeToCartStateUpdateCheckbox\"> Show console.log messages from a function that subscribed to State update<\/label><\/p>"
-        }
-      },
-      "16328358187ca71ad2": {
-        "type": "custom-html",
-        "settings": {
-          "custom_html": "<h2>cartRequestGet<\/h2><p><button class=\"btn\" id=\"cartRequestGetButton\">Call and console.log<\/button><\/p>"
-        }
-      },
-      "1632842855866e8451": {
-        "type": "custom-html",
-        "settings": {
-          "custom_html": "<h2>cartRequestAdd<\/h2><p><button class=\"btn\" id=\"cartRequestAddButton\">Add \"Single product\"<\/button><\/p>"
-        }
-      },
-      "16328560183aed5906": {
-        "type": "custom-html",
-        "settings": {
-          "custom_html": "<h2>cartRequestChange<\/h2><p><button class=\"btn\" id=\"cartRequestChangeButton\">Decrease<\/button> — decreases amount of the first item by one.<\/p>"
+          "custom_html": "<h2>JavaScript API examples<\/h2>\n<h3>1. Popup message after adding to cart<\/h3>\n<p><label><input type=\"checkbox\" id=\"addToCartPopupCheckbox\"> Display the «Add to Cart» message.<br><small>Tick the checkbox above and try to add a product to the cart.<\/small><\/label><\/p>\n\n<p>The code below shows the «alert» message after each «Add to cart» request performed by Liquid Ajax Cart if the <code>#addToCartPopupCheckbox<\/code> checkbox is checked.<\/p>\n\n<p><small>Reference: <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/requestState\/\">request state<\/a>, <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/subscribeToCartAjaxRequests\/\">subscribeToCartAjaxRequests<\/a><\/small><\/p>\n\n<pre><code>subscribeToCartAjaxRequests(( requestState, subscribeToResult ) =&gt; {\n  if ( requestState.requestType === 'add' ) {\n    const checkbox = document.getElementById( 'addToCartPopupCheckbox' );\n    if ( checkbox &amp;&amp; checkbox.checked ) {\n      subscribeToResult( requestState =&gt; {\n        if ( requestState.responseData?.ok ) {\n          let productName = requestState.responseData.body.title;\n          if ( requestState.responseData.body.items?.length === 1 ) {\n            productName = requestState.responseData.body.items[0].title;\n          }\n          alert(`${ productName ? '«' + productName + '» is' : 'Products are' } successfully added`);\n        }\n      });\n    }\n  }\n});<\/code><\/pre>\n\n<h3>2. Add a product to the cart if the total price is $100 or higher<\/h3>\n\n<p>The <a href=\"\/products\/single-product\">Single product<\/a> has an automatic discount: if the total price of all products in the cart is $100 or higher then one Single product is free. <\/p>\n<p> The code below automatically adds a Single product to the cart if the cart total price is $100 or higher.<\/p>\n\n<p><small>Reference: <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/state\/\">state<\/a>, <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/subscribeToCartStateUpdate\/\">subscribeToCartStateUpdate<\/a>, <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/requests\/\">cart Ajax API requests<\/a><\/small><\/p>\n\n<pre><code>subscribeToCartStateUpdate( state =&gt; {\n  const promoVariant = 40934235668668;\n  const promoSubtotal = 10000;\n\n  if ( state.status.cartStateSet &amp;&amp; !state.status.requestInProgress ) {\n\n    let currentSubtotal = state.cart.items_subtotal_price;\n\n    const autoAddedLineItem = state.cart.items.findIndex( lineItem =&gt; { \n      return lineItem.properties?._autoadded === 'Yes' ;\n    });\n    if ( autoAddedLineItem &gt; -1 ) {\n      currentSubtotal -= state.cart.items[autoAddedLineItem].final_line_price;\n    }\n\n    if ( currentSubtotal &gt;= promoSubtotal ) {\n      const promoVariantLineItem = state.cart.items.findIndex( lineItem =&gt; { \n        return lineItem.variant_id === promoVariant &amp;&amp; lineItem.discounts.length &gt; 0;\n      });\n      if ( promoVariantLineItem === -1 ) {\n        cartRequestAdd({ \n          items: [{\n              id: promoVariant,\n              quantity: 1,\n              properties: { \"_autoadded\": \"Yes\" }\n          }]  \n        });\n      }\n    } else {\n      if ( autoAddedLineItem &gt; -1 ) {\n        cartRequestChange({ \n          \"line\": autoAddedLineItem + 1,\n          \"quantity\": 0\n        });\n      }\n    }\n  }\n});\n<\/code><\/pre>"
         }
       },
       "my-cart": {
@@ -215,7 +191,7 @@
         "type": "rich-text",
         "settings": {
           "section_title": "Product forms",
-          "text": "<p><a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/product-forms\/\" target=\"_blank\">Product forms<\/a> are ajaxified automatically.<\/p><p>Form errors are put in a container that has the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-messages\/\" target=\"_blank\" title=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-messages\/\">data-ajax-cart-messages<\/a> attribute with the \"<em>form<\/em>\" value.<\/p><p>The submit button's loading indicator is connected to the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/js-ajax-cart-form-in-progress\/\" target=\"_blank\" title=\"https:\/\/liquid-ajax-cart.js.org\/reference\/js-ajax-cart-form-in-progress\/\">js-ajax-cart-form-in-progress<\/a> CSS class.<\/p>",
+          "text": "<p><a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/product-forms\/\" target=\"_blank\">Product forms<\/a> are ajaxified automatically.<\/p><p>Errors messages get put in a container that has the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-messages\/\" target=\"_blank\" title=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-messages\/\">data-ajax-cart-messages<\/a> attribute with the \"<em>form<\/em>\" value.<\/p><p>The submit button's loading indicator is set using the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/js-ajax-cart-form-in-progress\/\" target=\"_blank\" title=\"https:\/\/liquid-ajax-cart.js.org\/reference\/js-ajax-cart-form-in-progress\/\">js-ajax-cart-form-in-progress<\/a> CSS class.<\/p>",
           "text_size": "medium"
         }
       }
@@ -224,11 +200,7 @@
       "163511092542400c8a",
       "featured-product",
       "1632428792c98f42b1",
-      "16324720968dae6a91",
-      "1632473776ad1d6d59",
-      "16328358187ca71ad2",
-      "1632842855866e8451",
-      "16328560183aed5906"
+      "16324720968dae6a91"
     ]
   },
   "presets": {
