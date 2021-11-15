@@ -14,25 +14,42 @@ const MESSAGE_CODES = {
 
 const changeRequestHandler = ( requestState, subscribeToResult ) => {
 	const { messagesAttribute } = settings.computed;
-	let requestedId, requestedQuantity, requestedIdItems = [], itemKey, errorContainers;
+	let requestedId, requestedLine, requestedQuantity, lineItemIndex, requestedIdItems = [], errorContainers, itemCountBefore;
+	const state = getCartState();
 
 	if ( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) {
+		requestedLine = requestState.requestBody.get('line');
 		requestedId = requestState.requestBody.get('id');
 		requestedQuantity = requestState.requestBody.get('quantity');
     } else {
+		requestedLine = requestState.requestBody.line;
 		requestedId = requestState.requestBody.id;
 		requestedQuantity = requestState.requestBody.quantity;
 	}
 
+	if ( requestedLine ) {
+		const requestedLineNumber = Number(requestedLine);
+		if ( requestedLineNumber > 0 && state.status.cartStateSet ) {
+			lineItemIndex = requestedLineNumber - 1;
+			requestedId = state.cart.items[lineItemIndex]?.key;
+		}
+	}
+
 	if ( requestedId ) {
-		const state = getCartState();
 		if ( state.status.cartStateSet ) {
 			state.cart.items.forEach( element => {
-				requestedIdItems.push( element );
+				if ( element.key === requestedId || element.id == requestedId ) {
+					requestedIdItems.push( element );
+				}
 			});
+
+			itemCountBefore = state.cart.item_count;
 		}
 
 		if ( requestedId.indexOf(':') > -1 ) {
+			if ( requestedLine === undefined && requestedIdItems.length === 1) {
+				requestedLine = requestedIdItems[0].key;
+			}
 			errorContainers = document.querySelectorAll(`[${ messagesAttribute }="${ requestedId }"]`);
 		} else {
 			const errorContainersSelectorArray = requestedIdItems.map( element => `[${ messagesAttribute }="${ element.key }"]` );
@@ -55,15 +72,16 @@ const changeRequestHandler = ( requestState, subscribeToResult ) => {
 		if ( requestState.responseData?.ok ) {
 			if ( requestedId ) {
 				resultItems = requestState.responseData.body.items.reduce(( acc, element ) => {
-					if (( element.key === requestedId || element.id === requestedId ) ) {
+					if (( element.key === requestedId || element.id == requestedId ) ) {
 						acc.push(element);
 					}
 					return acc;
 				}, []);
 			}
 
+
 			resultItems.forEach( element => {
-				if ( element.quantity < requestedQuantity ) {
+				if ( element.quantity < requestedQuantity && itemCountBefore === requestState.responseData.body.item_count ) {
 					itemQuantityErrors.push( element );
 				}
 			});
@@ -88,21 +106,25 @@ const changeRequestHandler = ( requestState, subscribeToResult ) => {
 			});
 		} else {
 			const errorMessage = getRequestError( requestState );
+			errorContainers = [];
+			if ( requestedId ) {
+				if ( requestedId.indexOf(':') > -1 ) {
+					errorContainers = document.querySelectorAll(`[${ messagesAttribute }="${ requestedId }"]`);
+				} else {
 
-			if ( requestedId.indexOf(':') > -1 ) {
-				errorContainers = document.querySelectorAll(`[${ messagesAttribute }="${ requestedId }"]`);
-			} else {
+					resultItems = [];
+					const state = getCartState();
+					if ( state.status.cartStateSet ) {
+						state.cart.items.forEach( element => {
+							if (( element.key === requestedId || element.id == requestedId ) ) {
+								resultItems.push( element );
+							}
+						});
+					}
 
-				resultItems = [];
-				const state = getCartState();
-				if ( state.status.cartStateSet ) {
-					state.cart.items.forEach( element => {
-						resultItems.push( element );
-					});
+					const errorContainersSelectorArray = resultItems.map( element => `[${ messagesAttribute }="${ element.key }"]` );
+		        	errorContainers = document.querySelectorAll(errorContainersSelectorArray.join(','));
 				}
-
-				const errorContainersSelectorArray = resultItems.map( element => `[${ messagesAttribute }="${ element.key }"]` );
-	        	errorContainers = document.querySelectorAll(errorContainersSelectorArray.join(','));
 			}
 
 			if ( errorContainers.length > 0 ) {

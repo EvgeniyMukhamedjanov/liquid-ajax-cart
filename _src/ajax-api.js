@@ -38,7 +38,7 @@ const cartRequest = ( requestType, body, options = {} ) => {
 	const endpoint = getEndpoint( requestType );
 	let requestBody = undefined;
 	if ( requestType !== REQUEST_GET ) {
-		requestBody = body;
+		requestBody = body || {};
 	}
 	const method = requestType === REQUEST_GET ? 'GET' : 'POST';
 	const info = options.info || {};

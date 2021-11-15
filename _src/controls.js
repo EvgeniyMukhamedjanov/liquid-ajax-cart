@@ -25,7 +25,6 @@ function initEventListeners() {
 	}, false);
 
 	document.addEventListener("keydown", function(e) {
-		const { quantityInputAttribute } = settings.computed;
 
 		if (e.key === "Enter") {
 			quantityInputChangeHandler.call(e.target, e);
@@ -46,12 +45,22 @@ function stateUpdateHandler ( state ) {
 		})
 	} else {
 		document.querySelectorAll(`[${ quantityInputAttribute }]`).forEach( quantityInput => {
+			const attributeValue = quantityInput.getAttribute( quantityInputAttribute ).trim();
 			
 			// Update all the inputs from state because some of them might be out of ajax-sections
 			if ( state.status.cartStateSet ) {
-				const relatedLineItem = state.cart.items.find( lineItem => lineItem.key === quantityInput.getAttribute( quantityInputAttribute ).trim() );
+				let relatedLineItem;
+				if ( attributeValue.length > 3 ) {
+					relatedLineItem = state.cart.items.find( lineItem => lineItem.key === attributeValue );
+				} else {
+					const lineItemIndex = Number(attributeValue) - 1;
+					relatedLineItem = state.cart.items[lineItemIndex];
+				}
+
 				if (relatedLineItem) {
 					quantityInput.value = relatedLineItem.quantity;
+				} else {
+					quantityInput.value = 0;
 				}
 			}
 
@@ -182,7 +191,7 @@ function quantityInputChangeHandler (e) {
 	}
 
 	let value = Number( this.value.trim() );
-	const itemKey = this.getAttribute( quantityInputAttribute ).trim();
+	const lineItem = this.getAttribute( quantityInputAttribute ).trim();
 
 	if ( isNaN( value )) {
 		console.error('Liquid Ajax Cart: input value of a data-ajax-cart-quantity-input must be an Integer number');
@@ -193,13 +202,15 @@ function quantityInputChangeHandler (e) {
 		value = 0;
 	}
 
-	if ( !itemKey ) {
-		console.error('Liquid Ajax Cart: attribute value of a data-ajax-cart-quantity-input must be an item key');
+	if ( !lineItem ) {
+		console.error('Liquid Ajax Cart: attribute value of a data-ajax-cart-quantity-input must be an item key or an item index');
 		return;
 	}
 
+	const lineItemReqProperty = lineItem.length > 3 ? 'id' : 'line';
+
 	const formData = new FormData();
-	formData.set('id', itemKey);
+	formData.set(lineItemReqProperty, lineItem);
 	formData.set('quantity', value);
 
 	cartRequestChange( formData, { info: { initiator: this }} );
@@ -215,10 +226,17 @@ function quantityInputEscHandler (e) {
 	}
 
 	const quantityInput = this;
+	const attributeValue = quantityInput.getAttribute( quantityInputAttribute ).trim();
+	let relatedLineItem;
 	const state = getCartState();
 
 	if ( state.status.cartStateSet ) {
-		const relatedLineItem = state.cart.items.find( lineItem => lineItem.key === quantityInput.getAttribute( quantityInputAttribute ).trim() );
+		if ( attributeValue.length > 3 ) {
+			relatedLineItem = state.cart.items.find( lineItem => lineItem.key === quantityInput.getAttribute( quantityInputAttribute ).trim() );
+		} else {
+			const lineItemIndex = Number(attributeValue) - 1;
+			relatedLineItem = state.cart.items[lineItemIndex];
+		}
 		if (relatedLineItem) {
 			quantityInput.value = relatedLineItem.quantity;
 		}

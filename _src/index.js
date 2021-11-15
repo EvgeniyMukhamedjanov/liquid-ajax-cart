@@ -1,4 +1,4 @@
-import { configure } from './settings';
+import { cartSettingsInit, configureCart, settings } from './settings';
 import { cartRequestGet, cartRequestAdd, cartRequestChange, cartRequestUpdate, cartRequestClear, subscribeToCartAjaxRequests } from './ajax-api';
 import { getCartState, cartStateInit, subscribeToCartStateUpdate } from './state';
 import { cartDomBinderInit } from './dom-binder';
@@ -9,7 +9,7 @@ import { cartMessagesInit } from './messages';
 import { cartGlobalClassesInit } from './global-classes';
 
 if (!( 'liquidAjaxCart' in window )) {
-	configure();
+	cartSettingsInit();
 	cartStateInit();
 	cartDomBinderInit();
 	cartSectionsInit();
@@ -19,7 +19,7 @@ if (!( 'liquidAjaxCart' in window )) {
 	cartGlobalClassesInit();
 
 	window.liquidAjaxCart = {
-		configure,
+		configureCart,
 
 		cartRequestGet, 
 		cartRequestAdd, 
@@ -31,9 +31,15 @@ if (!( 'liquidAjaxCart' in window )) {
 		getCartState,
 		subscribeToCartStateUpdate,
 	}
+
+	window.addEventListener('focus', () => {
+		if ( settings.updateOnWindowFocus ) {
+			cartRequestUpdate();
+		}
+	})
 }
 
-const export_configure = liquidAjaxCart.configure;
+const export_configureCart = liquidAjaxCart.configureCart;
 
 const export_cartRequestGet = liquidAjaxCart.cartRequestGet;
 const export_cartRequestAdd = liquidAjaxCart.cartRequestAdd;
@@ -46,7 +52,7 @@ const export_getCartState = liquidAjaxCart.getCartState;
 const export_subscribeToCartStateUpdate = liquidAjaxCart.subscribeToCartStateUpdate;
 
 export { 
-	export_configure as configure,
+	export_configureCart as configureCart,
 
 	export_cartRequestGet as cartRequestGet, 
 	export_cartRequestAdd as cartRequestAdd, 
