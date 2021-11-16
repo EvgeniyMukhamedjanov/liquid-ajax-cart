@@ -9,5 +9,7 @@
 <title>{{ pageTitle | strip_html |  escape }}</title>
 <meta name="description" content="{{ pageDescription | strip_html | normalize_whitespace | truncate: 160 | escape }}">
 
+<meta name="google-site-verification" content="9RA5_RrOFGT3BhY-EWL2jPkhpru2rKmhC5nmo0LfsEM" />
+
 <link rel="canonical" href="{{ page.url | replace: 'index.html', '' | absolute_url }}">
 <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
