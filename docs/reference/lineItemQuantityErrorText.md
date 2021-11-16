@@ -11,7 +11,7 @@ You can change the message if your store language is not English or the phrase d
 
 <script type="application/json" data-ajax-cart-configuration >
   {
-    "lineItemQuantityErrorText": "{% raw %}{{ 'sections.cart.cart_quantity_error' | t }}{% endraw %}"
+    "lineItemQuantityErrorText": "{{ 'sections.cart.cart_quantity_error' | t }}"
   }
 </script>
 ```

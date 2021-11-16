@@ -11,7 +11,7 @@ You can change the message if your store language is not English or the phrase d
 
 <script type="application/json" data-ajax-cart-configuration >
   {
-    "requestErrorText": "{% raw %}{{ 'general.request_error' | t }}{% endraw %}"
+    "requestErrorText": "{{ 'general.request_error' | t }}"
   }
 </script>
 ```

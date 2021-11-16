@@ -9,7 +9,7 @@ Add a `script` tag with the `data-ajax-cart-configuration` attribute and a JSON 
 
 <script type="application/json" data-ajax-cart-configuration >
   {
-    "requestErrorText": "{% raw %}{{ 'general.request_error' | t }}{% endraw %}",
+    "requestErrorText": "{{ 'general.request_error' | t }}",
     "updateOnWindowFocus": true
   }
 </script>
