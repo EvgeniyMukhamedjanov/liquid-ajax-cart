@@ -21,7 +21,7 @@ Add a container with the `data-ajax-cart-messages="form"` attribute within a pro
 
 ### `line_item.key`
 
-Add the `data-ajax-cart-messages` attribute with a cart item's key to a container and Liquid Ajax Cart will populate the container with errors and messages related to the cart item:
+Add the `data-ajax-cart-messages` attribute with a cart item's key to a container and Liquid Ajax Cart will populate the container with errors and messages related to the cart item.
 
 {% raw %}
 ```html

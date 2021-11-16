@@ -34,6 +34,16 @@ title: Releases
 ### {{ file_version }}
 <p><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></p>
 
+{%- if file_version == '1.6.0' -%}
+* The `data-ajax-cart-quantity-input` supports line item's index now.
+* The `data-ajax-cart-messages="{% raw %}{{ item.key }}{% endraw %}"` shows messages even if the request resulted with a message was called with the `line` parameter, not `id`.
+* Liquid Ajax Cart update cart sections and the State when a window gets focus. 
+* The `configure` function is removed.
+* The `configureCart` function is added.
+* The `data-ajax-cart-configuration` attribute is added.
+* The `updateOnWindowFocus` configuration parameter is added.
+{%- endif -%}
+
 {%- if file_version == '1.5.0' -%}
 If the `data-ajax-cart-section` is attached to a section's root container, it doesn't update the whole section anymore. Only containers with the attribute will be updatable.
 {%- endif -%}

@@ -7,12 +7,23 @@ By default the text is "*You can't add more of this item to your cart*".
 You can change the message if your store language is not English or the phrase doesn't fit to your store:
 {% raw %}
 ```html
-<script type="module">
-  import { configure } from {% endraw %}{% include code/last-release-file-name.html asset_url=true %}{% raw %};
+{% comment %} Somewhere in layout/theme.liquid {% endcomment %}
 
-  configure({
-    lineItemQuantityErrorText: `{{ 'sections.cart.cart_quantity_error' | t }}`
-  })
+<script type="application/json" data-ajax-cart-configuration >
+  {
+    "lineItemQuantityErrorText": "{% raw %}{{ 'sections.cart.cart_quantity_error' | t }}{% endraw %}"
+  }
+</script>
+```
+{% endraw %}
+
+You can also use the `configureCart` function:
+{% raw %}
+```html
+<script type="module">
+  import { configureCart } from {% endraw %}{% include code/last-release-file-name.html asset_url=true %}{% raw %};
+
+  configureCart('lineItemQuantityErrorText': 'My quantity error text');
 </script>
 ```
 {% endraw %}

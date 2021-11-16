@@ -10,7 +10,7 @@ If you can't use links, Liquid Ajax Cart still offers the same functionality for
 
 {% raw %}
 ```html
-<button data-ajax-cart-request-button="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" > 
+<button data-ajax-cart-request-button="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" > 
   Minus one 
 </button>
 

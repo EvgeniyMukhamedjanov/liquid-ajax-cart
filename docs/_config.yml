@@ -113,14 +113,16 @@ links:
         - title: Request state
           file: requestState
           description: A Javascript object with information about each Cart Ajax API request.
-    - title: configure()
+    - title: Configuration
       file: configure
-      description: The function to set configuration parameters.
+      description: The `configureCart` function and the `data-ajax-cart-configuration` attribute to set configuration parameters.
       links:
         - file: productFormsFilter
           description: Sets which product forms shouldn't be ajaxified.
         - file: messageBuilder
           description: Sets HTML layout and the logic for `data-ajax-cart-messages` messages.
+        - file: updateOnWindowFocus
+          description: Toggles the functionality that updates cart sections and the State when the `window` loses the focus and gets the focus again.
         - file: lineItemQuantityErrorText
           description: Configures the error message text when a user tries to set a cart item's quantity higher than the available quantity of the product.
         - file: requestErrorText

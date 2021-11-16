@@ -7,12 +7,23 @@ By default the text is "*There was an error while updating your cart. Please try
 You can change the message if your store language is not English or the phrase doesn't fit to your store:
 {% raw %}
 ```html
-<script type="module">
-  import { configure } from {% endraw %}{% include code/last-release-file-name.html asset_url=true %}{% raw %};
+{% comment %} Somewhere in layout/theme.liquid {% endcomment %}
 
-  configure({
-    requestErrorText: `{{ 'sections.cart.cart_error' | t }}`
-  })
+<script type="application/json" data-ajax-cart-configuration >
+  {
+    "requestErrorText": "{% raw %}{{ 'general.request_error' | t }}{% endraw %}"
+  }
+</script>
+```
+{% endraw %}
+
+You can also use the `configureCart` function:
+{% raw %}
+```html
+<script type="module">
+  import { configureCart } from {% endraw %}{% include code/last-release-file-name.html asset_url=true %}{% raw %};
+
+  configureCart('requestErrorText': 'My request error text');
 </script>
 ```
 {% endraw %}

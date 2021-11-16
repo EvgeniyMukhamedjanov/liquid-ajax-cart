@@ -19,10 +19,10 @@ No Javascript code needed.
       <div>Price: {{ item.final_price | money }}</div>
       <div>
         Quantity: 
-        <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | minus: 1 }}" 
+        <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" 
         > Minus one </a>
-        <input type="number" value="{{ item.quantity }}" data-ajax-cart-quantity-input="{{ item.key }}" />
-        <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity={{ item.quantity | plus: 1 }}" 
+        <input data-ajax-cart-quantity-input="{{ forloop.index }}" value="{{ item.quantity }}" type="number" />
+        <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" 
         > Plus one </a>
       </div>
       <div data-ajax-cart-messages="{{ item.key }}"></div>

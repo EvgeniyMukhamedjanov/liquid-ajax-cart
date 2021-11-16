@@ -17,17 +17,15 @@ You can pass your own function using the `messageBuilder` configuration paramete
 {% raw %}
 ```html
 <script type="module">
-  import { configure } from {% endraw %}{% include code/last-release-file-name.html asset_url=true %}{% raw %};
+  import { configureCart } from {% endraw %}{% include code/last-release-file-name.html asset_url=true %}{% raw %};
 
-  configure({
-    messageBuilder: messages => {
-      let result = '<ul>';
-      messages.forEach( element => {
-        result += `<li class="my-message my-message--${ element.type }">${ element.text }</li>`;
-      })
-      result += '</ul>'
-      return result;
-    }
+  configureCart('messageBuilder', messages => {
+    let result = '<ul>';
+    messages.forEach( element => {
+      result += `<li class="my-message my-message--${ element.type }">${ element.text }</li>`;
+    })
+    result += '</ul>'
+    return result;
   })
 </script>
 ```
