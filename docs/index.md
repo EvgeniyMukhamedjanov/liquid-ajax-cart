@@ -117,7 +117,7 @@ Import all the needed modules and provide the initial cart state in the JSON for
  
 Feel free to use any Liquid tags, objects and filters.
 
-<p markdown="1"><span class="badge badge-info">Updated in 1.5.0</span> Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute to any HTML container — Liquid Ajax Cart reloads HTML of the containers with this attribute every time when the Shopify cart gets updated. </p>
+Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute to any HTML container — Liquid Ajax Cart reloads HTML of the containers with this attribute every time when the Shopify cart gets updated.
     
 ##### Buttons
 
@@ -125,7 +125,7 @@ Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "plus", "mi
 
 The `routes.cart_add_url`, `routes.cart_clear_url`, `routes.cart_update_url` are supported as well. See the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) reference for details.
     
-##### Quantity inputs
+<h5>Quantity inputs <span class="badge badge-info">Supports line-item index since 1.6.0</span></h5>
     
 Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-input/) attribute to an input element that displays a cart item's quantity to ajaxify it.
 

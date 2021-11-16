@@ -1,6 +1,6 @@
 # Configuration
 
-## data-ajax-cart-configuration
+### data-ajax-cart-configuration
 Add a `script` tag with the `data-ajax-cart-configuration` attribute and a JSON object with configuration parameters inside to set initial configuration of Liquid Ajax Cart:
 
 {% raw %}
@@ -21,7 +21,7 @@ It is highly recommended to add the `script` to the `layout/theme.liquid` file t
 This method doesn't support the [`productFormsFilter`](/reference/productFormsFilter/) and the [`messageBuilder`](/reference/messageBuilder/) parameters. To set them up use the `configureCart` function that supports all the parameters.
 
 
-## configureCart()
+### configureCart()
 
 The function takes a configuration parameter and its new value:
 {% raw %}
