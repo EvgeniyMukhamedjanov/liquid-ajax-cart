@@ -14,9 +14,11 @@ links:
   main:
     - title: Home
       url: /
+    - title: Guide
+      url: /guide/
     - title: Reference
       url: /reference/
-    - title: Releases
+    - title: Download
       url: /releases/
   header:
     - title: GitHub
