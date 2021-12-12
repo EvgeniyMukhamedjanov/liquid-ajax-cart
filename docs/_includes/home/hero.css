@@ -22,7 +22,7 @@
 	display: none;
 	background-color: #4B4B4B;
 	font-size: 12px;
-	font-family: "Arial Black";
+	font-family: 'Arial Black', 'Arial', sans-serif;
 	font-weight: 900;
 	color:  white;
 	padding: 2px 8px;
@@ -129,6 +129,7 @@
 	position: absolute;
 	top: -39px;
 	right: 0;
+	z-index: 1;
 }
 
 @media (min-width:  410px) {
