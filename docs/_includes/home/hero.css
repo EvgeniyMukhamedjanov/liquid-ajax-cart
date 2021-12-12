@@ -1,6 +1,5 @@
 .hero-heading {
 	border-top: 1px solid #B4EBAF;
-	padding-bottom: 27px;
 	position: relative;
 	background-color: #DEFB9A;
 	background: linear-gradient(113.65deg, #BAFF91 3.96%, #FFF6A4 64.43%), #DEFB9A;
@@ -9,6 +8,7 @@
 .hero-heading__wrapper {
 	padding-top: 30px;
 	position: relative;
+	padding-bottom: 27px;
 }
 
 .hero-heading__title {

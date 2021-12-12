@@ -60,6 +60,7 @@
 	white-space: pre;
 	overflow: auto;
 	word-wrap: normal;
+	word-break: normal;
 }
 
 .vs-code pre::-webkit-scrollbar {
