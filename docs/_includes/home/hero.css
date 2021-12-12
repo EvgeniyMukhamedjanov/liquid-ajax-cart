@@ -203,7 +203,7 @@
 
 @media (min-width:  900px) {
 	.hero-heading {
-		clip-path: url(#hero-clip-path);
+		clip-path: url("#hero-clip-path");
 	}
 
 	.hero-heading__wrapper {
