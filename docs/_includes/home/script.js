@@ -1,7 +1,7 @@
-let currentHighlight = undefined;
-const hightlightExample = (name) => {
+var currentHighlight = undefined;
+function hightlightExample (name) {
     if ( currentHighlight !== name ) {
-        let found = false;
+        var found = false;
         document.querySelectorAll('[data-example-highlight]').forEach(function(highlight){
             if (highlight.getAttribute('data-example-highlight') === name) {
                 highlight.classList.add('js-code-examples-highlighted');
@@ -13,7 +13,7 @@ const hightlightExample = (name) => {
         if (found) {
             found.closest('.code-examples__example').classList.add('code-examples__example--blur');
         } else {
-            document.querySelectorAll('.code-examples__example--blur')?.forEach(item => {
+            document.querySelectorAll('.code-examples__example--blur')?.forEach(function(item) {
                 item.classList.remove('code-examples__example--blur');
             })
         }
@@ -21,7 +21,7 @@ const hightlightExample = (name) => {
     }
 }
 
-const hightlightExampleScreenDecorator = (name) => {
+function hightlightExampleScreenDecorator (name) {
     if (window.matchMedia("(min-width: 900px)").matches) {
         hightlightExample(name);
     } else {
@@ -31,7 +31,7 @@ const hightlightExampleScreenDecorator = (name) => {
 
 document.querySelectorAll('[data-example]').forEach( function(example){
     example.addEventListener("mousemove", function( event ) {
-        const closestHighlight = event.target.closest('[data-example-highlight]');
+        var closestHighlight = event.target.closest('[data-example-highlight]');
         if(closestHighlight) {
             hightlightExampleScreenDecorator(closestHighlight.getAttribute('data-example-highlight'));
         } else {
@@ -49,40 +49,40 @@ window.addEventListener('resize', () => {
 
 
 
-const exampleLinkHighlight = document.querySelector('[data-example-link-highlight]');
+var exampleLinkHighlight = document.querySelector('[data-example-link-highlight]');
 
-const examples = document.querySelectorAll('[data-example]');
-const exampleLinks = document.querySelectorAll('[data-example-link]');
-const exampleCanvas = document.querySelector('[data-example-canvas]');
+var examples = document.querySelectorAll('[data-example]');
+var exampleLinks = document.querySelectorAll('[data-example-link]');
+var exampleCanvas = document.querySelector('[data-example-canvas]');
 
 if ( examples ) {
 
-    examples.forEach( item => {
+    examples.forEach( function(item) {
         // remove IDs so the page doesn't jump when an example link is clicked
         item.setAttribute('data-example-id', item.id);
         item.id = '';
 
         // set transition delay for all the code parts and notes
-        let transitionDelay = 500;
-        const transitionDelayStep = 5;
-        const codePartHighlights = [];
-        item.querySelectorAll('.highlight span:not([data-example-highlight]), [data-example-cta]').forEach(codePart => {
-            codePart.style.transitionDelay = `${ transitionDelay }ms`;
+        var transitionDelay = 500;
+        var transitionDelayStep = 5;
+        var codePartHighlights = [];
+        item.querySelectorAll('.highlight span:not([data-example-highlight]), [data-example-cta]').forEach(function(codePart) {
+            codePart.style.transitionDelay = transitionDelay + 'ms';
             transitionDelay += transitionDelayStep;
-            const codePartHighlight = codePart.parentNode.getAttribute('data-example-highlight');
+            var codePartHighlight = codePart.parentNode.getAttribute('data-example-highlight');
             if(codePartHighlight && !codePartHighlights.includes(codePartHighlight)) {
-                const relatedNotes = document.querySelectorAll(`[data-example-highlight=${ codePartHighlight }].code-examples__note`);
+                var relatedNotes = document.querySelectorAll('[data-example-highlight=' + codePartHighlight + '].code-examples__note');
                 if (relatedNotes) {
-                    relatedNotes.forEach( note => {
-                        note.parentNode.style.transitionDelay = `${ transitionDelay }ms`;
+                    relatedNotes.forEach( function(note) {
+                        note.parentNode.style.transitionDelay = transitionDelay + 'ms';
                     })
                 }
                 codePartHighlights.push(codePartHighlight);
             }
         });
-        const resultBlock = item.querySelector('.code-examples__result-block-wrapper');
+        var resultBlock = item.querySelector('.code-examples__result-block-wrapper');
         if(resultBlock) {
-            resultBlock.style.transitionDelay = `${ transitionDelay }ms`
+            resultBlock.style.transitionDelay = transitionDelay + 'ms'
         }
     });
 
@@ -90,12 +90,12 @@ if ( examples ) {
     // toggle .js-active for [data-example-link]
     // set height for examples wrapper according to a selected example
     // set props for [data-example-link-highlight]
-    const examplesRouter = () => {
-        let route = window.location.hash || '';
-        let selectedExample;
+    function examplesRouter () {
+        var route = window.location.hash || '';
+        var selectedExample;
         
         if (route) {
-            selectedExample = document.querySelector(`[data-example-id="${route.replace('#', '')}"]`);
+            selectedExample = document.querySelector('[data-example-id="' + route.replace('#', '') + '"]');
         }
         if(!selectedExample) {
             return;
@@ -109,13 +109,13 @@ if ( examples ) {
         });
 
         if ( exampleCanvas ) {
-            const marginBottom = parseInt(window.getComputedStyle(selectedExample,null).getPropertyValue("margin-bottom"));
-            const marginTop = parseInt(window.getComputedStyle(selectedExample,null).getPropertyValue("margin-top"));
+            var marginBottom = parseInt(window.getComputedStyle(selectedExample,null).getPropertyValue("margin-bottom"));
+            var marginTop = parseInt(window.getComputedStyle(selectedExample,null).getPropertyValue("margin-top"));
             exampleCanvas.style.height = selectedExample.offsetHeight + marginTop + marginBottom + 'px';
         }
         
         if(exampleLinks) {
-            let previousActive, nextActive;
+            var previousActive, nextActive;
             exampleLinks.forEach(item => {
                 if(item.hash === '#' + selectedExample.getAttribute('data-example-id')) {
                     nextActive = item;
@@ -127,7 +127,7 @@ if ( examples ) {
                 previousActive.classList.remove('js-active');
             }
             if(nextActive) {
-                const highlighter = nextActive.querySelector('span');
+                var highlighter = nextActive.querySelector('span');
                 if(previousActive) {
                     highlighter.classList.remove('js-left-move');
                     highlighter.classList.remove('js-right-move');
