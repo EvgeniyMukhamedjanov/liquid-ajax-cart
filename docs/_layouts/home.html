@@ -61,7 +61,7 @@ try {
 	      	{% include home/youtube-link.css %}
 	      	{% include home/result-content.css %}
 	    {% endcapture %}
-	    {{ home_css }}
+	    {{ home_css | scssify }}
 	</style>
 
 
