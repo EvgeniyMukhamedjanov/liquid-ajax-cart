@@ -21,41 +21,42 @@ try {
     {% include head/full.html %}
 
     <style type="text/css">
-    	body {
-			color:  black;
-		}
-
-		html:not(.js-animation) *,
-		html:not(.js-animation) *:before,
-		html:not(.js-animation) *:after {
-			transition-property: none !important;
-		}
-
-		code {
-			color: currentColor;
-		  padding: 0 5px;
-		  border: 1px solid #d2d5d8;
-		  background-color: #fafbf4;
-		  border-radius: 3px;
-		  white-space: nowrap;
-		}
-
-		.container {
-			max-width: 1670px;
-			padding:  0 15px;
-		}
-		@media (min-width: 760px) {
-			.container {
-				padding:  0 30px;
+    	{% capture home_css %}
+	    	body {
+				color:  black;
 			}
-		}
-		@media (min-width: 1360px) {
-			.container {
-				padding:  0 50px;
+
+			html:not(.js-animation) *,
+			html:not(.js-animation) *:before,
+			html:not(.js-animation) *:after {
+				transition-property: none !important;
 			}
-		}
-	    {% capture home_css %}
-	      	{% include home/youtube-link.css %}
+
+			code {
+				color: currentColor;
+			  padding: 0 5px;
+			  border: 1px solid #d2d5d8;
+			  background-color: #fafbf4;
+			  border-radius: 3px;
+			  white-space: nowrap;
+			}
+
+			.container {
+				max-width: 1670px;
+				padding:  0 15px;
+			}
+			@media (min-width: 760px) {
+				.container {
+					padding:  0 30px;
+				}
+			}
+			@media (min-width: 1360px) {
+				.container {
+					padding:  0 50px;
+				}
+			}
+
+	      	
 	    {% endcapture %}
 	    {{ home_css | scssify }}
 	</style>
