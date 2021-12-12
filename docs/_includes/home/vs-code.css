@@ -57,10 +57,14 @@
 .vs-code pre {
 	scrollbar-width: thin;
 	scrollbar-color: rgba(255, 255, 255, .2) rgba(255, 255, 255, .1);
-	white-space: pre;
 	overflow: auto;
+}
+
+.vs-code pre,
+.vs-code code {
 	word-wrap: normal;
 	word-break: normal;
+	white-space: pre;
 }
 
 .vs-code pre::-webkit-scrollbar {
