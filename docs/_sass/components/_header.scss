@@ -73,7 +73,7 @@
 }
 
 .header-nav__wrapper {
-    min-height: 70px;
+    min-height: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -130,14 +130,15 @@
     position: relative;
 }
 
-@media (min-width: 520px) {
+@media (min-width: 760px) {
 
     .header-nav__lists-wrapper {
-        padding: 13px 0 17px;
+        padding: 3px 0 6px;
         display: flex !important;
         justify-content: space-between;
         flex-grow: 1;
         position: static;
+        margin: 0 -10px;
     }
 
     .header-nav__toggle-button {

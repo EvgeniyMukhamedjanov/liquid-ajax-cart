@@ -1,0 +1,139 @@
+.cart-example {
+	font-size: 16px;
+}
+
+.cart-example__heading {
+	padding:  12px 10px 10px;
+	font-weight: bold;
+	font-size: 20px;
+	border-bottom: 1px solid rgba(27,30,47,.15);
+}
+
+.cart-example__item {
+	position: relative;
+	padding:  20px 10px;
+}
+
+.cart-example__checkout {
+	display: block;
+	background-color: rgba(0, 0, 0, .4);
+	font-family: "Arial Black";
+	font-weight: 900;
+	letter-spacing: .2em;
+	font-size: 14px;
+	color:  white;
+	text-transform: uppercase;
+	text-align: center;
+	padding: 13px 0;
+	border: none !important;
+}
+
+.cart-example__quantity {
+	margin-top: 5px;
+}
+
+.cart-example__minus,
+.cart-example__plus {
+	border: none;
+	width: 24px;
+	height: 24px;
+	text-indent: -1000px;
+	overflow: hidden;
+	position: relative;
+	background-color: transparent;
+	vertical-align: -6px;
+	display: inline-block;
+}
+.cart-example__minus:before,
+.cart-example__plus:before {
+	content: '';
+	position: absolute;
+	width: 11px;
+	height: 1px;
+	top: 50%;
+	left:  50%;
+	margin-left: -5px;
+	background-color: black;
+}
+.cart-example__plus:last-child:after {
+	content: '';
+	position: absolute;
+	height: 11px;
+	width: 1px;
+	top: 50%;
+	left:  50%;
+	margin-top: -5px;
+	background-color: black;
+}
+
+.cart-example__qty-input {
+    width: 53px;
+    display: inline;
+    /* margin: 0; */
+    padding: 1px 3px;
+    border: 1px solid rgba(27,30,47,.15);
+    color:  #333;
+    display: inline-block;
+	margin: 0;
+}
+
+.cart-example__messages {
+	font-size: 13px;
+	color:  black;
+	margin-bottom: 6px;
+	margin-top: 3px;
+	line-height: 1.2;
+}
+
+.cart-example__item-title {
+	color:  #7E7E7E !important;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+
+.product-example {
+	font-size: 15px;
+	padding: 20px 20px 26px;
+}
+
+.product-example__title {
+	font-size: 23px;
+	font-weight: bold;
+}
+
+.product-example__price {
+	font-size: 17px;
+	margin-bottom: 12px;
+}
+
+.product-example__button {
+	display: block;
+	width: 100%;
+	background-color: rgba(0, 0, 0, .4);
+	font-family: "Arial Black";
+	font-weight: 900;
+	letter-spacing: .2em;
+	font-size: 14px;
+	color:  white;
+	text-transform: uppercase;
+	text-align: center;
+	padding: 13px 0;
+	border: none !important;
+}
+
+.product-example__form {
+	margin-top: 18px;
+}
+
+.product-example__messages {
+	font-size: 13px;
+	color:  black;
+	margin-bottom: 3px;
+}
+
+.main-page-content {
+	margin-top: -20px;
+	padding: 20px 0 1px;
+	background: linear-gradient(122.54deg, #FCFFE7 16.87%, #FDFFEE 50.63%, #F0FFD0 68.73%), linear-gradient(0deg, #FCFFE7, #FCFFE7);
+}
