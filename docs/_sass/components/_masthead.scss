@@ -1,16 +1,13 @@
 .site-masthead {
-    @include themer(background, (
-        'dark': $site-ui-header-dark-color1,
-        'light': $site-ui-header-light-color1,
-    ));
-    @include themer(background, (
-        'dark': linear-gradient(135deg, $site-ui-header-dark-color1, $site-ui-header-dark-color2),
-        'light': linear-gradient(135deg, $site-ui-header-light-color1, $site-ui-header-light-color2),
-    ));
-
-    color: white;
+    
+    border-top: 1px solid #B4EBAF;
+    background-color: #DEFB9A;
+    background: linear-gradient(113.65deg, #BAFF91 3.96%, #FFF6A4 64.43%), #DEFB9A;
+    color: black;
     position: relative;
-    background-size: cover;
+    font-family: 'Arial Black', 'Arial', sans-serif;
+    font-weight: 900;
+    // font-size: 32px;
     
     .container-fluid & {
         border-radius: 1rem;

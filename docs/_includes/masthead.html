@@ -13,13 +13,12 @@
         {%- endif -%}
     {%- endcapture %}
     <div class="{%- if page.homepage -%} container-fluid {% endif %}">
-        <div class="site-masthead mb-5 py-5 {{ alignment_class }}">
+        <div class="site-masthead mb-5 pt-5 pb-4 {{ alignment_class }}">
             <div class="container">
                 {% include masthead/title.html %}
                 {% include masthead/buttons.html %}
             </div>
         </div>
     </div>
-    {% include masthead/bg-image.html %}
 
 {% endif %}
