@@ -1,10 +1,4 @@
----
-layout: full
-homepage: true
-description: A Javascript library for building Shopify Ajax-carts using Liquid templates
-disable_anchors: true
-title: Liquid Ajax Cart — Ajax Cart for Shopify
----
+#Guide
 
 {% assign last_release_file = blank %}
 {% assign last_release_slice = '/releases/last/liquid-ajax-cart-v' %}
@@ -19,32 +13,6 @@ title: Liquid Ajax Cart — Ajax Cart for Shopify
 {% assign left_column_classes = 'col-lg-5' %}
 {% assign right_column_classes = 'col-lg-7' %}
 
-<div class="row">
-<div class="col-lg-8">
-<p class="lead" markdown="1">
-Add the `data-ajax-cart-section` attribute to your cart liquid section and Liquid Ajax Cart will update the section's HTML on a page every time when the cart is changed.
-</p>
-<p class="lead" markdown="1">No Javascript code needed.</p>
-
-<p class="lead" markdown="1">Check out the <a href="https://liquid-ajax-cart.myshopify.com/" target="_blank">demo store</a> where all AJAX-cart functionality was built from scratch using Liquid Ajax Cart. Password — `liquid-ajax-cart`.</p>
-</div>
-<div class="col-lg-4">
-<blockquote>
-<h4 class="mt-0">{% include svg-icon.html icon="react" %} React integration</h4>
-<p markdown="1">For building custom storefronts using React or Preact, Liquid Ajax Cart offers [Ajax Cart API requests](/reference/requests/) and the [State](/reference/state/) — enriched cart object. The "How to" guide will be ready soon.</p>
-</blockquote>
-</div>
-</div>
-
----
-
-<div class="video mx-n5 py-4 px-5 mb-5">
-	<div>
-		<h2 class="video__title">How to create Shopify Ajax-carts <br/>using "Liquid Ajax Cart" Javascript library</h2>
-		<div class="mb-5"><a href="https://youtu.be/5Dl9Wsmq130" target="_blank" class="site-masthead__button video__btn">Watch on Youtube</a></div>
-	</div>
-	<div class="video__subtitle">Complete Shopify Ajax-cart from scratch in 10 minutes.</div>
-</div>
 
 <div class="{{ row_classes }}">
 <div class="col-lg-6" markdown="1">
