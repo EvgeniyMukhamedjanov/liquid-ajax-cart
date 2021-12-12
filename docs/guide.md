@@ -1,4 +1,8 @@
-#Guide
+---
+title: Guide
+layout: full
+disable_anchors: true
+---
 
 {% assign last_release_file = blank %}
 {% assign last_release_slice = '/releases/last/liquid-ajax-cart-v' %}
