@@ -4,8 +4,10 @@ layout: null
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {% for page in site.pages %}
-    <url>
-      <loc>{{ site.url }}{{ page.url | remove: "index.html" }}</loc>
-    </url>
+  	{% if page.name contains '.md' %}
+	    <url>
+	      <loc>{{ page.url | replace: 'index.html', '' | absolute_url }}</loc>
+	    </url>
+    {% endif %}
   {% endfor %}
 </urlset>
