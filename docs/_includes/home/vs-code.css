@@ -8,7 +8,7 @@
 .vs-code__tab {
 	display: flex;
 	color: white;
-	padding: 8px 0 8px 16px;
+	padding: 8px 0 8px 15px;
 	font-size: 13px;
 	font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
 }
@@ -25,13 +25,14 @@
 	background-color: transparent;
 	border: none;
 	padding:  0;
-	margin: 10px 0 0 55px;
+	margin: 10px 0 0 15px;
 	position: relative;
 }
 
 .vs-code .highlight pre code:before {
+	display: none;
+
 	content: '1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 10\A 11\A 12\A 13\A 14\A 15\A 16\A 17\A 18\A 19\A 20\A 21\A 22\A 23\A 24\A 25\A 26\A 27\A 28\A 29\A 30\A 31\A 32\A 33\A 34\A 35\A 36\A 37\A 38\A 39\A 40';
-	display: block;
 	white-space: pre;
 	color: #858585;
 	text-align: right;
@@ -129,6 +130,22 @@
 .js .code-examples__example--active .vs-code .highlight span:not(data-example-highlight) {
 	visibility: visible;
 	transition: visibility .1s;
+}
+
+@media (max-width: 539px) {
+	.vs-code .highlight pre {
+		font-size: 75%;
+	}
+}
+
+@media (min-width: 540px) { 
+	.vs-code .highlight pre code:before {
+		display: block;
+	}
+
+	.vs-code .highlight { 
+		margin: 10px 0 0 65px;
+	}
 }
 
 @media (min-width: 900px) { 
