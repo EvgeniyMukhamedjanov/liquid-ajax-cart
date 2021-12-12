@@ -1,3 +1,5 @@
+try{
+
 var currentHighlight = undefined;
 function hightlightExample (name) {
     if ( currentHighlight !== name ) {
@@ -156,3 +158,6 @@ if ( examples ) {
 setTimeout(() => {
     document.querySelector('html').classList.add('js-animation');
 }, 100)
+
+
+} catch(e) {alert(e)}
