@@ -111,17 +111,17 @@
 }
 
 [data-example-link] {
-	border-bottom: 1px dotted rgba(0, 0, 0, .3) !important;
+	border-bottom: 1px dotted black !important;
 	position: relative;
 }
 [data-example-link]:hover,
 [data-example-link]:active,
 [data-example-link]:focus {
-	border-bottom: 1px dotted rgba(0, 0, 0, 1) !important;
+	border-bottom: 1px dashed black !important;
 }
 
 .js [data-example-link].js-active {
-	border-bottom: 1px dotted rgba(0, 0, 0, 0) !important;
+	border-bottom-color: rgba(0, 0, 0, 0) !important;
 }
 
 
@@ -238,7 +238,7 @@
 	.js [data-example-link].js-active:after {
 		height: 20px;
 		bottom: -22px;
-		opacity: .6;
+		opacity: .8;
 		transition: all .2s .2s;
 	}
 
@@ -247,6 +247,7 @@
 		bottom: -34px;
 		top:  auto;
 		transition: all .4s .1s;
+		opacity: .6;
 	}
 	.js [data-example-link].js-active:after {
 		opacity: .8;
