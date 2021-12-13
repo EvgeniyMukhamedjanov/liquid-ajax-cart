@@ -21,6 +21,8 @@ links:
     - title: Download
       url: /releases/
   header:
+    - title: Demo Store
+      url: https://liquid-ajax-cart.myshopify.com/
     - title: GitHub
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   homepage:
