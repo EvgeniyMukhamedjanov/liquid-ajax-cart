@@ -247,12 +247,17 @@
 		bottom: -34px;
 		top:  auto;
 		transition: all .4s .1s;
-		opacity: .6;
 	}
 	.js [data-example-link].js-active:after {
 		opacity: .8;
 		bottom: -34px;
 		transition: all .4s .2s;
+	}
+	.js [data-example-link]:not(.js-active):hover:after {
+		opacity: .9;
+		height: 13px;
+		bottom: -34px;
+		transition: all .2s;
 	}
 }
 
