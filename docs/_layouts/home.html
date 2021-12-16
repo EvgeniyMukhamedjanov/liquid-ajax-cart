@@ -13,8 +13,11 @@
 <html lang="en" class="no-js">
 <script>
 try {
-    document.querySelector('html').classList.remove('no-js');
-    document.querySelector('html').classList.add('js')
+    var html = document.querySelectorAll('html');
+    html.forEach(function(item){
+        item.classList.remove('no-js');
+        item.classList.add('js');
+    })
 } catch(e){}
 </script>
 <head>
