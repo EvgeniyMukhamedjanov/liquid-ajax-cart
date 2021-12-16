@@ -13,9 +13,12 @@ function hightlightExample (name) {
         if (found) {
             found.closest('.code-examples__example').classList.add('code-examples__example--blur');
         } else {
-            document.querySelectorAll('.code-examples__example--blur')?.forEach(function(item) {
-                item.classList.remove('code-examples__example--blur');
-            })
+            var blurredExamples = document.querySelectorAll('.code-examples__example--blur');
+            if(blurredExamples) {
+                document.querySelectorAll('.code-examples__example--blur').forEach(function(item) {
+                    item.classList.remove('code-examples__example--blur');
+                })
+            }
         }
         currentHighlight = name;
     }
