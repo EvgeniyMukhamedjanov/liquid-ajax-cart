@@ -26,7 +26,7 @@ disable_anchors: true
   <div class="star-promo">
     <p>I believe Liquid Ajax Cart is the easiest and most native solution in 2022 for Shopify Ajax-carts and I want more people to know about it.</p>
     <p>If you also like the project — give a star in GitHub. It really helps to promote and impove.</p>
-    <div class="star-promo__name">— Evgeniy Mukhamedjanov, dev <img src="https://github.com/EvgeniyMukhamedjanov.png?size=26" width="26" height="26" /></div>
+    <div class="star-promo__name">— Evgeniy Mukhamedjanov, dev <img src="https://github.com/EvgeniyMukhamedjanov.png?size=62" width="26" height="26" /></div>
     <div>
         <a class="github-button" href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star EvgeniyMukhamedjanov/liquid-ajax-cart on GitHub">Star</a>
     </div>
