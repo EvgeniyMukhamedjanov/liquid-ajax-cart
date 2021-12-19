@@ -17,6 +17,23 @@ disable_anchors: true
 {% assign left_column_classes = 'col-lg-5' %}
 {% assign right_column_classes = 'col-lg-7' %}
 
+<div class="{{ row_classes }}">
+<div class="col-lg-6 lead">
+<p>Liquid Ajax Cart turns “Add to cart” form submissions into Ajax requests and updates cart sections using <a href="https://shopify.dev/api/ajax/reference/cart#bundled-section-rendering" target="_blank">Bundled Section Rendering</a>.</p>
+<p>It lets developers build Shopify Ajax-carts using plain Liquid templates.</p>
+</div>
+<div class="col-lg-6">
+  <div class="star-promo">
+    <p>I believe Liquid Ajax Cart is the easiest and most native solution in 2022 for Shopify Ajax-carts and I want more people to know about it.</p>
+    <p>If you also like the project — give a star in GitHub. It really helps to promote and impove.</p>
+    <div>
+        <a class="github-button" href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star EvgeniyMukhamedjanov/liquid-ajax-cart on GitHub">Star</a>
+    </div>
+  </div>
+</div>
+</div>
+
+---
 
 <div class="{{ row_classes }}">
 <div class="col-lg-6" markdown="1">
