@@ -1,22 +1,40 @@
+{% assign reference_url = '/reference/' %}
+{% assign page_url_reference_slice = page.url | slice: 0, reference_url.size %}
+{% assign is_reference_subpage = false %}
+{% if page_url_reference_slice == reference_url and page.url.size > reference_url.size %}
+    {% assign is_reference_subpage = true %}
+{% endif %}
+
+{% assign guide_url = '/guide/' %}
+{% assign page_url_guide_slice = page.url | slice: 0, guide_url.size %}
+{% assign is_guide = false %}
+{% if page_url_guide_slice == guide_url and page.url.size == guide_url.size %}
+    {% assign is_guide = true %}
+{% endif %}
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         {% include head/full.html %}
     </head>
-
-    {% assign scrollSpyOffset = page.scrollSpyOffset | default: layout.scrollSpyOffset | default: 0 %}
-    <body
-        class="layout-{{ page.layout }}"
-        data-spy="scroll"
-        data-target="#page-toc"
-        data-offset="{{ scrollSpyOffset }}"
-    >
+    
+    <body class="layout-{{ page.layout }}">
         {% include navigation.html %}
-        {% include masthead.html %}
+        <hr class="mt-0 mb-3" />
+        {% unless is_reference_subpage %}
+            <div class="site-masthead">
+                <div class="container">
+                    <h1 class="site-masthead__title"><span>{{ page.title | default: site.name }}</span></h1>
+                </div>
+            </div>
+        {% endunless %}
 
         <div style="overflow: hidden;">{{ content }}</div>
 
         {% include footer/full.html %}
     </body>
-    <script async="" defer="" src="https://buttons.github.io/buttons.js"></script>
+    {% if is_guide %}
+        <script async="" defer="" src="https://buttons.github.io/buttons.js"></script>
+    {% endif %}
 </html>

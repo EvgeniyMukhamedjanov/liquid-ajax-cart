@@ -8,3 +8,11 @@
     rel="stylesheet"
     href="{{ '/assets/css/styles.css' | relative_url }}?v=1"
 />
+
+<style type="text/css">
+    {% capture critical_css %}
+        {% include styles/navigation.scss %}
+        {% include styles/masthead.scss %}
+    {% endcapture %}
+    {{ critical_css | scssify }}
+</style>
