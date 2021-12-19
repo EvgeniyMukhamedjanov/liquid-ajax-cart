@@ -78,6 +78,7 @@
 	scrollbar-width: thin;
 	scrollbar-color: rgba(255, 255, 255, .2) rgba(255, 255, 255, .1);
 	overflow: auto;
+	margin-bottom: 0;
 }
 
 .vs-code pre,
