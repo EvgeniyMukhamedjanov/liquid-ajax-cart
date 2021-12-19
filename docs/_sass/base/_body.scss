@@ -14,7 +14,7 @@ body {
 .lead {
     font-weight: 400;
     font-size: 23px;
-    line-height: 1.33;
+    line-height: 1.4;
 
     a {
         background-color: rgba(191,234,82,0.15);
@@ -55,10 +55,8 @@ body {
     }
 }
 .star-promo__name {
-    position: absolute;
     font-size: 14px;
     font-style: italic;
-    right: 25px;
 
     img {
         width: 26px;
@@ -67,6 +65,11 @@ body {
         border: 1px solid rgba(0, 0, 0, .1);
         margin-left: 10px;
         display: inline-block !important;
+    }
+
+    @media only screen and (min-width: 480px) {
+        position: absolute;
+        right: 25px;
     }
 }
 
