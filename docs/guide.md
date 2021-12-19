@@ -28,7 +28,7 @@ disable_anchors: true
     <p>If you also like the project — give a star in GitHub. It really helps to promote and impove.</p>
     <p class="star-promo__name">— Evgeniy Mukhamedjanov, dev <img src="https://github.com/EvgeniyMukhamedjanov.png?size=62" width="26" height="26" alt="Evgeniy Mukhamedjanov's photo" /></p>
     <div>
-        <a class="github-button" href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star EvgeniyMukhamedjanov/liquid-ajax-cart on GitHub">Star</a>
+        <a class="github-button" href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart" data-size="large" data-show-count="true" aria-label="Star EvgeniyMukhamedjanov/liquid-ajax-cart on GitHub">GitHub</a>
     </div>
   </div>
 </div>
