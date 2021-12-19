@@ -22,6 +22,9 @@
                 {% include styles/navigation.scss %}
                 {% include styles/masthead.scss %}
                 {% include styles/highlight.scss %}
+                {% if is_reference_subpage %}
+                    {% include styles/sidebar.scss %}
+                {% endif %}
             {% endcapture %}
             {{ critical_css | scssify }}
         </style>

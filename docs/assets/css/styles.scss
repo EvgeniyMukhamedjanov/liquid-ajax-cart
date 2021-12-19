@@ -30,4 +30,3 @@ $site-ui-masthead-color-light: {{ site.ui.masthead.color.light | default: '#fff'
 // Components
 @import 'components/footer';
 @import 'components/mobile-toc';
-@import 'components/sidebar';
