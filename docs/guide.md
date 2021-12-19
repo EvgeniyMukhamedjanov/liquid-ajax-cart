@@ -23,7 +23,7 @@ disable_anchors: true
 <p>It lets developers build Shopify Ajax-carts using plain Liquid templates.</p>
 <p>Liquid Ajax Cart doesn't apply any CSS styles.</p>
 </div>
-<div class="col-lg-6">
+<div class="col-lg-6 mt-3 mt-lg-0">
   <div class="star-promo">
     <div class="star-promo__text">
       <p>Guys, I need your help!</p>
