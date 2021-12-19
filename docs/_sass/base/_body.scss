@@ -48,10 +48,18 @@ body {
     margin-left: auto;
     border: 1px solid rgba(0,0,0,.1);
     padding: 15px 25px;
+    position: relative;
 
     @media only screen and (min-width: 992px) {
         max-width: 480px;
     }
+}
+.star-promo__name {
+    position: absolute;
+    font-size: 14px;
+    font-style: italic;
+    right: 25px;
+    margin-top: 5px;
 }
 
 // .video {
