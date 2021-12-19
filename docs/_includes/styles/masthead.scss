@@ -1,0 +1,41 @@
+.site-masthead {
+    
+    border-top: 1px solid #e5e5e5;
+    color: black;
+    position: relative;
+    padding: 64px 0 32px;
+}
+
+.site-masthead__title {
+    font-family: 'Arial Black', 'Arial', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    line-height: 1;
+    position: relative;
+    z-index: 2;
+
+    span {
+        background: linear-gradient(104.39deg, #BAFF91 4.53%, #FFF6A4 73.74%);
+        background-size: 100% 0.375em;
+        background-repeat: repeat-x;
+        background-position: left 0 bottom 0.15em;
+    }
+
+    @media (min-width:  410px) {
+        font-size: 36px;
+    }
+
+    @media (min-width: 560px) {
+        font-size: 48px;
+    }
+
+    @media (min-width:  760px) {
+        font-size: 56px;
+    }
+
+    @media (min-width:  1200px) {
+        font-size: 60px;
+    }
+}
+
+
