@@ -17,8 +17,16 @@
 <html lang="en">
     <head>
         {% include head/full.html %}
+        <style type="text/css">
+            {% capture critical_css %}
+                {% include styles/navigation.scss %}
+                {% include styles/masthead.scss %}
+            {% endcapture %}
+            {{ critical_css | scssify }}
+        </style>
+
     </head>
-    
+
     <body class="layout-{{ page.layout }}">
         {% include navigation.html %}
         <hr class="mt-0 mb-3" />
