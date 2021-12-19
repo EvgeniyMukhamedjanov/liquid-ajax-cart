@@ -3,7 +3,7 @@
     top: 20px;
     
     scrollbar-width: 2px;
-    scrollbar-color: $site-ui-border-color-light #ebebeb;
+    scrollbar-color: #dee2e6 #ebebeb;
     &::-webkit-scrollbar {
       width: 2px;
       height: 2px;
@@ -12,7 +12,7 @@
       background: #ebebeb;
     }
     &::-webkit-scrollbar-thumb {
-      background: $site-ui-border-color-light;
+      background: #dee2e6;
     }
 
     a {
