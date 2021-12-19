@@ -30,14 +30,7 @@ $site-ui-masthead-color-light: {{ site.ui.masthead.color.light | default: '#fff'
 @import 'base/scope-markdown';
 
 // Components
-@import 'components/alert';
 @import 'components/footer';
-@import 'components/header';
 @import 'components/highlight';
-@import 'components/masthead';
 @import 'components/mobile-toc';
 @import 'components/sidebar';
-
-// Utilities
-@import 'utilities/colors';
-@import 'utilities/js';
