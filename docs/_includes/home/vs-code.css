@@ -87,6 +87,12 @@
 	white-space: pre;
 }
 
+.vs-code code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
 .vs-code pre::-webkit-scrollbar {
 	height: 8px;
 	height: 8px;

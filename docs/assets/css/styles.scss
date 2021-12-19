@@ -17,8 +17,6 @@ $site-ui-header-light-color2: {{ site.ui.header.light.color2 | default: '#673051
 $site-ui-masthead-color-dark: {{ site.ui.masthead.color.dark | default: '#fff' }};
 $site-ui-masthead-color-light: {{ site.ui.masthead.color.light | default: '#fff' }};
 
-@import 'abstracts/highlight-dark';
-@import 'abstracts/highlight-light';
 @import 'abstracts/themer';
 @import 'abstracts/variables';
 
@@ -31,6 +29,5 @@ $site-ui-masthead-color-light: {{ site.ui.masthead.color.light | default: '#fff'
 
 // Components
 @import 'components/footer';
-@import 'components/highlight';
 @import 'components/mobile-toc';
 @import 'components/sidebar';
