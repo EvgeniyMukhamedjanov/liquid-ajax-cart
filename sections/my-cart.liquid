@@ -15,20 +15,37 @@
     {% for item in cart.items %}
       <div class="ajax-cart__line-item" >
         <div><a class="h3" href="{{ item.url }}">{{ item.product.title }}</a></div>
-          {% unless item.product.has_only_default_variant %}
-            <div><small>{{ item.variant.title }}</small></div>
-          {% endunless %}
+        {% unless item.product.has_only_default_variant %}
+          <div><small>{{ item.variant.title }}</small></div>
+        {% endunless %}
+        {% for property in item.properties %}
+          {% if property.last != blank %}
           <div>
             <small>
-              Price: 
-              {% if item.original_price != item.final_price %}
-                <del>{{ item.original_price | money }}</del>
-                {{ item.final_price | money }}
+              {{ property.first }}: 
+              {% if property.first == 'Engraving' %}
+                <input 
+                  type="text"
+                  class="my-cart__input"
+                  value="{{ property.last }}" 
+                  data-ajax-cart-property-input="{{ forloop.index }} | {{ property.first }}"/>
               {% else %}
-                {{ item.original_price | money }} 
+                {{ property.last }}
               {% endif %}
             </small>
           </div>
+          {% endif %}
+        {% endfor %}
+        <p>
+          <small>
+            Price: 
+            {% if item.original_price != item.final_price %}
+              <del>{{ item.original_price | money }}</del>
+              {{ item.final_price | money }}
+            {% else %}
+              {{ item.original_price | money }} 
+            {% endif %}
+          </small>
         </p>
 
         <div>
@@ -43,7 +60,7 @@
               <i>-</i>
             </a>
             <input 
-              class="my-cart__quantity-input"
+              class="my-cart__input"
               type="number" 
               value="{{ item.quantity }}" 
               min="0" 
@@ -91,7 +108,7 @@
 {% endschema %}
 
 {% style %}
-  input.my-cart__quantity-input {
+  input.my-cart__input {
     width: 53px;
     display: inline;
     margin: 0;
