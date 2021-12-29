@@ -10,13 +10,21 @@ import { cartGlobalClassesInit } from './global-classes';
 
 if (!( 'liquidAjaxCart' in window )) {
 	cartSettingsInit();
-	cartStateInit();
-	cartDomBinderInit();
-	cartSectionsInit();
-	cartControlsInit();
 	cartProductFormsInit();
-	cartMessagesInit();
-	cartGlobalClassesInit();
+
+	// should be before cartStateInit because 
+	// it must subscribe to ajax-api before state 
+	// so that all state subscribers can work with updated DOM
+	cartSectionsInit();
+
+	cartStateInit();
+	cartDomBinderInit(); // state subscriber
+	cartControlsInit(); // state subscriber
+	cartGlobalClassesInit(); // state subscriber
+
+	// API subscriber but must be after cartStateInit because it uses state
+	// to calculate if there is an error
+	cartMessagesInit(); 
 
 	window.liquidAjaxCart = {
 		configureCart,

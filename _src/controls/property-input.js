@@ -33,7 +33,7 @@ function initEventListeners() {
 	}, false);
 }
 
-function stateUpdateHandler ( state ) {
+function stateHandler ( state ) {
 	const { propertyInputAttribute } = settings.computed;
 
 	if ( state.status.requestInProgress ) {
@@ -157,7 +157,7 @@ function escHandler (htmlNode) {
 
 function cartPropertyInputInit () {
 	initEventListeners();
-	subscribeToCartStateUpdate( stateUpdateHandler );
+	subscribeToCartStateUpdate( stateHandler );
 }
 
 export { cartPropertyInputInit }

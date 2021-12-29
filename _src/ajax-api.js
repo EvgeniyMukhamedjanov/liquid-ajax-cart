@@ -103,14 +103,14 @@ const cartRequest = ( requestType, body, options = {} ) => {
 
 		requestState.responseData = data;
 
-		if ( REQUEST_ADD !== requestType) {
+		if ( REQUEST_ADD !== requestType || !(requestState.responseData.ok)) {
 			return requestState;
 		}
 
-		// if requestType is REQUEST_ADD lets call 'get' also to update cart json
+		// if requestType is REQUEST_ADD lets call 'update' also to get cart json
 		// for state and all the subscribers
-		return fetch ( getEndpoint( REQUEST_GET ), {
-			method: 'GET',
+		return fetch ( getEndpoint( REQUEST_UPDATE ), {
+			method: 'POST',
 			headers: {
 		    	'Content-Type': 'application/json'
 		  	}
