@@ -268,3 +268,10 @@ form[action="/cart/add"].js-ajax-cart-form-in-progress [type="submit"]:after {
     display: inline;
     content: ")";
 }
+
+@media screen and (min-width: 769px) {
+	.product-single__prop input {
+		min-width: 50%;
+		width: auto;
+	}
+}

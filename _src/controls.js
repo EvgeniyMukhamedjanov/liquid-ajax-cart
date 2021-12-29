@@ -1,6 +1,8 @@
 import { settings } from './settings';
 import { cartRequestChange, cartRequestAdd, cartRequestClear, cartRequestUpdate } from './ajax-api';
 import { getCartState, subscribeToCartStateUpdate } from './state';
+import { cartPropertyInputInit } from './controls/property-input';
+import { findLineItemByCode } from './helpers';
 
 const ACTION_TOGGLE = 'toggle';
 const ACTION_ADD = 'add';
@@ -40,31 +42,22 @@ function stateUpdateHandler ( state ) {
 	const { quantityInputAttribute } = settings.computed;
 
 	if ( state.status.requestInProgress ) {
-		document.querySelectorAll(`[${ quantityInputAttribute }]`).forEach( quantityInput => {
-			quantityInput.readOnly = true;
+		document.querySelectorAll(`[${ quantityInputAttribute }]`).forEach( input => {
+			input.readOnly = true;
 		})
 	} else {
-		document.querySelectorAll(`[${ quantityInputAttribute }]`).forEach( quantityInput => {
-			const attributeValue = quantityInput.getAttribute( quantityInputAttribute ).trim();
+		document.querySelectorAll(`[${ quantityInputAttribute }]`).forEach( input => {
 			
-			// Update all the inputs from state because some of them might be out of ajax-sections
-			if ( state.status.cartStateSet ) {
-				let relatedLineItem;
-				if ( attributeValue.length > 3 ) {
-					relatedLineItem = state.cart.items.find( lineItem => lineItem.key === attributeValue );
-				} else {
-					const lineItemIndex = Number(attributeValue) - 1;
-					relatedLineItem = state.cart.items[lineItemIndex];
-				}
-
-				if (relatedLineItem) {
-					quantityInput.value = relatedLineItem.quantity;
-				} else {
-					quantityInput.value = 0;
-				}
+			const lineItemCode = input.getAttribute( quantityInputAttribute ).trim();
+			const [ lineItem ] = findLineItemByCode(lineItemCode, state);
+			if(lineItem) {
+				input.value = lineItem.quantity;
+			} else if(lineItem === null) {
+				input.value = 0;
 			}
 
-			quantityInput.readOnly = false;
+
+			input.readOnly = false;
 		})
 	}
 }
@@ -232,7 +225,7 @@ function quantityInputEscHandler (e) {
 
 	if ( state.status.cartStateSet ) {
 		if ( attributeValue.length > 3 ) {
-			relatedLineItem = state.cart.items.find( lineItem => lineItem.key === quantityInput.getAttribute( quantityInputAttribute ).trim() );
+			relatedLineItem = state.cart.items.find( lineItem => lineItem.key === attributeValue );
 		} else {
 			const lineItemIndex = Number(attributeValue) - 1;
 			relatedLineItem = state.cart.items[lineItemIndex];
@@ -249,6 +242,7 @@ function quantityInputEscHandler (e) {
 function cartControlsInit () {
 	initEventListeners();
 	subscribeToCartStateUpdate( stateUpdateHandler );
+	cartPropertyInputInit();
 }
 
 export { cartControlsInit }

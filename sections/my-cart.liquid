@@ -18,23 +18,22 @@
         {% unless item.product.has_only_default_variant %}
           <div><small>{{ item.variant.title }}</small></div>
         {% endunless %}
+        {% assign item_index = forloop.index %}
         {% for property in item.properties %}
-          {% if property.last != blank %}
           <div>
             <small>
               {{ property.first }}: 
               {% if property.first == 'Engraving' %}
                 <input 
                   type="text"
-                  class="my-cart__input"
+                  class="my-cart__input my-cart__input--property"
                   value="{{ property.last }}" 
-                  data-ajax-cart-property-input="{{ forloop.index }} | {{ property.first }}"/>
+                  data-ajax-cart-property-input="{{ item_index }} {{ property.first }}"/>
               {% else %}
                 {{ property.last }}
               {% endif %}
             </small>
           </div>
-          {% endif %}
         {% endfor %}
         <p>
           <small>
@@ -60,7 +59,7 @@
               <i>-</i>
             </a>
             <input 
-              class="my-cart__input"
+              class="my-cart__input my-cart__input--qty"
               type="number" 
               value="{{ item.quantity }}" 
               min="0" 
@@ -109,9 +108,14 @@
 
 {% style %}
   input.my-cart__input {
-    width: 53px;
     display: inline;
     margin: 0;
     padding: 1px 3px;
+  }
+  input.my-cart__input--qty {
+    width: 53px;
+  }
+  input.my-cart__input--property {
+    width: 77px;
   }
 {% endstyle %}
