@@ -153,7 +153,7 @@
                     {{ item.quantity }}
                   {% else %}
                     <label for="updates_{{ item.key }}" class="cart__mini-labels">{{ 'cart.label.quantity' | t }}</label>
-                    <input type="number" class="cart__quantity-selector" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" aria-label="{{ 'cart.label.quantity' | t }}" data-ajax-cart-quantity-input="{{ item.key }}">
+                    <input type="number" class="cart__quantity-selector" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" aria-label="{{ 'cart.label.quantity' | t }}" data-ajax-cart-quantity-input="{{ forloop.index }}">
                   {% endif %}
                 </div>
 

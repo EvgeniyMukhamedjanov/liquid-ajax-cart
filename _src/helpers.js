@@ -4,7 +4,7 @@ export function findLineItemByCode(code, state) {
 
 	if (state.status.cartStateSet) {
 		if ( code.length > 3 ) {
-			lineItem = state.cart.items.find( lineItem => lineItem.key === attributeValue );
+			lineItem = state.cart.items.find( lineItem => lineItem.key === code );
 			codeType = 'id';
 		} else {
 			lineItem = state.cart.items[Number(code) - 1];
@@ -13,6 +13,7 @@ export function findLineItemByCode(code, state) {
 
 		if (lineItem === undefined) {
 			lineItem = null;
+			console.error(`Liquid Ajax Cart: line item with ${ codeType }="${ code }" not found`);
 		}
 	}
 	return [ lineItem, codeType ]

@@ -27,16 +27,14 @@ function stateHandler ( state ) {
 			input.readOnly = true;
 		})
 	} else {
-		document.querySelectorAll(`[${ quantityInputAttribute }]`).forEach( input => {
-			
+		document.querySelectorAll(`[${ quantityInputAttribute }]`).forEach( input => {			
 			const lineItemCode = input.getAttribute( quantityInputAttribute ).trim();
-			const [ lineItem ] = findLineItemByCode(lineItemCode, state);
+			const [ lineItem, codeType ] = findLineItemByCode(lineItemCode, state);
 			if(lineItem) {
 				input.value = lineItem.quantity;
 			} else if(lineItem === null) {
 				input.value = 0;
 			}
-
 
 			input.readOnly = false;
 		})
