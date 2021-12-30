@@ -22,15 +22,38 @@
         {% for property in item.properties %}
           <div>
             <small>
-              {{ property.first }}: 
               {% if property.first == 'Engraving' %}
+                {{ property.first }}: 
                 <input 
                   type="text"
                   class="my-cart__input my-cart__input--property"
                   value="{{ property.last }}" 
                   data-ajax-cart-property-input="{{ item_index }} {{ property.first }}"/>
+              {% elsif property.first == 'Package' %}
+                <span>{{ property.first }}: </span>
+                {% assign suggested_packages = 'Red|Green|Blue' | split: '|' %}
+                {% for package in suggested_packages %}
+                  <label>
+                    <input 
+                      type="radio" 
+                      name="{{ item_index }}_{{ property.first | handleize }}" 
+                      value="{{ package }}" 
+                      data-ajax-cart-property-input="{{ item_index }} {{ property.first }}"
+                      {% if package == property.last %} checked {% endif %} /> 
+                    {{ package }}
+                  </label>
+                {% endfor %}
+              {% elsif property.first == 'Is a gift' %}
+                <label>
+                  <input 
+                    type="checkbox" 
+                    value="Yes"
+                    data-ajax-cart-property-input="{{ item_index }} {{ property.first }}"
+                    {% if property.last == 'Yes' %} checked {% endif %} />
+                  Is a gift
+                </label>
               {% else %}
-                {{ property.last }}
+                {{ property.first }}: {{ property.last }}
               {% endif %}
             </small>
           </div>
@@ -107,6 +130,18 @@
 {% endschema %}
 
 {% style %}
+  .ajax-cart__line-item label {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+  .ajax-cart__line-item label:not(:first-child) {
+    margin-left: .3em;
+  }
+
+  .ajax-cart__line-item label input {
+    vertical-align: -0.1em;
+  }
+
   input.my-cart__input {
     display: inline;
     margin: 0;

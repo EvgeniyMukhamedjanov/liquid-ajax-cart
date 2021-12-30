@@ -156,13 +156,8 @@
                 {% endfor %}
               </select>
 
-              {% if product.id != 7170824110268 %}
-                <div class="product-single__props-wrapper">
-                  <div class="product-single__prop">
-                    <label for="engraving">Engraving</label>
-                    <input id="engraving" type="text" name="properties[Engraving]">
-                  </div>
-                </div>
+              {% if product.id == 7149119373500 %}
+                {% render 'product-properties' %}
               {% endif %}
 
               <div class="product-single__quantity{% unless section.settings.product_quantity_enable %} is-hidden{% endunless %}">

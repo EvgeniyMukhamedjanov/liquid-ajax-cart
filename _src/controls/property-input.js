@@ -3,6 +3,8 @@ import { cartRequestChange } from './../ajax-api';
 import { getCartState, subscribeToCartStateUpdate } from './../state';
 import { findLineItemByCode } from './../helpers';
 
+const disablingElementTypes = ['checkbox', 'radio'];
+
 function splitPropertyAttribute(attributeValue) {
 	const { propertyInputAttribute } = settings.computed;
 
@@ -39,6 +41,10 @@ function stateHandler ( state ) {
 	if ( state.status.requestInProgress ) {
 		document.querySelectorAll(`[${ propertyInputAttribute }]`).forEach( element => {
 			element.readOnly = true;
+			const elementType = element.getAttribute('type').toLowerCase();
+			if(disablingElementTypes.includes(elementType)) {
+				element.disabled = true;
+			}
 		})
 	} else {
 		document.querySelectorAll(`[${ propertyInputAttribute }]`).forEach( element => {
@@ -52,8 +58,20 @@ function stateHandler ( state ) {
 			const [ lineItem ] = findLineItemByCode(objectCode, state);
 			
 			if(lineItem) {
-				element.value = lineItem.properties[propertyName];
+				const elementType = element.getAttribute('type').toLowerCase();
+				if(elementType === 'checkbox' || elementType === 'radio') {
+					if(element.value === lineItem.properties[propertyName]) {
+						element.checked = true;
+					} else {
+						element.checked = false;
+					}
+				} else {
+					element.value = lineItem.properties[propertyName];
+				}
 				element.readOnly = false;
+				if(disablingElementTypes.includes(elementType)) {
+					element.disabled = false;
+				}
 				return;
 			}
 
@@ -104,7 +122,13 @@ function changeHandler (htmlNode, e) {
 	const newProperties = {
 		...lineItem.properties
 	}
-	newProperties[propertyName] = htmlNode.value;
+
+	const htmlNodeType = htmlNode.getAttribute('type').toLowerCase();
+	if(htmlNodeType === 'checkbox' && !htmlNode.checked) {
+		newProperties[propertyName] = '';
+	} else {
+		newProperties[propertyName] = htmlNode.value;
+	}
 
 	const formData = new FormData();
 	formData.set(objectCodeType, objectCode);
