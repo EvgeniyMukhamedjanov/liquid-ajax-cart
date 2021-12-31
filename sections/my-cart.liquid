@@ -22,15 +22,29 @@
         {% for property in item.properties %}
           <div>
             <small>
+              <span class="ajax-cart__property-label">
+                {% if property.first != 'Is a gift' %}
+                  {{ property.first }}:
+                {% endif %}
+              </span>
               {% if property.first == 'Engraving' %}
-                {{ property.first }}: 
                 <input 
                   type="text"
                   class="my-cart__input my-cart__input--property"
                   value="{{ property.last }}" 
                   data-ajax-cart-property-input="{{ item_index }} {{ property.first }}"/>
+              {% elsif property.first == 'Position' %}
+                <select 
+                  id="engraving_position" 
+                  data-ajax-cart-property-input="{{ item_index }} {{ property.first }}"
+                  name="properties[Position]">
+                    <option value="">Not selected</option>
+                    {% assign suggested_positions = 'Left|Center|Right' | split: '|' %}
+                    {% for position in suggested_positions %}
+                      <option value="{{ position }}" {% if position == property.last %} selected {% endif %}>{{ position }}</option>
+                    {% endfor %}
+                </select>
               {% elsif property.first == 'Package' %}
-                <span>{{ property.first }}: </span>
                 {% assign suggested_packages = 'Red|Green|Blue' | split: '|' %}
                 {% for package in suggested_packages %}
                   <label>
@@ -45,6 +59,7 @@
                 {% endfor %}
               {% elsif property.first == 'Is a gift' %}
                 <label>
+                  <input type="hidden" value="No" data-ajax-cart-property-input="{{ item_index }} {{ property.first }}">
                   <input 
                     type="checkbox" 
                     value="Yes"
@@ -53,7 +68,7 @@
                   Is a gift
                 </label>
               {% else %}
-                {{ property.first }}: {{ property.last }}
+                {{ property.last }}
               {% endif %}
             </small>
           </div>
@@ -140,6 +155,18 @@
 
   .ajax-cart__line-item label input {
     vertical-align: -0.1em;
+  }
+
+  .ajax-cart__property-label {
+    min-width: 75px;
+    display: inline-block;
+  }
+
+  .ajax-cart__line-item select {
+    display: inline-block;
+    width: auto;
+    padding: 1px 27px 1px 3px;
+    margin-bottom: 0;
   }
 
   input.my-cart__input {

@@ -40,14 +40,24 @@ function stateHandler ( state ) {
 
 	if ( state.status.requestInProgress ) {
 		document.querySelectorAll(`[${ propertyInputAttribute }]`).forEach( element => {
+			let elementType = element.getAttribute('type') || '';
+			elementType = elementType.toLowerCase();
+			if(elementType === 'hidden') {
+				return;
+			}
 			element.readOnly = true;
-			const elementType = element.getAttribute('type').toLowerCase();
-			if(disablingElementTypes.includes(elementType)) {
+			if(disablingElementTypes.includes(elementType) || element.tagName.toUpperCase() === 'SELECT') {
 				element.disabled = true;
 			}
 		})
 	} else {
 		document.querySelectorAll(`[${ propertyInputAttribute }]`).forEach( element => {
+			let elementType = element.getAttribute('type') || '';
+			elementType = elementType.toLowerCase();
+			if(elementType === 'hidden') {
+				return;
+			}
+
 			const attributeValue = element.getAttribute( propertyInputAttribute );
 			const [ objectCode, propertyName ] = splitPropertyAttribute(attributeValue);
 			
@@ -58,7 +68,6 @@ function stateHandler ( state ) {
 			const [ lineItem ] = findLineItemByCode(objectCode, state);
 			
 			if(lineItem) {
-				const elementType = element.getAttribute('type').toLowerCase();
 				if(elementType === 'checkbox' || elementType === 'radio') {
 					if(element.value === lineItem.properties[propertyName]) {
 						element.checked = true;
@@ -69,7 +78,7 @@ function stateHandler ( state ) {
 					element.value = lineItem.properties[propertyName];
 				}
 				element.readOnly = false;
-				if(disablingElementTypes.includes(elementType)) {
+				if(disablingElementTypes.includes(elementType) || element.tagName.toUpperCase() === 'SELECT') {
 					element.disabled = false;
 				}
 				return;
@@ -123,9 +132,15 @@ function changeHandler (htmlNode, e) {
 		...lineItem.properties
 	}
 
-	const htmlNodeType = htmlNode.getAttribute('type').toLowerCase();
+	let htmlNodeType = htmlNode.getAttribute('type') || '';
+	htmlNodeType = htmlNodeType.toLowerCase();
 	if(htmlNodeType === 'checkbox' && !htmlNode.checked) {
-		newProperties[propertyName] = '';
+		const negativeValueInput = document.querySelector(`input[type="hidden"][${ propertyInputAttribute }="${ attributeValue }"]`);
+		if(negativeValueInput) {
+			newProperties[propertyName] = negativeValueInput.value;
+		} else {
+			newProperties[propertyName] = '';
+		}
 	} else {
 		newProperties[propertyName] = htmlNode.value;
 	}
