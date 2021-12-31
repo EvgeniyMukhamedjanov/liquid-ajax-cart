@@ -269,9 +269,18 @@ form[action="/cart/add"].js-ajax-cart-form-in-progress [type="submit"]:after {
     content: ")";
 }
 
+.product-single__prop {
+	margin-bottom: 1em;
+}
+
+.product-single__prop input,
+.product-single__prop select {
+	margin-bottom: 0;
+}
+
 @media screen and (min-width: 769px) {
-	.product-single__prop input {
-		min-width: 50%;
-		width: auto;
+	.product-single__prop > input,
+	.product-single__prop > select {
+		width: 50%;
 	}
 }
