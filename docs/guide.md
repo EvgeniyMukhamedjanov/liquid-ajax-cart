@@ -43,8 +43,22 @@ disable_anchors: true
       z-index: 2;
       margin-top: 11px;
       margin-left: 20px;
-      margin-right: -15px;
+      margin-right: -30px;
     }
+
+    .code-with-notes .c + span {
+      position: relative
+    }
+
+    .code-with-notes .c + span:before {
+      content: '';
+      width: 100px;
+      height: 1px;
+      background: #cccccc;
+      position: absolute;
+      left: -115px;
+      top: 8px;
+    } 
   }
 </style>
 
@@ -171,7 +185,7 @@ If you have a scrollable area within the section, add the [`data-ajax-cart-secti
 </div>
  
 </div>
-<div class="{{ right_column_classes }}" markdown="1">
+<div class="{{ right_column_classes }} code-with-notes" markdown="1">
 
 {% include code/section.html %}
   
