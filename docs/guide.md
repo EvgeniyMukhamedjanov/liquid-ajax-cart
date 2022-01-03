@@ -43,11 +43,7 @@ disable_anchors: true
       z-index: 2;
       margin-top: 11px;
       margin-left: 20px;
-      margin-right: -80px;
-    }
-
-    .code-side-note--short-line h5:after {
-      margin-right: -50px;
+      margin-right: -15px;
     }
   }
 </style>
@@ -168,7 +164,7 @@ Add the [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-inp
 Use a container with the [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) attribute to show cart item's error messages.
 </div>
   
-<div markdown="1" class="code-side-note code-side-note--short-line" style="top: 192px;">
+<div markdown="1" class="code-side-note" style="top: 192px;">
 ##### Scrollable areas
 
 If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](/reference/data-ajax-cart-section-scroll/) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
