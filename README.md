@@ -9,30 +9,42 @@ No Javascript code needed.
 ```liquid
 {% comment %} sections/my-cart.liquid {% endcomment %}
 
-<div data-ajax-cart-section >
-  <h2>Cart</h2>
-  
-  <div>
-    {% for item in cart.items %}  
-      <hr/>
-      <div><a href="{{ item.url }}">{{ item.title }}</a></div>
-      <div>Price: {{ item.final_price | money }}</div>
-      <div>
-        Quantity: 
-        <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" 
-        > Minus one </a>
-        <input data-ajax-cart-quantity-input="{{ forloop.index }}" value="{{ item.quantity }}" type="number" />
-        <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" 
-        > Plus one </a>
-      </div>
-      <div data-ajax-cart-messages="{{ item.key }}"></div>
+<form action="{{ routes.cart_url }}" method="post" class="my-cart">
+  <div data-ajax-cart-section>
+    <h2>Cart</h2>
+    
+    <div class="my-cart__items" data-ajax-cart-section-scroll>
+      {% for item in cart.items %}
+        {% assign item_index = forloop.index %}
+        <hr />  
+        <div><a href="{{ item.url }}">{{ item.title }}</a></div>
+        <div>Price: {{ item.final_price | money }}</div>
 
-      <div>Total: <strong>{{ item.final_line_price | money }}</strong></div>
-    {% endfor %}
+        <div>
+          Quantity:
+          <a data-ajax-cart-request-button
+            href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
+            Minus one 
+          </a>
+
+          <input data-ajax-cart-quantity-input="{{ item_index }}" name="updates[]" value="{{ item.quantity }}" type="number" />
+
+          <a data-ajax-cart-request-button 
+            href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | plus: 1 }}"> 
+            Plus one 
+          </a>
+        </div>
+        <div data-ajax-cart-messages="{{ item.key }}"></div>
+
+        <div>Total: <strong>{{ item.final_line_price | money }}</strong></div>
+      {% endfor %}
+    </div>
+    
+    <button type="submit" name="checkout">
+      Checkout — {{ cart.total_price | money_with_currency }}
+    </button> 
   </div>
-  
-  <button> Checkout — {{ cart.total_price | money_with_currency }} </button>
-</div>
+</form>
 
 {% schema %} { "name": "My Cart" } {% endschema %}
 ```
