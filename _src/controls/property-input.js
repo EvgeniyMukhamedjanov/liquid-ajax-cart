@@ -204,15 +204,8 @@ function changeHandler (htmlNode, e) {
 		formData.set('note', newPropertyValue);
 		cartRequestUpdate( formData, { info: { initiator: htmlNode }} );
 	} else if (objectCode === 'attributes') {
-		const newProperties = {
-			...state.cart.attributes
-		}
-		newProperties[propertyName] = newPropertyValue;
-
 		const formData = new FormData();
-		for( let p in newProperties) {
-			formData.set(`attributes[${ p }]`, newProperties[p]);
-		}
+		formData.set(`attributes[${ propertyName }]`, newPropertyValue);
 		cartRequestUpdate( formData, { info: { initiator: htmlNode }} );
 	} else {
 		const [ lineItem, objectCodeType ] = findLineItemByCode(objectCode, state);
