@@ -24,13 +24,14 @@
               {% endif %}
           </div>
         {% endfor %}
-        
+
         <div>Price: {{ item.final_price | money }}</div>
 
         <div>
           Quantity:
           <a data-ajax-cart-request-button
-            href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > Minus one 
+            href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
+            Minus one 
           </a>
 
           <input data-ajax-cart-quantity-input="{{ item_index }}"
@@ -55,7 +56,7 @@
       {{ cart.note }}
     </textarea>
     
-    <button type="submit" name="checkout" class="my-cart__checkout-btn">
+    <button type="submit" name="checkout">
       Checkout — {{ cart.total_price | money_with_currency }}
     </button> 
   </div>

@@ -1,12 +1,48 @@
 # data-ajax-cart-request-button
 
-Liquid Ajax Cart ajaxifies all the links that lead to [`routes.cart_add_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_add_url), [`routes.cart_change_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_change_url), [`routes.cart_clear_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_clear_url) and [`routes.cart_update_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_update_url). 
+Add the `data-ajax-cart-request-button` to links that lead to [`routes.cart_add_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_add_url), [`routes.cart_change_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_change_url), [`routes.cart_clear_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_clear_url) and [`routes.cart_update_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_update_url) ajaxify them.
 
-It is recommended to make buttons that change the cart state (like "Plus one", "Minus one", "Remove", "Clear cart", etc.) using links with the `routes.cart_*_url` routes without any `data-ajax-cart-` attribute because they will be ajaxified automaticaly and work even if Liquid Ajax Cart is not loaded.
+The most popular usecase is "Plus", "Minus" and "Remove" buttons for a cart line item.
 
-{% include code/section.html %}
+{% raw %}
+``` html
+<form action="{{ routes.cart_url }}" method="post">
+  <div data-ajax-cart-section>
+    <h2>Cart</h2>
+    
+    <div class="my-cart__items">
+      {% for item in cart.items %}
+        {% assign item_index = forloop.index %}
+        <div><a href="{{ item.url }}">{{ item.title }}</a></div>
 
-If you can't use links, Liquid Ajax Cart still offers the same functionality for any HTML element. Add the `data-ajax-cart-request-button` attribute to a HTML element, a cart mutation route as a value, and it will work the same way as the ajaxfied links:
+        <div>
+          Quantity:
+          <a data-ajax-cart-request-button
+            href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
+            Minus one 
+          </a>
+
+          {{ item.quantity }}
+
+          <a data-ajax-cart-request-button 
+            href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | plus: 1 }}"> 
+            Plus one 
+          </a>
+        </div>
+
+        <div>Total: <strong>{{ item.final_line_price | money }}</strong></div>
+      {% endfor %}
+    </div>
+    
+    <button type="submit" name="checkout">
+      Checkout — {{ cart.total_price | money_with_currency }}
+    </button> 
+  </div>
+</form>
+```
+{% endraw %}
+
+If you can't use links, Liquid Ajax Cart still offers the same functionality for any HTML element. Add the `data-ajax-cart-request-button` attribute to an HTML element, a `{{ routes.cart_*_url }}` as a value, and it will work the same way:
 
 {% raw %}
 ```html
@@ -26,6 +62,6 @@ If you can't use links, Liquid Ajax Cart still offers the same functionality for
 
 ## Inactive state
 
-The links or the `data-ajax-cart-request-button` elements become inactive when there is a [Cart Ajax API request](/reference/requests/) in progress.
+The `data-ajax-cart-request-button` elements become inactive when there is a [Cart Ajax API request](/reference/requests/) in progress.
 
 Liquid Ajax Cart adds the [`js-ajax-cart-request-in-progress`](/reference/js-ajax-cart-request-in-progress/) CSS class to the body tag so you can show a loading indicator or make the controls visually disabled.
