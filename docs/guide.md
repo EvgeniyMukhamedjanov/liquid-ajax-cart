@@ -160,7 +160,7 @@ Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute
 Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "Plus", "Minus" and "Remove" buttons. Add the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) to ajaxify them.
 </div>
   
-<div markdown="1" class="code-side-note" style="top: 843px;">
+<div markdown="1" class="code-side-note" style="top: 842px;">
 ##### Quantity inputs
     
 Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-input/) attribute to an input element that displays a cart item's quantity to ajaxify it.
@@ -178,7 +178,7 @@ Add the [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-inp
 Use a container with the [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) attribute to show cart item's error messages.
 </div>
   
-<div markdown="1" class="code-side-note" style="top: 192px;">
+<div markdown="1" class="code-side-note" style="top: 191px;">
 ##### Scrollable areas
 
 If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](/reference/data-ajax-cart-section-scroll/) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
