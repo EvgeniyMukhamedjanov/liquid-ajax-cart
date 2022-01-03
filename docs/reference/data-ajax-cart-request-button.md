@@ -1,6 +1,6 @@
 # data-ajax-cart-request-button
 
-Add the `data-ajax-cart-request-button` to links that lead to [`routes.cart_add_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_add_url), [`routes.cart_change_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_change_url), [`routes.cart_clear_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_clear_url) and [`routes.cart_update_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_update_url) ajaxify them.
+Add the `data-ajax-cart-request-button` to links that lead to [`routes.cart_add_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_add_url), [`routes.cart_change_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_change_url), [`routes.cart_clear_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_clear_url) and [`routes.cart_update_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_update_url) to ajaxify them.
 
 The most popular usecase is "Plus", "Minus" and "Remove" buttons for a cart line item.
 
@@ -17,6 +17,8 @@ The most popular usecase is "Plus", "Minus" and "Remove" buttons for a cart line
 
         <div>
           Quantity:
+
+          <!-- Ajaxified "Minus one" button -->
           <a data-ajax-cart-request-button
             href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
             Minus one 
@@ -24,6 +26,7 @@ The most popular usecase is "Plus", "Minus" and "Remove" buttons for a cart line
 
           {{ item.quantity }}
 
+          <!-- Ajaxified "Plus one" button -->
           <a data-ajax-cart-request-button 
             href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | plus: 1 }}"> 
             Plus one 
@@ -42,11 +45,11 @@ The most popular usecase is "Plus", "Minus" and "Remove" buttons for a cart line
 ```
 {% endraw %}
 
-If you can't use links, Liquid Ajax Cart still offers the same functionality for any HTML element. Add the `data-ajax-cart-request-button` attribute to an HTML element, a `{{ routes.cart_*_url }}` as a value, and it will work the same way:
+If you can't use the `a` tag with the `href` parameter, Liquid Ajax Cart still offers the same functionality for any HTML element. Add the `data-ajax-cart-request-button` attribute to an HTML element, a `routes.cart_*_url` route as a value:
 
 {% raw %}
 ```html
-<button data-ajax-cart-request-button="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" > 
+<button data-ajax-cart-request-button="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
   Minus one 
 </button>
 

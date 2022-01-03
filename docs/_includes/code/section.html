@@ -34,7 +34,7 @@
 
         <div>
           Quantity:
-          <!-- data-ajax-cart-request-button ajaxifies the "Plus one" button -->
+          <!-- data-ajax-cart-request-button ajaxifies the "Minus one" button -->
           <a data-ajax-cart-request-button
             href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
             Minus one 
@@ -46,7 +46,7 @@
             value="{{ item.quantity }}" 
             type="number" />
 
-          <!-- data-ajax-cart-request-button ajaxifies the "Minus one" button -->
+          <!-- data-ajax-cart-request-button ajaxifies the "Plus one" button -->
           <a data-ajax-cart-request-button 
             href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | plus: 1 }}"> 
             Plus one 
