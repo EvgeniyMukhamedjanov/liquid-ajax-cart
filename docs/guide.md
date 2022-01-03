@@ -123,7 +123,7 @@ Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute
 <div markdown="1" class="code-side-note" style="top: 695px;">
 ##### Buttons
 
-Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "Plus", "Minus" and "Remove" buttons. Add the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) to them to ajaxify the buttons.
+Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "Plus", "Minus" and "Remove" buttons. Add the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) to ajaxify them.
 </div>
   
 <div markdown="1" class="code-side-note" style="top: 822px;">
