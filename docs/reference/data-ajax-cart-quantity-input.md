@@ -2,7 +2,7 @@
 
 Add the `data-ajax-cart-quantity-input` attribute with a cart item's index or a cart item's key as the value to an input element to ajaxify the input field: once a user changes the input's value, Liquid Ajax Cart will send an [Cart Ajax API request](/reference/requests/) to update the quantity.
 
-The request will be send on input's `change` event and if a user presses the `Enter` key within the input field.
+The request will be sent on input's `change` event and if a user presses the `Enter` key within the input field.
 
 If a user presses the `Esc` key within the input, its value will be reset to the current item's quantity according to the [State](/reference/state/) object.
 
