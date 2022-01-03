@@ -1,11 +1,15 @@
 {% raw %}
 ```html
-{% comment %} sections/my-cart.liquid {% endcomment %}
+<!-- sections/my-cart.liquid -->
 
 <form action="{{ routes.cart_url }}" method="post" class="my-cart">
+  <!-- data-ajax-cart-section makes the element's HTML update
+  when the cart gets changed -->
   <div data-ajax-cart-section>
     <h2>Cart</h2>
     
+    <!-- data-ajax-cart-section-scroll keeps the scroll position unchanged
+    when the element's HTML is changed -->
     <div class="my-cart__items" data-ajax-cart-section-scroll>
       {% for item in cart.items %}
         {% assign item_index = forloop.index %}
@@ -16,6 +20,7 @@
           <div>
             {{ property.first }}:
             {% if property.first == 'Engraving' %}
+              <!-- data-ajax-cart-property-input ajaxifies the line item property input -->
               <input type="text"
                 value="{{ property.last }}" 
                 data-ajax-cart-property-input="{{ item_index }}[{{ property.first }}]"/>
@@ -29,27 +34,33 @@
 
         <div>
           Quantity:
+          <!-- data-ajax-cart-request-button ajaxifies the "Plus one" button -->
           <a data-ajax-cart-request-button
             href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
             Minus one 
           </a>
 
+          <!-- data-ajax-cart-quantity-input ajaxifies the line item quantity input -->
           <input data-ajax-cart-quantity-input="{{ item_index }}"
             name="updates[]" 
             value="{{ item.quantity }}" 
             type="number" />
 
+          <!-- data-ajax-cart-request-button ajaxifies the "Minus one" button -->
           <a data-ajax-cart-request-button 
             href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | plus: 1 }}"> 
             Plus one 
           </a>
         </div>
+
+        <!-- Container for errors -->
         <div data-ajax-cart-messages="{{ item.key }}"></div>
 
         <div>Total: <strong>{{ item.final_line_price | money }}</strong></div>
       {% endfor %}
     </div>
 
+    <!-- data-ajax-cart-property-input ajaxifies the cart note textarea -->
     <textarea data-ajax-cart-property-input
       name="note" 
       placeholder="Cart note">

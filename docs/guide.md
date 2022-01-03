@@ -104,7 +104,7 @@ Import all the needed modules and provide the initial cart state in the JSON for
 ---
 
 <div class="{{ row_classes }}">
-<div class="{{ left_column_classes }}" markdown="1">
+<div class="{{ left_column_classes }}" markdown="1" style="position: relative;">
  
 ### Create a section for AJAX cart
 {:.mt-0}
@@ -112,26 +112,36 @@ Import all the needed modules and provide the initial cart state in the JSON for
 Feel free to use any Liquid tags, objects and filters.
 
 Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute to any HTML container — Liquid Ajax Cart reloads HTML of the containers with this attribute every time when the Shopify cart gets updated.
-    
+
+<div markdown="1">
 ##### Buttons
 
 Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "Plus", "Minus" and "Remove" buttons. Add the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) to them to ajaxify the buttons.
-    
+</div>
+  
+<div markdown="1">
 ##### Quantity inputs
     
 Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-input/) attribute to an input element that displays a cart item's quantity to ajaxify it.
-
+</div>
+  
+<div markdown="1">
 <h5>Property inputs <span class="badge badge-success">New in 1.7.0</span></h5>
 
-Add the [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-input/) attribute a line item property input, cart attribute input or cart note input to ajaxify them. The attribute supports checkboxes, radio buttons, `select` and `textarea` tags as well.
-
+Add the [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-input/) attribute to a line item property input, cart attribute input or cart note input to ajaxify them. The attribute supports checkboxes, radio buttons, `select` and `textarea` tags as well.
+</div>
+  
+<div markdown="1">
 ##### Error messages
 
 Use a container with the [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) attribute to show cart item's error messages.
-
+</div>
+  
+<div markdown="1">
 ##### Scrollable areas
 
 If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](/reference/data-ajax-cart-section-scroll/) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
+</div>
  
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
