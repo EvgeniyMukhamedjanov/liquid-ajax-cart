@@ -25,6 +25,30 @@ disable_anchors: true
     .code-side-note {
       position: absolute;
     }
+
+    .code-side-note h5 {
+      display: flex;
+    }
+
+    .code-side-note h5 .badge {
+      margin-left: 10px;
+    }
+
+    .code-side-note h5:after {
+      content: '';
+      flex: 1 1 0;
+      width: 100%;
+      background: #cccccc;
+      height: 1px;
+      z-index: 2;
+      margin-top: 11px;
+      margin-left: 20px;
+      margin-right: -80px;
+    }
+
+    .code-side-note--short-line h5:after {
+      margin-right: -50px;
+    }
   }
 </style>
 
@@ -120,31 +144,31 @@ Feel free to use any Liquid tags, objects and filters.
 
 Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute to any HTML container — Liquid Ajax Cart reloads HTML of the containers with this attribute every time when the Shopify cart gets updated.
 
-<div markdown="1" class="code-side-note" style="top: 695px;">
+<div markdown="1" class="code-side-note" style="top: 716px;">
 ##### Buttons
 
 Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "Plus", "Minus" and "Remove" buttons. Add the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) to ajaxify them.
 </div>
   
-<div markdown="1" class="code-side-note" style="top: 822px;">
+<div markdown="1" class="code-side-note" style="top: 843px;">
 ##### Quantity inputs
     
 Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-input/) attribute to an input element that displays a cart item's quantity to ajaxify it.
 </div>
   
-<div markdown="1" class="code-side-note" style="top: 395px;">
+<div markdown="1" class="code-side-note" style="top: 422px;">
 <h5>Property inputs <span class="badge badge-success">New in 1.7.0</span></h5>
 
 Add the [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-input/) attribute to a line item property input, cart attribute input or cart note input to ajaxify them. The attribute supports checkboxes, radio buttons, `select` and `textarea` tags as well.
 </div>
   
-<div markdown="1" class="code-side-note" style="top: 1090px;">
+<div markdown="1" class="code-side-note" style="top: 1115px;">
 ##### Error messages
 
 Use a container with the [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) attribute to show cart item's error messages.
 </div>
   
-<div markdown="1">
+<div markdown="1" class="code-side-note code-side-note--short-line" style="top: 192px;">
 ##### Scrollable areas
 
 If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](/reference/data-ajax-cart-section-scroll/) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
