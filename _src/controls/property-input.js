@@ -1,20 +1,51 @@
 import { settings } from './../settings';
-import { cartRequestChange } from './../ajax-api';
+import { cartRequestChange, cartRequestUpdate } from './../ajax-api';
 import { getCartState, subscribeToCartStateUpdate } from './../state';
 import { findLineItemByCode } from './../helpers';
 
 const disablingElementTypes = ['checkbox', 'radio'];
 
-function splitPropertyAttribute(attributeValue) {
+function consoleInputError(htmlNode) {
 	const { propertyInputAttribute } = settings.computed;
+	const attributeValue = htmlNode.getAttribute(propertyInputAttribute);
+	const nameValue = htmlNode.getAttribute('name');
+	console.error(`Liquid Ajax Cart: the element [${ propertyInputAttribute }="${ attributeValue }"]${ nameValue ? `[name="${ nameValue }"]` : '' } has wrong attributes.`);
+}
 
-	let [objectCode, ...propertyName] = attributeValue.split(' ');
-	objectCode = objectCode.trim();
-	propertyName = propertyName || [];
-	propertyName = propertyName.join(' ');
-	if (!objectCode || !propertyName) {
-		console.error(`Liquid Ajax Cart: ${ propertyInputAttribute } attribute must contain two parameters separated by the space symbol. The current value is "${ attributeValue }".`);
+function getInputData(htmlNode) {
+	const { propertyInputAttribute } = settings.computed;
+	if (!(htmlNode.hasAttribute(propertyInputAttribute))) {
+		return [ undefined, undefined ];
 	}
+
+	let attributeValue = htmlNode.getAttribute(propertyInputAttribute).trim();
+	if (!attributeValue) {
+		const nameValue = htmlNode.getAttribute('name').trim();
+		if(nameValue) {
+			attributeValue = nameValue;
+		}
+	}
+
+	if ( !attributeValue ) {
+		consoleInputError();
+		return [ undefined, undefined ];
+	}
+
+	if(attributeValue === 'note') {
+		return [ attributeValue, undefined ];
+	}
+
+	let [objectCode, ...propertyName] = attributeValue.trim().split('[');
+	let isNotValid = false;
+	if(!propertyName 
+		|| propertyName.length !== 1 
+		|| propertyName[0].length < 2 
+		|| propertyName[0].indexOf(']') !== propertyName[0].length - 1 ) {
+		consoleInputError();
+		return [ undefined, undefined ];
+	}
+	propertyName = propertyName[0].replace(']', '');
+
 	return [ objectCode, propertyName ];
 }
 
@@ -25,8 +56,10 @@ function initEventListeners() {
 	}, false);
 
 	document.addEventListener("keydown", function(e) {
-		if (e.key === "Enter") {
-			changeHandler(e.target, e);
+		if (e.key === "Enter" ) {
+			if ( e.target.tagName.toUpperCase() !== 'TEXTAREA' || e.ctrlKey) {
+				changeHandler(e.target, e);
+			}
 		}
 
 		if (e.key === "Escape") {
@@ -52,40 +85,65 @@ function stateHandler ( state ) {
 		})
 	} else {
 		document.querySelectorAll(`[${ propertyInputAttribute }]`).forEach( element => {
+			const elementTag = element.tagName.toUpperCase();
 			let elementType = element.getAttribute('type') || '';
 			elementType = elementType.toLowerCase();
 			if(elementType === 'hidden') {
 				return;
 			}
 
-			const attributeValue = element.getAttribute( propertyInputAttribute );
-			const [ objectCode, propertyName ] = splitPropertyAttribute(attributeValue);
+			const [ objectCode, propertyName ] = getInputData(element);
 			
-			if(!(objectCode && propertyName)) {
+			if(!objectCode) {
 				return;
 			}
 
-			const [ lineItem ] = findLineItemByCode(objectCode, state);
-			
-			if(lineItem) {
-				if(elementType === 'checkbox' || elementType === 'radio') {
-					if(element.value === lineItem.properties[propertyName]) {
-						element.checked = true;
-					} else {
-						element.checked = false;
-					}
-				} else {
-					element.value = lineItem.properties[propertyName];
+			if (!(state.status.cartStateSet)) {
+				return;
+			}
+
+			let propertyValue = undefined;
+			let doNotEnable = false;
+			if( objectCode === 'note' ) {
+				propertyValue = state.cart.note;
+			} else if (objectCode === 'attributes') {
+				propertyValue = state.cart.attributes[propertyName];
+			} else {
+				const [ lineItem, objectCodeType ] = findLineItemByCode(objectCode, state);
+				if(lineItem) {
+					propertyValue = lineItem.properties[propertyName];
 				}
+				if(lineItem === null) {
+					let attributeValue = element.getAttribute(propertyInputAttribute).trim();
+					if (!attributeValue) {
+						const nameValue = element.getAttribute('name').trim();
+						if(nameValue) {
+							attributeValue = nameValue;
+						}
+					}
+					console.error(`Liquid Ajax Cart: line item with ${ objectCodeType }="${ objectCode }" was not found when the [${propertyInputAttribute}] element with "${attributeValue}" value tried to get updated from the State`);
+					doNotEnable = true;
+				}
+			}
+
+			if(elementType === 'checkbox' || elementType === 'radio') {
+				if(element.value === propertyValue) {
+					element.checked = true;
+				} else {
+					element.checked = false;
+				}
+			} else {
+				if ( !propertyValue && typeof propertyValue !== 'string' && !(propertyValue instanceof String)) {
+					propertyValue = '';
+				}
+				element.value = propertyValue;
+			}
+
+			if (!doNotEnable) {
 				element.readOnly = false;
 				if(disablingElementTypes.includes(elementType) || element.tagName.toUpperCase() === 'SELECT') {
 					element.disabled = false;
 				}
-				return;
-			}
-
-			if(lineItem === null) {
-				element.value = '';
 			}
 		})
 	}
@@ -112,47 +170,73 @@ function changeHandler (htmlNode, e) {
 		return;
 	}
 
-	const attributeValue = htmlNode.getAttribute( propertyInputAttribute );
-	const [ objectCode, propertyName ] = splitPropertyAttribute(attributeValue);
-	if(!objectCode || !propertyName) {
+	let attributeValue = htmlNode.getAttribute(propertyInputAttribute).trim();
+	if (!attributeValue) {
+		const nameValue = htmlNode.getAttribute('name').trim();
+		if(nameValue) {
+			attributeValue = nameValue;
+		}
+	}
+	const [ objectCode, propertyName ] = getInputData(htmlNode);
+	if(!objectCode) {
 		return;
-	}
-
-	const [ lineItem, objectCodeType ] = findLineItemByCode(objectCode, state);
-
-	if (lineItem === null) {
-		console.error(`Liquid Ajax Cart: line item was not found when the ${propertyInputAttribute}="${attributeValue}" element tried to update the cart`);
-	}
-
-	if(!lineItem) {
-		return
-	}
-		
-	const newProperties = {
-		...lineItem.properties
 	}
 
 	let htmlNodeType = htmlNode.getAttribute('type') || '';
 	htmlNodeType = htmlNodeType.toLowerCase();
+	let newPropertyValue = htmlNode.value;
 	if(htmlNodeType === 'checkbox' && !htmlNode.checked) {
-		const negativeValueInput = document.querySelector(`input[type="hidden"][${ propertyInputAttribute }="${ attributeValue }"]`);
-		if(negativeValueInput) {
-			newProperties[propertyName] = negativeValueInput.value;
-		} else {
-			newProperties[propertyName] = '';
+		let negativeValueInput = document.querySelector(`input[type="hidden"][${ propertyInputAttribute }="${ attributeValue }"]`);
+		if (!negativeValueInput && ( objectCode === 'note' || objectCode === 'attributes') ) {
+			negativeValueInput = document.querySelector(`input[type="hidden"][${ propertyInputAttribute }][name="${ attributeValue }"]`);
 		}
+		if(negativeValueInput) {
+			newPropertyValue = negativeValueInput.value;
+		} else {
+			newPropertyValue = '';
+		}
+	}
+
+	if( objectCode === 'note' ) {
+		const formData = new FormData();
+		formData.set('note', newPropertyValue);
+		cartRequestUpdate( formData, { info: { initiator: htmlNode }} );
+	} else if (objectCode === 'attributes') {
+		const newProperties = {
+			...state.cart.attributes
+		}
+		newProperties[propertyName] = newPropertyValue;
+
+		const formData = new FormData();
+		for( let p in newProperties) {
+			formData.set(`attributes[${ p }]`, newProperties[p]);
+		}
+		cartRequestUpdate( formData, { info: { initiator: htmlNode }} );
 	} else {
-		newProperties[propertyName] = htmlNode.value;
-	}
+		const [ lineItem, objectCodeType ] = findLineItemByCode(objectCode, state);
 
-	const formData = new FormData();
-	formData.set(objectCodeType, objectCode);
-	formData.set('quantity', lineItem.quantity);
-	for( let p in newProperties) {
-		formData.set(`properties[${ p }]`, newProperties[p]);
-	}
+		if (lineItem === null) {
+			console.error(`Liquid Ajax Cart: line item with ${ objectCodeType }="${ objectCode }" was not found when the [${propertyInputAttribute}] element with "${attributeValue}" value tried to update the cart`);
+		}
 
-	cartRequestChange( formData, { info: { initiator: this }} );
+		if(!lineItem) {
+			return
+		}
+			
+		const newProperties = {
+			...lineItem.properties
+		}
+		newProperties[propertyName] = newPropertyValue;
+
+		const formData = new FormData();
+		formData.set(objectCodeType, objectCode);
+		formData.set('quantity', lineItem.quantity);
+		for( let p in newProperties) {
+			formData.set(`properties[${ p }]`, newProperties[p]);
+		}
+
+		cartRequestChange( formData, { info: { initiator: htmlNode }} );
+	}
 }
 
 function escHandler (htmlNode) {

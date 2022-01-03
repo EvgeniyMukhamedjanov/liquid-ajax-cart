@@ -194,6 +194,12 @@
           "text": "<p><a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/product-forms\/\" target=\"_blank\">Product forms<\/a> are ajaxified automatically.<\/p><p>Errors messages get put in a container that has the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-messages\/\" target=\"_blank\" title=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-messages\/\">data-ajax-cart-messages<\/a> attribute with the \"<em>form<\/em>\" value.<\/p><p>The submit button's loading indicator is set using the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/js-ajax-cart-form-in-progress\/\" target=\"_blank\" title=\"https:\/\/liquid-ajax-cart.js.org\/reference\/js-ajax-cart-form-in-progress\/\">js-ajax-cart-form-in-progress<\/a> CSS class.<\/p>",
           "text_size": "medium"
         }
+      },
+      "cart-template": {
+        "type": "cart-template",
+        "settings": {
+          "cart_notes_enable": true
+        }
       }
     },
     "content_for_index": [

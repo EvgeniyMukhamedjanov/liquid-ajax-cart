@@ -6,7 +6,7 @@
   after user's cart state is changed.
 {% endcomment %}
 
-<div data-ajax-cart-section>
+<form action="{{ routes.cart_url }}" method="post" data-ajax-cart-section class="my-cart">
   <div>
     <h2>Cart</h2>
     <p>The section gets updated after each action because it has a content wrapper with the <a href="https://liquid-ajax-cart.js.org/reference/data-ajax-cart-section/" target="_blank">data-ajax-cart-section</a> attribute.</p>
@@ -20,7 +20,7 @@
         {% endunless %}
         {% assign item_index = forloop.index %}
         {% for property in item.properties %}
-          <div>
+          <div class="ajax-cart__property">
             <small>
               <span class="ajax-cart__property-label">
                 {% if property.first != 'Is a gift' %}
@@ -32,11 +32,11 @@
                   type="text"
                   class="my-cart__input my-cart__input--property"
                   value="{{ property.last }}" 
-                  data-ajax-cart-property-input="{{ item_index }} {{ property.first }}"/>
+                  data-ajax-cart-property-input="{{ item_index }}[{{ property.first }}]"/>
               {% elsif property.first == 'Position' %}
                 <select 
                   id="engraving_position" 
-                  data-ajax-cart-property-input="{{ item_index }} {{ property.first }}"
+                  data-ajax-cart-property-input="{{ item_index }}[{{ property.first }}]"
                   name="properties[Position]">
                     <option value="">Not selected</option>
                     {% assign suggested_positions = 'Left|Center|Right' | split: '|' %}
@@ -52,18 +52,18 @@
                       type="radio" 
                       name="{{ item_index }}_{{ property.first | handleize }}" 
                       value="{{ package }}" 
-                      data-ajax-cart-property-input="{{ item_index }} {{ property.first }}"
+                      data-ajax-cart-property-input="{{ item_index }}[{{ property.first }}]"
                       {% if package == property.last %} checked {% endif %} /> 
                     {{ package }}
                   </label>
                 {% endfor %}
               {% elsif property.first == 'Is a gift' %}
                 <label>
-                  <input type="hidden" value="No" data-ajax-cart-property-input="{{ item_index }} {{ property.first }}">
+                  <input type="hidden" value="No" data-ajax-cart-property-input="{{ item_index }}[{{ property.first }}]">
                   <input 
                     type="checkbox" 
                     value="Yes"
-                    data-ajax-cart-property-input="{{ item_index }} {{ property.first }}"
+                    data-ajax-cart-property-input="{{ item_index }}[{{ property.first }}]"
                     {% if property.last == 'Yes' %} checked {% endif %} />
                   Is a gift
                 </label>
@@ -101,6 +101,7 @@
               type="number" 
               value="{{ item.quantity }}" 
               min="0" 
+              name="updates[]"
               data-ajax-cart-quantity-input="{{ forloop.index }}"
             />
             <a 
@@ -135,8 +136,92 @@
       </div>
     {% endfor %}
   </div>
-  <div> <a href="#checkout-route">Checkout — {{ cart.total_price | money_with_currency }}</a> </div>
-</div>
+  <div> 
+    <div class="ajax-cart__footer-toggler" onclick="javascript:document.body.classList.toggle('my-cart-show-footer')">Cart note and attributes</div>
+    <div class="ajax-cart__footer-content">
+      <label for="cart_note">Cart note</label>
+      <textarea id="cart_note" name="note" data-ajax-cart-property-input>{{ cart.note }}</textarea>
+
+      <div>Cart attributes</div>
+      <div class="ajax-cart__property">
+        <small>
+          <span class="ajax-cart__property-label">
+            Package text:
+          </span>
+          <input 
+            type="text" 
+            name="attributes[Package text]" 
+            value="{{ cart.attributes['Package text'] }}"
+            data-ajax-cart-property-input
+            class="my-cart__input my-cart__input--property" />
+        </small>
+      </div>
+
+      <div class="ajax-cart__property">
+        <small>
+          <span class="ajax-cart__property-label">
+            Delivery day:
+          </span>
+          <select name="attributes[Delivery day]" data-ajax-cart-property-input>
+            {% assign suggested_days = 'Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday' | split: '|' %}
+            <option 
+              value=""
+              {% unless suggested_days contains cart.attributes['Delivery day'] %} selected {% endunless %}>
+              Any day
+            </option>
+            {% for day in suggested_days %}
+              <option 
+                value="{{ day }}" 
+                {% if day == cart.attributes['Delivery day'] %} selected {% endif %}>
+                {{ day }}
+              </option>
+            {% endfor %}
+          </select>
+        </small>
+      </div>
+
+      <div class="ajax-cart__property">
+        <small>
+          <span class="ajax-cart__property-label">
+            Delivery time:
+          </span>
+          {% assign suggested_time = 'Any time|Day time|Evening' | split: '|' %}
+          {% for time in suggested_time %}
+            <label>
+              <input 
+                name="attributes[Delivery time]" 
+                type="radio" 
+                value="{{ time }}" 
+                data-ajax-cart-property-input
+                {% if cart.attributes['Delivery time'] == time %} checked {% endif %}>
+              {{ time }}
+            </label>
+          {% endfor %}
+        </small>
+      </div>
+
+      <div class="ajax-cart__property">
+        <small>
+          <span class="ajax-cart__property-label"></span>
+          <label>
+            <input type="hidden" value="" name="attributes[Leave at the door]"  data-ajax-cart-property-input>
+            <input 
+              type="checkbox" 
+              name="attributes[Leave at the door]" 
+              value="Yes"
+              data-ajax-cart-property-input
+              {% if cart.attributes['Leave at the door'] == 'Yes' %} checked {% endif %}>
+            Leave at the door
+          </label>
+        </small>
+      </div>
+
+    </div>
+    <button type="submit" name="checkout" class="my-cart__checkout-btn">
+      Checkout — {{ cart.total_price | money_with_currency }}
+    </button> 
+  </div>
+</form>
 
 {% schema %}
 {
@@ -145,15 +230,36 @@
 {% endschema %}
 
 {% style %}
-  .ajax-cart__line-item label {
-    display: inline-block;
+  .my-cart {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 47px;
+    right: 0;
+    bottom: 0;
+    width: 500px;
+    max-width: 100%;
+    background-color: white;
+    transform: translateX(100%);
+    transition:  transform .3s;
     margin-bottom: 0;
   }
-  .ajax-cart__line-item label:not(:first-child) {
-    margin-left: .3em;
+  .js-ajax-cart-open .my-cart {
+    transform: translateX(0); 
+  }
+  @media screen and (min-width: 1200px) {
+    .my-cart {
+      top:  0;
+    }
   }
 
-  .ajax-cart__line-item label input {
+  .ajax-cart__property label {
+    display: inline-block;
+    margin-bottom: 0;
+    margin-right: .3em;
+  }
+
+  .ajax-cart__property label input {
     vertical-align: -0.1em;
   }
 
@@ -161,12 +267,16 @@
     min-width: 75px;
     display: inline-block;
   }
+  .ajax-cart__footer-content .ajax-cart__property-label {
+    min-width: 90px;
+  }
 
-  .ajax-cart__line-item select {
+  .ajax-cart__property select {
     display: inline-block;
     width: auto;
     padding: 1px 27px 1px 3px;
     margin-bottom: 0;
+    min-width: 130px;
   }
 
   input.my-cart__input {
@@ -178,6 +288,65 @@
     width: 53px;
   }
   input.my-cart__input--property {
-    width: 77px;
+    width: 130px;
   }
+
+  .ajax-cart__footer-toggler {
+    border-top: 1px solid rgba(27,30,47,.15);
+    border-bottom: 1px solid rgba(27,30,47,.15);
+    padding: 10px 30px;
+    font-size: .8em;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .ajax-cart__footer-toggler:after {
+    content: '+';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 30px;
+    left: auto;
+    margin: auto 0;
+    height: 10px;
+    line-height: 10px;
+  }
+  .my-cart-show-footer .ajax-cart__footer-toggler:after {
+    content: '﹣';
+  }
+
+  .ajax-cart__footer-content {
+    padding: 0 30px;
+    max-height: 0px;
+    overflow: hidden;
+    transition: all .3s;
+  }
+
+  .my-cart-show-footer .ajax-cart__footer-content {
+    max-height: 350px;
+    padding: 20px 30px;
+  }
+
+  .my-cart__checkout-btn {
+    width: 100%;
+    padding: 14px 32px;
+    font-size: 1.125em;
+    font-weight: 700;
+    min-height: 60px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    line-height: 1.8;
+    text-decoration: none;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    background-color: #d77e6a;
+    color: #fff;
+    font-family: "PT Sans",sans-serif;
+    display: block;
+    border: none;
+  }
+  
 {% endstyle %}

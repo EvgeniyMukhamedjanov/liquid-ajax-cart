@@ -64,23 +64,6 @@
 	color: red;
 }
 
-#shopify-section-my-cart > div {
-	display: flex;
-	flex-direction: column;
-	position: fixed;
-	top: 47px;
-	right: 0;
-	bottom: 0;
-	width: 500px;
-	max-width: 100%;
-	background-color: white;
-	transform: translateX(100%);
-	transition:  transform .3s;
-}
-.js-ajax-cart-open #shopify-section-my-cart > div {
-	transform: translateX(0);	
-}
-
 .header-bar {
 	position: fixed;
 	top:  0;
@@ -98,24 +81,21 @@
 	body.js-ajax-cart-open {
 		padding-right: 500px;
 	}
-	#shopify-section-my-cart > div {
-		top:  0;
-	}
 	.js-ajax-cart-open .header-bar {
 		right: 500px;
 	}
 }
 
 /* Header */
-#shopify-section-my-cart > div > div:first-child {
+#shopify-section-my-cart > form > div:first-child {
 	padding: 40px 30px 20px;
 	flex: 0 0 auto;
 	position: relative;
 }
-#shopify-section-my-cart > div > div:first-child h2 {
+#shopify-section-my-cart > form > div:first-child h2 {
 	margin-bottom: 0;
 }
-.js-ajax-cart-request-in-progress #shopify-section-my-cart > div > div:first-child:before {
+.js-ajax-cart-request-in-progress #shopify-section-my-cart > form > div:first-child:before {
 	content: '';
     position: absolute;
     top: 46px;
@@ -140,28 +120,28 @@
 }
 
 /* Content */
-#shopify-section-my-cart > div > div:nth-child(2) {
+#shopify-section-my-cart > form > div:nth-child(2) {
 	flex: 1 1 auto;
 	min-height: 1px;
     overflow: auto;
     margin: 0 15px 0 0;
     padding: 0 15px 0 30px;
 }
-#shopify-section-my-cart > div > div:nth-child(2){ 
+#shopify-section-my-cart > form > div:nth-child(2){ 
 	scrollbar-width: 3px;
 	scrollbar-color: #757575 #ebebeb;
 }
-#shopify-section-my-cart > div > div:nth-child(2)::-webkit-scrollbar {
+#shopify-section-my-cart > form > div:nth-child(2)::-webkit-scrollbar {
   	width: 3px;
   	height: 1px;
 }
-#shopify-section-my-cart > div > div:nth-child(2)::-webkit-scrollbar-track {
+#shopify-section-my-cart > form > div:nth-child(2)::-webkit-scrollbar-track {
     background: #ebebeb;
 }
-#shopify-section-my-cart > div > div:nth-child(2)::-webkit-scrollbar-thumb {
+#shopify-section-my-cart > form > div:nth-child(2)::-webkit-scrollbar-thumb {
     background: #757575;
 }
-.js-ajax-cart-request-in-progress #shopify-section-my-cart > div > div:nth-child(2) {
+.js-ajax-cart-request-in-progress #shopify-section-my-cart > form > div:nth-child(2) {
 	opacity: .6;
 }
 
@@ -179,29 +159,8 @@
 }
 
 /* Footer */
-#shopify-section-my-cart > div > div:last-child {
+#shopify-section-my-cart > form > div:last-child {
 	flex: 0 0 auto;
-}
-
-[href="#checkout-route"] {
-	width: 100%;
-    padding: 14px 32px;
-    font-size: 1.125em;
-    font-weight: 700;
-    min-height: 60px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    line-height: 1.8;
-    text-decoration: none;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-    cursor: pointer;
-    user-select: none;
-    background-color: #d77e6a;
-    color: #fff;
-    font-family: "PT Sans",sans-serif;
-    display: block;
 }
 
 form[action="/cart/add"] button {
