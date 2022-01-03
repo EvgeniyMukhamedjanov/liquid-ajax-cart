@@ -93,6 +93,7 @@
             <a 
               href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" 
               class="ajax-cart__quantity-button"
+              data-ajax-cart-request-button
             >
               <i>-</i>
             </a>
@@ -107,6 +108,7 @@
             <a 
               href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" 
               class="ajax-cart__quantity-button"
+              data-ajax-cart-request-button
             >
               <i>+</i>
             </a>
@@ -128,6 +130,7 @@
             <a 
               href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" 
               class="ajax-cart__remove-button"
+              data-ajax-cart-request-button
             >
               <small>Remove</small>
             </a>

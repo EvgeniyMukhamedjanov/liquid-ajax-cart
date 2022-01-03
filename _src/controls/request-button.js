@@ -13,24 +13,24 @@ function clickHandler (htmlNode, e) {
 	let url = undefined;
 	const validURLs = [ CHANGE_URL, ADD_URL, CLEAR_URL, UPDATE_URL ];
 
-	if ( htmlNode.hasAttribute( requestButtonAttribute ) ) {
-		const attr = htmlNode.getAttribute( requestButtonAttribute );
-		if ( attr ) {
-			let attrURL;
-			try {
-				attrURL = new URL(attr, window.location.origin);
-				if ( validURLs.includes( attrURL.pathname ) ) {
-					url = attrURL;
-				} else {
-					throw `URL should be one of the following: ${CHANGE_URL}, ${ADD_URL}, ${UPDATE_URL}, ${CLEAR_URL}`
-				}
-			} catch (error) {
-				console.error(`Liquid Ajax Cart: ${requestButtonAttribute} contains an invalid URL as a parameter.`, error);
-			}
-		}
+	if ( !(htmlNode.hasAttribute( requestButtonAttribute )) ) {
+		return;
 	}
 
-	if ( url === undefined ) {
+	const attr = htmlNode.getAttribute( requestButtonAttribute );
+	if ( attr ) {
+		let attrURL;
+		try {
+			attrURL = new URL(attr, window.location.origin);
+			if ( validURLs.includes( attrURL.pathname ) ) {
+				url = attrURL;
+			} else {
+				throw `URL should be one of the following: ${CHANGE_URL}, ${ADD_URL}, ${UPDATE_URL}, ${CLEAR_URL}`
+			}
+		} catch (error) {
+			console.error(`Liquid Ajax Cart: ${requestButtonAttribute} contains an invalid URL as a parameter.`, error);
+		}
+	} else {
 		if ( htmlNode.hasAttribute( 'href' ) && htmlNode.tagName.toUpperCase() === 'A' ) {
 			const linkURL = new URL(htmlNode.href);
 			if ( validURLs.includes( linkURL.pathname ) ) {
@@ -45,6 +45,7 @@ function clickHandler (htmlNode, e) {
 	}
 
 	if ( url === undefined ) {
+		console.error( `Liquid Ajax Cart: a ${requestButtonAttribute} element doesn't have a valid URL` );
 		return;
 	}
 
