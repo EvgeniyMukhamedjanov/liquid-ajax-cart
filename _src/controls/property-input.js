@@ -56,8 +56,10 @@ function initEventListeners() {
 	}, false);
 
 	document.addEventListener("keydown", function(e) {
+		const tagName = e.target.tagName.toUpperCase();
+		const typeAttribute = e.target.getAttribute('type');
 		if (e.key === "Enter" ) {
-			if ( e.target.tagName.toUpperCase() !== 'TEXTAREA' || e.ctrlKey) {
+			if ( tagName !== 'TEXTAREA' || e.ctrlKey) {
 				changeHandler(e.target, e);
 			}
 		}
@@ -246,33 +248,40 @@ function escHandler (htmlNode) {
 		return;
 	}
 
+	let htmlNodeType = htmlNode.getAttribute('type') || '';
+	htmlNodeType = htmlNodeType.toLowerCase();
+	const htmlNodeTag = htmlNode.tagName.toUpperCase();
+	if ( ( htmlNodeTag !== 'INPUT' && htmlNodeTag !== 'TEXTAREA' ) || htmlNodeType === 'checkbox' || htmlNodeType === 'radio' ) {
+		return;
+	}
+
 	const state = getCartState();
 	if ( !(state.status.cartStateSet) ) {
 		htmlNode.blur();
 		return;
 	}
 
-	const attributeValue = htmlNode.getAttribute( propertyInputAttribute );
-	let [ objectCode, ...propertyName ] = attributeValue.split(' ');
-	if(propertyName.length === 0) {
-		console.error(`Liquid Ajax Cart: ${propertyInputAttribute} attribute must contain two parameters separated by the space symbol`);
+	const [ objectCode, propertyName ] = getInputData(htmlNode);
+	if(!objectCode) {
 		return;
 	}
-	objectCode = objectCode.trim();
-	propertyName = propertyName.join(' ');
-	
-	const [ lineItem ] = findLineItemByCode(objectCode, state);
-	if(lineItem) {
-		let propertyValue = undefined;
-		for( let p in lineItem.properties ) {
-			if(propertyName === p) {
-				propertyValue = lineItem.properties[p];
-				break;
-			}
+
+	let propertyValue = undefined;
+	if( objectCode === 'note' ) {
+		propertyValue = state.cart.note;
+	} else if ( objectCode === 'attributes' ) {
+		propertyValue = state.cart.attributes[propertyName];
+	} else {
+		const [ lineItem ] = findLineItemByCode(objectCode, state);
+		if(lineItem) {
+			propertyValue = lineItem.properties[propertyName];
 		}
-		if(propertyValue !== undefined) {
-			htmlNode.value = propertyValue;
+	}
+	if(propertyValue !== undefined) {
+		if ( !propertyValue && typeof propertyValue !== 'string' && !(propertyValue instanceof String)) {
+			propertyValue = '';
 		}
+		htmlNode.value = propertyValue;
 	}
 
 	htmlNode.blur();
