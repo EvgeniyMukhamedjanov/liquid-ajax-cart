@@ -59,6 +59,11 @@ disable_anchors: true
       left: -115px;
       top: 8px;
     } 
+
+    /* Remove the line from the Minus button button */
+    .na + .s + .nt + .c + span.nt:before {
+      display: none;
+    }
   }
 </style>
 
