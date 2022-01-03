@@ -174,7 +174,10 @@ Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-inp
 <div markdown="1" class="code-side-note" style="top: 422px;">
 <h5>Property inputs <span class="badge badge-success">New in 1.7.0</span></h5>
 
-Add the [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-input/) attribute to a line item property input, cart attribute input or cart note input to ajaxify them. The attribute supports checkboxes, radio buttons, `select` and `textarea` tags as well.
+Add the [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-input/) attribute to a line item property input to ajaxify it. The attribute also supports checkboxes, radio buttons, `select` and `textarea` tags.
+</div>
+<div markdown="1" class="code-side-note" style="top: 1262px;">
+The [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-input/) attribute works with the cart note and cart attributes as well.
 </div>
   
 <div markdown="1" class="code-side-note" style="top: 1115px;">
