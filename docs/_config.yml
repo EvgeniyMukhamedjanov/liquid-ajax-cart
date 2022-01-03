@@ -59,6 +59,8 @@ links:
           description: Adds/removes a `body` CSS class on user's click.
         - file: data-ajax-cart-quantity-input
           description: Performs a Cart Ajax API request when an input field for a cart item's quantity is changed.
+        - file: data-ajax-cart-property-input
+          description: Performs a Cart Ajax API request when an input field for a cart item's property, cart note or cart attribute is changed.
     - title: Messages
       file: data-ajax-cart-messages
       links:
