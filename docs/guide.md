@@ -115,13 +115,15 @@ Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute
     
 ##### Buttons
 
-Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "plus", "minus" and "remove" buttons. They will be ajaxified automatically. 
-
-The `routes.cart_add_url`, `routes.cart_clear_url`, `routes.cart_update_url` are supported as well. See the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) reference for details.
+Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "Plus", "Minus" and "Remove" buttons. Add the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) to them to ajaxify the buttons.
     
-<h5>Quantity inputs <span class="badge badge-info">Supports line-item index since 1.6.0</span></h5>
+##### Quantity inputs
     
 Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-input/) attribute to an input element that displays a cart item's quantity to ajaxify it.
+
+<h5>Property inputs <span class="badge badge-success">New in 1.7.0</span></h5>
+
+Add the [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-input/) attribute a line item property input, cart attribute input or cart note input to ajaxify them. The attribute supports checkboxes, radio buttons, `select` and `textarea` tags as well.
 
 ##### Error messages
 
