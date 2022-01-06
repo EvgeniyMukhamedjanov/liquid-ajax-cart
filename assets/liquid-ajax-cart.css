@@ -13,6 +13,9 @@
     padding-right: 27.5px;
   }
 }
+.section-featured-product + .section-featured-product {
+  margin-top:  27.5px;
+}
 
 
 .ajax-cart__quantity-button {
