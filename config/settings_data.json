@@ -65,15 +65,18 @@
         "blocks": {
           "slider-0": {
             "type": "image",
-            "settings": {}
+            "settings": {
+            }
           },
           "slider-1": {
             "type": "image",
-            "settings": {}
+            "settings": {
+            }
           },
           "slider-2": {
             "type": "image",
-            "settings": {}
+            "settings": {
+            }
           }
         },
         "block_order": [
@@ -102,7 +105,8 @@
       },
       "collection-list": {
         "type": "collection-list",
-        "settings": {}
+        "settings": {
+        }
       },
       "product-template": {
         "type": "product-template",
@@ -185,7 +189,8 @@
       },
       "my-cart": {
         "type": "my-cart",
-        "settings": {}
+        "settings": {
+        }
       },
       "163511092542400c8a": {
         "type": "rich-text",
@@ -200,11 +205,24 @@
         "settings": {
           "cart_notes_enable": true
         }
+      },
+      "164149653986a90fa3": {
+        "type": "featured-product",
+        "settings": {
+          "featured_product": "product-with-properties",
+          "product_vendor_enable": false,
+          "product_quantity_enable": false,
+          "product_image_zoom_type": "no-zoom",
+          "social_sharing": false,
+          "enable_payment_button": false,
+          "add_to_cart_width": "small"
+        }
       }
     },
     "content_for_index": [
       "163511092542400c8a",
       "featured-product",
+      "164149653986a90fa3",
       "1632428792c98f42b1",
       "16324720968dae6a91"
     ]
@@ -277,11 +295,13 @@
             },
             "footer-2": {
               "type": "social",
-              "settings": {}
+              "settings": {
+              }
             },
             "footer-3": {
               "type": "newsletter",
-              "settings": {}
+              "settings": {
+              }
             }
           },
           "block_order": [
@@ -299,15 +319,18 @@
           "blocks": {
             "slider-0": {
               "type": "image",
-              "settings": {}
+              "settings": {
+              }
             },
             "slider-1": {
               "type": "image",
-              "settings": {}
+              "settings": {
+              }
             },
             "slider-2": {
               "type": "image",
-              "settings": {}
+              "settings": {
+              }
             }
           },
           "block_order": [
@@ -336,7 +359,8 @@
         },
         "collection-list": {
           "type": "collection-list",
-          "settings": {}
+          "settings": {
+          }
         },
         "product-template": {
           "type": "product-template",
@@ -458,11 +482,13 @@
             },
             "footer-2": {
               "type": "social",
-              "settings": {}
+              "settings": {
+              }
             },
             "footer-3": {
               "type": "newsletter",
-              "settings": {}
+              "settings": {
+              }
             }
           },
           "block_order": [
@@ -480,11 +506,13 @@
           "blocks": {
             "slider-0": {
               "type": "image",
-              "settings": {}
+              "settings": {
+              }
             },
             "slider-1": {
               "type": "image",
-              "settings": {}
+              "settings": {
+              }
             }
           },
           "block_order": [
@@ -507,7 +535,8 @@
         },
         "collection-list": {
           "type": "collection-list",
-          "settings": {}
+          "settings": {
+          }
         },
         "feature-row-0": {
           "type": "feature-row",
@@ -523,7 +552,8 @@
         },
         "map": {
           "type": "map",
-          "settings": {}
+          "settings": {
+          }
         },
         "product-template": {
           "type": "product-template",
@@ -623,11 +653,13 @@
             },
             "footer-2": {
               "type": "social",
-              "settings": {}
+              "settings": {
+              }
             },
             "footer-3": {
               "type": "newsletter",
-              "settings": {}
+              "settings": {
+              }
             }
           },
           "block_order": [
@@ -645,19 +677,23 @@
           "blocks": {
             "slider-0": {
               "type": "image",
-              "settings": {}
+              "settings": {
+              }
             },
             "slider-1": {
               "type": "image",
-              "settings": {}
+              "settings": {
+              }
             },
             "slider-2": {
               "type": "image",
-              "settings": {}
+              "settings": {
+              }
             },
             "slider-3": {
               "type": "image",
-              "settings": {}
+              "settings": {
+              }
             }
           },
           "block_order": [
@@ -707,19 +743,23 @@
           "blocks": {
             "collection-list-0": {
               "type": "collection",
-              "settings": {}
+              "settings": {
+              }
             },
             "collection-list-1": {
               "type": "collection",
-              "settings": {}
+              "settings": {
+              }
             },
             "collection-list-2": {
               "type": "collection",
-              "settings": {}
+              "settings": {
+              }
             },
             "collection-list-3": {
               "type": "collection",
-              "settings": {}
+              "settings": {
+              }
             }
           },
           "block_order": [
@@ -737,19 +777,23 @@
           "blocks": {
             "collection-list-1-0": {
               "type": "collection",
-              "settings": {}
+              "settings": {
+              }
             },
             "collection-list-1-1": {
               "type": "collection",
-              "settings": {}
+              "settings": {
+              }
             },
             "collection-list-1-2": {
               "type": "collection",
-              "settings": {}
+              "settings": {
+              }
             },
             "collection-list-1-3": {
               "type": "collection",
-              "settings": {}
+              "settings": {
+              }
             }
           },
           "block_order": [
