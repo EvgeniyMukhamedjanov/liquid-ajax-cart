@@ -22,8 +22,6 @@ layout: reference-content
     }
 
     .reference-link-block__sub-sections-wrapper {
-        display: flex;
-        flex-wrap: wrap;
         margin-left: -15px;
         margin-right: -15px;
     }
@@ -31,7 +29,6 @@ layout: reference-content
     .reference-link-block__sub-section {
         padding: 0 15px;
         margin-top: 38px;
-        flex: 0 0 50%;
     }
 
     .reference-link-block p {
@@ -40,6 +37,17 @@ layout: reference-content
 
     .reference-link-block p + p {
         margin-top: 1rem;
+    }
+
+    @media (min-width: 768px) {
+        .reference-link-block__sub-sections-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .reference-link-block__sub-section {
+            flex: 0 0 50%;
+        }
     }
     
 </style>
