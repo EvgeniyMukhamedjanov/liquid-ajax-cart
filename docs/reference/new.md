@@ -8,7 +8,7 @@ layout: reference-content
         margin-bottom: 74px;
     }
     .reference-link-block + .reference-link-block {
-        border-top: rgba(0, 0, 0, .1);
+        border-top: 1px solid rgba(0, 0, 0, .1);
         margin-top: 74px;
     }
 
@@ -29,6 +29,16 @@ layout: reference-content
 
     .reference-link-block__sub-section {
         padding: 0 15px;
-        margin-top: 48px;
+        margin-top: 38px;
+        flex: 0 0 50%;
     }
+
+    .reference-link-block p {
+        margin-bottom: 0;
+    }
+
+    .reference-link-block p + p {
+        margin-top: 1rem;
+    }
+    
 </style>
