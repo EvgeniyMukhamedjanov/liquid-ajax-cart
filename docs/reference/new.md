@@ -5,11 +5,11 @@ layout: reference-content
 
 <style>
     .reference-link-block {
-        margin-bottom: 74px;
+        margin-bottom: 60px;
     }
     .reference-link-block + .reference-link-block {
         border-top: 1px solid rgba(0, 0, 0, .1);
-        margin-top: 74px;
+        padding-top: 60px;
     }
 
     .reference-link-block__title {
@@ -23,6 +23,7 @@ layout: reference-content
 
     .reference-link-block__sub-sections-wrapper {
         display: flex;
+        flex-wrap: wrap;
         margin-left: -15px;
         margin-right: -15px;
     }
