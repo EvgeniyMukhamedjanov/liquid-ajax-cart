@@ -6,10 +6,10 @@ layout: reference-content
 <style>
     .reference-link-block {
         margin-bottom: 60px;
+        padding-top: 60px;
     }
     .reference-link-block + .reference-link-block {
         border-top: 1px solid rgba(0, 0, 0, .1);
-        padding-top: 60px;
     }
 
     .reference-link-block__title {
