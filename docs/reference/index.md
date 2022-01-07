@@ -49,5 +49,14 @@ layout: reference-content
             flex: 0 0 50%;
         }
     }
+
+    code {
+        color: currentColor;
+        padding: 0 5px;
+        border: 1px solid #d2d5d8;
+        background-color: #fafbf4;
+        border-radius: 3px;
+        white-space: nowrap;
+    }
     
 </style>

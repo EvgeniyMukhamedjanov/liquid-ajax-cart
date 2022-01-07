@@ -31,7 +31,7 @@ layout: default
                                 </a>
                             </h3>
                             {%- if ref_child_link.description -%}
-                                <p markdown="1">{{ ref_child_link.description | replace: ' `', '<code class="language-plaintext highlighter-rouge">' | replace: '` ', '</code>' }}</p>
+                                <p markdown="1">{{ ref_child_link.description | replace: ' `', ' <code class="language-plaintext highlighter-rouge">' | replace: '` ', '</code> ' }}</p>
                             {%- endif -%}
                         </div>
                         {%- endfor -%}
