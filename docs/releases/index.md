@@ -16,7 +16,7 @@ title: Releases
 }
 
 .release__date {
-	font-size: 13px;
+	font-size: 14px;
 }
 
 @media (min-width: 1200px) {
@@ -105,6 +105,9 @@ title: Releases
 	</div>
 
 <div class="release__description" markdown="1">
+{%- if file_version != '0.0.1' -%}
+#### Changes:
+{%- endif -%}
 {%- if file_version == '1.7.0' -%}
 * The `data-ajax-cart-property-input` attribute is added.
 * The routes to `routes.cart_*_url` are not automatically ajaxified anymore. Add the `data-ajax-cart-request-button` to ajaxify them.
