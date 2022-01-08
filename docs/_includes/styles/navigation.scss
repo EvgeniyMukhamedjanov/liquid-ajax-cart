@@ -90,10 +90,10 @@
 }
 
 .header-nav__link {
-    display: block;
+    display: inline-block;
     padding: 10px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 20px;
     color: #717171 !important;
     position: relative;
 
@@ -154,5 +154,9 @@
     }
     .header-nav__item:last-child {
         margin-right: 0;
+    }
+
+    .header-nav__link {
+        font-size: 14px;
     }
 }

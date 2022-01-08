@@ -44,21 +44,7 @@ try {
 			  white-space: nowrap;
 			}
 
-			.container {
-				max-width: 1670px;
-				padding:  0 15px;
-			}
-			@media (min-width: 760px) {
-				.container {
-					padding:  0 30px;
-				}
-			}
-			@media (min-width: 1360px) {
-				.container {
-					padding:  0 50px;
-				}
-			}
-
+            {% include styles/containers.scss %}
             {% include styles/navigation.scss %}
 	      	{% include home/hero.css %}
 	      	{% include home/example-layout.css %}
@@ -82,7 +68,7 @@ try {
     <clipPath id="hero-clip-path" clipPathUnits="objectBoundingBox"><path d="M0,0 H1 V0.976 C0.888,0.991,0.706,1,0.5,1 C0.294,1,0.112,0.991,0,0.976 V0"></path></clipPath>
 </svg>
 <div class="hero-heading">
-    <div class="container">
+    <div class="wide-container">
         <div class="hero-heading__wrapper">
             <h1 class="hero-heading__title">Liquid Ajax Cart 
             	{% if version != blank %}
@@ -120,7 +106,7 @@ try {
 </div>
 
 <div class="main-page-content">
-    <div class="code-examples container">
+    <div class="code-examples wide-container">
         <div class="code-examples__wrapper">
             <div class="code-examples__examples-container" data-example-canvas>
                 <div class="code-examples__example code-examples__example--active" data-example id="section-example">

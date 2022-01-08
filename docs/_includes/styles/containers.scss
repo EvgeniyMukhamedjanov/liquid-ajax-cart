@@ -1,0 +1,14 @@
+.wide-container {
+    max-width: 1670px;
+    padding:  0 15px;
+}
+@media (min-width: 760px) {
+    .wide-container {
+        padding:  0 30px;
+    }
+}
+@media (min-width: 1360px) {
+    .wide-container {
+        padding:  0 50px;
+    }
+}
