@@ -2,10 +2,11 @@
     position: relative;
     z-index: 4;
 
-    @media (max-width: 759px) {
-        .container {
-            max-width: none;
-        }
+    
+}
+@media (max-width: 759px) {
+    .header-nav .container {
+        max-width: none;
     }
 }
 
