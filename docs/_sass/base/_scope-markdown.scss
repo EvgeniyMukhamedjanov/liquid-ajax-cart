@@ -43,7 +43,8 @@
     }
 
     h1 {
-        font-size: 18px;
+        font-size: 2.25rem;
+        // font-size: 18px;
         font-family: 'Arial Black', 'Arial', sans-serif;
         font-weight: 900;
         position: relative;
@@ -56,12 +57,12 @@
             background-repeat: repeat-x;
             background-position: left 0 bottom 0.15em;
         }
-        @media (min-width: 576px) {
-            font-size: 28px;
-        }
-        @media (min-width: 768px) {
-            font-size: 2.25rem;
-        }
+        // @media (min-width: 576px) {
+        //     font-size: 28px;
+        // }
+        // @media (min-width: 768px) {
+        //     font-size: 2.25rem;
+        // }
     }
 
     h2 {

@@ -11,8 +11,7 @@ title: Releases
 }
 
 .release:first-child {
-	border-color: #FCFF6B;
-	background-color: #FCFF6B;
+	background-color: #fff6a4;
 	margin: 0 -15px;
 	padding: 32px 15px;
 }
