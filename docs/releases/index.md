@@ -56,7 +56,7 @@ title: Releases
 }
 </style>
 
-<div class="release-list">
+<div class="release-list my-5">
 {%- assign release_slice = '/releases/liquid-ajax-cart-v' -%}
 
 {%- assign versions_joined = '' -%}
@@ -108,6 +108,7 @@ title: Releases
 {%- if file_version != '0.0.1' -%}
 #### Changes:
 {%- endif -%}
+
 {%- if file_version == '1.7.0' -%}
 * The `data-ajax-cart-property-input` attribute is added.
 * The routes to `routes.cart_*_url` are not automatically ajaxified anymore. Add the `data-ajax-cart-request-button` to ajaxify them.
