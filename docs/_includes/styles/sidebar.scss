@@ -20,6 +20,10 @@
         border-bottom: 0;
     }
 
+    > ul > li {
+        margin-bottom: 10px;
+    }
+
     ul {
         padding-left: 15px;
 
@@ -34,7 +38,7 @@
         a {
             border-bottom: 0;
             display: block;
-            font-weight: 500;
+            // font-weight: 500;
             position: relative;
 
             &:focus,
