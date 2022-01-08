@@ -18,7 +18,7 @@
     right: 0;
     background: white;
     padding: 0 10px 15px;
-    box-shadow: 0 9px 5px -5px rgb(0 0 0 / 30%);
+    box-shadow: 0 9px 5px -5px rgba(0, 0, 0, .3);
 }
 .header-nav__toggle-checkbox:checked ~ .header-nav__lists-wrapper {
     display: block;
