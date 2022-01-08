@@ -5,6 +5,10 @@ title: Releases
 ---
 
 <style>
+.release {
+	border-radius: 5px;
+}
+
 .release__version {
 	font-family: 'Arial Black', 'Arial', sans-serif;
     font-weight: 900;
@@ -35,8 +39,10 @@ title: Releases
 		flex: 0 0 200px;
 	}
 
-	.release__version {
+	h2.release__version {
 		font-size: 48px;
+		margin: 0;
+		border: none;
 	}
 
 	.release__description {
