@@ -86,7 +86,7 @@ links:
       description: A Javascript object that keeps the cart and app state.
       links:
         - file: data-ajax-cart-initial-state
-          description: Defines initial cart state from `{{ cart | json }}`.
+          description: Defines initial cart state from `{{ cart | json }}` .
         - file: data-ajax-cart-bind-state
           description: Renders a cart state property anywhere on a page.
         - title: getCartState()
