@@ -83,7 +83,7 @@ title: Releases
 	}
 
 	.release__description {
-		flex: 0 1 550px;
+		flex: 0 1 725;
 	}
 }
 
@@ -97,7 +97,7 @@ title: Releases
 	}
 
 	.release__description {
-		padding-right: 205px;
+		padding-right: 175px;
 	}
 
 	.release__download-wrapper {
