@@ -19,7 +19,7 @@ title: Releases
 	font-size: 14px;
 }
 
-.release__description h4 {
+.release__description h5 {
 	margin-top: 0;
 }
 
@@ -44,6 +44,11 @@ title: Releases
 .release__download-btn:hover {
 	background: black !important;
 	color: white !important
+}
+
+.release:first-child code {
+	background: transparent;
+	border: 1px solid rgba(0, 0, 0, .5);
 }
 
 @media (min-width: 992px) {
@@ -134,7 +139,7 @@ title: Releases
 
 <div class="release__description" markdown="1">
 {% if file_version != '0.0.1' %}
-#### Changes:
+##### Changes:
 
 {% endif %}
 
