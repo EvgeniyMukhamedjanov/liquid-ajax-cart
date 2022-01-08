@@ -46,7 +46,7 @@ title: Releases
 	color: white !important
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
 	.release {
 		display: flex;
 		padding: 32px;
@@ -79,6 +79,7 @@ title: Releases
 	.release__download-wrapper {
 		flex: 0 0 auto;
 		margin-left: auto;
+		padding-left: 60px;
 	}
 }
 </style>
