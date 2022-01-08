@@ -51,6 +51,28 @@
     width: 22px;
 }
 
+.highlight pre {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(0, 0, 0, .2) rgba(0, 0, 0, .1);
+	overflow: auto;
+	margin-bottom: 0;
+}
+
+.highlight pre::-webkit-scrollbar {
+	height: 8px;
+	height: 8px;
+}
+   
+.highlight pre::-webkit-scrollbar-track {
+	background-color: rgba(0, 0, 0, .1);
+	border-radius: 100px;
+}
+   
+.highlight pre::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, .2);
+	border-radius: 100px;
+}
+
 .hll {
     background-color: #ffc
 }
