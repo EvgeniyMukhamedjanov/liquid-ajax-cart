@@ -10,7 +10,7 @@ layout: default
         {%- for ref_link in site.links.reference -%}
             {%- assign md_file_name = ref_link.file | append: '.md' -%}
             <div class="reference-link-block">
-                <div>
+                <div class="reference-link-block__text">
                     <h2 class="reference-link-block__title">
                         <a href="/reference/{{ ref_link.file }}/" 
                             class="{{ include.anchor_class }} {% if md_file_name == page.name %} active {% endif %}">

@@ -50,6 +50,21 @@ layout: reference-content
         }
     }
 
+    @media (min-width: 1200px) {
+        .reference-link-block__title {
+            font-size: 28px;
+        }
+
+        .reference-link-block__text {
+            flex: 0 0 34%;
+            padding-right: 60px;
+        }
+
+        .reference-link-block__sub-sections-wrapper {
+            margin-top: -30px;
+        }
+    }
+
     code {
         color: currentColor;
         padding: 0 5px;
