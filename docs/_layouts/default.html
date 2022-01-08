@@ -49,14 +49,14 @@
                 const heading = document.querySelector('.scope-markdown h1');
                 if(heading) {
                     heading.innerHTML = `<span>${ heading.innerHTML }</span>`;
-                }
-                const headingWordBreak = () => {
-                    if(heading.offsetWidth > heading.parentNode.offsetWidth) {
-                        heading.style.wordBreak = "break-all";
+                    const headingWordBreak = () => {
+                        if(heading.querySelector('span').offsetWidth > heading.parentNode.offsetWidth) {
+                            heading.style.wordBreak = "break-all";
+                        }
                     }
+                    window.addEventListener('resize', headingWordBreak);
+                    headingWordBreak();
                 }
-                window.addEventListener('resize', headingWordBreak);
-                headingWordBreak();
             } catch(e) {}
         </script>
 
