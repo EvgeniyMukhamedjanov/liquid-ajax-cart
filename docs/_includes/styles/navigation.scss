@@ -1,6 +1,12 @@
 .header-nav {
     position: relative;
     z-index: 4;
+
+    @media (max-width: 759px) {
+        .container {
+            max-width: none;
+        }
+    }
 }
 
 .header-nav__toggle-checkbox {

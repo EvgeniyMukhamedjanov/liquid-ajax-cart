@@ -7,6 +7,11 @@
     padding: 9px 14px;
     margin-bottom: 14px;
 }
+@media (max-width: 539px) {
+    .highlight {
+        padding: 4px 9px;
+    }
+}
 
 .highlight pre {
     background-color: transparent;
