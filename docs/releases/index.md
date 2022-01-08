@@ -4,6 +4,53 @@ disable_anchors: true
 title: Releases
 ---
 
+<style>
+.release__version {
+	font-family: 'Arial Black', 'Arial', sans-serif;
+    font-weight: 900;
+	line-height: 1;
+}
+
+.release__date {
+	font-size: 13px;
+}
+
+@media (min-width: 1200px) {
+	.release {
+		display: flex;
+		padding: 32px;
+		border: 1px solid rgba(0, 0, 0, .1);
+	}
+
+	.release:first-child {
+		border-color: #FCFF6B;
+		background-color: #FCFF6B;
+	}
+
+	.release + .release {
+		margin-top: 38px;
+	}
+
+	.release__heading {
+		flex: 0 0 200px;
+	}
+
+	.release__version {
+		font-size: 48px;
+	}
+
+	.release__description {
+		flex: 1 0 450px;
+	}
+
+	.release__download-wrapper {
+		flex: 0 0 auto;
+		margin-left: auto;
+	}
+}
+</style>
+
+<div class="release-list">
 {%- assign release_slice = '/releases/liquid-ajax-cart-v' -%}
 
 {%- assign versions_joined = '' -%}
@@ -31,8 +78,14 @@ title: Releases
 {%- for long_version in versions_array -%}
 {% assign file_version = long_version | replace: "0", "-" | replace: ".---", ".0"  | replace: ".--", "." | replace: ".-", "." | remove_first: "." | replace: "-", "0" %}
 
-### {{ file_version }}
-<p><a href="{{ release_slice | append: file_version | append: '.js' }}" download >{{ 'liquid-ajax-cart-v' | append: file_version | append: '.js' }}</a></p>
+<div class="release">
+	<div class="release__heading">
+		<h2 class="release__version">{{ file_version }}</h2>
+		<div class="release__date">
+			{%- if file_version == '1.7.0' -%}Released on 2022, Jan 3{%- endif -%}
+		</div>
+	</div>
+	<div class="release__description" markdown="1">
 
 {%- if file_version == '1.7.0' -%}
 * The `data-ajax-cart-property-input` attribute is added.
@@ -99,4 +152,13 @@ Public release.
 * The `cartRequestAdd` and `cartRequestUpdate` functions are added.
 {% endif %}
 
+	</div>
+	<div class="release__download-wrapper">
+		<a download href="{{ release_slice | append: file_version | append: '.js' }}" class="release__download-btn">
+			Download
+		</a>
+	</div>
+</div>
+
 {% endfor %}
+</div>
