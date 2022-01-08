@@ -2,12 +2,51 @@
 layout: default
 ---
 
+<style>
+
+.layout-page__sidebar {
+    display: none;
+}
+
+.layout-page__main .scope-markdown {
+    max-width: 825px;
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .mobile-toc {
+        display: none;
+    }
+    
+    .layout-page__wrapper {
+        display: flex;
+        margin: 0 -15px;
+    }
+
+    .layout-page__main {
+        order: 2;
+        flex: 1 1 auto;
+        padding: 0 15px;
+    }
+
+    .layout-page__sidebar {
+        display: block;
+        flex: 0 0 255px;
+        order: 1;
+    }
+}
+</style>
+
 {% assign reference_url = '/reference/' %}
 {% assign page_url_reference_slice = page.url | slice: 0, reference_url.size %}
+{% assign is_reference_subpage = false %}
+{% if page_url_reference_slice == reference_url and page.url.size > reference_url.size %}
+    {% assign is_reference_subpage = true %}
+{% endif %}
 
-<div class="container">
-    <div class="row">
-        <main class="col-md-9 order-md-2 layout-page__main">
+<div class="{% if is_reference_subpage %}wide-{% endif %}container">
+    <div class="layout-page__wrapper">
+        <main class="layout-page__main">
             {% if page_url_reference_slice != reference_url %}
                 <section class="mobile-toc border mb-3 p-3 d-md-none">
                     <div class="d-flex align-items-center">
@@ -35,7 +74,7 @@ layout: default
 
             {% if page_url_reference_slice == reference_url and page.url.size > reference_url.size %}
                 <hr class="d-md-none" />
-                <section class="mobile-toc border mb-3 p-3 d-md-none">
+                <section class="mobile-toc border mb-3 p-3">
                     <div class="d-flex align-items-center">
                         <h2 class="mb-0">Reference</h2>
                     </div>
@@ -49,7 +88,7 @@ layout: default
 
         {% if page_url_reference_slice == reference_url %}
             {% if page.url.size > reference_url.size %}
-                <aside class="col-md-3 order-md-1 layout-page__sidebar d-none d-md-block hidden-print">
+                <aside class="layout-page__sidebar">
                     <nav class="page-sidebar page-sidebar--expanded">
                         {% include reference-navigation.html
                             class="list-unstyled pl-0"
@@ -59,7 +98,7 @@ layout: default
                 </aside>
             {% endif %}
         {% else %}
-            <aside class="col-md-3 order-md-3 layout-page__sidebar d-none d-md-block hidden-print">
+            <aside class="layout-page__sidebar">
                 {% include sidebar/content-pre.html %}
                 {% include sidebar/content.html %}
                 {% include sidebar/content-post.html %}
