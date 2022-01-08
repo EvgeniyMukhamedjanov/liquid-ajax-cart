@@ -85,8 +85,8 @@ title: Releases
 			{%- if file_version == '1.7.0' -%}Released on 2022, Jan 3{%- endif -%}
 		</div>
 	</div>
-	<div class="release__description" markdown="1">
 
+<div class="release__description" markdown="1">
 {%- if file_version == '1.7.0' -%}
 * The `data-ajax-cart-property-input` attribute is added.
 * The routes to `routes.cart_*_url` are not automatically ajaxified anymore. Add the `data-ajax-cart-request-button` to ajaxify them.
@@ -151,8 +151,8 @@ Public release.
 * The `data-ajax-cart-request-button` attribute is added.
 * The `cartRequestAdd` and `cartRequestUpdate` functions are added.
 {% endif %}
+</div>
 
-	</div>
 	<div class="release__download-wrapper">
 		<a download href="{{ release_slice | append: file_version | append: '.js' }}" class="release__download-btn">
 			Download
