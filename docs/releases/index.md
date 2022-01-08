@@ -36,7 +36,7 @@ title: Releases
 	}
 
 	.release__heading {
-		flex: 0 0 200px;
+		flex: 0 0 250px;
 	}
 
 	h2.release__version {
@@ -86,9 +86,21 @@ title: Releases
 
 <div class="release">
 	<div class="release__heading">
-		<h2 class="release__version">{{ file_version }}</h2>
+		<h2 class="release__version">v{{ file_version }}</h2>
 		<div class="release__date">
 			{%- if file_version == '1.7.0' -%}Released on 2022, Jan 3{%- endif -%}
+			{%- if file_version == '1.6.0' -%}Released on 2021, Nov 16{%- endif -%}
+			{%- if file_version == '1.5.0' -%}Released on 2021, Nov 2{%- endif -%}
+			{%- if file_version == '1.4.0' -%}Released on 2021, Oct 30{%- endif -%}
+			{%- if file_version == '1.3.0' -%}Released on 2021, Oct 25{%- endif -%}
+			{%- if file_version == '1.2.1' -%}Released on 2021, Oct 23{%- endif -%}
+			{%- if file_version == '1.2.0' -%}Released on 2021, Oct 22{%- endif -%}
+			{%- if file_version == '1.1.0' -%}Released on 2021, Oct 16{%- endif -%}
+			{%- if file_version == '1.0.0' -%}Released on 2021, Oct 10{%- endif -%}
+			{%- if file_version == '0.2.0' -%}Released on 2021, Oct 10{%- endif -%}
+			{%- if file_version == '0.1.1' -%}Released on 2021, Oct 10{%- endif -%}
+			{%- if file_version == '0.1.0' -%}Released on 2021, Oct 5{%- endif -%}
+			{%- if file_version == '0.0.1' -%}Released on 2021, Oct 5{%- endif -%}
 		</div>
 	</div>
 
@@ -156,6 +168,10 @@ Public release.
 * The `data-ajax-cart-quantity-button` attribute is removed.
 * The `data-ajax-cart-request-button` attribute is added.
 * The `cartRequestAdd` and `cartRequestUpdate` functions are added.
+{% endif %}
+
+{%- if file_version == '0.0.1' -%}
+`Hello world!`
 {% endif %}
 </div>
 
