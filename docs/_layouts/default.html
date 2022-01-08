@@ -44,6 +44,14 @@
         {% endunless %}
 
         <div style="overflow: hidden;">{{ content }}</div>
+        <script>
+            try {
+                const heading = document.querySelector('.scope-markdown h1');
+                if(heading) {
+                    heading.innerHTML = `<span>${ heading }</span>`;
+                }
+            } catch(e) {}
+        </script>
 
         {% include footer/full.html %}
     </body>
