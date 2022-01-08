@@ -46,7 +46,7 @@ title: Releases
 	}
 
 	.release__description {
-		flex: 1 0 450px;
+		flex: 1 0 550px;
 	}
 
 	.release__download-wrapper {
