@@ -7,7 +7,7 @@
 .site-masthead__title {
     font-family: 'Arial Black', 'Arial', sans-serif;
     font-weight: 900;
-    font-size: 32px;
+    font-size: 42px;
     line-height: 1;
     position: relative;
     z-index: 2;
@@ -19,11 +19,7 @@
         background-position: left 0 bottom 0.15em;
     }
 
-    @media (min-width:  410px) {
-        font-size: 36px;
-    }
-
-    @media (min-width: 560px) {
+    @media (min-width: 410px) {
         font-size: 48px;
     }
 

@@ -10,15 +10,17 @@ layout: default
         {%- for ref_link in site.links.reference -%}
             {%- assign md_file_name = ref_link.file | append: '.md' -%}
             <div class="reference-link-block">
-                <h2 class="reference-link-block__title">
-                    <a href="/reference/{{ ref_link.file }}/" 
-                        class="{{ include.anchor_class }} {% if md_file_name == page.name %} active {% endif %}">
-                            {%- if ref_link.title -%} {{ ref_link.title }} {%- else -%} {{ ref_link.file }} {%- endif -%}
-                    </a>
-                </h2>
-                {%- if ref_link.description -%}
-                    <p markdown="1">{{ ref_link.description | replace: ' `', '<code class="language-plaintext highlighter-rouge">' | replace: '` ', '</code>' }}</p>
-                {%- endif -%}
+                <div>
+                    <h2 class="reference-link-block__title">
+                        <a href="/reference/{{ ref_link.file }}/" 
+                            class="{{ include.anchor_class }} {% if md_file_name == page.name %} active {% endif %}">
+                                {%- if ref_link.title -%} {{ ref_link.title }} {%- else -%} {{ ref_link.file }} {%- endif -%}
+                        </a>
+                    </h2>
+                    {%- if ref_link.description -%}
+                        <p markdown="1">{{ ref_link.description | replace: ' `', ' <code class="language-plaintext highlighter-rouge">' | replace: '` ', '</code> ' }}</p>
+                    {%- endif -%}
+                </div>
 
                 {%- if ref_link.links -%}
                     <div class="reference-link-block__sub-sections-wrapper">
