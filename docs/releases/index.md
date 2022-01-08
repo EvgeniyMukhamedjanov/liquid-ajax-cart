@@ -6,15 +6,15 @@ title: Releases
 
 <style>
 .release {
-	border-radius: 5px;
 	position: relative;
-	padding: 32px;
-	border: 1px solid rgba(0, 0, 0, .1);
+	padding: 32px 0;
 }
 
 .release:first-child {
 	border-color: #FCFF6B;
 	background-color: #FCFF6B;
+	margin: 0 -15px;
+	padding: 32px 15px;
 }
 
 .release + .release {
@@ -23,13 +23,14 @@ title: Releases
 
 .release__heading {
 	margin-top: -8px;
+	margin-bottom: 30px;
 }
 
 h2.release__version {
 	font-family: 'Arial Black', 'Arial', sans-serif;
     font-weight: 900;
 	line-height: 1;
-	font-size: 48px;
+	font-size: 36px;
 	margin: 0;
 	border: none;
 }
@@ -74,6 +75,19 @@ h2.release__version {
 	margin-top: 30px;
 }
 
+@media (min-width: 480px) {
+	.release {
+		border-radius: 5px;
+		padding: 32px;
+		border: 1px solid rgba(0, 0, 0, .1);
+	}
+
+	.release:first-child {
+		margin: 0;
+		padding: 32px;
+	}
+}
+
 @media (min-width: 768px) {
 	.release {
 		display: flex;
@@ -81,6 +95,11 @@ h2.release__version {
 
 	.release__heading {
 		flex: 0 0 210px;
+		margin-bottom: 0;
+	}
+
+	h2.release__version {
+		font-size: 48px;
 	}
 
 	.release__description {
