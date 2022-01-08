@@ -40,27 +40,27 @@ links:
       file: sections
       links:
         - file: data-ajax-cart-section
-          description: Liquid Ajax Cart reloads HTML code of the HTML containers with the `data-ajax-cart-section` attribute every time when the Shopify cart is changed.
+          description: Defines an HTML container that will be re-rendered each time when the cart is changed.
         - file: data-ajax-cart-section-scroll
-          description: Add the `data-ajax-cart-section-scroll` attribute to a scrollable area within a `data-ajax-cart-section` section and the scroll position will not be reset to top every time after HTML is updated.
+          description: Makes sure that the scroll position of a scrollable area within a `data-ajax-cart-section` container will not be reset to top when HTML is updated.
     - title: Product Forms
       file: product-forms
       description: Liquid Ajax Cart ajaxifies product forms once it is loaded.
       links:
         - title: .js-ajax-cart-form-in-progress
           file: js-ajax-cart-form-in-progress
-          description: Liquid Ajax Cart adds the `js-ajax-cart-form-in-progress` CSS class to the product form when its "Add to cart" request is in progress.
+          description: The CSS class gets attached to a product form when it is in process of adding a product to the cart.
     - title: Controls
       file: controls
       links: 
         - file: data-ajax-cart-request-button
           description: Performs a Cart Ajax API request when a link with the `routes.cart_*_url` or an element with the `data-ajax-cart-request-button` attribute is clicked.
         - file: data-ajax-cart-toggle-class-button
-          description: Adds/removes a `body` CSS class on user's click.
+          description: Adds/removes a CSS class of the `body` tag on a user's click.
         - file: data-ajax-cart-quantity-input
-          description: Performs a Cart Ajax API request when an input field for a cart item's quantity is changed.
+          description: Ajaxifies an input field for a cart item's quantity.
         - file: data-ajax-cart-property-input
-          description: Performs a Cart Ajax API request when an input field for a cart item's property, cart note or cart attribute is changed.
+          description: Ajaxifies an input field for a cart item's property, a cart attribute or the cart note.
     - title: Messages
       file: data-ajax-cart-messages
       links:
@@ -83,10 +83,10 @@ links:
           description: Is added if there are one or more Cart Ajax API requests in progress.
     - title: State
       file: state
-      description: A Javascript object to store the cart and app state.
+      description: A Javascript object that keeps the cart and app state.
       links:
         - file: data-ajax-cart-initial-state
-          description: The container with the cart state JSON to load the initial state.
+          description: Defines initial cart state from `{{ cart | json }}`.
         - file: data-ajax-cart-bind-state
           description: Renders a cart state property anywhere on a page.
         - title: getCartState()
@@ -130,9 +130,9 @@ links:
         - file: updateOnWindowFocus
           description: Toggles the functionality that updates cart sections and the State when the `window` loses the focus and gets the focus again.
         - file: lineItemQuantityErrorText
-          description: Configures the error message text when a user tries to set a cart item's quantity higher than the available quantity of the product.
+          description: Defines the message text for the error when a user tries to set a cart item's quantity higher than the available quantity of the product.
         - file: requestErrorText
-          description: To set the error message text when a Cart Ajax API request is not successful and doesn't have any error descriptions, or if the request is not performed.
+          description: Defines the message text for the error when a Cart Ajax API request is not successful and doesn't have any error descriptions, or if the request is not performed.
 
 
 ui:
