@@ -7,6 +7,18 @@ title: Releases
 <style>
 .release {
 	border-radius: 5px;
+	position: relative;
+	padding: 32px;
+	border: 1px solid rgba(0, 0, 0, .1);
+}
+
+.release:first-child {
+	border-color: #FCFF6B;
+	background-color: #FCFF6B;
+}
+
+.release + .release {
+	margin-top: 38px;
 }
 
 .release__version {
@@ -51,24 +63,17 @@ title: Releases
 	border: 1px solid rgba(0, 0, 0, .5);
 }
 
-@media (min-width: 992px) {
+.release__download-wrapper {
+	margin-top: 30px;
+}
+
+@media (min-width: 768px) {
 	.release {
 		display: flex;
-		padding: 32px;
-		border: 1px solid rgba(0, 0, 0, .1);
-	}
-
-	.release:first-child {
-		border-color: #FCFF6B;
-		background-color: #FCFF6B;
-	}
-
-	.release + .release {
-		margin-top: 38px;
 	}
 
 	.release__heading {
-		flex: 0 0 250px;
+		flex: 0 0 210px;
 	}
 
 	h2.release__version {
@@ -80,11 +85,26 @@ title: Releases
 	.release__description {
 		flex: 0 1 550px;
 	}
+}
+
+@media (min-width: 992px) {
+	.release {
+		display: flex;
+	}
+
+	.release__heading {
+		flex: 0 0 250px;
+	}
+
+	.release__description {
+		padding-right: 205px;
+	}
 
 	.release__download-wrapper {
-		flex: 0 0 auto;
-		margin-left: auto;
-		padding-left: 60px;
+		position: absolute;
+		top: 32px;
+		right: 32px;
+		margin-top: 0;
 	}
 }
 </style>
@@ -211,13 +231,16 @@ Public release.
 {%- if file_version == '0.0.1' -%}
 `Hello world!`
 {% endif %}
+
+<div class="release__download-wrapper">
+	<a download href="{{ release_slice | append: file_version | append: '.js' }}" class="release__download-btn">
+		Download
+	</a>
 </div>
 
-	<div class="release__download-wrapper">
-		<a download href="{{ release_slice | append: file_version | append: '.js' }}" class="release__download-btn">
-			Download
-		</a>
-	</div>
+</div>
+
+	
 </div>
 
 {% endfor %}
