@@ -13,4 +13,4 @@ But, for example, if you want to ajaxify only product forms with the `data-my-pr
 ```
 {% endraw %}
 
-Liquid Ajax Cart will call your function and pass the the product form that is going to add a product to cart, and proceed with an "Add to cart" Ajax request only if the function returns `true`.
+Liquid Ajax Cart will call your function and pass the the product form that is going to add a product to the cart, and proceed with an "Add to cart" Ajax request only if the function returns `true`.
