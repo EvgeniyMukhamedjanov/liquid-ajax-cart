@@ -20,22 +20,30 @@ title: Releases
 }
 
 .release__description h4 {
-	margin-top: none;
+	margin-top: 0;
 }
 
 .release__download-btn {
 	border: 1px solid black !important;
-	padding: 12px 16px 13px;
+	padding: 8px 16px 8px;
 	font-family: 'Arial Black', 'Arial', sans-serif;
 	font-weight: 900;
 	letter-spacing: .2em;
-	font-size: 14px;
+	font-size: 10px;
 	display: inline-block;
 	text-transform: uppercase;
 	border-radius: 5px;
 	overflow: hidden;
 	position: relative;
-	margin-top: 1rem;
+	background: transparent !important;
+}
+.release:first-child .release__download-btn {
+	padding: 12px 16px 13px;
+	font-size: 14px;
+}
+.release__download-btn:hover {
+	background: black !important;
+	color: white !important
 }
 
 @media (min-width: 1200px) {
