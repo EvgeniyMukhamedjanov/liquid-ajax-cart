@@ -83,7 +83,7 @@ title: Releases
 	}
 
 	.release__description {
-		flex: 0 1 725;
+		flex: 0 1 725px;
 	}
 }
 
