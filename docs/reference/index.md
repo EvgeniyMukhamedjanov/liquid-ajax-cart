@@ -51,6 +51,10 @@ layout: reference-content
     }
 
     @media (min-width: 1200px) {
+        .reference-link-block {
+            display: flex;
+        }
+
         .reference-link-block__title {
             font-size: 28px;
         }
