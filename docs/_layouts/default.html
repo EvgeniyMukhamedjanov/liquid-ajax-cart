@@ -50,6 +50,13 @@
                 if(heading) {
                     heading.innerHTML = `<span>${ heading.innerHTML }</span>`;
                 }
+                const headingWordBreak = () => {
+                    if(heading.offsetWidth > heading.parentNode.offsetWidth) {
+                        heading.style.wordBreak = "break-all";
+                    }
+                }
+                window.addEventListener('resize', headingWordBreak);
+                headingWordBreak();
             } catch(e) {}
         </script>
 
