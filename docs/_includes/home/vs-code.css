@@ -167,12 +167,6 @@
 	transition: visibility .1s;
 }
 
-@media (max-width: 539px) {
-	.vs-code .highlight pre {
-		font-size: 75%;
-	}
-}
-
 @media (min-width: 540px) { 
 	.vs-code .highlight pre code:before {
 		display: block;

@@ -18,6 +18,7 @@
     right: 0;
     background: white;
     padding: 0 10px 15px;
+    box-shadow: 0 9px 5px -5px rgb(0 0 0 / 30%);
 }
 .header-nav__toggle-checkbox:checked ~ .header-nav__lists-wrapper {
     display: block;
@@ -139,6 +140,7 @@
         flex-grow: 1;
         position: static;
         margin: 0 -10px;
+        box-shadow: none;
     }
 
     .header-nav__toggle-button {

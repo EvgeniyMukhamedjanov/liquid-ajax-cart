@@ -258,6 +258,7 @@
 	.js .code-examples__example {
 		margin: 0 0 24px;
 	}
+	.code-examples.wide-container,
 	.code-examples.container {
 		padding: 0;
 	}
