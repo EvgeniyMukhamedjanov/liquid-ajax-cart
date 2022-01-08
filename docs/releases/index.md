@@ -105,9 +105,10 @@ title: Releases
 	</div>
 
 <div class="release__description" markdown="1">
-{%- if file_version != '0.0.1' -%}
+{% if file_version != '0.0.1' %}
 #### Changes:
-{%- endif -%}
+
+{% endif %}
 
 {%- if file_version == '1.7.0' -%}
 * The `data-ajax-cart-property-input` attribute is added.
