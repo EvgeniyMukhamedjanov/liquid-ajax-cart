@@ -21,10 +21,17 @@ title: Releases
 	margin-top: 38px;
 }
 
-.release__version {
+.release__heading {
+	margin-top: -8px;
+}
+
+h2.release__version {
 	font-family: 'Arial Black', 'Arial', sans-serif;
     font-weight: 900;
 	line-height: 1;
+	font-size: 48px;
+	margin: 0;
+	border: none;
 }
 
 .release__date {
@@ -74,12 +81,6 @@ title: Releases
 
 	.release__heading {
 		flex: 0 0 210px;
-	}
-
-	h2.release__version {
-		font-size: 48px;
-		margin: 0;
-		border: none;
 	}
 
 	.release__description {
@@ -202,7 +203,7 @@ The `data-ajax-cart-quantity-input` adds `initiator` property to Ajax requests.
 * The `data-ajax-cart-quantity-input` sends data as the `FormData` object.
 * The `data-ajax-cart-form-error` attribute is removed.
 * The `data-ajax-cart-messages` attribute is added.
-* The `messageBuilder`, `lineItemQuantityErrorText` and `requestErrorText` coniguration options are added.
+* The `messageBuilder`, `lineItemQuantityErrorText` and `requestErrorText` configuration options are added.
 {%- endif -%}
 
 {%- if file_version == '1.1.0' -%}
