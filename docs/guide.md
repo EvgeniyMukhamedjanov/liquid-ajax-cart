@@ -41,14 +41,14 @@ disable_anchors: true
 
 ---
 
-<div class="{{ row_classes }} guide-row--50">
+<div class="{{ row_classes }}">
 <div class="col-lg-6" markdown="1">
 ### Installation
 {:.mt-0}
 </div>
 </div>
 
-<div class="{{ row_classes }}">
+<div class="{{ row_classes }} guide-row--50">
 <div class="col-lg-6" markdown="1">
 ##### Manual
 {:.mt-0}
