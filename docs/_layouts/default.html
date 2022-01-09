@@ -26,6 +26,9 @@
                 {% if is_reference_subpage %}
                     {% include styles/sidebar.scss %}
                 {% endif %}
+                {% if is_guide %}
+                    {% include styles/guide.scss %}
+                {% endif %}
             {% endcapture %}
             {{ critical_css | scssify }}
         </style>

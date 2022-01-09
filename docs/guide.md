@@ -17,55 +17,6 @@ disable_anchors: true
 {% assign left_column_classes = 'col-lg-5' %}
 {% assign right_column_classes = 'col-lg-7' %}
 
-<style>
-  .code-side-note {
-    position: static;
-  }
-  @media (min-width: 992px) {
-    .code-side-note {
-      position: absolute;
-    }
-
-    .code-side-note h5 {
-      display: flex;
-    }
-
-    .code-side-note h5 .badge {
-      margin-left: 10px;
-    }
-
-    .code-side-note h5:after {
-      content: '';
-      flex: 1 1 0;
-      width: 100%;
-      background: #cccccc;
-      height: 1px;
-      z-index: 2;
-      margin-top: 11px;
-      margin-left: 20px;
-      margin-right: -30px;
-    }
-
-    .code-with-notes .c + span {
-      position: relative
-    }
-
-    .code-with-notes .c + span:before {
-      content: '';
-      width: 100px;
-      height: 1px;
-      background: #cccccc;
-      position: absolute;
-      left: -115px;
-      top: 8px;
-    } 
-
-    /* Remove the line from the Minus button button */
-    .na + .s + .nt + .c + span.nt:before {
-      display: none;
-    }
-  }
-</style>
 
 <div class="{{ row_classes }}">
 <div class="col-lg-6 lead">
@@ -157,7 +108,9 @@ Import the module and provide the initial cart state in the JSON format within a
  
 Feel free to use any Liquid tags, objects and filters.
 
+<div class="code-side-note-data-ajax-cart-section"  markdown="1">
 Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute to any HTML container — Liquid Ajax Cart reloads HTML of the containers with this attribute every time when the Shopify cart gets updated.
+</div>
 
 <div markdown="1" class="code-side-note" style="top: 716px;">
 ##### Buttons
@@ -176,7 +129,7 @@ Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-inp
 
 Add the [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-input/) attribute to a line item property input to ajaxify it. The attribute also supports checkboxes, radio buttons, `select` and `textarea` tags.
 </div>
-<div markdown="1" class="code-side-note" style="top: 1288px;">
+<div markdown="1" class="code-side-note code-side-note--p" style="top: 1288px;">
 The [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-input/) attribute works with the cart note and cart attributes as well.
 </div>
   

@@ -1,0 +1,75 @@
+.code-side-note {
+  position: static;
+}
+@media (min-width: 992px) {
+  .code-side-note {
+    position: absolute;
+  }
+
+  .code-side-note h5 {
+    display: flex;
+  }
+
+  .code-side-note h5 .badge {
+    margin-left: 10px;
+  }
+
+  .code-side-note h5:after {
+    content: '';
+    flex: 1 1 0;
+    width: 100%;
+    background: #cccccc;
+    height: 1px;
+    z-index: 2;
+    margin-top: 11px;
+    margin-left: 20px;
+    margin-right: -30px;
+  }
+
+  .code-with-notes .c + span {
+    position: relative
+  }
+
+  .code-with-notes .c + span:before {
+    content: '';
+    width: 100px;
+    height: 1px;
+    background: #cccccc;
+    position: absolute;
+    left: -115px;
+    top: 8px;
+  } 
+
+  /* Remove the line from the Minus button button */
+  .na + .s + .nt + .c + span.nt:before {
+    display: none;
+  }
+
+  .code-side-note-data-ajax-cart-section {
+    position: relative;
+    &:after {
+      content: '';
+      background: #cccccc;
+      height: 1px;
+      z-index: 2;
+      margin-top: 11px;
+      margin-left: 20px;
+      margin-right: -30px;
+      position: absolute;
+    }
+  }
+
+  .code-side-note--p {
+    position: relative;
+    &:after {
+      content: '';
+      background: #cccccc;
+      height: 1px;
+      z-index: 2;
+      margin-top: 11px;
+      margin-left: 20px;
+      margin-right: -30px;
+      position: absolute;
+    }
+  }
+}
