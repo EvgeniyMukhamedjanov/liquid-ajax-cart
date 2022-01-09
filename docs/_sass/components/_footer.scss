@@ -1,4 +1,7 @@
 .site-footer {
+    margin-top: 24px;
+    padding: 24px 0;
+    border-top: 1px solid rgba(0, 0, 0, .1);
 }
 
 .site-footer__social-links {
@@ -18,7 +21,12 @@
 }
 
 .site-footer__links {
+    padding-left: 0;
+    list-style: none;
+
     .list-inline-item {
+        display: inline-block;
+        
         &:not(:last-child)::after {
             content: '\00b7';
             padding-left: 0.5rem;
@@ -36,4 +44,21 @@
 
 .site-footer__summary {
     font-size: 0.8rem;
+    margin-top: 8px;
+}
+
+@media (min-width: 768px) {
+    .site-footer__body {
+        display: flex;
+        align-items: center;
+        
+        > * {
+            flex: 0 0 50%;
+        }
+    }
+
+    .site-footer__summary {
+        text-align: right;
+        margin-top: 0;
+    }
 }

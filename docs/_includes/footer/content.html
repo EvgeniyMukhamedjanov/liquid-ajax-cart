@@ -75,59 +75,57 @@
     {% endif %}
 
     <div class="site-footer__body">
-        <div class="row align-items-center">
-            <div class="col-md-5">
-                {% if site.links.footer %}
-                    <ul class="site-footer__links text-left list-inline mb-0">
-                        {% for link in site.links.footer %}
-                            <li class="list-inline-item">
-                                <a
-                                    href="{{ link.url }}"
-                                    class="site-footer__link"
-                                >
-                                    {% include svg-icon.html icon=link.icon %}
-                                    <span>{{ link.title }}</span>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
+        <div>
+            {% if site.links.footer %}
+                <ul class="site-footer__links text-left list-inline mb-0">
+                    {% for link in site.links.footer %}
+                        <li class="list-inline-item">
+                            <a
+                                href="{{ link.url }}"
+                                class="site-footer__link"
+                            >
+                                {% include svg-icon.html icon=link.icon %}
+                                <span>{{ link.title }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
 
-            <div class="col-md-7 text-left text-md-right">
-                {% if site.license %}
-                    <div class="site-footer__summary">
-                        {% assign software_and_docs = site.license.software and site.license.docs %}
-                        {% assign one_or_the_other = site.license.software or site.license.docs %}
-                        
-                        <p class="mb-0">
-                            Created by Evgeniy Mukhamedjanov
-                        </p>
-
-                        <p class="mb-0">
-                            {%- if site.license.software -%}
-                                Licensed under
-
-                                {% if site.license.software_url -%}<a href="{{ site.license.software_url }}" target="_blank">{%- endif -%}
-                                    {{ site.license.software }}
-                                {%- if site.license.software_url -%}</a>{%- endif -%}
-                            {%- endif -%}
-
-                            {%- if site.license.docs -%}
-                                {%- if one_or_the_other -%}
-                                    , documentation under
-                                {%- else -%}
-                                    Documentation under
-                                {%- endif %}
-
-                                {% if site.license.docs_url -%}<a href="{{ site.license.docs_url }}">{%- endif -%}
-                                    {{ site.license.docs }}
-                                {%- if site.license.docs_url -%}</a>{%- endif -%}
-                            {%- endif -%}
-                        </p>
+        <div>
+            {% if site.license %}
+                <div class="site-footer__summary">
+                    {% assign software_and_docs = site.license.software and site.license.docs %}
+                    {% assign one_or_the_other = site.license.software or site.license.docs %}
+                    
+                    <div>
+                        Created by Evgeniy Mukhamedjanov
                     </div>
-                {% endif %}
-            </div>
+
+                    <div>
+                        {%- if site.license.software -%}
+                            Licensed under
+
+                            {% if site.license.software_url -%}<a href="{{ site.license.software_url }}" target="_blank">{%- endif -%}
+                                {{ site.license.software }}
+                            {%- if site.license.software_url -%}</a>{%- endif -%}
+                        {%- endif -%}
+
+                        {%- if site.license.docs -%}
+                            {%- if one_or_the_other -%}
+                                , documentation under
+                            {%- else -%}
+                                Documentation under
+                            {%- endif %}
+
+                            {% if site.license.docs_url -%}<a href="{{ site.license.docs_url }}">{%- endif -%}
+                                {{ site.license.docs }}
+                            {%- if site.license.docs_url -%}</a>{%- endif -%}
+                        {%- endif -%}
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
