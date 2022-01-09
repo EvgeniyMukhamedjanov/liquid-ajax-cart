@@ -18,10 +18,16 @@
     a {
         color: #777;
         border-bottom: 0;
+        padding: 4px 0;
     }
 
-    > ul > li {
-        margin-bottom: 10px;
+    > ul {
+        padding-left: 0;
+        list-style: none;
+
+        > li {
+            margin-bottom: 10px;
+        }
     }
 
     ul {

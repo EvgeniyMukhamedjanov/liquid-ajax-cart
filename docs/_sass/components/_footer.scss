@@ -23,10 +23,11 @@
 .site-footer__links {
     padding-left: 0;
     list-style: none;
+    margin-bottom: 0;
 
     .list-inline-item {
         display: inline-block;
-        
+
         &:not(:last-child)::after {
             content: '\00b7';
             padding-left: 0.5rem;
