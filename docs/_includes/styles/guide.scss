@@ -82,6 +82,16 @@
     padding: 0 15px;
     flex: 0 0 100%;
     max-width: 100%;
+
+    > h3:first-child,
+    > h4:first-child,
+    > h5:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-top: 16px;
+    }
   }
 }
 
@@ -94,6 +104,7 @@
   .guide-row > *:last-child {
     flex: 0 0 58.333333%;
     max-width: 58.333333%;
+    margin-top: 0;
   }
 
   .guide-row--50 > *:first-child,

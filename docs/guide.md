@@ -14,17 +14,17 @@ disable_anchors: true
 {% endfor %}
 
 {% assign row_classes = 'guide-row' %}
-{% assign left_column_classes = 'col-lg-5' %}
-{% assign right_column_classes = 'col-lg-7' %}
+{% assign left_column_classes = 'guide-row__col' %}
+{% assign right_column_classes = 'guide-row__col' %}
 
 
 <div class="{{ row_classes }} guide-row--50">
-<div class="col-lg-6 lead">
+<div class="guide-row__col lead">
 <p>Liquid Ajax Cart turns “Add to cart” form submissions into Ajax requests and updates cart sections using <a href="https://shopify.dev/api/ajax/reference/cart#bundled-section-rendering" target="_blank">Bundled Section Rendering</a>.</p>
 <p>It lets developers build Shopify Ajax-carts using plain Liquid templates.</p>
 <p>Liquid Ajax Cart doesn't apply any CSS styles.</p>
 </div>
-<div class="col-lg-6 mt-3 mt-lg-0">
+<div class="guide-row__col">
   <div class="star-promo">
     <div class="star-promo__text">
       <p>Guys, I need your help!</p>
@@ -42,16 +42,14 @@ disable_anchors: true
 ---
 
 <div class="{{ row_classes }}">
-<div class="col-lg-6" markdown="1">
+<div class="guide-row__col" markdown="1">
 ### Installation
-{:.mt-0}
 </div>
 </div>
 
 <div class="{{ row_classes }} guide-row--50">
-<div class="col-lg-6" markdown="1">
+<div class="guide-row__col" markdown="1">
 ##### Manual
-{:.mt-0}
  
 {% raw %}
 ```html
@@ -72,8 +70,8 @@ Upload the <a href="{{ last_release_file.path }}" download >{% include code/last
 Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/reference/data-ajax-cart-initial-state/) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
 
 </div>
-<div class="col-lg-6" markdown="1">
-<h5 class="mt-0">Via npm <span class="badge badge-secondary">soon</span></h5>
+<div class="guide-row__col" markdown="1">
+<h5>Via npm <span class="badge badge-secondary">soon</span></h5>
  
 <div class="soon-blurred" markdown="1">
 ```
@@ -104,7 +102,6 @@ Import the module and provide the initial cart state in the JSON format within a
 <div class="{{ left_column_classes }}" markdown="1" style="position: relative;">
  
 ### Create a section for AJAX cart
-{:.mt-0}
  
 Feel free to use any Liquid tags, objects and filters.
 
@@ -175,7 +172,6 @@ Include the section to the place where you want to display the AJAX cart
 <div class="{{ left_column_classes }}" markdown="1">
 
 ##### Loading state
-{:.mt-0}
 
 Buttons become inactive when the cart is getting updated. 
  
@@ -205,7 +201,6 @@ body.js-ajax-cart-request-in-progress .my-cart__items {
 <div class="{{ left_column_classes }}" markdown="1">
  
 ### Enhance product forms
-{:.mt-0}
  
 Liquid Ajax Cart ajaxifies all product forms once it is loaded. <br/> If you want to exclude some of them — use the [`productFormsFilter`](/reference/productFormsFilter/) configuration parameter.
 
@@ -216,7 +211,6 @@ Liquid Ajax Cart ajaxifies all product forms once it is loaded. <br/> If you wan
 <div class="{{ left_column_classes }}" markdown="1">
 
 ##### Error messages
-{:.mt-0}
  
 Add the [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) attribute with the `form` value to a container within product forms to show error messages.
 
@@ -232,7 +226,6 @@ Add the [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) attribu
 <div class="{{ left_column_classes }}" markdown="1">
 
 ##### Loading state
-{:.mt-0}
  
 When a user submits a product form, it becomes and remains inactive until the Ajax "Add to cart" request is finished to prevent accidental double submissions.
   
@@ -252,7 +245,6 @@ Liquid Ajax Cart adds the [`js-ajax-cart-form-in-progress`](/reference/js-ajax-c
 <div class="{{ left_column_classes }}" markdown="1">
 
 ### Show/hide a cart section on a button click
-{:.mt-0}
 
 Write some CSS to show your cart section if a specific `body` CSS class exists.
 
@@ -324,7 +316,6 @@ If you want the button to only add or only remove the CSS class — specify the 
 <div class="{{ left_column_classes }}" markdown="1">
 
 ### Display the cart object's attributes outside of AJAX sections
-{:.mt-0}
  
 Add the [`data-ajax-cart-bind-state`](/reference/data-ajax-cart-bind-state/) attribute to an HTML element, pass a Cart state property as an attribute's value and Liquid Ajax Cart will display the state property's value within the HTML element and refresh it when cart gets updated.
 
@@ -344,7 +335,6 @@ Explore all the properties on the [State reference](/reference/state/) page.
 <div class="{{ left_column_classes }}" markdown="1">
 
 ### Run your Javascript code before and after each Ajax Cart API request
-{:.mt-0}
 
 Use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/) function to add callbacks that will be called before and after Ajax Cart API requests.
  
@@ -377,7 +367,6 @@ Use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/)
 <div class="{{ left_column_classes }}" markdown="1">
 
 ### Make your own calls to Shopify Ajax Cart API
-{:.mt-0}
  
 Use these function instead of direct Cart API calls and Liquid Ajax Cart will keep the Ajax cart sections, the State object and body CSS classes updated:
 
@@ -414,7 +403,6 @@ Use these function instead of direct Cart API calls and Liquid Ajax Cart will ke
 <div class="{{ left_column_classes }}" markdown="1">
 
 ### Get Cart State JSON
-{:.mt-0}
  
 [State](/reference/state/) is a Javascript object where Liquid Ajax Cart keeps the information related to user's cart.
 

@@ -12,6 +12,13 @@
     {% assign is_guide = true %}
 {% endif %}
 
+{% assign releases_url = '/releases/' %}
+{% assign page_url_releases_slice = page.url | slice: 0, releases_url.size %}
+{% assign is_releases = false %}
+{% if page_url_releases_slice == releases_url and page.url.size == releases_url.size %}
+    {% assign is_releases = true %}
+{% endif %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +37,9 @@
                 {% if is_guide %}
                     {% include styles/guide.scss %}
                 {% endif %}
+                {% if is_releases %}
+                    {% include styles/releases.scss %}
+                {% endif %}
             {% endcapture %}
             {{ critical_css | scssify }}
         </style>
@@ -38,7 +48,7 @@
 
     <body class="layout-{{ page.layout }}">
         {% include navigation.html %}
-        <hr class="mt-0 mb-3" />
+        <hr class="nav-hr" />
         {% unless is_reference_subpage %}
             <div class="site-masthead">
                 <div class="container">
