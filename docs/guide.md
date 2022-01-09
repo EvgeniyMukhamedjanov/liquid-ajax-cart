@@ -13,12 +13,12 @@ disable_anchors: true
     {% endif %}
 {% endfor %}
 
-{% assign row_classes = 'row mb-4 mt-4' %}
+{% assign row_classes = 'guide-row' %}
 {% assign left_column_classes = 'col-lg-5' %}
 {% assign right_column_classes = 'col-lg-7' %}
 
 
-<div class="{{ row_classes }}">
+<div class="{{ row_classes }} guide-row--50">
 <div class="col-lg-6 lead">
 <p>Liquid Ajax Cart turns “Add to cart” form submissions into Ajax requests and updates cart sections using <a href="https://shopify.dev/api/ajax/reference/cart#bundled-section-rendering" target="_blank">Bundled Section Rendering</a>.</p>
 <p>It lets developers build Shopify Ajax-carts using plain Liquid templates.</p>
@@ -41,7 +41,7 @@ disable_anchors: true
 
 ---
 
-<div class="{{ row_classes }}">
+<div class="{{ row_classes }} guide-row--50">
 <div class="col-lg-6" markdown="1">
 ### Installation
 {:.mt-0}

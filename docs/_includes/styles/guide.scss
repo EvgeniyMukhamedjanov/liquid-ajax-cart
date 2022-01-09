@@ -72,3 +72,33 @@
     }
   }
 }
+
+.guide-row {
+  margin: 24px -15px;
+  display: flex;
+  flex-wrap: wrap;
+
+  > * {
+    padding: 0 15px;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .guide-row > *:first-child {
+    flex: 0 0 41.666667%;
+    max-width: 41.666667%;
+  }
+
+  .guide-row > *:last-child {
+    flex: 0 0 58.333333%;
+    max-width: 58.333333%;
+  }
+
+  .guide-row--50 > *:last-child,
+  .guide-row--50 > *:last-child {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
