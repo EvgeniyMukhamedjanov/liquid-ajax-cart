@@ -52,23 +52,22 @@
       background: #cccccc;
       height: 1px;
       z-index: 2;
-      margin-top: 11px;
-      margin-left: 20px;
-      margin-right: -30px;
+      width: 30px;
+      top: 45px;
+      right: -45px;
       position: absolute;
     }
   }
 
   .code-side-note--p {
-    position: relative;
     &:after {
       content: '';
       background: #cccccc;
       height: 1px;
       z-index: 2;
-      margin-top: 11px;
-      margin-left: 20px;
-      margin-right: -30px;
+      width: 30px;
+      top: 13px;
+      right: -30px;
       position: absolute;
     }
   }
