@@ -38,6 +38,7 @@ links:
   reference:
     - title: Ajaxified sections
       file: sections
+      description: Liquid Ajax Cart updates the HTML of your cart sections when the cart is changed
       links:
         - file: data-ajax-cart-section
           description: Defines an HTML container that will be re-rendered each time when the cart is changed.
@@ -121,7 +122,7 @@ links:
           description: A Javascript object with information about each Cart Ajax API request.
     - title: Configuration
       file: configure
-      description: The `configureCart` function and the `data-ajax-cart-configuration` attribute to set configuration parameters.
+      description: Lets you set configuration parameters using the `configureCart` function and the `data-ajax-cart-configuration` attribute
       links:
         - file: productFormsFilter
           description: Sets which product forms shouldn't be ajaxified.
