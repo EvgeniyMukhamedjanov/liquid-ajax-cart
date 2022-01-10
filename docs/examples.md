@@ -60,6 +60,8 @@ if ( 'liquidAjaxCart' in window ) {
 ### Show a pop-up message after adding to the cart
 
 ```javascript
+import { subscribeToCartAjaxRequests } from {% include code/last-release-file-name.html asset_url=true %};
+
 // Define a callback for all the Cart Ajax API requests
 // It will be called BEFORE each request is getting performed
 subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
@@ -96,6 +98,8 @@ Lets say you have a product with a default variant id `40934235668668`. And you 
 Thus you want to add the product to the cart automatically if the total price is $100 or higher.
 
 ```javascript
+import { cartRequestAdd, cartRequestChange, subscribeToCartStateUpdate } from {% include code/last-release-file-name.html asset_url=true %};
+
 // Define a callback that will be called each time when the cart state is updated
 subscribeToCartStateUpdate( state => {
 
