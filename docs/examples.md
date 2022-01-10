@@ -31,6 +31,7 @@ If you want to use any function from Liquid Ajax Cart, you need to import it:
 </script>
  
 <script type="module">
+  // import subscribeToCartAjaxRequests along with including Liquid Ajax Cart
   import { subscribeToCartAjaxRequests } from {% endraw %}{% include code/last-release-file-name.html asset_url=true %}{% raw %};
 
   // Using the imported function:
@@ -53,6 +54,8 @@ if ( 'liquidAjaxCart' in window ) {
   });
 }
 ```
+
+---
 
 ### Show a pop-up message after adding to the cart
 
@@ -83,6 +86,8 @@ subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
   }
 });
 ```
+
+---
 
 ### Add a product to the cart automatically if the total price is $100 or higher
 

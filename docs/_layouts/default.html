@@ -19,6 +19,13 @@
     {% assign is_releases = true %}
 {% endif %}
 
+{% assign examples_url = '/examples/' %}
+{% assign page_url_examples_slice = page.url | slice: 0, examples_url.size %}
+{% assign is_examples = false %}
+{% if page_url_examples_slice == examples_url and page.url.size == examples_url.size %}
+    {% assign is_examples = true %}
+{% endif %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +38,7 @@
                 {% include styles/navigation.scss %}
                 {% include styles/masthead.scss %}
                 {% include styles/highlight.scss %}
-                {% if is_reference_subpage %}
+                {% if is_reference_subpage or is_examples %}
                     {% include styles/sidebar.scss %}
                 {% endif %}
                 {% if is_guide %}

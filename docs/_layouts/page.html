@@ -15,6 +15,9 @@ layout: default
 
 .layout-page__main-wrapper {
     max-width: 725px;
+}
+
+.layout-page__main-wrapper--content-right {
     margin: 0 auto;
 }
 
@@ -29,16 +32,22 @@ layout: default
     }
 
     .layout-page__main {
-        order: 2;
         flex: 1 1 auto;
         padding: 0 15px;
         min-width: 1px;
     }
 
+    .layout-page__main--content-right {
+        order: 2;
+    }
+
     .layout-page__sidebar {
         display: block;
         flex: 0 0 280px;
-        padding: 14px 15px 0;
+        padding: 14px 15px 0;   
+    }
+
+    .layout-page__sidebar--content-right {
         order: 1;
     }
 }
@@ -53,8 +62,8 @@ layout: default
 
 <div class="container">
     <div class="layout-page__wrapper">
-        <main class="layout-page__main">
-            <div class="layout-page__main-wrapper">
+        <main class="layout-page__main {% if is_reference_subpage %}layout-page__main--content-right{% endif %}">
+            <div class="layout-page__main-wrapper {% if is_reference_subpage %}layout-page__main-wrapper--content-right{% endif %}">
                 {% if page_url_reference_slice != reference_url %}
                     <section class="mobile-toc border mb-3 p-3 d-md-none">
                         <div class="d-flex align-items-center">
@@ -97,7 +106,7 @@ layout: default
 
         {% if page_url_reference_slice == reference_url %}
             {% if page.url.size > reference_url.size %}
-                <aside class="layout-page__sidebar">
+                <aside class="layout-page__sidebar--content-right">
                     <nav class="page-sidebar page-sidebar--expanded">
                         {% include reference-navigation.html
                             class="list-unstyled pl-0"
