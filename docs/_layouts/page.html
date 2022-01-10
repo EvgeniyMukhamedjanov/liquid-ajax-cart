@@ -44,11 +44,12 @@ layout: default
     .layout-page__sidebar {
         display: block;
         flex: 0 0 280px;
-        padding: 14px 15px 0;   
+        padding: 25px 15px 0;   
     }
 
     .layout-page__sidebar--content-right {
         order: 1;
+        padding: 14px 15px 0;   
     }
 }
 </style>
@@ -66,22 +67,11 @@ layout: default
             <div class="layout-page__main-wrapper {% if is_reference_subpage %}layout-page__main-wrapper--content-right{% endif %}">
                 {% if page_url_reference_slice != reference_url %}
                     <section class="mobile-toc border mb-3 p-3 d-md-none">
-                        <div class="d-flex align-items-center">
-                            <h2 class="mb-0">Table of Contents</h2>
-
-                            <button
-                                class="js-only ml-2 toggle-toc"
-                                aria-controls="mobileTOC"
-                                aria-label="Toggle table of contents"
-                                aria-expanded="true"
-                            >
-                                <span aria-hidden="true" data-role="toggle">Hide</span>
-                            </button>
-                        </div>
+                        <h2>Table of Contents</h2>
                         {% include jekyll-docs-theme/toc.html
-                            class="js-toc.mb-0.mt-2"
                             id="mobileTOC"
                         %}
+                        <hr />
                     </section>
                 {% endif %}
 
@@ -90,13 +80,10 @@ layout: default
                 </section>
 
                 {% if page_url_reference_slice == reference_url and page.url.size > reference_url.size %}
-                    <section class="mobile-toc border mb-3 p-3">
-                        <hr class="d-md-none" />
-                        <div class="d-flex align-items-center">
-                            <h2 class="mb-0">Reference</h2>
-                        </div>
+                    <section class="mobile-toc">
+                        <hr />
+                        <h2>Reference</h2>
                         {% include reference-navigation.html
-                            class="js-toc mb-0 mt-2"
                             id="mobileTOC"
                         %}
                     </section>
