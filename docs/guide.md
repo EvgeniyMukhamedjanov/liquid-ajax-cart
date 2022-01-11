@@ -429,7 +429,7 @@ If you want to run your Javascript code every time when the state is changed —
   import { getCartState, subscribeToCartStateUpdate } from {% include code/last-release-file-name.html asset_url=true %}
 
   const initialState = getCartState();
-  console.log('Initial state: ', InitialState);
+  console.log('Initial state: ', initialState);
 
   subscribeToCartStateUpdate( state => {
     console.log('Updated state: ', state);
