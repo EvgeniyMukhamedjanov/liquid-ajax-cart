@@ -110,7 +110,7 @@ Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute
 </div>
 
 <div markdown="1" class="code-side-note" style="top: 716px;">
-<h5>Property inputs <span class="badge badge-warning">Changed in 1.7.0</span></h5>
+<h5>Buttons <span class="badge badge-warning">Changed in 1.7.0</span></h5>
 
 Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "Plus", "Minus" and "Remove" buttons. Add the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) to ajaxify them.
 </div>
