@@ -10,6 +10,9 @@ No Javascript code needed.
 {% comment %} sections/my-cart.liquid {% endcomment %}
 
 <form action="{{ routes.cart_url }}" method="post" class="my-cart">
+  <!-- add the data-ajax-cart-section attribute 
+  to a container that must be re-rendered 
+  when the user's cart gets changed -->
   <div data-ajax-cart-section>
     <h2>Cart</h2>
     
@@ -22,11 +25,13 @@ No Javascript code needed.
 
         <div>
           Quantity:
+          <!-- Use routes.cart_change_url for "Plus", "Minus", "Remove" buttons,
+          add the data-ajax-cart-request-button attribute to ajaxify them -->
           <a data-ajax-cart-request-button
             href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
             Minus one 
           </a>
-
+          <!-- Add the data-ajax-cart-quantity-input attribute to quantity input fields -->
           <input data-ajax-cart-quantity-input="{{ item_index }}" name="updates[]" value="{{ item.quantity }}" type="number" />
 
           <a data-ajax-cart-request-button 
@@ -34,6 +39,7 @@ No Javascript code needed.
             Plus one 
           </a>
         </div>
+        <!-- Place a data-ajax-cart-messages container for error messages -->
         <div data-ajax-cart-messages="{{ item.key }}"></div>
 
         <div>Total: <strong>{{ item.final_line_price | money }}</strong></div>
@@ -66,7 +72,7 @@ No Javascript code needed.
 
 :tada: That's it!
 
-Liquid Ajax Cart will ajaxify the `{{ routes.cart_change_url }}` links, all product forms and `data-ajax-cart-section` sections. The links and product forms will update the cart without page reloading and the cart section will get updated each time when the cart is changed.
+Product forms will be ajaxified automatically.
 
 Liquid Ajax Cart provides Javascript API as well.
 
