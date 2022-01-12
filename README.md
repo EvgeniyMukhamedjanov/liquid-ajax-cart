@@ -1,8 +1,12 @@
 # Liquid Ajax Cart — Ajax carts for Shopify :fire:
  
-Liquid Ajax Cart — a Javascript library that ajaxifies Shopify cart sections and product forms.
+Liquid Ajax Cart is a JavaScript asset for Shopify.
 
-No JavaScript code needed. JavaScript API is provided for customization. 
+Ajaxifies Shopify cart sections and product forms like a :dark_sunglasses:boss.
+
+No JavaScript code needed. 
+
+JavaScript API is provided for customization. 
 
 ##### 1. Create a theme section for the cart with a `data-ajax-cart-section` container
 
