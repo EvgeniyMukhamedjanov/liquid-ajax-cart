@@ -1,8 +1,8 @@
-# Liquid Ajax Cart — Ajax carts for Shopify
+# Liquid Ajax Cart — Ajax carts for Shopify :fire:
+ 
+Liquid Ajax Cart — a Javascript library that ajaxifies Shopify cart sections and product forms.
 
-Liquid Ajax Cart — a Javascript library that lets you build Shopify Ajax-carts using Liquid templates.
-
-No Javascript code needed.
+No JavaScript code needed. JavaScript API is provided for customization. 
 
 ##### 1. Create a theme section for the cart with a `data-ajax-cart-section` container
 
@@ -10,7 +10,8 @@ No Javascript code needed.
 {% comment %} sections/my-cart.liquid {% endcomment %}
 
 <form action="{{ routes.cart_url }}" method="post" class="my-cart">
-  <!-- add the data-ajax-cart-section attribute 
+  
+  <!-- Add the data-ajax-cart-section attribute 
   to a container that must be re-rendered 
   when the user's cart gets changed -->
   <div data-ajax-cart-section>
@@ -25,12 +26,14 @@ No Javascript code needed.
 
         <div>
           Quantity:
+          
           <!-- Use routes.cart_change_url for "Plus", "Minus", "Remove" buttons,
           add the data-ajax-cart-request-button attribute to ajaxify them -->
           <a data-ajax-cart-request-button
             href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
             Minus one 
           </a>
+          
           <!-- Add the data-ajax-cart-quantity-input attribute to quantity input fields -->
           <input data-ajax-cart-quantity-input="{{ item_index }}" name="updates[]" value="{{ item.quantity }}" type="number" />
 
@@ -39,6 +42,7 @@ No Javascript code needed.
             Plus one 
           </a>
         </div>
+        
         <!-- Place a data-ajax-cart-messages container for error messages -->
         <div data-ajax-cart-messages="{{ item.key }}"></div>
 
@@ -70,11 +74,7 @@ No Javascript code needed.
 </script>
 ```
 
-:tada: That's it!
-
-Product forms will be ajaxified automatically.
-
-Liquid Ajax Cart provides Javascript API as well.
+:tada: That's it! Product forms will be ajaxified automatically.
 
 Check out all features on the [documentation](https://liquid-ajax-cart.js.org) website.
 
