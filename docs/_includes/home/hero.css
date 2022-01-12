@@ -284,4 +284,8 @@
 		transform-origin: left;
 		transform: rotateZ(-2deg);
 	}
+
+	.hero-heading__boss {
+		display: none;
+	}
 }
