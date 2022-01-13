@@ -169,7 +169,10 @@ function bossInit() {
     const bossNode = document.querySelector('[data-boss]');
     if(bossNode) {
         let revertTimer = undefined;
+        let handlerReady = true;
         bossNode.addEventListener('mousemove', function(e) { 
+            if(!handlerReady) return;
+            handlerReady = false;
             const target = e.target
             let newClass;
             if(e.offsetX >= target.offsetWidth / 2) { 
@@ -190,6 +193,9 @@ function bossInit() {
             if(newClass) {
                 target.classList.add(newClass);
             }
+            setTimeout(() => {
+                handlerReady = true;
+            }, 110);
             if(revertTimer) {
                 clearTimeout(revertTimer);
             }
