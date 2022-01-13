@@ -160,5 +160,43 @@ if(html && 'classList' in html && html.classList.contains('js')) {
 
     setTimeout(function() {
         document.querySelector('html').classList.add('js-animation');
-    }, 100)
+    }, 100);
+
+    bossInit();
+}
+
+function bossInit() {
+    const bossNode = document.querySelector('[data-boss]');
+    if(bossNode) {
+        let revertTimer = undefined;
+        bossNode.addEventListener('mousemove', function(e) { 
+            const target = e.target
+            let newClass;
+            if(e.offsetX >= target.offsetWidth / 2) { 
+                if(target.classList.contains('js-left')) {
+                    newClass = 'js-right'
+                } else if(!(target.classList.contains('js-right'))) {
+                    newClass = 'js-left'
+                }
+            } else { 
+                if(target.classList.contains('js-right')) {
+                    newClass = 'js-left'
+                } else if(!(target.classList.contains('js-left'))) {
+                    newClass = 'js-right'
+                }
+            } 
+            target.classList.remove('js-left');
+            target.classList.remove('js-right');
+            if(newClass) {
+                target.classList.add(newClass);
+            }
+            if(revertTimer) {
+                clearTimeout(revertTimer);
+            }
+            revertTimer = setTimeout(() => {
+                target.classList.remove('js-left');
+                target.classList.remove('js-right');
+            }, 3000);
+        });
+    }
 }
