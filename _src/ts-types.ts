@@ -84,7 +84,7 @@ export type MessageType = {
 	requestState: RequestStateType
 }
 
-
+// todo: replace any
 declare global {
     interface Window { 
     	liquidAjaxCart: any,

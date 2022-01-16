@@ -143,7 +143,9 @@
   
   <script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
   <script type="module">
-    import { subscribeToCartAjaxRequests, subscribeToCartStateUpdate, cartRequestAdd, cartRequestChange } from '{{ 'liquid-ajax-cart.js' | asset_url }}';
+    import { subscribeToCartAjaxRequests, subscribeToCartStateUpdate, cartRequestAdd, cartRequestChange, configureCart } from '{{ 'liquid-ajax-cart.js' | asset_url }}';
+
+    configureCart('addToCartCssClass', 'js-ajax-cart-open');
 
     subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
       if ( requestState.requestType === 'add' ) {
