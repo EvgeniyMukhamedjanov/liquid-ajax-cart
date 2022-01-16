@@ -1,12 +1,30 @@
+import { 
+	RequestCallbackType, 
+	RequestStateType, 
+	CartRequestOptionsType, 
+	JSONObjectType,
+	RequestBodyType,
+	RequestStateInfoType,
+	RequestResultCallback
+} from './ts-types';
+
+type FetchPayloadType = {
+	method: string,
+	headers?: {
+		[key: string]: string
+	}
+	body?: string | FormData
+}
+
 const REQUEST_ADD = 'add';
 const REQUEST_CHANGE = 'change';
 const REQUEST_UPDATE = 'update';
 const REQUEST_CLEAR = 'clear';
 const REQUEST_GET = 'get';
 
-const subscribers = [];
+const subscribers: RequestCallbackType[] = [];
 
-const getEndpoint = ( requestType ) => {
+function getEndpoint ( requestType: string ): string | undefined {
 	switch ( requestType ) {
 		case REQUEST_ADD:
 			return '/cart/add.js';
@@ -34,18 +52,21 @@ const getEndpoint = ( requestType ) => {
 	return undefined;
 }
 
-const cartRequest = ( requestType, body, options = {} ) => {
+
+function cartRequest( requestType: string, body: RequestBodyType, options: CartRequestOptionsType ) {
 	const endpoint = getEndpoint( requestType );
-	let requestBody = undefined;
+	let requestBody: RequestBodyType = undefined;
 	if ( requestType !== REQUEST_GET ) {
 		requestBody = body || {};
 	}
-	const method = requestType === REQUEST_GET ? 'GET' : 'POST';
-	const info = options.info || {};
-	const resultSubscribers = 'firstComplete' in options ? [ options.firstComplete ] : [];
-	const requestState = {
+	const method: string = requestType === REQUEST_GET ? 'GET' : 'POST';
+	const info: RequestStateInfoType = options.info || {};
+	const resultSubscribers: RequestResultCallback[] = 'firstComplete' in options ? [ options.firstComplete ] : [];
+	const requestState: RequestStateType = {
 		requestType,
-		endpoint
+		endpoint,
+		requestBody,
+		info
 	}
 
 	subscribers.forEach( callback => {
@@ -57,7 +78,7 @@ const cartRequest = ( requestType, body, options = {} ) => {
 				// the same requestBody will be used in the fetch request, 
 				// so subscriber can make changes in it before the request
 				requestBody
-			}, resultCallback => resultSubscribers.push( resultCallback ));
+			}, ( resultCallback: RequestResultCallback ) => { resultSubscribers.push( resultCallback ) } );
 		} catch (e) {
 			console.error('Liquid Ajax Cart: Error during Ajax request subscriber callback in ajax-api');
 			console.error(e);
@@ -68,10 +89,11 @@ const cartRequest = ( requestType, body, options = {} ) => {
 		resultSubscribers.push( options.lastComplete );
 	}
 
+	// todo: maybe it is not needed because requestState already has requestBody and info as links to objects?
 	requestState.requestBody = requestBody;
 	requestState.info = info;
 
-	const fetchPayload = {
+	const fetchPayload: FetchPayloadType = {
 		method
 	}
 	if ( requestType !== REQUEST_GET ) {
@@ -92,7 +114,7 @@ const cartRequest = ( requestType, body, options = {} ) => {
 		endpoint, 
 		fetchPayload
 	).then( response => {
-		return response.json().then( responseBody => {
+		return response.json().then( (responseBody: JSONObjectType) => {
 			return {
 				ok: response.ok,
 				status: response.status,
@@ -141,27 +163,27 @@ const cartRequest = ( requestType, body, options = {} ) => {
 	});
 }
 
-const cartRequestGet = ( options ) => {
+function cartRequestGet ( options: CartRequestOptionsType | undefined = {} ): void {
 	cartRequest( REQUEST_GET, undefined, options );
 }
 
-const cartRequestAdd = ( body, options ) => {
+function cartRequestAdd( body: RequestBodyType = {}, options: CartRequestOptionsType | undefined = {} ): void {
 	cartRequest( REQUEST_ADD, body, options );
 }
 
-const cartRequestChange = ( body, options ) => {
+function cartRequestChange( body: RequestBodyType = {}, options: CartRequestOptionsType | undefined = {} ): void {
 	cartRequest( REQUEST_CHANGE, body, options );
 }
 
-const cartRequestUpdate = ( body, options ) => {
+function cartRequestUpdate( body: RequestBodyType = {}, options: CartRequestOptionsType | undefined = {} ): void {
 	cartRequest( REQUEST_UPDATE, body, options );
 }
 
-const cartRequestClear = ( body, options ) => {
+function cartRequestClear( body: RequestBodyType = {}, options: CartRequestOptionsType | undefined = {} ): void {
 	cartRequest( REQUEST_CLEAR, body, options );
 }
 
-const subscribeToCartAjaxRequests = ( callback ) => {
+function subscribeToCartAjaxRequests( callback: RequestCallbackType ): void {
 	subscribers.push( callback );
 }
 

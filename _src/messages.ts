@@ -1,3 +1,10 @@
+import { 
+	RequestStateType, 
+	RequestResultSubscriberType,
+	LineItemType,
+	MessageType
+} from './ts-types';
+
 import { subscribeToCartAjaxRequests, REQUEST_ADD, REQUEST_CHANGE } from './ajax-api';
 import { getCartState } from './state';
 import { settings } from './settings';
@@ -12,19 +19,37 @@ const MESSAGE_CODES = {
 	REQUEST_ERROR: 'request_error',
 }
 
-const changeRequestHandler = ( requestState, subscribeToResult ) => {
+const changeRequestHandler = ( requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType ) => {
 	const { messagesAttribute } = settings.computed;
-	let requestedId, requestedLine, requestedQuantity, lineItemIndex, requestedIdItems = [], errorContainers, itemCountBefore;
+	let requestedId: string, 
+		requestedLine: string, 
+		requestedQuantity: number, 
+		lineItemIndex: number, 
+		requestedIdItems: LineItemType[] = [], 
+		errorContainers: NodeListOf<Element>, 
+		itemCountBefore: number;
 	const state = getCartState();
 
 	if ( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) {
-		requestedLine = requestState.requestBody.get('line');
-		requestedId = requestState.requestBody.get('id');
-		requestedQuantity = requestState.requestBody.get('quantity');
+		if (requestState.requestBody.has('line')) {
+			requestedLine = requestState.requestBody.get('line').toString();
+		}
+		if (requestState.requestBody.has('id')) {
+			requestedId = requestState.requestBody.get('id').toString();
+		}
+		if (requestState.requestBody.has('quantity')) {
+			requestedQuantity = Number(requestState.requestBody.get('quantity').toString());
+		}
     } else {
-		requestedLine = requestState.requestBody.line;
-		requestedId = requestState.requestBody.id;
-		requestedQuantity = requestState.requestBody.quantity;
+    	if('line' in requestState.requestBody) {
+			requestedLine = String(requestState.requestBody.line);
+		}
+		if('id' in requestState.requestBody) {
+			requestedId = String(requestState.requestBody.id);
+		}
+		if('quantity' in requestState.requestBody) {
+			requestedQuantity = Number(requestState.requestBody.quantity);
+		}
 	}
 
 	if ( requestedLine ) {
@@ -37,8 +62,8 @@ const changeRequestHandler = ( requestState, subscribeToResult ) => {
 
 	if ( requestedId ) {
 		if ( state.status.cartStateSet ) {
-			state.cart.items.forEach( element => {
-				if ( element.key === requestedId || element.id == requestedId ) {
+			state.cart.items.forEach( (element: LineItemType) => {
+				if ( element.key === requestedId || element.id === Number(requestedId) ) {
 					requestedIdItems.push( element );
 				}
 			});
@@ -63,16 +88,17 @@ const changeRequestHandler = ( requestState, subscribeToResult ) => {
 		}
 	}
 
-	subscribeToResult( requestState => {
+	subscribeToResult( ( requestState: RequestStateType ) => {
 		const { lineItemQuantityErrorText, messageBuilder } = settings;
 		const { messagesAttribute } = settings.computed;
-		let resultItems = [];
-		const itemQuantityErrors = [];
+		let resultItems: LineItemType[] = [];
+		const itemQuantityErrors: LineItemType[] = [];
+		let errorContainers: NodeListOf<Element>;
 
 		if ( requestState.responseData?.ok ) {
 			if ( requestedId ) {
-				resultItems = requestState.responseData.body.items.reduce(( acc, element ) => {
-					if (( element.key === requestedId || element.id == requestedId ) ) {
+				resultItems = (requestState.responseData.body.items as LineItemType[]).reduce(( acc: LineItemType[], element: LineItemType ) => {
+					if (( element.key === requestedId || element.id == Number(requestedId) ) ) {
 						acc.push(element);
 					}
 					return acc;
@@ -80,33 +106,33 @@ const changeRequestHandler = ( requestState, subscribeToResult ) => {
 			}
 
 
-			resultItems.forEach( element => {
-				if ( element.quantity < requestedQuantity && itemCountBefore === requestState.responseData.body.item_count ) {
+			resultItems.forEach( (element: LineItemType) => {
+				if ( !isNaN(requestedQuantity) && element.quantity < requestedQuantity && itemCountBefore === requestState.responseData.body.item_count ) {
 					itemQuantityErrors.push( element );
 				}
 			});
 
-			const errorContainersSelectorArray = itemQuantityErrors.reduce((acc, element) => {
+			const errorContainersSelectorArray: string[] = itemQuantityErrors.reduce((acc: string[], element: LineItemType) => {
 				acc.push(`[${ messagesAttribute }="${ element.key }"]`);
         		return acc;
         	}, []);
 
-			errorContainers = [];
 			if ( errorContainersSelectorArray.length > 0 ) {
 				errorContainers = document.querySelectorAll( errorContainersSelectorArray.join(',') );
 			}
 
-			errorContainers.forEach( element => {
-				element.innerHTML = messageBuilder([{
-					type: MESSAGE_TYPES.ERROR,
-					text: lineItemQuantityErrorText,
-					code: MESSAGE_CODES.LINE_ITEM_QUANTITY_ERROR,
-					requestState
-				}]);
-			});
+			if ( errorContainers && errorContainers.length > 0 ) {
+				errorContainers.forEach( (element: Element) => {
+					element.innerHTML = messageBuilder([{
+						type: MESSAGE_TYPES.ERROR,
+						text: lineItemQuantityErrorText,
+						code: MESSAGE_CODES.LINE_ITEM_QUANTITY_ERROR,
+						requestState
+					}]);
+				});
+			}
 		} else {
 			const errorMessage = getRequestError( requestState );
-			errorContainers = [];
 			if ( requestedId ) {
 				if ( requestedId.indexOf(':') > -1 ) {
 					errorContainers = document.querySelectorAll(`[${ messagesAttribute }="${ requestedId }"]`);
@@ -115,8 +141,8 @@ const changeRequestHandler = ( requestState, subscribeToResult ) => {
 					resultItems = [];
 					const state = getCartState();
 					if ( state.status.cartStateSet ) {
-						state.cart.items.forEach( element => {
-							if (( element.key === requestedId || element.id == requestedId ) ) {
+						state.cart.items.forEach( (element: LineItemType) => {
+							if (element.key === requestedId || element.id === Number(requestedId)) {
 								resultItems.push( element );
 							}
 						});
@@ -136,31 +162,31 @@ const changeRequestHandler = ( requestState, subscribeToResult ) => {
     });
 }
 
-const addRequestHandler = ( requestState, subscribeToResult ) => {
-	const initiator = requestState.info?.initiator;
-	let formErrorContainers;
+const addRequestHandler = ( requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType ) => {
+	const initiator: Element = requestState.info?.initiator;
+	let formErrorContainers: NodeListOf<Element>;
 
 	if ( initiator instanceof HTMLFormElement ) {
 		formErrorContainers = initiator.querySelectorAll(`[${ settings.computed.messagesAttribute }="form"]`);
 		if ( formErrorContainers.length > 0 ) {
-			formErrorContainers.forEach( element => {
+			formErrorContainers.forEach(( element: Element ) => {
 				element.innerHTML = '';
 			});
 		}
 	}
 
-	subscribeToResult( requestState => {
+	subscribeToResult(( requestState: RequestStateType ) => {
 		const { messageBuilder } = settings;
 		const errorMessage = getRequestError( requestState );
 		if ( errorMessage && formErrorContainers ) {
-			formErrorContainers.forEach( element => {
+			formErrorContainers.forEach(( element: Element ) => {
 				element.innerHTML = messageBuilder([ errorMessage ]);
 			});
 		}
 	});
 }
 
-const getRequestError = (requestState) => {
+function getRequestError( requestState: RequestStateType ): MessageType | undefined {
 
 	const { requestErrorText } = settings;
 
@@ -170,7 +196,7 @@ const getRequestError = (requestState) => {
 		if ( 'description' in requestState.responseData.body ) {
 			return { 
 				type: MESSAGE_TYPES.ERROR,
-				text: requestState.responseData.body.description,
+				text: <string>requestState.responseData.body.description,
 				code: MESSAGE_CODES.SHOPIFY_ERROR,
 				requestState
 			}
@@ -178,7 +204,7 @@ const getRequestError = (requestState) => {
 		if ( 'message' in requestState.responseData.body ) {
 			return { 
 				type: MESSAGE_TYPES.ERROR,
-				text: requestState.responseData.body.message,
+				text: <string>requestState.responseData.body.message,
 				code: MESSAGE_CODES.SHOPIFY_ERROR,
 				requestState
 			}
@@ -194,8 +220,12 @@ const getRequestError = (requestState) => {
 }
 
 const cartMessagesInit = () => {
-	subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
-		const handlers = {};
+	subscribeToCartAjaxRequests(( requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType ) => {
+
+		interface HandlersInterface {
+			[key: string]: (requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType) => void
+		}
+		const handlers: HandlersInterface = {};
 		handlers[REQUEST_ADD] = addRequestHandler;
 		handlers[REQUEST_CHANGE] = changeRequestHandler;
 

@@ -4,17 +4,17 @@ const ACTION_TOGGLE = 'toggle';
 const ACTION_ADD = 'add';
 const ACTION_REMOVE = 'remove';
 
-function clickHandler (htmlNode, e) {
+function clickHandler (element: Element, e: Event) {
 	const { toggleClassButtonAttribute } = settings.computed;
 
-	if (!( htmlNode.hasAttribute( toggleClassButtonAttribute ) )) {
+	if (!( element.hasAttribute( toggleClassButtonAttribute ) )) {
 		return;
 	}
 
 	if(e) {
 		e.preventDefault();
 	}
-	const parameters = htmlNode.getAttribute( toggleClassButtonAttribute ).split( '|' );
+	const parameters = element.getAttribute( toggleClassButtonAttribute ).split( '|' );
 	if ( !parameters ) {
 		console.error('Liquid Ajax Cart: Error while toggling body class');
 		return;
@@ -45,7 +45,7 @@ function clickHandler (htmlNode, e) {
 
 function cartToggleClassButtonInit () {
 	document.addEventListener('click', function(e) {
-	    for (var target = e.target; target && target != this; target = target.parentNode) {
+	    for (let target = (e.target as Element); target && target != document.documentElement; target = target.parentElement) {
 			clickHandler(target, e);
 	    }
 	}, false);

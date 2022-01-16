@@ -1,3 +1,5 @@
+import { AppStateType } from './../ts-types';
+
 import { settings } from './../settings';
 import { cartRequestChange } from './../ajax-api';
 import { getCartState, subscribeToCartStateUpdate } from './../state';
@@ -5,46 +7,67 @@ import { findLineItemByCode } from './../helpers';
 
 function initEventListeners() {
 	document.addEventListener('change', function(e) {
-		changeHandler(e.target, e);
+		changeHandler((e.target as Element), e);
 	}, false);
 
 	document.addEventListener("keydown", function(e) {
 		if (e.key === "Enter") {
-			changeHandler(e.target, e);
+			changeHandler((e.target as Element), e);
 		}
 
 		if (e.key === "Escape") {
-			escHandler(e.target);
+			escHandler((e.target as Element));
 		}
 	}, false);
 }
 
-function stateHandler ( state ) {
+function isValidElement(element: Element): boolean {
+	const { quantityInputAttribute } = settings.computed;
+
+	if ( !(element.hasAttribute(quantityInputAttribute)) ) {
+		return false;
+	}
+
+	if( !(element instanceof HTMLInputElement) || ( element.type !== 'text' && element.type !== 'number' )) {
+		// todo: print error that it supports only input text or input number
+		return false;
+	}
+
+	return true;
+}
+
+function stateHandler ( state: AppStateType ) {
 	const { quantityInputAttribute } = settings.computed;
 
 	if ( state.status.requestInProgress ) {
-		document.querySelectorAll(`[${ quantityInputAttribute }]`).forEach( input => {
-			input.readOnly = true;
+		document.querySelectorAll(`input[${ quantityInputAttribute }]`).forEach(( input: HTMLInputElement) => {
+			if( isValidElement(input) ) {
+				input.disabled = true;
+			}
 		})
 	} else {
-		document.querySelectorAll(`[${ quantityInputAttribute }]`).forEach( input => {			
-			const lineItemCode = input.getAttribute( quantityInputAttribute ).trim();
-			const [ lineItem, codeType ] = findLineItemByCode(lineItemCode, state);
-			if(lineItem) {
-				input.value = lineItem.quantity;
-			} else if(lineItem === null) {
-				input.value = 0;
+		document.querySelectorAll(`input[${ quantityInputAttribute }]`).forEach(( input: HTMLInputElement ) => {
+			if( !isValidElement(input) ) {
+				return;
 			}
 
-			input.readOnly = false;
+			const lineItemCode = input.getAttribute( quantityInputAttribute ).trim();
+			const [ lineItem ] = findLineItemByCode(lineItemCode, state);
+			if(lineItem) {
+				input.value = lineItem.quantity.toString();
+			} else if(lineItem === null) {
+				input.value = "0";
+			}
+
+			input.disabled = false;
 		})
 	}
 }
 
-function changeHandler (htmlNode, e) {
+function changeHandler (element: Element, e: Event) {
 	const { quantityInputAttribute } = settings.computed;
 
-	if ( !( htmlNode.hasAttribute( quantityInputAttribute )) ) {
+	if( !isValidElement(element) ) {
 		return;
 	}
 
@@ -57,8 +80,8 @@ function changeHandler (htmlNode, e) {
 		return;
 	}
 
-	let value = Number( htmlNode.value.trim() );
-	const lineItem = htmlNode.getAttribute( quantityInputAttribute ).trim();
+	let value = Number( (element as HTMLInputElement).value.trim() );
+	const lineItem = element.getAttribute( quantityInputAttribute ).trim();
 
 	if ( isNaN( value )) {
 		console.error('Liquid Ajax Cart: input value of a data-ajax-cart-quantity-input must be an Integer number');
@@ -78,21 +101,21 @@ function changeHandler (htmlNode, e) {
 
 	const formData = new FormData();
 	formData.set(lineItemReqProperty, lineItem);
-	formData.set('quantity', value);
+	formData.set('quantity', value.toString());
 
-	cartRequestChange( formData, { info: { initiator: this }} );
+	cartRequestChange( formData, { info: { initiator: element }} );
 
-	htmlNode.blur();
+	(element as HTMLInputElement).blur();
 }
 
-function escHandler (htmlNode) {
+function escHandler (element: Element) {
 	const { quantityInputAttribute } = settings.computed;
 
-	if ( !( htmlNode.hasAttribute( quantityInputAttribute )) ) {
+	if( !isValidElement(element) ) {
 		return;
 	}
 
-	const attributeValue = htmlNode.getAttribute( quantityInputAttribute ).trim();
+	const attributeValue = element.getAttribute( quantityInputAttribute ).trim();
 	let relatedLineItem;
 	const state = getCartState();
 
@@ -104,11 +127,11 @@ function escHandler (htmlNode) {
 			relatedLineItem = state.cart.items[lineItemIndex];
 		}
 		if (relatedLineItem) {
-			htmlNode.value = relatedLineItem.quantity;
+			(element as HTMLInputElement).value = relatedLineItem.quantity.toString();
 		}
 	}
 
-	htmlNode.blur();
+	(element as HTMLInputElement).blur();
 }
 
 function cartQuantityInputInit () {

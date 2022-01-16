@@ -42,22 +42,22 @@ if (!( 'liquidAjaxCart' in window )) {
 
 	window.addEventListener('focus', () => {
 		if ( settings.updateOnWindowFocus ) {
-			cartRequestUpdate();
+			cartRequestUpdate({}, {});
 		}
 	})
 }
 
-const export_configureCart = liquidAjaxCart.configureCart;
+const export_configureCart = window.liquidAjaxCart.configureCart;
 
-const export_cartRequestGet = liquidAjaxCart.cartRequestGet;
-const export_cartRequestAdd = liquidAjaxCart.cartRequestAdd;
-const export_cartRequestChange = liquidAjaxCart.cartRequestChange;
-const export_cartRequestUpdate = liquidAjaxCart.cartRequestUpdate;
-const export_cartRequestClear = liquidAjaxCart.cartRequestClear;
-const export_subscribeToCartAjaxRequests = liquidAjaxCart.subscribeToCartAjaxRequests;
+const export_cartRequestGet = window.liquidAjaxCart.cartRequestGet;
+const export_cartRequestAdd = window.liquidAjaxCart.cartRequestAdd;
+const export_cartRequestChange = window.liquidAjaxCart.cartRequestChange;
+const export_cartRequestUpdate = window.liquidAjaxCart.cartRequestUpdate;
+const export_cartRequestClear = window.liquidAjaxCart.cartRequestClear;
+const export_subscribeToCartAjaxRequests = window.liquidAjaxCart.subscribeToCartAjaxRequests;
 
-const export_getCartState = liquidAjaxCart.getCartState;
-const export_subscribeToCartStateUpdate = liquidAjaxCart.subscribeToCartStateUpdate;
+const export_getCartState = window.liquidAjaxCart.getCartState;
+const export_subscribeToCartStateUpdate = window.liquidAjaxCart.subscribeToCartStateUpdate;
 
 export { 
 	export_configureCart as configureCart,

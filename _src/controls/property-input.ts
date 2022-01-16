@@ -1,38 +1,70 @@
+import { AppStateType, JSONValueType } from './../ts-types';
+
 import { settings } from './../settings';
 import { cartRequestChange, cartRequestUpdate } from './../ajax-api';
 import { getCartState, subscribeToCartStateUpdate } from './../state';
 import { findLineItemByCode } from './../helpers';
 
-const disablingElementTypes = ['checkbox', 'radio'];
+type ValidElementType = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
-function consoleInputError(htmlNode) {
+function consoleInputError(element: Element) {
 	const { propertyInputAttribute } = settings.computed;
-	const attributeValue = htmlNode.getAttribute(propertyInputAttribute);
-	const nameValue = htmlNode.getAttribute('name');
+
+	const attributeValue = element.getAttribute(propertyInputAttribute);
+	const nameValue = element.getAttribute('name');
 	console.error(`Liquid Ajax Cart: the element [${ propertyInputAttribute }="${ attributeValue }"]${ nameValue ? `[name="${ nameValue }"]` : '' } has wrong attributes.`);
 }
 
-function getInputData(htmlNode) {
+function isValidElement(element: Element): boolean {
 	const { propertyInputAttribute } = settings.computed;
-	if (!(htmlNode.hasAttribute(propertyInputAttribute))) {
-		return [ undefined, undefined ];
+
+	if ( !(element.hasAttribute(propertyInputAttribute)) ) {
+		return false;
 	}
 
-	let attributeValue = htmlNode.getAttribute(propertyInputAttribute).trim();
+	if((!(element instanceof HTMLInputElement) || element.type === 'hidden')
+		&& !(element instanceof HTMLTextAreaElement)
+		&& !(element instanceof HTMLSelectElement)) {
+		return false;
+	}
+
+	return true;
+}
+
+type InputDataType = {
+	objectCode: string | undefined,
+	propertyName: string | undefined,
+	attributeValue: string | undefined
+}
+function getInputData(element: Element): InputDataType {
+	const { propertyInputAttribute } = settings.computed;
+	const result: InputDataType = {
+		objectCode: undefined,
+		propertyName: undefined,
+		attributeValue: undefined
+	}
+
+	if (!(element.hasAttribute(propertyInputAttribute))) {
+		return result;
+	}
+
+	let attributeValue = element.getAttribute(propertyInputAttribute).trim();
 	if (!attributeValue) {
-		const nameValue = htmlNode.getAttribute('name').trim();
+		const nameValue = element.getAttribute('name').trim();
 		if(nameValue) {
 			attributeValue = nameValue;
 		}
 	}
 
 	if ( !attributeValue ) {
-		consoleInputError();
-		return [ undefined, undefined ];
+		consoleInputError(element);
+		return result;
 	}
+	result.attributeValue = attributeValue;
 
 	if(attributeValue === 'note') {
-		return [ attributeValue, undefined ];
+		result.objectCode = 'note';
+		return result;
 	}
 
 	let [objectCode, ...propertyName] = attributeValue.trim().split('[');
@@ -41,60 +73,51 @@ function getInputData(htmlNode) {
 		|| propertyName.length !== 1 
 		|| propertyName[0].length < 2 
 		|| propertyName[0].indexOf(']') !== propertyName[0].length - 1 ) {
-		consoleInputError();
-		return [ undefined, undefined ];
+		consoleInputError(element);
+		return result;
 	}
-	propertyName = propertyName[0].replace(']', '');
+	result.objectCode = objectCode;
+	result.propertyName = propertyName[0].replace(']', '');
 
-	return [ objectCode, propertyName ];
+	return result;
 }
 
 function initEventListeners() {
 
 	document.addEventListener('change', function(e) {
-		changeHandler(e.target, e);
+		changeHandler((e.target as HTMLElement), e);
 	}, false);
 
 	document.addEventListener("keydown", function(e) {
-		const tagName = e.target.tagName.toUpperCase();
-		const typeAttribute = e.target.getAttribute('type');
-		if (e.key === "Enter" ) {
-			if ( tagName !== 'TEXTAREA' || e.ctrlKey) {
-				changeHandler(e.target, e);
+		const element = e.target as HTMLElement;
+		if (e.key === "Enter") {
+			if ( !(element instanceof HTMLTextAreaElement) || e.ctrlKey) {
+				changeHandler(element, e);
 			}
 		}
 
 		if (e.key === "Escape") {
-			escHandler(e.target);
+			escHandler(element);
 		}
 	}, false);
 }
 
-function stateHandler ( state ) {
+function stateHandler ( state: AppStateType ) {
 	const { propertyInputAttribute } = settings.computed;
 
 	if ( state.status.requestInProgress ) {
 		document.querySelectorAll(`[${ propertyInputAttribute }]`).forEach( element => {
-			let elementType = element.getAttribute('type') || '';
-			elementType = elementType.toLowerCase();
-			if(elementType === 'hidden') {
-				return;
-			}
-			element.readOnly = true;
-			if(disablingElementTypes.includes(elementType) || element.tagName.toUpperCase() === 'SELECT') {
-				element.disabled = true;
+			if(isValidElement(element)) {
+				(element as ValidElementType).disabled = true;
 			}
 		})
 	} else {
 		document.querySelectorAll(`[${ propertyInputAttribute }]`).forEach( element => {
-			const elementTag = element.tagName.toUpperCase();
-			let elementType = element.getAttribute('type') || '';
-			elementType = elementType.toLowerCase();
-			if(elementType === 'hidden') {
+			if(!isValidElement(element)) {
 				return;
 			}
 
-			const [ objectCode, propertyName ] = getInputData(element);
+			const { objectCode, propertyName, attributeValue } = getInputData(element);
 			
 			if(!objectCode) {
 				return;
@@ -104,7 +127,7 @@ function stateHandler ( state ) {
 				return;
 			}
 
-			let propertyValue = undefined;
+			let propertyValue: JSONValueType | undefined = undefined;
 			let doNotEnable = false;
 			if( objectCode === 'note' ) {
 				propertyValue = state.cart.note;
@@ -116,45 +139,36 @@ function stateHandler ( state ) {
 					propertyValue = lineItem.properties[propertyName];
 				}
 				if(lineItem === null) {
-					let attributeValue = element.getAttribute(propertyInputAttribute).trim();
-					if (!attributeValue) {
-						const nameValue = element.getAttribute('name').trim();
-						if(nameValue) {
-							attributeValue = nameValue;
-						}
-					}
 					console.error(`Liquid Ajax Cart: line item with ${ objectCodeType }="${ objectCode }" was not found when the [${propertyInputAttribute}] element with "${attributeValue}" value tried to get updated from the State`);
 					doNotEnable = true;
 				}
 			}
 
-			if(elementType === 'checkbox' || elementType === 'radio') {
-				if(element.value === propertyValue) {
-					element.checked = true;
+			if( element instanceof HTMLInputElement && (element.type === 'checkbox' || element.type === 'radio')) {
+				if((element as HTMLInputElement).value === propertyValue) {
+					(element as HTMLInputElement).checked = true;
 				} else {
-					element.checked = false;
+					(element as HTMLInputElement).checked = false;
 				}
 			} else {
+				// todo: consider number values and maybe all the rest through JSON stringify
 				if ( !propertyValue && typeof propertyValue !== 'string' && !(propertyValue instanceof String)) {
 					propertyValue = '';
 				}
-				element.value = propertyValue;
+				(element as ValidElementType).value = <string>propertyValue;
 			}
 
 			if (!doNotEnable) {
-				element.readOnly = false;
-				if(disablingElementTypes.includes(elementType) || element.tagName.toUpperCase() === 'SELECT') {
-					element.disabled = false;
-				}
+				(element as ValidElementType).disabled = false;
 			}
 		})
 	}
 }
 
-function changeHandler (htmlNode, e) {
+function changeHandler (element: Element, e: Event) {
 	const { propertyInputAttribute } = settings.computed;
 
-	if ( !( htmlNode.hasAttribute( propertyInputAttribute )) ) {
+	if(!isValidElement(element)) {
 		return;
 	}
 
@@ -162,8 +176,7 @@ function changeHandler (htmlNode, e) {
 		e.preventDefault(); // prevent form submission
 	}
 
-	htmlNode.blur();
-
+	(element as ValidElementType).blur();
 	const state = getCartState();
 	if (!(state.status.cartStateSet)) {
 		return;
@@ -172,25 +185,16 @@ function changeHandler (htmlNode, e) {
 		return;
 	}
 
-	let attributeValue = htmlNode.getAttribute(propertyInputAttribute).trim();
-	if (!attributeValue) {
-		const nameValue = htmlNode.getAttribute('name').trim();
-		if(nameValue) {
-			attributeValue = nameValue;
-		}
-	}
-	const [ objectCode, propertyName ] = getInputData(htmlNode);
+	const { objectCode, propertyName, attributeValue } = getInputData(element);
 	if(!objectCode) {
 		return;
 	}
 
-	let htmlNodeType = htmlNode.getAttribute('type') || '';
-	htmlNodeType = htmlNodeType.toLowerCase();
-	let newPropertyValue = htmlNode.value;
-	if(htmlNodeType === 'checkbox' && !htmlNode.checked) {
-		let negativeValueInput = document.querySelector(`input[type="hidden"][${ propertyInputAttribute }="${ attributeValue }"]`);
+	let newPropertyValue = (element as ValidElementType).value;
+	if(element instanceof HTMLInputElement && element.type === 'checkbox' && !element.checked) {
+		let negativeValueInput = <HTMLInputElement>document.querySelector(`input[type="hidden"][${ propertyInputAttribute }="${ attributeValue }"]`);
 		if (!negativeValueInput && ( objectCode === 'note' || objectCode === 'attributes') ) {
-			negativeValueInput = document.querySelector(`input[type="hidden"][${ propertyInputAttribute }][name="${ attributeValue }"]`);
+			negativeValueInput = <HTMLInputElement>document.querySelector(`input[type="hidden"][${ propertyInputAttribute }][name="${ attributeValue }"]`);
 		}
 		if(negativeValueInput) {
 			newPropertyValue = negativeValueInput.value;
@@ -202,11 +206,11 @@ function changeHandler (htmlNode, e) {
 	if( objectCode === 'note' ) {
 		const formData = new FormData();
 		formData.set('note', newPropertyValue);
-		cartRequestUpdate( formData, { info: { initiator: htmlNode }} );
+		cartRequestUpdate( formData, { info: { initiator: element }} );
 	} else if (objectCode === 'attributes') {
 		const formData = new FormData();
 		formData.set(`attributes[${ propertyName }]`, newPropertyValue);
-		cartRequestUpdate( formData, { info: { initiator: htmlNode }} );
+		cartRequestUpdate( formData, { info: { initiator: element }} );
 	} else {
 		const [ lineItem, objectCodeType ] = findLineItemByCode(objectCode, state);
 
@@ -223,43 +227,43 @@ function changeHandler (htmlNode, e) {
 		}
 		newProperties[propertyName] = newPropertyValue;
 
+		// todo: property might be not a string!!!
 		const formData = new FormData();
 		formData.set(objectCodeType, objectCode);
-		formData.set('quantity', lineItem.quantity);
+		formData.set('quantity', lineItem.quantity.toString());
 		for( let p in newProperties) {
 			formData.set(`properties[${ p }]`, newProperties[p]);
 		}
 
-		cartRequestChange( formData, { info: { initiator: htmlNode }} );
+		cartRequestChange( formData, { info: { initiator: element }} );
 	}
 }
 
-function escHandler (htmlNode) {
-	const { propertyInputAttribute } = settings.computed;
-
-	if ( !( htmlNode.hasAttribute( propertyInputAttribute )) ) {
+function escHandler (element: Element) {
+	if(!isValidElement(element)) {
 		return;
 	}
 
-	let htmlNodeType = htmlNode.getAttribute('type') || '';
-	htmlNodeType = htmlNodeType.toLowerCase();
-	const htmlNodeTag = htmlNode.tagName.toUpperCase();
-	if ( ( htmlNodeTag !== 'INPUT' && htmlNodeTag !== 'TEXTAREA' ) || htmlNodeType === 'checkbox' || htmlNodeType === 'radio' ) {
+	if ( !(element instanceof HTMLInputElement) && !(element instanceof HTMLTextAreaElement) ) {
+		return;
+	}
+
+	if ( element instanceof HTMLInputElement && (element.type === 'checkbox' || element.type === 'radio') ) {
 		return;
 	}
 
 	const state = getCartState();
 	if ( !(state.status.cartStateSet) ) {
-		htmlNode.blur();
+		(element as ValidElementType).blur();
 		return;
 	}
 
-	const [ objectCode, propertyName ] = getInputData(htmlNode);
+	const { objectCode, propertyName } = getInputData(element);
 	if(!objectCode) {
 		return;
 	}
 
-	let propertyValue = undefined;
+	let propertyValue: JSONValueType | undefined = undefined;
 	if( objectCode === 'note' ) {
 		propertyValue = state.cart.note;
 	} else if ( objectCode === 'attributes' ) {
@@ -274,10 +278,10 @@ function escHandler (htmlNode) {
 		if ( !propertyValue && typeof propertyValue !== 'string' && !(propertyValue instanceof String)) {
 			propertyValue = '';
 		}
-		htmlNode.value = propertyValue;
+		element.value = String(propertyValue);
 	}
 
-	htmlNode.blur();
+	(element as ValidElementType).blur();
 }
 
 function cartPropertyInputInit () {

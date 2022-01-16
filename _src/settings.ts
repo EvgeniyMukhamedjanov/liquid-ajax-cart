@@ -1,15 +1,39 @@
+import { MessageType, FormattersObjectType } from './ts-types';
+
+import { cartDomBinderRerender } from './dom-binder';
+
+type ConfigurationValue = 
+	| string 
+	| boolean
+	| ((formNode: HTMLFormElement) => boolean) 
+	| ((messages: Array<MessageType>) => string);
+
+type SettingsType = {
+	productFormsFilter: (formNode: HTMLFormElement) => boolean ,
+	messageBuilder: (messages: Array<MessageType>) => string,
+	stateBinderFormatters: FormattersObjectType,
+	lineItemQuantityErrorText: string,
+	requestErrorText: string,
+	updateOnWindowFocus: boolean,
+	computed: {
+		[property: string]: string
+	}
+}
+type SeetingsKeysType = keyof SettingsType;
+
 const cssClassesPrefix = 'js-ajax-cart';
 const dataAttributePrefix = 'data-ajax-cart';
 
-const settings = {
-	productFormsFilter: formNode => true,
-	messageBuilder: messages => {
+const settings: SettingsType = {
+	productFormsFilter: (formNode: HTMLFormElement): boolean => true,
+	messageBuilder: (messages: Array<MessageType>): string => {
 		let result = '';
 		messages.forEach( element => {
 			result += `<div class="${ cssClassesPrefix }-message ${ cssClassesPrefix }-message--${ element.type }">${ element.text }</div>`;
 		})
 		return result;
 	},
+	stateBinderFormatters: {},
 
 	lineItemQuantityErrorText: 'You can\'t add more of this item to your cart',
 	requestErrorText: 'There was an error while updating your cart. Please try again.',
@@ -37,9 +61,12 @@ const settings = {
 	}
 }
 
-const configureCart = ( property, value ) => {
+const configureCart = ( property: string, value: ConfigurationValue ) => {
 	if ( property in settings && property !== 'computed' ) {
-		settings[property] = value;
+		(settings[property as SeetingsKeysType] as ConfigurationValue) = value;
+		if ( property === 'stateBinderFormatters' ) {
+			cartDomBinderRerender();
+		}
 	} else {
 		console.error(`Liquid Ajax Cart: unknown configuration parameter "${ property }"`);
 	}

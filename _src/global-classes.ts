@@ -1,7 +1,9 @@
+import { AppStateType } from './ts-types';
+
 import { settings } from './settings';
 import { getCartState, subscribeToCartStateUpdate } from './state';
 
-const updateClasses = state => {
+function updateClasses( state: AppStateType ): void {
 	const { 
 		cartStateSetBodyClass, 
 		requestInProgressBodyClass,

@@ -1,14 +1,20 @@
+import { RequestStateType, RequestResultSubscriberType, JSONValueType } from './ts-types';
+
 import { subscribeToCartAjaxRequests } from './ajax-api';
 import { settings } from './settings';
 
+type ScrollAreasListType = {
+	[scrollId: string]: number[]
+}
+
 const shopifySectionPrefix = 'shopify-section-';
 
-const cartSectionsInit = () => {
-	subscribeToCartAjaxRequests (( requestState, subscribeToResult ) => {
+function cartSectionsInit() {
+	subscribeToCartAjaxRequests (( requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType ) => {
 		const { sectionsAttribute, sectionScrollAreaAttribute } = settings.computed;
 
 		if ( requestState.requestBody !== undefined ) {
-			const sectionNames = [];
+			const sectionNames: string[] = [];
 			// todo: test with dynamic sections
 			document.querySelectorAll( `[${ sectionsAttribute }]` ).forEach( sectionNodeChild => {
 				// todo: test if the attribute not within a section
@@ -21,6 +27,7 @@ const cartSectionsInit = () => {
 				}
 			});
 			if ( sectionNames.length ) {
+				// todo: don't override the current 'sections' param
 				if ( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) {
 					requestState.requestBody.append('sections', sectionNames.join( ',' ));
 				} else {
@@ -29,12 +36,12 @@ const cartSectionsInit = () => {
 			}
 		}
 
-		subscribeToResult( requestState => {
+		subscribeToResult(( requestState: RequestStateType ) => {
 			const { sectionsAttribute, sectionScrollAreaAttribute } = settings.computed;
 			const parser = new DOMParser();
 
 			if ( requestState.responseData?.ok && 'sections' in requestState.responseData.body ) {
-				const sections = requestState.responseData.body.sections;
+				const sections = requestState.responseData.body.sections as (({ [key: string]: string }));
 				for ( let sectionId in sections ) {
 					if ( !sections[ sectionId ] ) {
 						console.error(`Liquid Ajax Cart: the HTML for the "${ sectionId }" section was requested but the response is ${ sections[ sectionId ] }`)
@@ -47,7 +54,7 @@ const cartSectionsInit = () => {
 
 						// Memorize scroll positions
 						const noId = "__noId__";
-						const scrollAreasList = {};
+						const scrollAreasList: ScrollAreasListType = {};
 						sectionNode.querySelectorAll(` [${ sectionScrollAreaAttribute }] `).forEach( scrollAreaNode => {
 							let scrollId = scrollAreaNode.getAttribute( sectionScrollAreaAttribute ).toString().trim();
 							if ( scrollId === '' ) {
