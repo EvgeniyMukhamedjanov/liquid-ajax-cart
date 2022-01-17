@@ -63,7 +63,7 @@ const settings: SettingsType = {
 	}
 }
 
-const configureCart = ( property: string, value: ConfigurationValue ) => {
+function configureCart ( property: string, value: ConfigurationValue ) {
 	if ( property in settings && property !== 'computed' ) {
 		(settings[property as SeetingsKeysType] as ConfigurationValue) = value;
 		if ( property === 'stateBinderFormatters' ) {
@@ -74,7 +74,7 @@ const configureCart = ( property: string, value: ConfigurationValue ) => {
 	}
 }
 
-const cartSettingsInit = () => {
+function cartSettingsInit () {
 	const configurationContainer = document.querySelector(`[${ settings.computed.configurationAttribute }]`);
 	if ( configurationContainer ) {
 		try {

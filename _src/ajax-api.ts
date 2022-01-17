@@ -75,8 +75,6 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 				requestType,
 				endpoint,
 				info,
-				// the same requestBody will be used in the fetch request, 
-				// so subscriber can make changes in it before the request
 				requestBody
 			}, ( resultCallback: RequestResultCallback ) => { resultSubscribers.push( resultCallback ) } );
 		} catch (e) {
@@ -88,10 +86,6 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 	if ( 'lastComplete' in options ) {
 		resultSubscribers.push( options.lastComplete );
 	}
-
-	// todo: maybe it is not needed because requestState already has requestBody and info as links to objects?
-	requestState.requestBody = requestBody;
-	requestState.info = info;
 
 	const fetchPayload: FetchPayloadType = {
 		method
@@ -163,6 +157,7 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 	});
 }
 
+// todo: void is return value or function type??
 function cartRequestGet ( options: CartRequestOptionsType | undefined = {} ): void {
 	cartRequest( REQUEST_GET, undefined, options );
 }

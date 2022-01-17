@@ -1,4 +1,4 @@
-import { AppStateType, JSONValueType } from './../ts-types';
+import { AppStateType, JSONValueType, RequestBodyType } from './../ts-types';
 
 import { settings } from './../settings';
 import { cartRequestChange, cartRequestUpdate } from './../ajax-api';
@@ -227,15 +227,23 @@ function changeHandler (element: Element, e: Event) {
 		}
 		newProperties[propertyName] = newPropertyValue;
 
-		// todo: property might be not a string!!!
 		const formData = new FormData();
+		let requestBody: RequestBodyType = formData;
 		formData.set(objectCodeType, objectCode);
 		formData.set('quantity', lineItem.quantity.toString());
 		for( let p in newProperties) {
-			formData.set(`properties[${ p }]`, newProperties[p]);
+			const v = newProperties[p];
+			if ( typeof v === 'string' || v instanceof String ) {
+				formData.set(`properties[${ p }]`, <string>newProperties[p]);
+			} else {
+				requestBody = {
+					[ objectCodeType ]: objectCode,
+					quantity: lineItem.quantity,
+					properties: newProperties
+				}
+			}
 		}
-
-		cartRequestChange( formData, { info: { initiator: element }} );
+		cartRequestChange( requestBody, { info: { initiator: element }} );
 	}
 }
 

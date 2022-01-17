@@ -10,8 +10,7 @@ export type JSONObjectType = {
     [x: string]: JSONValueType;
 }
 
-// todo: add URLtype to requestBody
-export type RequestBodyType = JSONObjectType | FormData | undefined;
+export type RequestBodyType = JSONObjectType | FormData | URLSearchParams | undefined;
 
 export type RequestStateInfoType = {
 	initiator?: Element
@@ -76,7 +75,6 @@ export type FormattersObjectType = {
 	[key: string]: (value: JSONValueType | undefined) => JSONValueType | undefined
 }
 
-
 export type MessageType = {
 	type: string,
 	text: string,
@@ -84,10 +82,9 @@ export type MessageType = {
 	requestState: RequestStateType
 }
 
-// todo: replace any
 declare global {
     interface Window { 
-    	liquidAjaxCart: any,
+    	liquidAjaxCart: any, //todo: replace any
     	Shopify: any 
     }
 }

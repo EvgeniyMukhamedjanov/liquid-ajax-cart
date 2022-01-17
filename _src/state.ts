@@ -36,13 +36,11 @@ function cartStateInit() {
 	if ( initialStateContainer ) {
 		try {
 			const initialState = JSON.parse(initialStateContainer.textContent);
-			// todo: create a function for checking cart object
-			if ( 'item_count' in initialState ) {
-				cart = initialState;
-				statusUpdate();
-			} else {
+			cart = cartStateFromObject(initialState);
+			if ( cart === null ) {
 				throw `JSON from ${ settings.computed.initialStateAttribute } script is not correct cart object`;
 			}
+			statusUpdate();
 		} catch (e) {
 			console.error(`Liquid Ajax Cart: can't parse cart JSON from the "${ settings.computed.initialStateAttribute }" script. A /cart.js request will be performed to receive the cart state`);
 			console.error(e);
