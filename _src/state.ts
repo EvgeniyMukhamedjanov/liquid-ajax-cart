@@ -132,16 +132,17 @@ const statusUpdate = () => {
 }
 
 function subscribeToCartStateUpdate( callback: StateSubscriberType ) {
-	try {
-		callback({
-			cart,
-			status
-		});
-		subscribers.push( callback );
-	} catch (e) {
-		console.log('Liquid Ajax Cart: Error during subscribing to the state');
-		console.error(e);
-	}
+	subscribers.push( callback );
+	// try {
+	// 	callback({
+	// 		cart,
+	// 		status
+	// 	});
+	// 	subscribers.push( callback );
+	// } catch (e) {
+	// 	console.log('Liquid Ajax Cart: Error during subscribing to the state');
+	// 	console.error(e);
+	// }
 }
 
 function getCartState (): AppStateType {
@@ -159,8 +160,8 @@ const notify = () => {
 				status,
 			});
 		} catch (e) {
+			console.log('Liquid Ajax Cart: Error during a call of a cart state update subscriber');
 			console.error(e);
-			// todo: add error handler like in subscribeToCartStateUpdate
 		}
 	})
 }

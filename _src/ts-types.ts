@@ -71,6 +71,12 @@ export type AppStateType = JSONObjectType & {
 }
 export type StateSubscriberType = (state: AppStateType) => void;
 
+export type ConfigurationValue = 
+	| string 
+	| boolean
+	| ((formNode: HTMLFormElement) => boolean) 
+	| ((messages: Array<MessageType>) => string);
+
 export type FormattersObjectType = {
 	[key: string]: (value: JSONValueType | undefined) => JSONValueType | undefined
 }
@@ -84,7 +90,17 @@ export type MessageType = {
 
 declare global {
     interface Window { 
-    	liquidAjaxCart: any, //todo: replace any
-    	Shopify: any 
+    	liquidAjaxCart: {
+    		configureCart: ( property: string, value: ConfigurationValue ) => void,
+    		cartRequestGet: ( options: CartRequestOptionsType | undefined ) => void,
+    		cartRequestAdd: ( body: RequestBodyType, options: CartRequestOptionsType | undefined ) => void, 
+			cartRequestChange: ( body: RequestBodyType, options: CartRequestOptionsType | undefined ) => void, 
+			cartRequestUpdate: ( body: RequestBodyType, options: CartRequestOptionsType | undefined ) => void, 
+			cartRequestClear: ( body: RequestBodyType, options: CartRequestOptionsType | undefined ) => void, 
+			subscribeToCartAjaxRequests: ( callback: RequestCallbackType ) => void,
+			getCartState: () => AppStateType,
+			subscribeToCartStateUpdate: ( callback: StateSubscriberType ) => void
+    	}
+    	Shopify: JSONObjectType 
     }
 }

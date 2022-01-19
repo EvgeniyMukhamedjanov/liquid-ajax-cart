@@ -151,9 +151,16 @@ function stateHandler ( state: AppStateType ) {
 					(element as HTMLInputElement).checked = false;
 				}
 			} else {
-				// todo: consider number values and maybe all the rest through JSON stringify
-				if ( !propertyValue && typeof propertyValue !== 'string' && !(propertyValue instanceof String)) {
-					propertyValue = '';
+				if ( typeof propertyValue !== 'string' 
+					&& !(propertyValue instanceof String) 
+					&& typeof propertyValue !== 'number' 
+					&& !(propertyValue instanceof Number)) {
+					if (Array.isArray(propertyValue) || <JSONValueType>propertyValue instanceof Object) {
+						propertyValue = JSON.stringify(propertyValue);
+						console.warn(`Liquid Ajax Cart: the ${ propertyInputAttribute } with the "${ attributeValue }" value is bound to the ${ propertyName } ${ objectCode === 'attributes' ? 'attribute' : 'property' } that is not string or number: ${ propertyValue }`);
+					} else {
+						propertyValue = '';
+					}
 				}
 				(element as ValidElementType).value = <string>propertyValue;
 			}
@@ -295,6 +302,7 @@ function escHandler (element: Element) {
 function cartPropertyInputInit () {
 	initEventListeners();
 	subscribeToCartStateUpdate( stateHandler );
+	stateHandler( getCartState() );
 }
 
 export { cartPropertyInputInit }

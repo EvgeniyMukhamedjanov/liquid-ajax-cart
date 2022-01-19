@@ -58,6 +58,12 @@ title: Releases
 
 {% endif %}
 
+{%- if file_version == '1.8.0' -%}
+* The `addToCartCssClass` configuration parameter is added.
+* The `stateBinderFormatters` configuration parameter is added.
+* The `subscribeToCartStateUpdate` function doesn't call the callback immediately after subscribing. Only after a next state change.
+{%- endif -%}
+
 {%- if file_version == '1.7.0' -%}
 * The `data-ajax-cart-property-input` attribute is added.
 * The routes to `routes.cart_*_url` are not automatically ajaxified anymore. Add the `data-ajax-cart-request-button` to ajaxify them.

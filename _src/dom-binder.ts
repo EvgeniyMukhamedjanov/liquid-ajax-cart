@@ -64,7 +64,7 @@ const defaultFormatters: FormattersObjectType = {
 		const moneyValue = (value as number) / 100;
 
 		if ( 'Intl' in window && window.Shopify?.locale ) {
-			return Intl.NumberFormat(window.Shopify.locale, { 
+			return Intl.NumberFormat(<string>window.Shopify.locale, { 
 				style: 'currency',
 				currency: <string>state.cart.currency
 				}).format(moneyValue);

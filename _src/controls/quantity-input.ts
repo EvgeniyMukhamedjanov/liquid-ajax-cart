@@ -29,7 +29,7 @@ function isValidElement(element: Element): boolean {
 	}
 
 	if( !(element instanceof HTMLInputElement) || ( element.type !== 'text' && element.type !== 'number' )) {
-		// todo: print error that it supports only input text or input number
+		console.error(`Liquid Ajax Cart: the ${ quantityInputAttribute } attribute supports "input" elements only with the "text" and the "number" types`);
 		return false;
 	}
 
@@ -137,6 +137,7 @@ function escHandler (element: Element) {
 function cartQuantityInputInit () {
 	initEventListeners();
 	subscribeToCartStateUpdate( stateHandler );
+	stateHandler( getCartState() );
 }
 
 export { cartQuantityInputInit }

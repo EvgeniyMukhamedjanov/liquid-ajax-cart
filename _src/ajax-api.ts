@@ -157,7 +157,7 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 	});
 }
 
-// todo: void is return value or function type??
+
 function cartRequestGet ( options: CartRequestOptionsType | undefined = {} ): void {
 	cartRequest( REQUEST_GET, undefined, options );
 }

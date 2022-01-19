@@ -1,12 +1,6 @@
-import { MessageType, FormattersObjectType } from './ts-types';
+import { MessageType, FormattersObjectType, ConfigurationValue } from './ts-types';
 
 import { cartDomBinderRerender } from './dom-binder';
-
-type ConfigurationValue = 
-	| string 
-	| boolean
-	| ((formNode: HTMLFormElement) => boolean) 
-	| ((messages: Array<MessageType>) => string);
 
 type SettingsType = {
 	productFormsFilter: (formNode: HTMLFormElement) => boolean ,
