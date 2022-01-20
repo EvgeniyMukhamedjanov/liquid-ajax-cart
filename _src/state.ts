@@ -52,7 +52,6 @@ function cartStateInit() {
 }
 
 function cartStateFromObject ( data: JSONObjectType ): AppStateCartType {
-	// todo: improve checking
 	const { attributes, items, item_count } = data;
 	if ( attributes === undefined || attributes === null || typeof attributes !== 'object' ) {
 		return null;

@@ -17,13 +17,14 @@ function cartSectionsInit() {
 			const sectionNames: string[] = [];
 			// todo: test with dynamic sections
 			document.querySelectorAll( `[${ sectionsAttribute }]` ).forEach( sectionNodeChild => {
-				// todo: test if the attribute not within a section
 				const sectionNode = sectionNodeChild.closest(`[id^="${ shopifySectionPrefix }"]`);
 				if ( sectionNode ) {
 					const sectionId = sectionNode.id.replace( shopifySectionPrefix, '' );
 					if ( sectionNames.indexOf( sectionId ) === -1 ) {
 						sectionNames.push( sectionId );
 					}
+				} else {
+					console.error(`Liquid Ajax Cart: there is a ${ sectionsAttribute } element that is not inside a Shopify section`);
 				}
 			});
 			if ( sectionNames.length ) {
