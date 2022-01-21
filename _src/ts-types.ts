@@ -13,7 +13,8 @@ export type JSONObjectType = {
 export type RequestBodyType = JSONObjectType | FormData | URLSearchParams | undefined;
 
 export type RequestStateInfoType = {
-	initiator?: Element
+	initiator?: Element,
+	_liquid_ajax_cart_sections_update?: string[]
 }
 
 export type RequestStateType = {

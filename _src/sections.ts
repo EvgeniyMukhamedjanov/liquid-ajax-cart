@@ -1,6 +1,6 @@
 import { RequestStateType, RequestResultSubscriberType, JSONValueType } from './ts-types';
 
-import { subscribeToCartAjaxRequests } from './ajax-api';
+import { subscribeToCartAjaxRequests, cartRequestUpdate } from './ajax-api';
 import { settings } from './settings';
 
 type ScrollAreasListType = {
@@ -8,6 +8,7 @@ type ScrollAreasListType = {
 }
 
 const shopifySectionPrefix = 'shopify-section-';
+const infoSectionsUpdateParam = '_liquid_ajax_cart_sections_update';
 
 function cartSectionsInit() {
 	subscribeToCartAjaxRequests (( requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType ) => {
@@ -15,24 +16,43 @@ function cartSectionsInit() {
 
 		if ( requestState.requestBody !== undefined ) {
 			const sectionNames: string[] = [];
-			// todo: test with dynamic sections
-			document.querySelectorAll( `[${ sectionsAttribute }]` ).forEach( sectionNodeChild => {
-				const sectionNode = sectionNodeChild.closest(`[id^="${ shopifySectionPrefix }"]`);
-				if ( sectionNode ) {
-					const sectionId = sectionNode.id.replace( shopifySectionPrefix, '' );
-					if ( sectionNames.indexOf( sectionId ) === -1 ) {
-						sectionNames.push( sectionId );
+			if ( infoSectionsUpdateParam in requestState.info ) {
+				sectionNames.push( ...requestState.info[infoSectionsUpdateParam] );
+			} else {
+				if ( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) {
+					const userRequestedSections = requestState.requestBody.get('sections');
+					if ( typeof userRequestedSections === 'string' || userRequestedSections instanceof String ) {
+						sectionNames.push( ...userRequestedSections.split(',') );
 					}
 				} else {
-					console.error(`Liquid Ajax Cart: there is a ${ sectionsAttribute } element that is not inside a Shopify section`);
+					const userRequestedSections = requestState.requestBody.sections;
+					if ( typeof userRequestedSections === 'string' || userRequestedSections instanceof String ) {
+						sectionNames.push( ...userRequestedSections.split(',') );
+					}
+					requestState.requestBody.sections = '';
 				}
-			});
+
+				document.querySelectorAll( `[${ sectionsAttribute }]` ).forEach( sectionNodeChild => {
+					const sectionNode = sectionNodeChild.closest(`[id^="${ shopifySectionPrefix }"]`);
+					if ( sectionNode ) {
+						const sectionId = sectionNode.id.replace( shopifySectionPrefix, '' );
+						if ( sectionNames.indexOf( sectionId ) === -1 ) {
+							sectionNames.push( sectionId );
+						}
+					} else {
+						console.error(`Liquid Ajax Cart: there is a ${ sectionsAttribute } element that is not inside a Shopify section`);
+					}
+				});
+			}
 			if ( sectionNames.length ) {
+				const currentSectionNames = sectionNames.slice(0, 5);
+				requestState.info[infoSectionsUpdateParam] = sectionNames.slice(5);
+
 				// todo: don't override the current 'sections' param
 				if ( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) {
-					requestState.requestBody.append('sections', sectionNames.join( ',' ));
+					requestState.requestBody.set('sections', currentSectionNames.join( ',' ));
 				} else {
-					requestState.requestBody.sections = sectionNames.join( ',' );
+					requestState.requestBody.sections = currentSectionNames.join( ',' );
 				}
 			}
 		}
@@ -95,6 +115,16 @@ function cartSectionsInit() {
 							})
 						}
 					})
+				}
+
+				if ( infoSectionsUpdateParam in requestState.info && requestState.info[infoSectionsUpdateParam].length > 0 ) {
+					// todo: improve text
+					console.warn(`Liquid Ajax Cart: there were more than 5 sections requested`);
+					cartRequestUpdate({}, { 
+						info: { 
+							[infoSectionsUpdateParam]: requestState.info[infoSectionsUpdateParam] 
+						}
+					});
 				}
 			}
 		})

@@ -9,6 +9,8 @@ import { cartMessagesInit } from './messages';
 import { cartGlobalClassesInit } from './global-classes';
 
 if (!( 'liquidAjaxCart' in window )) {
+	//todo: add test if browser supports FormData.set, fetch etc.
+	
 	cartSettingsInit();
 	cartProductFormsInit();
 
