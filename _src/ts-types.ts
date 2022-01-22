@@ -67,7 +67,8 @@ export type AppStateStatusType = {
 }
 export type AppStateType = JSONObjectType & {
 	status: AppStateStatusType,
-	cart: AppStateCartType
+	cart: AppStateCartType,
+	previousCart?: AppStateCartType
 }
 export type StateSubscriberType = (state: AppStateType) => void;
 

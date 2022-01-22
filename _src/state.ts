@@ -15,6 +15,7 @@ let queryCounter: number = 0;
 
 const subscribers: Array<StateSubscriberType> = [];
 let cart: AppStateCartType = null;
+let previousCart: AppStateCartType | undefined = undefined
 let status: AppStateStatusType = {
 	requestInProgress: false,
 	cartStateSet: false,
@@ -99,10 +100,12 @@ function cartStateFromObject ( data: JSONObjectType ): AppStateCartType {
 
 
 function beforeRequestHandler( requestState: RequestStateType ) {
+	previousCart = undefined;
 	queryCounter++;
 }
 
 function afterRequestHandler( requestState: RequestStateType ) {
+	previousCart = undefined;
 	queryCounter--;
 	let newCart: AppStateCartType | undefined = undefined;
 	if ( requestState.extraResponseData?.ok ) {
@@ -117,6 +120,7 @@ function afterRequestHandler( requestState: RequestStateType ) {
 		}
 	}
 	if( newCart ) {
+		previousCart = cart;
 		cart = newCart;
 	} else if ( newCart === null ) {
 		console.error(`Liquid Ajax Cart: expected to receive the updated cart state but the object is not recognized. The request state:`, requestState);
@@ -131,16 +135,6 @@ const statusUpdate = () => {
 
 function subscribeToCartStateUpdate( callback: StateSubscriberType ) {
 	subscribers.push( callback );
-	// try {
-	// 	callback({
-	// 		cart,
-	// 		status
-	// 	});
-	// 	subscribers.push( callback );
-	// } catch (e) {
-	// 	console.log('Liquid Ajax Cart: Error during subscribing to the state');
-	// 	console.error(e);
-	// }
 }
 
 function getCartState (): AppStateType {
@@ -153,10 +147,11 @@ function getCartState (): AppStateType {
 const notify = () => {
 	subscribers.forEach(( callback: StateSubscriberType ) => {
 		try {
-			callback({
-				cart,
-				status,
-			});
+			const data: AppStateType = { cart, status };
+			if ( previousCart !== undefined ) {
+				data.previousCart = previousCart;
+			}
+			callback(data);
 		} catch (e) {
 			console.error('Liquid Ajax Cart: Error during a call of a cart state update subscriber');
 			console.error(e);

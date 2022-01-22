@@ -215,51 +215,56 @@
       },
       "164286254942bd9fab": {
         "type": "dynamic-cart",
+        "disabled": true,
         "settings": {}
       },
       "1642862559a4b861cc": {
         "type": "dynamic-cart",
+        "disabled": true,
         "settings": {}
       },
       "164286256120a5d043": {
         "type": "dynamic-cart",
+        "disabled": true,
         "settings": {}
       },
       "1642862566506c7d37": {
         "type": "dynamic-cart",
+        "disabled": true,
         "settings": {}
       },
       "16428625694e43e596": {
         "type": "dynamic-cart",
+        "disabled": true,
         "settings": {}
       },
       "1642862571ede82428": {
         "type": "dynamic-cart",
+        "disabled": true,
         "settings": {}
       },
       "1642862575446d7c2f": {
         "type": "dynamic-cart",
+        "disabled": true,
         "settings": {}
       },
       "16428625760199d15f": {
         "type": "dynamic-cart",
+        "disabled": true,
         "settings": {}
       },
       "1642862578acd63951": {
         "type": "dynamic-cart",
+        "disabled": true,
         "settings": {}
       },
       "16428625849c2287c2": {
         "type": "dynamic-cart",
+        "disabled": true,
         "settings": {}
       }
     },
     "content_for_index": [
-      "163511092542400c8a",
-      "featured-product",
-      "164149653986a90fa3",
-      "1632428792c98f42b1",
-      "16324720968dae6a91",
       "164286254942bd9fab",
       "1642862559a4b861cc",
       "164286256120a5d043",
@@ -269,7 +274,12 @@
       "1642862575446d7c2f",
       "16428625760199d15f",
       "1642862578acd63951",
-      "16428625849c2287c2"
+      "16428625849c2287c2",
+      "163511092542400c8a",
+      "featured-product",
+      "164149653986a90fa3",
+      "1632428792c98f42b1",
+      "16324720968dae6a91"
     ]
   },
   "presets": {
