@@ -1,14 +1,13 @@
 import { RequestStateType, RequestResultSubscriberType, JSONValueType } from './ts-types';
 
-import { subscribeToCartAjaxRequests, cartRequestUpdate } from './ajax-api';
+import { subscribeToCartAjaxRequests, cartRequestUpdate, REQUEST_ADD } from './ajax-api';
 import { settings } from './settings';
 
 type ScrollAreasListType = {
-	[scrollId: string]: number[]
+	[scrollId: string]: Array<{ scroll: number, height: number }>
 }
 
 const shopifySectionPrefix = 'shopify-section-';
-const infoSectionsUpdateParam = '_liquid_ajax_cart_sections_update';
 
 function cartSectionsInit() {
 	subscribeToCartAjaxRequests (( requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType ) => {
@@ -16,43 +15,39 @@ function cartSectionsInit() {
 
 		if ( requestState.requestBody !== undefined ) {
 			const sectionNames: string[] = [];
-			if ( infoSectionsUpdateParam in requestState.info ) {
-				sectionNames.push( ...requestState.info[infoSectionsUpdateParam] );
-			} else {
-				if ( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) {
-					const userRequestedSections = requestState.requestBody.get('sections');
-					if ( typeof userRequestedSections === 'string' || userRequestedSections instanceof String ) {
-						sectionNames.push( ...userRequestedSections.split(',') );
+
+			document.querySelectorAll( `[${ sectionsAttribute }]` ).forEach( sectionNodeChild => {
+				const sectionNode = sectionNodeChild.closest(`[id^="${ shopifySectionPrefix }"]`);
+				if ( sectionNode ) {
+					const sectionId = sectionNode.id.replace( shopifySectionPrefix, '' );
+					if ( sectionNames.indexOf( sectionId ) === -1 ) {
+						sectionNames.push( sectionId );
 					}
 				} else {
-					const userRequestedSections = requestState.requestBody.sections;
-					if ( typeof userRequestedSections === 'string' || userRequestedSections instanceof String ) {
-						sectionNames.push( ...userRequestedSections.split(',') );
-					}
-					requestState.requestBody.sections = '';
+					console.error(`Liquid Ajax Cart: there is a ${ sectionsAttribute } element that is not inside a Shopify section. All the ${ sectionsAttribute } elements must be inside Shopify sections.`);
 				}
+			});
 
-				document.querySelectorAll( `[${ sectionsAttribute }]` ).forEach( sectionNodeChild => {
-					const sectionNode = sectionNodeChild.closest(`[id^="${ shopifySectionPrefix }"]`);
-					if ( sectionNode ) {
-						const sectionId = sectionNode.id.replace( shopifySectionPrefix, '' );
-						if ( sectionNames.indexOf( sectionId ) === -1 ) {
-							sectionNames.push( sectionId );
-						}
-					} else {
-						console.error(`Liquid Ajax Cart: there is a ${ sectionsAttribute } element that is not inside a Shopify section`);
-					}
-				});
-			}
 			if ( sectionNames.length ) {
-				const currentSectionNames = sectionNames.slice(0, 5);
-				requestState.info[infoSectionsUpdateParam] = sectionNames.slice(5);
+				let requestingSections = sectionNames.join(',');
 
-				// todo: don't override the current 'sections' param
+				let sectionsParam: JSONValueType = undefined;
 				if ( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) {
-					requestState.requestBody.set('sections', currentSectionNames.join( ',' ));
+					if ( requestState.requestBody.has('sections') ) {
+						sectionsParam = requestState.requestBody.get('sections').toString();
+					}
 				} else {
-					requestState.requestBody.sections = currentSectionNames.join( ',' );
+					sectionsParam = requestState.requestBody.sections;
+				}
+				if ( (( typeof sectionsParam === 'string' || <JSONValueType>sectionsParam instanceof String ) && <string>sectionsParam !== '') 
+					|| (Array.isArray(sectionsParam) && sectionsParam.length > 0) ) {
+					requestingSections = `${ (<string | string[]>sectionsParam).toString() },${ requestingSections }`; 
+				}
+				
+				if ( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) {
+					requestState.requestBody.set('sections', requestingSections);
+				} else {
+					requestState.requestBody.sections = requestingSections;
 				}
 			}
 		}
@@ -62,7 +57,10 @@ function cartSectionsInit() {
 			const parser = new DOMParser();
 
 			if ( requestState.responseData?.ok && 'sections' in requestState.responseData.body ) {
-				const sections = requestState.responseData.body.sections as (({ [key: string]: string }));
+				let sections = requestState.responseData.body.sections as ({ [key: string]: string });
+				if ( requestState.extraResponseData?.body?.sections ) {
+					sections = { ...sections, ...(requestState.extraResponseData.body.sections as ({ [key: string]: string })) };
+				}
 				for ( let sectionId in sections ) {
 					if ( !sections[ sectionId ] ) {
 						console.error(`Liquid Ajax Cart: the HTML for the "${ sectionId }" section was requested but the response is ${ sections[ sectionId ] }`)
@@ -70,8 +68,6 @@ function cartSectionsInit() {
 					}
 
 					document.querySelectorAll( `#shopify-section-${ sectionId }` ).forEach( sectionNode => {
-
-						// let newSectionNode = sectionNode;
 
 						// Memorize scroll positions
 						const noId = "__noId__";
@@ -84,7 +80,10 @@ function cartSectionsInit() {
 							if ( !(scrollId in scrollAreasList) ) {
 								scrollAreasList[scrollId] = [];
 							}
-							scrollAreasList[scrollId].push(scrollAreaNode.scrollTop);
+							scrollAreasList[scrollId].push({ 
+								scroll: scrollAreaNode.scrollTop,
+								height: scrollAreaNode.scrollHeight
+							});
 						});
 
 						// Replace HTML
@@ -110,21 +109,13 @@ function cartSectionsInit() {
 						for ( let scrollId in scrollAreasList ) {
 							sectionNode.querySelectorAll(` [${ sectionScrollAreaAttribute }="${ scrollId.replace( noId, '' ) }"] `).forEach(( scrollAreaNode, scrollAreaIndex ) => {
 								if ( scrollAreaIndex + 1 <= scrollAreasList[ scrollId ].length ) {
-									scrollAreaNode.scrollTop = scrollAreasList[ scrollId ][ scrollAreaIndex ];
+									if ( requestState.requestType !== REQUEST_ADD || scrollAreasList[ scrollId ][ scrollAreaIndex ][ 'height' ] >= scrollAreaNode.scrollHeight ) {
+										scrollAreaNode.scrollTop = scrollAreasList[ scrollId ][ scrollAreaIndex ][ 'scroll' ];
+									}
 								}
 							})
 						}
 					})
-				}
-
-				if ( infoSectionsUpdateParam in requestState.info && requestState.info[infoSectionsUpdateParam].length > 0 ) {
-					// todo: improve text
-					console.warn(`Liquid Ajax Cart: there were more than 5 sections requested`);
-					cartRequestUpdate({}, { 
-						info: { 
-							[infoSectionsUpdateParam]: requestState.info[infoSectionsUpdateParam] 
-						}
-					});
 				}
 			}
 		})

@@ -5,7 +5,8 @@ import {
 	JSONObjectType,
 	RequestBodyType,
 	RequestStateInfoType,
-	RequestResultCallback
+	RequestResultCallback,
+	JSONValueType
 } from './ts-types';
 
 type FetchPayloadType = {
@@ -68,6 +69,7 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 		requestBody,
 		info
 	}
+	const redundandSections: string[] = [];
 
 	subscribers.forEach( callback => {
 		try {
@@ -82,6 +84,37 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 			console.error(e);
 		}
 	});
+
+	if ( requestBody !== undefined ) {
+		let sectionsParam: JSONValueType = undefined;
+		if ( requestBody instanceof FormData || requestBody instanceof URLSearchParams ) {
+			if ( requestBody.has('sections') ) {
+				sectionsParam = requestBody.get('sections').toString();
+			}
+		} else {
+			sectionsParam = requestBody.sections;
+		}
+		if ( typeof sectionsParam === 'string' || <JSONValueType>sectionsParam instanceof String || Array.isArray(sectionsParam) ) {
+			const allSections: string[] = [];
+			if ( Array.isArray(sectionsParam) ) {
+				allSections.push( ...(sectionsParam as string[]) );
+			} else {
+				allSections.push( ...((sectionsParam as string).split(',')) ); 
+			}
+			if ( allSections.length > 5 ) {
+				redundandSections.push( ...allSections.slice(5) );
+				const newSectionsParam = allSections.slice(0, 5).join(',');
+				if ( requestBody instanceof FormData || requestBody instanceof URLSearchParams ) {
+					requestBody.set('sections', newSectionsParam);
+				} else {
+					requestBody.sections = newSectionsParam;
+				}
+			}
+		} else if ( sectionsParam !== undefined && sectionsParam !== null ) {
+			console.error(`Liquid Ajax Cart: "sections" parameter in a Cart Ajax API request must be a string or an array. Now it is ${ sectionsParam }`);
+		}
+	}
+
 
 	if ( 'lastComplete' in options ) {
 		resultSubscribers.push( options.lastComplete );
@@ -119,26 +152,14 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 
 		requestState.responseData = data;
 
-		if ( REQUEST_ADD !== requestType || !(requestState.responseData.ok)) {
+		if (( REQUEST_ADD !== requestType && redundandSections.length === 0 ) || !(requestState.responseData.ok)) {
 			return requestState;
 		}
 
-		// if requestType is REQUEST_ADD lets call 'update' also to get cart json
-		// for state and all the subscribers
-		return fetch ( getEndpoint( REQUEST_UPDATE ), {
-			method: 'POST',
-			headers: {
-		    	'Content-Type': 'application/json'
-		  	}
-		}).then( response => response.json().then( responseBody => {
-				requestState.extraResponseData = {
-					ok: response.ok,
-					status: response.status,
-					body: responseBody
-				};
-				return requestState;
-			})
-		);
+		return extraRequest( redundandSections ).then( extraResponseData => {
+			requestState.extraResponseData = extraResponseData;
+			return requestState;
+		})
 
 	}).catch( error => {
 		console.error('Liquid Ajax Cart: Error while performing cart Ajax request')
@@ -155,6 +176,40 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 			}
 		})
 	});
+}
+
+function extraRequest ( sections: string[] = [] ): Promise<{ ok:boolean, status:number, body:JSONObjectType }> {
+	const requestBody: JSONObjectType = {};
+	if ( sections.length > 0 ) {
+		requestBody.sections = sections.slice(0, 5).join(',');
+	}
+	let result = undefined;
+	return fetch( getEndpoint( REQUEST_UPDATE ), {
+		method: 'POST',
+		headers: {
+	    	'Content-Type': 'application/json'
+	  	},
+	  	body: JSON.stringify(requestBody)
+	}).then( response => response.json().then( responseBody => {
+		const data = {
+			ok: response.ok,
+			status: response.status,
+			body: responseBody
+		};
+		if ( sections.length < 6 ) {
+			return data;
+		}
+
+		return extraRequest( sections.slice(5) ).then( addData => {
+			if ( addData.ok && addData.body?.sections && typeof addData.body.sections === 'object' ) {
+				if ( !('sections' in data.body) ) {
+					data.body.sections = {};
+				}
+				data.body.sections = { ...data.body.sections, ...addData.body.sections }
+			}
+			return data;
+		})
+	}));
 }
 
 

@@ -153,7 +153,7 @@ const changeRequestHandler = ( requestState: RequestStateType, subscribeToResult
 				}
 			}
 
-			if ( errorContainers.length > 0 ) {
+			if ( errorContainers && errorContainers.length > 0 ) {
 				errorContainers.forEach( element => {
 					element.innerHTML = messageBuilder([ errorMessage ]);
 				});
