@@ -8,8 +8,8 @@ The attribute supports formatters and there is the `money_with_currency` formatt
 
 ```javascript
 return Intl.NumberFormat(window.Shopify.locale, { 
-	style: 'currency',
-	currency: state.cart.currency
+  style: 'currency',
+  currency: state.cart.currency
 }).format(value);
 ```
 

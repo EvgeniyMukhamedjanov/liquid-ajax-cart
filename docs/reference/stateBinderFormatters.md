@@ -30,6 +30,8 @@ For example, if you use the `option_selection.js` Shopify asset and its `Shopify
 </script>
 
 <!-- Applying the formatter -->
-<span data-ajax-cart-bind-state="cart.total_price | my_formatter">{{ cart.total_price | money_with_currency }}</span>
+<span data-ajax-cart-bind-state="cart.total_price | my_formatter">
+	{{ cart.total_price | money_with_currency }}
+</span>
 ```
 {% endraw %}

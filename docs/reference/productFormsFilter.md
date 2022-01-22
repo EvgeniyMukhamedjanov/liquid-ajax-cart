@@ -8,7 +8,9 @@ But, for example, if you want to ajaxify only product forms with the `data-my-pr
 <script type="module">
   import { configureCart } from {% endraw %}{% include code/last-release-file-name.html asset_url=true %}{% raw %};
 
-  configureCart('productFormsFilter', formNode => formNode.hasAttribute('data-my-product-form'));
+  configureCart('productFormsFilter', formNode => { 
+    return formNode.hasAttribute('data-my-product-form') 
+  });
 </script>
 ```
 {% endraw %}

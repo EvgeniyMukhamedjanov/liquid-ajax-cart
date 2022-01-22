@@ -73,7 +73,7 @@ title: Releases
 
 {%- if file_version == '1.6.0' -%}
 * The `data-ajax-cart-quantity-input` supports line item's index now.
-* The `data-ajax-cart-messages="{% raw %}{{ item.key }}{% endraw %}"` shows messages even if the request resulted with a message was called with the `line` parameter, not `id`.
+* The `data-ajax-cart-messages` attribute with an `item.key` parameter shows messages even if the request resulted with a message was called with the `line` parameter, not `id`.
 * Liquid Ajax Cart update cart sections and the State when a window gets focus. 
 * The `configure` function is removed.
 * The `configureCart` function is added.

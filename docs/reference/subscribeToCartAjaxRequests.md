@@ -16,7 +16,14 @@ Two parameters will be passed to the callback function:
       "info": {…}
     }
     ```
-    You can mutate the `requestBody` object and the request will be run with the updated parameters.
+    You can mutate the `requestBody` and the `info` objects as they are references to the objects that will be used in the request. But if you assign a new object to them it will not work:
+    ```javascript
+    // Correct:
+    info.my_parameter = 'value';
+
+    // Wrong:
+    info = { my_parameter: 'value' }
+    ```
 
 2. **`subscribeToResult`** — a function that adds your another callback to the list of functions that will be called after the current request is performed. Takes the result-callback as the only parameter:
     ```javascript

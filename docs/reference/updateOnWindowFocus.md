@@ -4,9 +4,9 @@ Liquid Ajax Cart makes a Cart Ajax API request each time when the browser tab lo
 
 It is necessary because a user can open two browser tabs with the same Shopify store, adds a product to the cart in the second tab and then goes back to the first one. The first tab "doesn't know" about the new product in the cart but once the tab gets focus it will get updated.
 
-You might want to turn off this functionality during the development process because when you switch from DevTools to a page content and back the `window` object will get and lose focus all the time and cart sections will be updating constantly. Use the `updateOnWindowFocus` configuration parameter to turn this functionality off.
+You might want to disable this functionality during the development process because when you switch from DevTools to a page content and back the `window` object will get and lose focus all the time and cart sections will be updating constantly. Use the `updateOnWindowFocus` configuration parameter to turn this functionality off.
 
-Using the `data-ajax-cart-configuration` attribute:
+Disable using the `data-ajax-cart-configuration` attribute:
 {% raw %}
 ```html
 {% comment %} Somewhere in layout/theme.liquid {% endcomment %}
@@ -19,7 +19,7 @@ Using the `data-ajax-cart-configuration` attribute:
 ```
 {% endraw %}
 
-Using the `configureCart` function:
+Disable using the `configureCart` function:
 {% raw %}
 ```html
 <script type="module">

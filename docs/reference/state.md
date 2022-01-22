@@ -3,9 +3,9 @@ State is a Javascript object where Liquid Ajax Cart keeps the information relate
 
 {% include code/state.html %}
 
-State gets updated after each [Cart Ajax API request](/reference/requests/) due to subscription to them using the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/) function.
+State gets updated after each [Cart Ajax API request](/reference/requests/).
 
-To make sure that State is up to date, always use the functions from the [Cart Ajax API requests](/reference/requests/) reference instead of direct Cart API calls.
+Always use the functions from the [Cart Ajax API requests](/reference/requests/) reference instead of direct Cart API calls and Liquid Ajax Cart will make sure that the State is up to date.
 
 ## Properties
 

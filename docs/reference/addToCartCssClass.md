@@ -4,7 +4,7 @@ The `addToCartCssClass` configuration parameter lets you specify a CSS class tha
 
 The usecase — opening a cart drawer after a user clicks an "Add to cart" button.
 
-Using the `data-ajax-cart-configuration` attribute:
+Setting up using the `data-ajax-cart-configuration` attribute:
 {% raw %}
 ```html
 {% comment %} Somewhere in layout/theme.liquid {% endcomment %}
@@ -17,7 +17,7 @@ Using the `data-ajax-cart-configuration` attribute:
 ```
 {% endraw %}
 
-Using the `configureCart` function:
+Setting up using the `configureCart` function:
 {% raw %}
 ```html
 <script type="module">
@@ -28,11 +28,13 @@ Using the `configureCart` function:
 ```
 {% endraw %}
 
-You can also specify the time in milliseconds after which the class should be removed from the `body` tag.
+### Removing the class after a while
+
+You can specify the time in milliseconds after which the class should be removed from the `body` tag.
 
 The usecase — opening a mini-cart popup for 3 seconds.
 
-Using the `data-ajax-cart-configuration` attribute:
+Setting up using the `data-ajax-cart-configuration` attribute:
 {% raw %}
 ```html
 {% comment %} Somewhere in layout/theme.liquid {% endcomment %}
@@ -45,7 +47,7 @@ Using the `data-ajax-cart-configuration` attribute:
 ```
 {% endraw %}
 
-Using the `configureCart` function:
+Setting up using the `configureCart` function:
 {% raw %}
 ```html
 <script type="module">
