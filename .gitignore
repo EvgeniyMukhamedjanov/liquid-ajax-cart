@@ -4,6 +4,7 @@
 
 /node_modules
 /config.yml
+/notes.txt
 
 # ignore packaged files
 *.7z

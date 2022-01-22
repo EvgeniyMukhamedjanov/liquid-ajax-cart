@@ -10,5 +10,11 @@ even if Liquid Ajax Cart is not loaded: -->
 <div data-ajax-cart-bind-state="cart.item_count" >
   {{ cart.item_count }}
 </div>
+
+<!-- Use the "money_with_currency" formatter
+to show money related values -->
+<div data-ajax-cart-bind-state="cart.total_price | money_with_currency">
+  {{ cart.total_price | money_with_currency }}
+</div>
 ```
 {% endraw %}

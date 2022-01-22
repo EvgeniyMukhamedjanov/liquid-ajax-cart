@@ -110,7 +110,7 @@ Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute
 </div>
 
 <div markdown="1" class="code-side-note" style="top: 716px;">
-<h5>Buttons <span class="badge badge-warning">Changed in 1.7.0</span></h5>
+##### Buttons
 
 Use links to {% raw %}`{{ routes.cart_change_url }}`{% endraw %} for "Plus", "Minus" and "Remove" buttons. Add the [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) to ajaxify them.
 </div>
@@ -122,7 +122,7 @@ Add the [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-inp
 </div>
   
 <div markdown="1" class="code-side-note" style="top: 422px;">
-<h5>Property inputs <span class="badge badge-success">New in 1.7.0</span></h5>
+##### Property inputs
 
 Add the [`data-ajax-cart-property-input`](/reference/data-ajax-cart-property-input/) attribute to a line item property input to ajaxify it. The attribute also supports checkboxes, radio buttons, `select` and `textarea` tags.
 </div>
@@ -306,6 +306,60 @@ If you want the button to only add or only remove the CSS class — specify the 
   Close cart
 </button>
 ```
+
+</div>
+</div>
+
+---
+
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
+<h3>Show a cart section after adding a product to the cart <span class="badge badge-success">New in 1.8.0</span></h3>
+
+Write some CSS to show your cart section if a specific `body` CSS class exists.
+
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+{% raw %}
+```html
+<!-- Floating cart -->
+<div class="my-floating-cart"> {% section 'my-cart' %} </div>
+
+<style>
+  .my-floating-cart { display: none; }
+
+  /* Show the floating cart if the 'js-my-cart-open' CSS class exists */
+  .js-my-cart-open .my-floating-cart { display: block; }
+</style>
+```
+{% endraw %}
+
+</div>
+</div>
+
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
+Use the [`addToCartCssClass`](/reference/addToCartCssClass/) configuration parameter to specify the CSS class that should be attached to the `body` tag after successful adding a product to the cart.
+
+The parameter also lets you define the time after which the class should be removed.
+
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+{% raw %}
+```html
+{% comment %} Somewhere in layout/theme.liquid {% endcomment %}
+
+<script type="application/json" data-ajax-cart-configuration >
+  {
+    "addToCartCssClass": "js-my-cart-open"
+  }
+</script>
+```
+{% endraw %}
 
 </div>
 </div>

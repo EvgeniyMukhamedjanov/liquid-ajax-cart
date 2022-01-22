@@ -59,6 +59,10 @@ if ( 'liquidAjaxCart' in window ) {
 
 ### Show a pop-up message after adding to the cart
 
+If just adding a CSS class to the `body` tag is enough for showing your pop-up — consider using the [`addToCartCssClass`](/reference/addToCartCssClass/) configuration parameter instead. 
+
+But if you need to show information about products that have been just added to the cart then take a look at the following code:
+
 ```javascript
 import { subscribeToCartAjaxRequests } from {% include code/last-release-file-name.html asset_url=true %};
 

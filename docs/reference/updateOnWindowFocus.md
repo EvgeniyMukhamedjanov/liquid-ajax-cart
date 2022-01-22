@@ -1,8 +1,10 @@
 # updateOnWindowFocus
 
-There is a chance that a user opens two browser tabs with the same Shopify store, adds a product to the cart in the first tab and then goes to the second one. To keep all [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) containers and the [State](/reference/state/) objects up to date in each tab, Liquid Ajax Cart makes a Cart Ajax API request to get the latest cart state every time when the tab's `window` object gets focus.
+Liquid Ajax Cart makes a Cart Ajax API request each time when the browser tab loses focus and gets focus back to keep [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) containers and the [State](/reference/state/) object up to date.
 
-This functionality might be annoying if you are working with the Chrome DevTools along with a page's content. In this case the `window` object will get and lose focus all the time and cart sections will be updating constantly. Use the `updateOnWindowFocus` configuration parameter to switch this functionality off.
+It is necessary because a user can open two browser tabs with the same Shopify store, adds a product to the cart in the second tab and then goes back to the first one. The first tab "doesn't know" about the new product in the cart but once the tab gets focus it will get updated.
+
+You might want to turn off this functionality during the development process because when you switch from DevTools to a page content and back the `window` object will get and lose focus all the time and cart sections will be updating constantly. Use the `updateOnWindowFocus` configuration parameter to turn this functionality off.
 
 Using the `data-ajax-cart-configuration` attribute:
 {% raw %}

@@ -60,8 +60,10 @@ title: Releases
 
 {%- if file_version == '1.8.0' -%}
 * The `addToCartCssClass` configuration parameter is added.
+* The `money_with_currency` formatter is added for the `data-ajax-cart-bind-state` attribute.
 * The `stateBinderFormatters` configuration parameter is added.
 * The `subscribeToCartStateUpdate` function doesn't call the callback immediately after subscribing. Only after a next state change.
+* `subscribeToCartStateUpdate` callback functions will be called with one more parameter — `previousCart`.
 {%- endif -%}
 
 {%- if file_version == '1.7.0' -%}

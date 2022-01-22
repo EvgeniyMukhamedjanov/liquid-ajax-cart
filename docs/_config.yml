@@ -115,7 +115,7 @@ links:
           description: Performs `POST /cart/change.js` request.
         - title: cartRequestClear()
           file: cartRequestClear
-          description: Performs `POST /cart/cleear.js` request.
+          description: Performs `POST /cart/clear.js` request.
         - title: subscribeToCartAjaxRequests()
           file: subscribeToCartAjaxRequests
           description: Registers your callbacks to be called before and after each Cart Ajax API request.
@@ -130,6 +130,10 @@ links:
           description: Sets which product forms shouldn't be ajaxified.
         - file: messageBuilder
           description: Sets HTML layout and the logic for `data-ajax-cart-messages` messages.
+        - file: stateBinderFormatters
+          description: Defines custom formatters for the `data-ajax-cart-bind-state` attribute.
+        - file: addToCartCssClass
+          description: Adds a CSS class to the `body` tag after successful adding a product to the cart.
         - file: updateOnWindowFocus
           description: Toggles the functionality that updates cart sections and the State when the `window` loses the focus and gets the focus again.
         - file: lineItemQuantityErrorText
