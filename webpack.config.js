@@ -12,6 +12,11 @@ module.exports = (env, argv) => {
     if ( env.last ) {
       folder = 'docs/releases/last';
     }
+
+    if ( env.npm ) {
+      folder = '_npm';
+      filename = 'liquid-ajax-cart.js'
+    }
   }
 
   return {

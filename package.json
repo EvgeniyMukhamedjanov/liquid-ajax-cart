@@ -1,17 +1,28 @@
 {
   "name": "liquid-ajax-cart",
   "version": "1.8.0",
-  "description": "",
+  "description": "Ajaxifies Shopify cart sections and product forms like a boss",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack-watch": "webpack --mode=development --watch",
     "themekit-watch": "shopify-themekit open && shopify-themekit watch",
     "watch": "npm-run-all --parallel themekit-watch webpack-watch",
-    "build": "rimraf docs/releases/last && webpack --mode=production && webpack --mode=production --env last=true"
+    "build": "rimraf docs/releases/last && webpack --mode=production && webpack --mode=production --env last=true  && webpack --mode=production --env npm=true"
   },
-  "author": "Evgeniy Mukhamedjanov",
+  "keywords": [
+    "shopify",
+    "liquid",
+    "ajax",
+    "cart"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart.git"
+  },
+  "author": "Evgeniy Mukhamedjanov (https://github.com/EvgeniyMukhamedjanov)",
   "license": "ISC",
+  "homepage": "https://liquid-ajax-cart.js.org",
   "devDependencies": {
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
