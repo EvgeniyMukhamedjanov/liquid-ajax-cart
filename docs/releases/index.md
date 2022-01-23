@@ -36,6 +36,7 @@ title: Releases
 	<div class="release__heading">
 		<h2 class="release__version">v{{ file_version }}</h2>
 		<div class="release__date">
+			{%- if file_version == '1.8.0' -%}Released on 2022, Jan 22{%- endif -%}
 			{%- if file_version == '1.7.0' -%}Released on 2022, Jan 3{%- endif -%}
 			{%- if file_version == '1.6.0' -%}Released on 2021, Nov 16{%- endif -%}
 			{%- if file_version == '1.5.0' -%}Released on 2021, Nov 2{%- endif -%}

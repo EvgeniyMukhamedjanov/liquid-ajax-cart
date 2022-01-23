@@ -30,8 +30,8 @@ The object looks like this:
 * `responseData` — the response on the request. `ok` is `true` if the response was successful (status in the range 200-299).
 * for `/cart/add.js` requests Liquid Ajax Cart performs an extra `POST` request to the `/cart/update.js` endpoint to get the updated cart state. `extraResponseData` object contains the response of the extra request.
 * Sometimes Liquid Ajax Cart performs an additional `POST /cart/update.js` request and saves the response in the `extraResponseData` object. The additional request happens if:
-  * there were a `/cart/add.js` request that doesn't return the cart JSON-data — the additional `/cart/update.js` request will bring the updates cart state,
-  * there were a request with more than 5 sections — the additional `/cart/update.js` request will bring the rest sections HTML.
+  * there were a `/cart/add.js` request that doesn't return the cart JSON-data — the additional `/cart/update.js` request will bring the updated cart state,
+  * there were a request with more than 5 sections — the additional `/cart/update.js` request will bring the rest sections' HTML.
 * If the request couldn't be performed and response wasn't received because, for example, internet was disconnected — the `responseData` will not exist but `fetchError` will be there instead:
   
   ```json
