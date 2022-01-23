@@ -14,7 +14,7 @@ module.exports = (env, argv) => {
     }
 
     if ( env.npm ) {
-      folder = '_npm';
+      folder = '.';
       filename = 'liquid-ajax-cart.js'
     }
   }

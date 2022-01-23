@@ -6,6 +6,7 @@
 /_npm
 /config.yml
 /notes.txt
+/liquid-ajax-cart.js
 
 # ignore packaged files
 *.7z

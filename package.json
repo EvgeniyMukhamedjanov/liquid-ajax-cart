@@ -2,7 +2,9 @@
   "name": "liquid-ajax-cart",
   "version": "1.8.0",
   "description": "Ajaxifies Shopify cart sections and product forms like a boss",
-  "private": true,
+  "private": false,
+  "browser": "./liquid-ajax-cart.js",
+  "files": ["/liquid-ajax-cart.js"],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack-watch": "webpack --mode=development --watch",
