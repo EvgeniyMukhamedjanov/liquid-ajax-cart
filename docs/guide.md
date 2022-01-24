@@ -71,9 +71,9 @@ Provide the initial cart state in the JSON format within a script tag with the [
 
 </div>
 <div class="guide-row__col" markdown="1">
-<h5>Via npm <span class="badge badge-secondary">soon</span></h5>
+<h5>Via npm <span class="badge badge-success">new</span></h5>
  
-<div class="soon-blurred" markdown="1">
+<div markdown="1">
 ```
 npm install liquid-ajax-cart
 ```
@@ -84,13 +84,17 @@ import 'liquid-ajax-cart';
  
 {% raw %}
 ```html
+{% comment %} Somewhere in layout/theme.liquid {% endcomment %}
+
 <script type="application/json" data-ajax-cart-initial-state >
   {{ cart | json }}
 </script>
 ```
 {% endraw %}
 
-Import the module and provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/reference/data-ajax-cart-initial-state/) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
+Import the `liquid-ajax-cart` package to a JavaScript module that is going to be processed by Webpack or any other bundler.
+
+Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/reference/data-ajax-cart-initial-state/) attribute. If not — Liquid Ajax Cart will make another AJAX request to get the cart state.
 </div>
  
 </div>
