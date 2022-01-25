@@ -84,7 +84,7 @@
                                 href="{{ link.url }}"
                                 class="site-footer__link"
                             >
-                                {% include svg-icon.html icon=link.icon %}
+                                {% if link.icon != blank %}{% include svg-icon.html icon=link.icon %}{% endif %}
                                 <span>{{ link.title }}</span>
                             </a>
                         </li>
