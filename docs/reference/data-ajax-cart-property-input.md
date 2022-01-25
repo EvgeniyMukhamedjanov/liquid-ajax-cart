@@ -6,7 +6,7 @@ The request will be sent on input's `change` event and if a user presses the `En
 
 If a user presses the `Esc` key within the input, its value will be reset to the current item's quantity according to the [State](/reference/state/) object.
 
-The `data-ajax-cart-property-input` input fields become `readonly` (or `disabled` for checkboxes, radio buttons and `select` elements) when there is a Cart Ajax API request in progress (if the [State](/reference/state/)’s `status.requestInProgress` property is `true`);
+The `data-ajax-cart-property-input` input fields become `disabled` when there is a Cart Ajax API request in progress (if the [State](/reference/state/)’s `status.requestInProgress` property is `true`);
 
 The `data-ajax-cart-property-input` supports textual input fields, checkboxes, radio buttons, `select` and `textarea` elements.
 

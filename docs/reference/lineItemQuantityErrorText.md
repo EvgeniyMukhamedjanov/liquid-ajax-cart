@@ -1,6 +1,6 @@
 # lineItemQuantityErrorText
 
-The `lineItemQuantityErrorText` configuration parameter sets the error message text that appears in {% raw %}[`data-ajax-cart-messages="{{ line_item.key }}"`](/reference/data-ajax-cart-messages/){% endraw %} containers when a user tries to set a cart item's quantity higher than the available quantity of the product.
+The `lineItemQuantityErrorText` configuration parameter sets the error message text that appears in [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) containers with the {% raw %}`{{ line_item.key }}`{% endraw %} value when a user tries to set a cart item's quantity higher than the available quantity of the product.
 
 By default the text is "*You can't add more of this item to your cart*".
 
