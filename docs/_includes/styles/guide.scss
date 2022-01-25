@@ -96,15 +96,15 @@
 }
 
 @media (min-width: 992px) {
-  .guide-row > *:first-child {
-    flex: 0 0 41.666667%;
-    max-width: 41.666667%;
-  }
-
   .guide-row > *:last-child {
     flex: 0 0 58.333333%;
     max-width: 58.333333%;
     margin-top: 0;
+  }
+
+  .guide-row > *:first-child {
+    flex: 0 0 41.666667%;
+    max-width: 41.666667%;
   }
 
   .guide-row--50 > *:first-child,
