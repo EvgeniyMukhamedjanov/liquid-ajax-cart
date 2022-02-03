@@ -199,6 +199,30 @@ body.js-ajax-cart-request-in-progress .my-cart__items {
 </div>
 </div>
 
+<div class="{{ row_classes }}">
+<div class="{{ left_column_classes }}" markdown="1">
+
+<h5>JavaScript callback <span class="badge badge-success">New in 1.8.2</span></h5>
+
+If you want to run your JavaScript code after a Shopify Ajax cart section is updated — use the [`subscribeToCartSectionsUpdate`](/reference/subscribeToCartSectionsUpdate/) function.
+ 
+</div>
+<div class="{{ right_column_classes }}" markdown="1">
+
+```html
+<script type="module">
+  import { subscribeToCartSectionsUpdate } from {% include code/last-release-file-name.html asset_url=true %}
+
+  subscribeToCartSectionsUpdate( sections => {
+    console.log('Sections are updated: ', sections);
+    // Place your code here
+  });
+</script>
+```
+
+</div>
+</div>
+
 ---
 
 <div class="{{ row_classes }}">
@@ -319,7 +343,7 @@ If you want the button to only add or only remove the CSS class — specify the 
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-<h3>Show a cart section after adding a product to the cart <span class="badge badge-success">New in 1.8.0</span></h3>
+### Show a cart section after adding a product to the cart
 
 Write some CSS to show your cart section if a specific `body` CSS class exists.
 
@@ -477,7 +501,7 @@ Use these function instead of direct Cart API calls and Liquid Ajax Cart will ke
 
 Use the [`getCartState`](/reference/getCartState/) function to get the current state.
 
-If you want to run your Javascript code every time when the state is changed — use the [`subscribeToCartStateUpdate`](/reference/subscribeToCartStateUpdate/) function to subscribe to state updates.
+If you want to run your JavaScript code every time when the state is changed — use the [`subscribeToCartStateUpdate`](/reference/subscribeToCartStateUpdate/) function to subscribe to state updates.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
