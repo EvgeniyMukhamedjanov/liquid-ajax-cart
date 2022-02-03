@@ -4,22 +4,6 @@
     border-top: 1px solid rgba(0, 0, 0, .1);
 }
 
-.site-footer__social-links {
-    .github-btn {
-        border: 0;
-        overflow: hidden
-    }
-
-    .twitter-follow-button {
-        width: 225px!important
-    }
-
-    .twitter-share-button {
-        width: 98px!important
-    }
-
-}
-
 .site-footer__links {
     padding-left: 0;
     list-style: none;
@@ -28,18 +12,9 @@
     .list-inline-item {
         display: inline-block;
 
-        &:not(:last-child)::after {
-            content: '\00b7';
-            padding-left: 0.5rem;
+        &:not(:last-child) {
+            margin-right: 1rem;
         }
-    }
-}
-
-.site-footer__link {
-    border-bottom: 0 !important;
-
-    span {
-        border-bottom: 1px dashed currentColor;
     }
 }
 

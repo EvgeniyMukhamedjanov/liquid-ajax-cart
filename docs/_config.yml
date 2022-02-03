@@ -37,6 +37,8 @@ links:
       icon: github
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
+    - title: Contact form
+      url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions/new
   reference:
     - title: Ajaxified sections
       file: sections

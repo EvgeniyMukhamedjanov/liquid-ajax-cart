@@ -45,7 +45,7 @@ The most popular usecase is "Plus", "Minus" and "Remove" buttons for a cart line
 ```
 {% endraw %}
 
-If you can't use the `a` tag with the `href` parameter, Liquid Ajax Cart still offers the same functionality for any HTML element. Add the `data-ajax-cart-request-button` attribute to an HTML element, a `routes.cart_*_url` route as a value:
+If you can't use the `a` tag with the `href` parameter, Liquid Ajax Cart still offers the same functionality for any HTML element: add the `data-ajax-cart-request-button` attribute to an HTML element and provide a `routes.cart_*_url` route as an attribute's value:
 
 {% raw %}
 ```html
