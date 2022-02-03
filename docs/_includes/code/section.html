@@ -67,6 +67,10 @@
       {{ cart.note }}
     </textarea>
     
+    <!-- data-ajax-cart-static-element keeps the container unchanged
+    when the cart and the surrounding HTML get changed -->
+    <div data-ajax-cart-static-element class="my-cart__app-container"></div>
+
     <button type="submit" name="checkout">
       Checkout — {{ cart.total_price | money_with_currency }}
     </button> 

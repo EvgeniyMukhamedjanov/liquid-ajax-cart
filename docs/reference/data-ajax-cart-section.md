@@ -32,6 +32,8 @@ Apply the `data-ajax-cart-section` to the container that you want to be updatabl
 
 In the above example the `.my-cart__wrapper` container will be replaced with the new one after the Shopify cart is changed. 
 
+If want to have an immutable HTML element within a `data-ajax-cart-section` container — apply the [data-ajax-cart-static-element](/reference/data-ajax-cart-static-element/) to it.
+
 ### Make multiple containers of a section updatable
 
 If you want multiple containers to be updatable — apply the `data-ajax-cart-section` to them.
@@ -43,13 +45,16 @@ If you want multiple containers to be updatable — apply the `data-ajax-cart-se
 <div class="my-cart">
   <div class="my-cart__header">Cart</div>
   <div class="my-cart__items" data-ajax-cart-section >
-    <!-- cart items -->
+    <!-- Cart items container is updatable
+    because of the data-ajax-cart-section attribute -->
   </div>
-  <div class="my-cart__third-party-app-container">
-    <!-- Container for an app that must be immutable -->
+  <div class="my-cart__immutable-content">
+    <!-- Another content that is not updatable 
+    because there is no parent data-ajax-cart-section -->
   </div>
   <div class="my-cart__footer" data-ajax-cart-section >
-    <!-- cart footer -->
+    <!-- Cart footer container is updatable 
+    because of the data-ajax-cart-section attribute -->
   </div>
 </div> 
 
@@ -67,7 +72,7 @@ If you want multiple containers to be updatable — apply the `data-ajax-cart-se
 
 In the above example the `.my-cart__wrapper` and `.my-cart__footer` containers will be replaced with the new ones after the Shopify cart is changed. 
 
-It is useful when you have HTML nodes that must be immutable and they are placed between updatable containers.
+It is useful when you have HTML nodes that must be immutable and they are placed between updatable containers. If you want to have an immutable node right within a `data-ajax-cart-section` — use the [data-ajax-cart-static-element](/reference/data-ajax-cart-static-element/) attribute with it.
 
 If you have multiple `data-ajax-cart-section` containers, make sure that your section always renders the constant number of the `data-ajax-cart-section` containers in the same order. If the amount varies, it is considered as an exception situation and the section's HTML will be replaced completely with the new HTML to try to resolve it. 
 
@@ -79,10 +84,10 @@ If you have multiple `data-ajax-cart-section` containers, make sure that your se
 <div class="my-cart">
   <div class="my-cart__header">Cart</div>
   <div class="my-cart__items" data-ajax-cart-section >
-    <!-- cart items -->
+    <!-- Cart items -->
   </div>
-  <div class="my-cart__third-party-app-container">
-    <!-- Container for an app that must not be updated -->
+  <div class="my-cart__immutable-content">
+    <!-- Another content that is not updatable -->
   </div>
   {% if cart.item_count > 0 %}
 
@@ -91,7 +96,7 @@ If you have multiple `data-ajax-cart-section` containers, make sure that your se
       must not depend on any condition
     {% endcomment %}
     <div class="my-cart__footer" data-ajax-cart-section >
-      <!-- cart footer -->
+      <!-- Cart footer -->
     </div>
   {% endif %}
 </div> 
@@ -116,10 +121,10 @@ If you have multiple `data-ajax-cart-section` containers, make sure that your se
 <div class="my-cart">
   <div class="my-cart__header">Cart</div>
   <div class="my-cart__items" data-ajax-cart-section >
-    <!-- cart items -->
+    <!-- Cart items -->
   </div>
-  <div class="my-cart__third-party-app-container">
-    <!-- Container for an app that must not be updated -->
+  <div class="my-cart__immutable-content">
+    <!-- Another content that is not updatable -->
   </div>
   <div class="my-cart__footer" data-ajax-cart-section >
     {% if cart.item_count > 0 %}

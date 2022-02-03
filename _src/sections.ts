@@ -3,6 +3,10 @@ import { RequestStateType, RequestResultSubscriberType, JSONValueType, UpdatedSe
 import { subscribeToCartAjaxRequests, cartRequestUpdate, REQUEST_ADD } from './ajax-api';
 import { settings } from './settings';
 
+type StaticElementsListType = {
+	[elementId: string]: Array<Element>
+}
+
 type ScrollAreasListType = {
 	[scrollId: string]: Array<{ scroll: number, height: number }>
 }
@@ -12,7 +16,7 @@ const subscribers: Array<SectionsSubscriberType> = [];
 
 function cartSectionsInit() {
 	subscribeToCartAjaxRequests (( requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType ) => {
-		const { sectionsAttribute, sectionScrollAreaAttribute } = settings.computed;
+		const { sectionsAttribute, staticElementAttribute, sectionScrollAreaAttribute } = settings.computed;
 
 		if ( requestState.requestBody !== undefined ) {
 			const sectionNames: string[] = [];
@@ -72,9 +76,9 @@ function cartSectionsInit() {
 					document.querySelectorAll( `#shopify-section-${ sectionId }` ).forEach( sectionNode => {
 
 						let newNodes: Array<Element> = []; // for subscribers
+						const noId = "__noId__"; // for memorizing scroll positions and static elements
 
 						// Memorize scroll positions
-						const noId = "__noId__";
 						const scrollAreasList: ScrollAreasListType = {};
 						sectionNode.querySelectorAll(` [${ sectionScrollAreaAttribute }] `).forEach( scrollAreaNode => {
 							let scrollId = scrollAreaNode.getAttribute( sectionScrollAreaAttribute ).toString().trim();
@@ -90,16 +94,48 @@ function cartSectionsInit() {
 							});
 						});
 
-						// Replace HTML
+						// Memorize static elements
+						const staticElementsList: StaticElementsListType = {}
+						const staticElements = sectionNode.querySelectorAll(`[${ staticElementAttribute }]`);
+						if (staticElements) {
+							staticElements.forEach(staticElement => {
+								let staticElementId = staticElement.getAttribute(staticElementAttribute).toString().trim();
+								if ( staticElementId === '' ) {
+									staticElementId = noId;
+								}
+								if (!(staticElementId in staticElementsList) ) {
+									staticElementsList[staticElementId] = [];
+								}
+								staticElementsList[staticElementId].push(staticElement);
+							})
+						}
+
+						// Replace HTML and Restore static elements
 						const sectionParts = sectionNode.querySelectorAll( `[${ sectionsAttribute }]` );
 						if ( sectionParts ) {
       						const receivedDOM = parser.parseFromString(sections[ sectionId ], "text/html");
+
+      						// Restore static elements
+      						for ( let staticElementId in staticElementsList ) {
+								receivedDOM.querySelectorAll(` [${ staticElementAttribute }="${ staticElementId.replace( noId, '' ) }"] `).forEach(( staticElement, staticElementIndex ) => {
+									if ( staticElementIndex + 1 <= staticElementsList[ staticElementId ].length ) {
+										console.log(staticElementId);
+										staticElement.before(staticElementsList[staticElementId][staticElementIndex]);
+										staticElement.parentElement.removeChild(staticElement);
+									}
+								})
+							};
+
+							// Replace old sections with new sections
       						const receivedParts = receivedDOM.querySelectorAll( `[${ sectionsAttribute }]` );
       						if ( sectionParts.length !== receivedParts.length ) {
       							console.error(`Liquid Ajax Cart: the received HTML for the "${ sectionId }" section has a different quantity of the "${ sectionsAttribute }" containers. The section will be updated completely.`);
       							const receivedSection = receivedDOM.querySelector(`#${ shopifySectionPrefix }${ sectionId }`);
 								if ( receivedSection ) {
-									sectionNode.innerHTML = receivedSection.innerHTML;
+									sectionNode.innerHTML = "";
+									while (receivedSection.childNodes.length) { 	
+										sectionNode.appendChild(receivedSection.firstChild); 
+									}
 									newNodes.push(sectionNode);
 								}
       						} else {

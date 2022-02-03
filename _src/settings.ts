@@ -39,6 +39,7 @@ const settings: SettingsType = {
 	computed: {
 		productFormsErrorsAttribute: `${ dataAttributePrefix }-form-error`,
 		sectionsAttribute: `${ dataAttributePrefix }-section`,
+		staticElementAttribute: `${ dataAttributePrefix }-static-element`,
 		binderAttribute: `${ dataAttributePrefix }-bind-state`,
 		requestButtonAttribute: `${ dataAttributePrefix }-request-button`,
 		toggleClassButtonAttribute: `${ dataAttributePrefix }-toggle-class-button`,

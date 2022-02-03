@@ -145,6 +145,12 @@ Use a container with the [`data-ajax-cart-messages`](/reference/data-ajax-cart-m
 
 If you have a scrollable area within the section, add the [`data-ajax-cart-section-scroll`](/reference/data-ajax-cart-section-scroll/) attribute to the area — Liquid Ajax Cart keeps the scroll position unchanged while updating sections' HTML.
 </div>
+
+<div markdown="1" class="code-side-note" style="top: 191px; display: none;">
+<h5>JavaScript callback <span class="badge badge-success">New in 1.9.0</span></h5>
+
+If want to have an immutable HTML element, for example for a third-party app — add the [`data-ajax-cart-static-element`](/reference/data-ajax-cart-static-element/) to this element.
+</div>
  
 </div>
 <div class="{{ right_column_classes }} code-with-notes" markdown="1">
@@ -202,7 +208,7 @@ body.js-ajax-cart-request-in-progress .my-cart__items {
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-<h5>JavaScript callback <span class="badge badge-success">New in 1.8.2</span></h5>
+##### JavaScript callback
 
 If you want to run your JavaScript code after a Shopify Ajax cart section is updated — use the [`subscribeToCartSectionsUpdate`](/reference/subscribeToCartSectionsUpdate/) function.
  
