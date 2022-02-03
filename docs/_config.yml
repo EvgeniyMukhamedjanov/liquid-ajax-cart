@@ -48,7 +48,8 @@ links:
           description: Defines an HTML container that will be re-rendered each time when the cart is changed.
         - file: data-ajax-cart-section-scroll
           description: Makes sure that the scroll position of a scrollable area within a `data-ajax-cart-section` container will not be reset to top when HTML is updated.
-        - file: subscribeToCartSectionsUpdate
+        - title: subscribeToCartSectionsUpdate()
+          file: subscribeToCartSectionsUpdate
           description: Registers your callbacks to be called after sections HTML is updated.
     - title: Product Forms
       file: product-forms
