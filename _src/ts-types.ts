@@ -89,6 +89,12 @@ export type MessageType = {
 	requestState: RequestStateType
 }
 
+export type UpdatedSectionType = {
+	id: string,
+	elements: Array<Element>
+}
+export type SectionsSubscriberType = (sections: Array<UpdatedSectionType>) => void;
+
 declare global {
     interface Window { 
     	liquidAjaxCart: {
@@ -100,7 +106,8 @@ declare global {
 			cartRequestClear: ( body: RequestBodyType, options: CartRequestOptionsType | undefined ) => void, 
 			subscribeToCartAjaxRequests: ( callback: RequestCallbackType ) => void,
 			getCartState: () => AppStateType,
-			subscribeToCartStateUpdate: ( callback: StateSubscriberType ) => void
+			subscribeToCartStateUpdate: ( callback: StateSubscriberType ) => void,
+			subscribeToCartSectionsUpdate: ( callback: SectionsSubscriberType ) => void,
     	}
     	Shopify: JSONObjectType 
     }

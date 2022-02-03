@@ -1,4 +1,4 @@
-import { RequestStateType, RequestResultSubscriberType, JSONValueType } from './ts-types';
+import { RequestStateType, RequestResultSubscriberType, JSONValueType, UpdatedSectionType, SectionsSubscriberType } from './ts-types';
 
 import { subscribeToCartAjaxRequests, cartRequestUpdate, REQUEST_ADD } from './ajax-api';
 import { settings } from './settings';
@@ -8,6 +8,7 @@ type ScrollAreasListType = {
 }
 
 const shopifySectionPrefix = 'shopify-section-';
+const subscribers: Array<SectionsSubscriberType> = [];
 
 function cartSectionsInit() {
 	subscribeToCartAjaxRequests (( requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType ) => {
@@ -55,6 +56,7 @@ function cartSectionsInit() {
 		subscribeToResult(( requestState: RequestStateType ) => {
 			const { sectionsAttribute, sectionScrollAreaAttribute } = settings.computed;
 			const parser = new DOMParser();
+			const updatedSections: Array<UpdatedSectionType> = []; // for subscribers
 
 			if ( requestState.responseData?.ok && 'sections' in requestState.responseData.body ) {
 				let sections = requestState.responseData.body.sections as ({ [key: string]: string });
@@ -68,6 +70,8 @@ function cartSectionsInit() {
 					}
 
 					document.querySelectorAll( `#shopify-section-${ sectionId }` ).forEach( sectionNode => {
+
+						let newNodes: Array<Element> = []; // for subscribers
 
 						// Memorize scroll positions
 						const noId = "__noId__";
@@ -96,11 +100,13 @@ function cartSectionsInit() {
       							const receivedSection = receivedDOM.querySelector(`#${ shopifySectionPrefix }${ sectionId }`);
 								if ( receivedSection ) {
 									sectionNode.innerHTML = receivedSection.innerHTML;
+									newNodes.push(sectionNode);
 								}
       						} else {
       							sectionParts.forEach(( sectionPartsItem, sectionPartsItemIndex ) => {
-      								sectionPartsItem.before( receivedParts[sectionPartsItemIndex] );
+      								sectionPartsItem.before(receivedParts[sectionPartsItemIndex]);
 									sectionPartsItem.parentElement.removeChild(sectionPartsItem);
+									newNodes.push(receivedParts[sectionPartsItemIndex]);
       							});
       						}
 						}
@@ -115,11 +121,33 @@ function cartSectionsInit() {
 								}
 							})
 						}
+
+						if (newNodes.length > 0) {
+							updatedSections.push({
+								id: sectionId,
+								elements: newNodes
+							});
+						}
 					})
 				}
+			}
+
+			if (updatedSections.length > 0 && subscribers.length > 0) {
+				subscribers.forEach(callback => {
+					try {
+						callback(updatedSections);
+					} catch (e) {
+						console.error('Liquid Ajax Cart: Error during a call of a sections update subscriber');
+						console.error(e);
+					}
+				});
 			}
 		})
 	})
 }
 
-export { cartSectionsInit };
+function subscribeToCartSectionsUpdate(callback: SectionsSubscriberType) {
+	subscribers.push(callback);
+}
+
+export { cartSectionsInit, subscribeToCartSectionsUpdate };

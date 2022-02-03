@@ -2,14 +2,14 @@ import { cartSettingsInit, configureCart, settings } from './settings';
 import { cartRequestGet, cartRequestAdd, cartRequestChange, cartRequestUpdate, cartRequestClear, subscribeToCartAjaxRequests } from './ajax-api';
 import { getCartState, cartStateInit, subscribeToCartStateUpdate } from './state';
 import { cartDomBinderInit } from './dom-binder';
-import { cartSectionsInit } from './sections';
+import { cartSectionsInit, subscribeToCartSectionsUpdate } from './sections';
 import { cartControlsInit } from './controls';
 import { cartProductFormsInit } from './product-forms';
 import { cartMessagesInit } from './messages';
 import { cartGlobalClassesInit } from './global-classes';
 
 if (!( 'liquidAjaxCart' in window )) {
-	//todo: add test if browser supports FormData.set, fetch, Promise, WeakMap, template string etc.
+	//todo: add test if browser supports FormData.set, fetch, Promise, WeakMap, template string, Dom Parser etc.
 	
 	cartSettingsInit();
 	cartProductFormsInit();
@@ -40,6 +40,8 @@ if (!( 'liquidAjaxCart' in window )) {
 
 		getCartState,
 		subscribeToCartStateUpdate,
+
+		subscribeToCartSectionsUpdate
 	}
 
 	window.addEventListener('focus', () => {
@@ -61,6 +63,8 @@ const export_subscribeToCartAjaxRequests = window.liquidAjaxCart.subscribeToCart
 const export_getCartState = window.liquidAjaxCart.getCartState;
 const export_subscribeToCartStateUpdate = window.liquidAjaxCart.subscribeToCartStateUpdate;
 
+const export_subscribeToCartSectionsUpdate = window.liquidAjaxCart.subscribeToCartSectionsUpdate;
+
 export { 
 	export_configureCart as configureCart,
 
@@ -72,5 +76,7 @@ export {
 	export_subscribeToCartAjaxRequests as subscribeToCartAjaxRequests,
 
 	export_getCartState as getCartState,
-	export_subscribeToCartStateUpdate as subscribeToCartStateUpdate
+	export_subscribeToCartStateUpdate as subscribeToCartStateUpdate,
+
+	export_subscribeToCartSectionsUpdate as subscribeToCartSectionsUpdate
 }

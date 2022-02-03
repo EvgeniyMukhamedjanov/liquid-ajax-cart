@@ -10,4 +10,6 @@ If you have a scrollable area within a `data-ajax-cart-section` container, the s
 
 Since the cart sections are plain Shopify liquid theme sections, you are free to use any Liquid tags, objects and filters.
 
+If you want to run your JavaScript code after the HTML code of the `data-ajax-cart-section` sections are reloaded — use the [`subscribeToCartSectionsUpdate`](/reference/subscribeToCartSectionsUpdate/) function.
+
 {% include code/section.html %}
