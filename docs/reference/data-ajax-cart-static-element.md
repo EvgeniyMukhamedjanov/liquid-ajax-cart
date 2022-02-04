@@ -1,6 +1,6 @@
 # data-ajax-cart-static-element
 
-If want to have an immutable HTML element within a [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) container because the element's HTML must not be updated along with the parent `data-ajax-cart-section` container — add the `data-ajax-cart-static-element` to this element.
+If you want to have an immutable HTML element within a [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) container — add the `data-ajax-cart-static-element` attribute to this element. HTML of the immutable element will *not* be replaced when its section gets updated.
 
 Liquid Ajax Cart remembers all `data-ajax-cart-static-element` nodes before updating a `data-ajax-cart-section` container, then updates the `data-ajax-cart-section` container and then puts the saved `data-ajax-cart-static-element` nodes to their places back.
 

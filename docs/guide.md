@@ -147,9 +147,9 @@ If you have a scrollable area within the section, add the [`data-ajax-cart-secti
 </div>
 
 <div markdown="1" class="code-side-note" style="top: 1430px;">
-<h5>Immutable container <span class="badge badge-success">New in 1.9.0</span></h5>
+<h5>Immutable containers <span class="badge badge-success">New in 1.9.0</span></h5>
 
-If want to have an immutable HTML element, for example for a third-party app — add the [`data-ajax-cart-static-element`](/reference/data-ajax-cart-static-element/) to this element.
+If you want to have an immutable HTML element, for example for a third-party app — add the [`data-ajax-cart-static-element`](/reference/data-ajax-cart-static-element/) attribute to this element. HTML of an immutable container will *not* be replaced when its section gets updated.
 </div>
  
 </div>
@@ -236,7 +236,7 @@ If you want to run your JavaScript code after a Shopify Ajax cart section is upd
  
 ### Enhance product forms
  
-Liquid Ajax Cart ajaxifies all Shopify product forms once it is loaded. <br/> If you want to exclude some of them — use the [`productFormsFilter`](/reference/productFormsFilter/) configuration parameter.
+Liquid Ajax Cart ajaxifies all Shopify product forms. <br/> If you want to exclude some of them — use the [`productFormsFilter`](/reference/productFormsFilter/) configuration parameter.
 
 </div>
 </div>
