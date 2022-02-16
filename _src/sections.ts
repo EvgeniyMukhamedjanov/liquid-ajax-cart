@@ -119,7 +119,6 @@ function cartSectionsInit() {
       						for ( let staticElementId in staticElementsList ) {
 								receivedDOM.querySelectorAll(` [${ staticElementAttribute }="${ staticElementId.replace( noId, '' ) }"] `).forEach(( staticElement, staticElementIndex ) => {
 									if ( staticElementIndex + 1 <= staticElementsList[ staticElementId ].length ) {
-										console.log(staticElementId);
 										staticElement.before(staticElementsList[staticElementId][staticElementIndex]);
 										staticElement.parentElement.removeChild(staticElement);
 									}
