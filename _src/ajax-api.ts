@@ -1,5 +1,6 @@
 import { 
 	RequestCallbackType, 
+	QueuesCallbackType,
 	RequestStateType, 
 	CartRequestOptionsType, 
 	JSONObjectType,
@@ -17,44 +18,68 @@ type FetchPayloadType = {
 	body?: string | FormData
 }
 
+type QueueItemType = {
+	requestType: string, 
+	body: RequestBodyType, 
+	options: CartRequestOptionsType
+}
+
 const REQUEST_ADD = 'add';
 const REQUEST_CHANGE = 'change';
 const REQUEST_UPDATE = 'update';
 const REQUEST_CLEAR = 'clear';
 const REQUEST_GET = 'get';
 
-const subscribers: RequestCallbackType[] = [];
+const requestSubscribers: RequestCallbackType[] = [];
+const queuesSubscribers: QueuesCallbackType[] = [];
+const queues: QueueItemType[][] = [];
 
-function getEndpoint ( requestType: string ): string | undefined {
-	switch ( requestType ) {
-		case REQUEST_ADD:
-			return '/cart/add.js';
-			break;
-
-		case REQUEST_CHANGE:
-			return '/cart/change.js';
-			break;
-
-		case REQUEST_GET:
-			return '/cart.js';
-			break;
-
-		case REQUEST_CLEAR:
-			return '/cart/clear.js';
-			break;
-
-		case REQUEST_UPDATE:
-			return '/cart/update.js';
-			break;
-
-		default:
-			return undefined;
+function addToQueues(queueItem: QueueItemType) {
+	if ( queueItem.options?.newQueue || queues.length === 0 ) {
+		const newLength = queues.push([ queueItem ]);
+		if (newLength === 1) {
+			notifyQueuesSubscribers(true);
+			runQueues();
+		}
+		return;
 	}
-	return undefined;
+	queues[0].push(queueItem);
+	return;
 }
 
+function runQueues() {
 
-function cartRequest( requestType: string, body: RequestBodyType, options: CartRequestOptionsType ) {
+	if (queues.length === 0) { 
+		notifyQueuesSubscribers(false);
+		return; 
+	}
+
+	if (queues[0].length === 0) {
+		queues.shift();
+		runQueues();
+		return;
+	}
+
+	const { requestType, body, options } = queues[0][0];
+	cartRequest(requestType, body, options, () => {
+		queues[0].shift();
+		runQueues();
+	});
+	return;
+}
+
+function notifyQueuesSubscribers(inProgress: boolean) {
+	queuesSubscribers.forEach( callback => {
+		try {
+			callback(inProgress);
+		} catch (e) {
+			console.error('Liquid Ajax Cart: Error during queues subscriber callback in ajax-api');
+			console.error(e);
+		}
+	});
+}
+
+function cartRequest( requestType: string, body: RequestBodyType, options: CartRequestOptionsType, finalCallback: () => void | undefined = undefined ) {
 	const endpoint = getEndpoint( requestType );
 	let requestBody: RequestBodyType = undefined;
 	if ( requestType !== REQUEST_GET ) {
@@ -71,7 +96,7 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 	}
 	const redundandSections: string[] = [];
 
-	subscribers.forEach( callback => {
+	requestSubscribers.forEach( callback => {
 		try {
 			callback({
 				requestType,
@@ -84,6 +109,15 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 			console.error(e);
 		}
 	});
+
+	if ( 'lastComplete' in options ) {
+		resultSubscribers.push( options.lastComplete );
+	}
+
+	if (info.cancel) {
+		cartRequestFinally(resultSubscribers, finalCallback, requestState);
+		return;
+	}
 
 	if ( requestBody !== undefined ) {
 		let sectionsParam: JSONValueType = undefined;
@@ -113,11 +147,6 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 		} else if ( sectionsParam !== undefined && sectionsParam !== null ) {
 			console.error(`Liquid Ajax Cart: "sections" parameter in a Cart Ajax API request must be a string or an array. Now it is ${ sectionsParam }`);
 		}
-	}
-
-
-	if ( 'lastComplete' in options ) {
-		resultSubscribers.push( options.lastComplete );
 	}
 
 	const fetchPayload: FetchPayloadType = {
@@ -167,15 +196,31 @@ function cartRequest( requestType: string, body: RequestBodyType, options: CartR
 		requestState.fetchError = error;
 		// throw requestState;
 	}).finally(() => {
-		resultSubscribers.forEach( callback => {
-			try {
-				callback(requestState);
-			} catch (e) {
-				console.error('Liquid Ajax Cart: Error during Ajax request result callback in ajax-api');
-				console.error(e);
-			}
-		})
+		cartRequestFinally(resultSubscribers, finalCallback, requestState);
 	});
+}
+
+function cartRequestFinally(
+	resultSubscribers: RequestResultCallback[], 
+	finalCallback: () => void | undefined, 
+	requestState: RequestStateType
+) {
+	resultSubscribers.forEach( callback => {
+		try {
+			callback(requestState);
+		} catch (e) {
+			console.error('Liquid Ajax Cart: Error during Ajax request result callback in ajax-api');
+			console.error(e);
+		}
+	});
+	if (finalCallback) {
+		try {
+			finalCallback();
+		} catch (e) {
+			console.error('Liquid Ajax Cart: Error during Ajax request final internal callback in ajax-api');
+			console.error(e);
+		}
+	}
 }
 
 function extraRequest ( sections: string[] = [] ): Promise<{ ok:boolean, status:number, body:JSONObjectType }> {
@@ -214,27 +259,59 @@ function extraRequest ( sections: string[] = [] ): Promise<{ ok:boolean, status:
 
 
 function cartRequestGet ( options: CartRequestOptionsType | undefined = {} ): void {
-	cartRequest( REQUEST_GET, undefined, options );
+	addToQueues({ requestType: REQUEST_GET, body: undefined, options });
 }
 
 function cartRequestAdd( body: RequestBodyType = {}, options: CartRequestOptionsType | undefined = {} ): void {
-	cartRequest( REQUEST_ADD, body, options );
+	addToQueues({ requestType: REQUEST_ADD, body, options });
 }
 
 function cartRequestChange( body: RequestBodyType = {}, options: CartRequestOptionsType | undefined = {} ): void {
-	cartRequest( REQUEST_CHANGE, body, options );
+	addToQueues({ requestType: REQUEST_CHANGE, body, options });
 }
 
 function cartRequestUpdate( body: RequestBodyType = {}, options: CartRequestOptionsType | undefined = {} ): void {
-	cartRequest( REQUEST_UPDATE, body, options );
+	addToQueues({ requestType: REQUEST_UPDATE, body, options });
 }
 
 function cartRequestClear( body: RequestBodyType = {}, options: CartRequestOptionsType | undefined = {} ): void {
-	cartRequest( REQUEST_CLEAR, body, options );
+	addToQueues({ requestType: REQUEST_CLEAR, body, options });
 }
 
 function subscribeToCartAjaxRequests( callback: RequestCallbackType ): void {
-	subscribers.push( callback );
+	requestSubscribers.push( callback );
+}
+
+function subscribeToCartQueues( callback: QueuesCallbackType ): void {
+	queuesSubscribers.push( callback );
+}
+
+function getEndpoint ( requestType: string ): string | undefined {
+	switch ( requestType ) {
+		case REQUEST_ADD:
+			return '/cart/add.js';
+			break;
+
+		case REQUEST_CHANGE:
+			return '/cart/change.js';
+			break;
+
+		case REQUEST_GET:
+			return '/cart.js';
+			break;
+
+		case REQUEST_CLEAR:
+			return '/cart/clear.js';
+			break;
+
+		case REQUEST_UPDATE:
+			return '/cart/update.js';
+			break;
+
+		default:
+			return undefined;
+	}
+	return undefined;
 }
 
 export { 
@@ -244,6 +321,7 @@ export {
 	cartRequestGet, 
 	cartRequestUpdate, 
 	subscribeToCartAjaxRequests, 
+	subscribeToCartQueues,
 	REQUEST_ADD,
 	REQUEST_CHANGE
 }

@@ -13,7 +13,8 @@ export type JSONObjectType = {
 export type RequestBodyType = JSONObjectType | FormData | URLSearchParams | undefined;
 
 export type RequestStateInfoType = {
-	initiator?: Element
+	initiator?: Element,
+	cancel?: boolean
 }
 
 export type RequestStateType = {
@@ -37,13 +38,15 @@ export type RequestStateType = {
 export type CartRequestOptionsType = {
 	firstComplete?: (requestState: RequestStateType) => void,
 	lastComplete?: (requestState: RequestStateType) => void,
-	info?: RequestStateInfoType
+	info?: RequestStateInfoType,
+	newQueue?: boolean
 }
 
 export type RequestResultCallback = ( requestState: RequestStateType) => void;
 export type RequestResultSubscriberType = ( resultCallback: RequestResultCallback ) => void;
 
 export type RequestCallbackType = ( requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType ) => void;
+export type QueuesCallbackType = ( inProgress: boolean ) => void;
 
 export type LineItemType = {
 	key: string,
@@ -68,9 +71,9 @@ export type AppStateStatusType = {
 export type AppStateType = JSONObjectType & {
 	status: AppStateStatusType,
 	cart: AppStateCartType,
-	previousCart?: AppStateCartType
+	previousCart: AppStateCartType | undefined
 }
-export type StateSubscriberType = (state: AppStateType) => void;
+export type StateSubscriberType = (state: AppStateType, isCartUpdated: boolean) => void;
 
 export type ConfigurationValue = 
 	| string 

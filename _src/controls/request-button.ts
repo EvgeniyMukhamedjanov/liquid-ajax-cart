@@ -65,16 +65,16 @@ function clickHandler (element: Element, e: Event) {
 
 	switch ( url.pathname ) {
 		case ADD_URL:
-			cartRequestAdd( formData, { info: { initiator: element }} );
+			cartRequestAdd( formData, { newQueue: true, info: { initiator: element }} );
 			break;
 		case CHANGE_URL:
-			cartRequestChange( formData, { info: { initiator: element }} );
+			cartRequestChange( formData, { newQueue: true, info: { initiator: element }} );
 			break;
 		case UPDATE_URL:
-			cartRequestUpdate( formData, { info: { initiator: element }} );
+			cartRequestUpdate( formData, { newQueue: true, info: { initiator: element }} );
 			break;
 		case CLEAR_URL:
-			cartRequestClear( {}, { info: { initiator: element }});
+			cartRequestClear( {}, { newQueue: true, info: { initiator: element }});
 			break;
 	}
 }

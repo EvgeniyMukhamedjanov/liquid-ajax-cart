@@ -1,6 +1,6 @@
 import { RequestStateType, RequestResultSubscriberType, JSONValueType, UpdatedSectionType, SectionsSubscriberType } from './ts-types';
 
-import { subscribeToCartAjaxRequests, cartRequestUpdate, REQUEST_ADD } from './ajax-api';
+import { subscribeToCartAjaxRequests, REQUEST_ADD } from './ajax-api';
 import { settings } from './settings';
 
 type StaticElementsListType = {

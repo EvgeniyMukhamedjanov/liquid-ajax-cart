@@ -41,7 +41,7 @@ const cartProductFormsInit = () => {
 		updateFormHTML( form );
 
 		cartRequestAdd( formData, {
-			"lastComplete": (requestState: RequestStateType) => {
+			lastComplete: (requestState: RequestStateType) => {
 
 				const processesAmountAfter = processesAmount.get( form );
 				if ( processesAmountAfter > 0 ) {
@@ -50,7 +50,8 @@ const cartProductFormsInit = () => {
 
 				updateFormHTML( form );
 			},
-			"info": {
+			newQueue: true,
+			info: {
 				"initiator": form
 			}
 		})

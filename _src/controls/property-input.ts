@@ -213,11 +213,11 @@ function changeHandler (element: Element, e: Event) {
 	if( objectCode === 'note' ) {
 		const formData = new FormData();
 		formData.set('note', newPropertyValue);
-		cartRequestUpdate( formData, { info: { initiator: element }} );
+		cartRequestUpdate( formData, { newQueue: true, info: { initiator: element }} );
 	} else if (objectCode === 'attributes') {
 		const formData = new FormData();
 		formData.set(`attributes[${ propertyName }]`, newPropertyValue);
-		cartRequestUpdate( formData, { info: { initiator: element }} );
+		cartRequestUpdate( formData, { newQueue: true, info: { initiator: element }} );
 	} else {
 		const [ lineItem, objectCodeType ] = findLineItemByCode(objectCode, state);
 
@@ -250,7 +250,7 @@ function changeHandler (element: Element, e: Event) {
 				}
 			}
 		}
-		cartRequestChange( requestBody, { info: { initiator: element }} );
+		cartRequestChange( requestBody, { newQueue: true, info: { initiator: element }} );
 	}
 }
 

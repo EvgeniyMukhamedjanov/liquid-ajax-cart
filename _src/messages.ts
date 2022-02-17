@@ -89,6 +89,8 @@ const changeRequestHandler = ( requestState: RequestStateType, subscribeToResult
 	}
 
 	subscribeToResult( ( requestState: RequestStateType ) => {
+		if (requestState.info.cancel) return;
+
 		const { lineItemQuantityErrorText, messageBuilder } = settings;
 		const { messagesAttribute } = settings.computed;
 		let resultItems: LineItemType[] = [];
@@ -176,6 +178,8 @@ const addRequestHandler = ( requestState: RequestStateType, subscribeToResult: R
 	}
 
 	subscribeToResult(( requestState: RequestStateType ) => {
+		if (requestState.info.cancel) return;
+		
 		const { messageBuilder } = settings;
 		const errorMessage = getRequestError( requestState );
 		if ( errorMessage && formErrorContainers ) {
