@@ -12,7 +12,7 @@ If the first queue contains requests then they will be performed in order. When 
 
 ### If `newQueue` is `true`
 
-If the `newQueue` property of a Shopify [Cart API request](/reference/requests/) options is `true` then a new queue will be created and the request will be added to the new queue. 
+If the `newQueue` property of a Cart API request options is `true` then a new queue will be created and the request will be added to the new queue. 
 
 Use this option when your request doesn't have any relation to any other requests that might be in progress now. Usually these are requests that should get performed on a user action.
 
@@ -65,7 +65,9 @@ if (button) {
 // Queue 1: [cartRequestAdd]
 // Queue 2: [cartRequestAdd]
 
-// When the button's first cartRequestAdd has just finished and the lastComplete callback is called, the cartRequestChange will be added to the first queue:
+// When the button's first cartRequestAdd has just finished 
+// and the lastComplete callback is called, 
+// the cartRequestChange will be added to the first queue:
 // Queue 1: [cartRequestAdd] [cartRequestChange]
 // Queue 2: [cartRequestAdd]
 ```
