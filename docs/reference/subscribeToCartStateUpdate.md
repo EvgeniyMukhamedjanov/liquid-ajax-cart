@@ -19,6 +19,6 @@ subscribeToCartStateUpdate( myCallback );
 
 Your callback will be called with the [State object](/reference/state/) and the `isCartUpdated` boolean parameter. 
 
-If the `isCartUpdated` is `true`, it means that Liquid Ajax Cart has just received new cart JSON-data from Shopify after the last Shopify [Cart API request](/reference/requests/) and the new cart state is attached to the `cart` property.
+If the `isCartUpdated` is `true`, it means that Liquid Ajax Cart has just received new cart JSON-data from Shopify from the last Shopify [Cart Ajax API request](/reference/requests/) and the new cart state is available in the `cart` property.
 
 If the `isCartUpdated` is `false`, it means that only `status` State property is changed.
