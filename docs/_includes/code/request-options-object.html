@@ -1,20 +1,20 @@
 const options = {
-  firstComplete: ( requestState ) => {
-    // The first callback that will be called after the request is finished:
-    // state object is not updated yet,
-    // sections are not updated yet,
-    // everything is not updated yet.
-  },
-  lastComplete: ( requestState ) => {
-    // The last callback that will be called after the request is finished:
-    // state is updated,
-    // sections are updated,
-    // everything is updated.
-  },
-  info: {
-    // Any additional data you want to attach
-    // Don't use the "initiator" and the "cancel" keys
-    my_parameter: 'value'
-  },
-  newQueue: true // whether the request should go to a new or the first queue
-}
+    firstComplete: ( requestState ) => {
+      // The first callback that will be called after the request is finished:
+      // state object is not updated yet,
+      // sections are not updated yet,
+      // everything is not updated yet.
+    },
+    lastComplete: ( requestState ) => {
+      // The last callback that will be called after the request is finished:
+      // state is updated,
+      // sections are updated,
+      // everything is updated.
+    },
+    info: {
+      // Any additional data you want to attach
+      // Don't use the "initiator" and the "cancel" keys
+      my_parameter: 'value'
+    },
+    newQueue: true // whether the request should go to a new or the first queue
+  }

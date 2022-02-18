@@ -26,7 +26,9 @@ The object looks like this:
 }
 ```
 * `requestBody` is `undefined` for `GET` requests, JSON or [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) object for `POST` requests.
-* `info` — additional data that set by the request caller. [Product forms](/reference/product-forms/) and [Controls](/reference/controls/) attach the `initiator` property to the `info` parameter. The `initiator` keeps the `HTMLElement` object of the form or control.
+* `info` — additional data that set by the request caller. 
+  * [Product forms](/reference/product-forms/) and [Controls](/reference/controls/) attach the `initiator` property to the `info` parameter. The `initiator` keeps the `HTMLElement` object of the form or control.
+  * If there is a `cancel` property of the `info` parameter and `cancel` property is `true`, then the request will not be performed and the `responseData` will not exist.
 * `responseData` — the response on the request. `ok` is `true` if the response was successful (status in the range 200-299).
 * for `/cart/add.js` requests Liquid Ajax Cart performs an extra `POST` request to the `/cart/update.js` endpoint to get the updated cart state. `extraResponseData` object contains the response of the extra request.
 * Sometimes Liquid Ajax Cart performs an additional `POST /cart/update.js` request and saves the response in the `extraResponseData` object. The additional request happens if:
