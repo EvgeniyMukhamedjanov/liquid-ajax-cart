@@ -20,84 +20,77 @@ const MESSAGE_CODES = {
 }
 
 const changeRequestHandler = ( requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType ) => {
-	const { messagesAttribute } = settings.computed;
-	let requestedId: string, 
-		requestedLine: string, 
-		requestedQuantity: number, 
-		lineItemIndex: number, 
-		requestedIdItems: LineItemType[] = [], 
-		errorContainers: NodeListOf<Element>, 
-		itemCountBefore: number;
-	const state = getCartState();
-
-	if ( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) {
-		if (requestState.requestBody.has('line')) {
-			requestedLine = requestState.requestBody.get('line').toString();
-		}
-		if (requestState.requestBody.has('id')) {
-			requestedId = requestState.requestBody.get('id').toString();
-		}
-		if (requestState.requestBody.has('quantity')) {
-			requestedQuantity = Number(requestState.requestBody.get('quantity').toString());
-		}
-    } else {
-    	if('line' in requestState.requestBody) {
-			requestedLine = String(requestState.requestBody.line);
-		}
-		if('id' in requestState.requestBody) {
-			requestedId = String(requestState.requestBody.id);
-		}
-		if('quantity' in requestState.requestBody) {
-			requestedQuantity = Number(requestState.requestBody.quantity);
-		}
-	}
-
-	if ( requestedLine ) {
-		const requestedLineNumber = Number(requestedLine);
-		if ( requestedLineNumber > 0 && state.status.cartStateSet ) {
-			lineItemIndex = requestedLineNumber - 1;
-			requestedId = state.cart.items[lineItemIndex]?.key;
-		}
-	}
-
-	if ( requestedId ) {
-		if ( state.status.cartStateSet ) {
-			state.cart.items.forEach( (element: LineItemType) => {
-				if ( element.key === requestedId || element.id === Number(requestedId) ) {
-					requestedIdItems.push( element );
-				}
-			});
-
-			itemCountBefore = state.cart.item_count;
-		}
-
-		if ( requestedId.indexOf(':') > -1 ) {
-			if ( requestedLine === undefined && requestedIdItems.length === 1) {
-				requestedLine = requestedIdItems[0].key;
-			}
-			errorContainers = document.querySelectorAll(`[${ messagesAttribute }="${ requestedId }"]`);
-		} else {
-			const errorContainersSelectorArray = requestedIdItems.map( element => `[${ messagesAttribute }="${ element.key }"]` );
-        	errorContainers = document.querySelectorAll(errorContainersSelectorArray.join(','));
-		}
-
-		if ( errorContainers.length > 0 ) {
-			errorContainers.forEach( element => {
-				element.innerHTML = '';
-			});
-		}
-	}
 
 	subscribeToResult( ( requestState: RequestStateType ) => {
+		const { messagesAttribute } = settings.computed;
+		const { lineItemQuantityErrorText, messageBuilder } = settings;
+
 		if (requestState.info.cancel) return;
 
-		const { lineItemQuantityErrorText, messageBuilder } = settings;
-		const { messagesAttribute } = settings.computed;
-		let resultItems: LineItemType[] = [];
+		const state = getCartState();
 		const itemQuantityErrors: LineItemType[] = [];
-		let errorContainers: NodeListOf<Element>;
+		let requestedId: string, 
+			requestedLine: string, 
+			requestedQuantity: number = 1, 
+			lineItemIndex: number, 
+			requestedIdItems: LineItemType[] = [],
+			errorContainers: NodeListOf<Element>, 
+			resultItems: LineItemType[] = [];
+
+		if ( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) {
+			if (requestState.requestBody.has('line')) {
+				requestedLine = requestState.requestBody.get('line').toString();
+			}
+			if (requestState.requestBody.has('id')) {
+				requestedId = requestState.requestBody.get('id').toString();
+			}
+	    } else {
+	    	if('line' in requestState.requestBody) {
+				requestedLine = String(requestState.requestBody.line);
+			}
+			if('id' in requestState.requestBody) {
+				requestedId = String(requestState.requestBody.id);
+			}
+		}
+
+		if ( requestedLine ) {
+			const requestedLineNumber = Number(requestedLine);
+			if ( requestedLineNumber > 0 && state.status.cartStateSet ) {
+				lineItemIndex = requestedLineNumber - 1;
+				requestedId = state.cart.items[lineItemIndex]?.key;
+			}
+		}
+
+		if ( requestedId ) {
+			if ( requestedId.indexOf(':') > -1 ) {
+				errorContainers = document.querySelectorAll(`[${ messagesAttribute }="${ requestedId }"]`);
+			} else if ( state.status.cartStateSet ) {
+	        	errorContainers = document.querySelectorAll(
+	        		state.cart.items.reduce(( acc, element ) => {
+	        			if ( element.key === requestedId || element.id === Number(requestedId) ) {
+		        			acc.push(`[${ messagesAttribute }="${ element.key }"]`);
+		        		}
+		        		return acc;
+	        		}, []).join(',')
+	        	);
+			}
+
+			if ( errorContainers.length > 0 ) {
+				errorContainers.forEach( element => {
+					element.innerHTML = '';
+				});
+			}
+		}
 
 		if ( requestState.responseData?.ok ) {
+			if (!state.previousCart) return;
+
+			if (( requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams ) && requestState.requestBody.has('quantity')) {
+				requestedQuantity = Number(requestState.requestBody.get('quantity').toString());
+			} else if('quantity' in requestState.requestBody) {
+				requestedQuantity = Number(requestState.requestBody.quantity);
+			}
+
 			if ( requestedId ) {
 				resultItems = (requestState.responseData.body.items as LineItemType[]).reduce(( acc: LineItemType[], element: LineItemType ) => {
 					if (( element.key === requestedId || element.id == Number(requestedId) ) ) {
@@ -107,53 +100,22 @@ const changeRequestHandler = ( requestState: RequestStateType, subscribeToResult
 				}, []);
 			}
 
-
-			resultItems.forEach( (element: LineItemType) => {
-				if ( !isNaN(requestedQuantity) && element.quantity < requestedQuantity && itemCountBefore === requestState.responseData.body.item_count ) {
-					itemQuantityErrors.push( element );
+			resultItems.forEach((element: LineItemType) => {
+				if ( !isNaN(requestedQuantity) && element.quantity < requestedQuantity && state.previousCart.item_count === requestState.responseData.body.item_count ) {
+					errorContainers.forEach((errorContainersItem: Element) => {
+						if (errorContainersItem.getAttribute(messagesAttribute) === element.key) {
+							errorContainersItem.innerHTML = messageBuilder([{
+								type: MESSAGE_TYPES.ERROR,
+								text: lineItemQuantityErrorText,
+								code: MESSAGE_CODES.LINE_ITEM_QUANTITY_ERROR,
+								requestState
+							}]);
+						}
+					})
 				}
 			});
-
-			const errorContainersSelectorArray: string[] = itemQuantityErrors.reduce((acc: string[], element: LineItemType) => {
-				acc.push(`[${ messagesAttribute }="${ element.key }"]`);
-        		return acc;
-        	}, []);
-
-			if ( errorContainersSelectorArray.length > 0 ) {
-				errorContainers = document.querySelectorAll( errorContainersSelectorArray.join(',') );
-			}
-
-			if ( errorContainers && errorContainers.length > 0 ) {
-				errorContainers.forEach( (element: Element) => {
-					element.innerHTML = messageBuilder([{
-						type: MESSAGE_TYPES.ERROR,
-						text: lineItemQuantityErrorText,
-						code: MESSAGE_CODES.LINE_ITEM_QUANTITY_ERROR,
-						requestState
-					}]);
-				});
-			}
 		} else {
 			const errorMessage = getRequestError( requestState );
-			if ( requestedId ) {
-				if ( requestedId.indexOf(':') > -1 ) {
-					errorContainers = document.querySelectorAll(`[${ messagesAttribute }="${ requestedId }"]`);
-				} else {
-
-					resultItems = [];
-					const state = getCartState();
-					if ( state.status.cartStateSet ) {
-						state.cart.items.forEach( (element: LineItemType) => {
-							if (element.key === requestedId || element.id === Number(requestedId)) {
-								resultItems.push( element );
-							}
-						});
-					}
-
-					const errorContainersSelectorArray = resultItems.map( element => `[${ messagesAttribute }="${ element.key }"]` );
-		        	errorContainers = document.querySelectorAll(errorContainersSelectorArray.join(','));
-				}
-			}
 
 			if ( errorContainers && errorContainers.length > 0 ) {
 				errorContainers.forEach( element => {
