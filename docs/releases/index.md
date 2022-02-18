@@ -36,6 +36,7 @@ title: Releases
 	<div class="release__heading">
 		<h2 class="release__version">v{{ file_version }}</h2>
 		<div class="release__date">
+			{%- if file_version == '1.10.0' -%}Released on 2022, Feb 19{%- endif -%}
 			{%- if file_version == '1.9.0' -%}Released on 2022, Feb 3{%- endif -%}
 			{%- if file_version == '1.8.2' -%}Released on 2022, Feb 2{%- endif -%}
 			{%- if file_version == '1.8.0' -%}Released on 2022, Jan 22{%- endif -%}
@@ -60,6 +61,15 @@ title: Releases
 ##### Changes:
 
 {% endif %}
+
+{%- if file_version == '1.10.0' -%}
+* The `previousCart` parameter is always passed to `subscribeToCartStateUpdate` callback functions.
+* The `getCartState` always returns the `previousCart` as well.
+* `subscribeToCartStateUpdate` callback functions will be called with one more parameter — `isCartChanged`.
+* The `info.cancel` property of a Request state lets you cancel the request before it is started.
+* All Ajax Cart requests get in queues to be performed.
+* The `newQueue` property is accepted within the `options` parameter of the `cartRequest*` functions and lets you manage request queue position.
+{%- endif -%}
 
 {%- if file_version == '1.9.0' -%}
 * The `data-ajax-cart-static-element` attribute is added.

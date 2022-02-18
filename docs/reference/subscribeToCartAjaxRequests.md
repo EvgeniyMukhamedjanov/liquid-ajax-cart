@@ -6,41 +6,78 @@ The callback should be passed as the only parameter.
 subscribeToCartAjaxRequests( myRequestCallback );
 ```
 
-Two parameters will be passed to the callback function: 
-1. **`requestState`** — the [Request state](/reference/requestState/) object with information about the request. Since the request is not performed yet, not all the Request state's properties will be available:
-    ```json
-    {
-      "endpoint": "/cart/add.js",
-      "requestBody": {…},
-      "requestType": "add",
-      "info": {…}
+Two parameters will be passed to the callback function: `requestState` and `subscribeToResult`.
+```javascript
+function myRequestCallback ( requestState, subscribeToResult ) {
+  // callback code
+}
+subscribeToCartAjaxRequests( myRequestCallback );
+```
+
+### `requestState`
+
+The `requestState` parameter is the [Request state](/reference/requestState/) object with information about the request. Since the request is not performed yet, not all the Request state properties will be available:
+```json
+{
+  "endpoint": "/cart/add.js",
+  "requestBody": {…},
+  "requestType": "add",
+  "info": {…}
+}
+```
+###### Mutate the request
+You can mutate the `requestBody` and the `info` objects as they are references to the objects that will be used in the request. But if you assign a new object to them it will not work:
+```javascript
+function myRequestCallback ( requestState, subscribeToResult ) {
+  
+  // Correct:
+  if ( requestState.requestType === 'change' ) {
+    if (requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams) {
+      requestState.requestBody.set('quantity', 2); // Mutating of the "requestBody" object is allowed
+    } else {
+      requestState.requestBody.quantity = 2; // Mutating of the "requestBody" object is allowed
     }
-    ```
-    You can mutate the `requestBody` and the `info` objects as they are references to the objects that will be used in the request. But if you assign a new object to them it will not work:
-    ```javascript
-    // Correct:
-    info.my_parameter = 'value';
+  }
 
-    // Wrong:
-    info = { my_parameter: 'value' }
-    ```
+  // Wrong:
+  if ( requestState.requestType === 'change' ) {
+    requestState.requestBody = newRequestObject; // Assigning another object to the "requestBody" doesn't work
+  }
 
-2. **`subscribeToResult`** — a function that adds your another callback to the list of functions that will be called after the current request is performed. Takes the result-callback as the only parameter:
-    ```javascript
-    function myRequestCallback ( requestState, subscribeToResult ) {
-      console.log( 'Before request', requestState );
-      
-      const myResultCallback = function ( requestState ) {
-        console.log( 'After request', requestState );
-      }
-      
-      subscribeToResult( myResultCallback );
-    }
-    subscribeToCartAjaxRequests( myRequestCallback );
-    ```
-    The result-callback will be called with the only one parameter — the [Request state](/reference/requestState/) object with information about the request.
+  // Correct:
+  requestState.info.my_parameter = 'value'; // Mutating of the "info" object is allowed
 
-##### Use with the state
+  // Wrong:
+  requestState.info = { my_parameter: 'value' }; // Assigning another object to the "info" doesn't work
+}
+```
+
+###### Cancel the request
+You can cancel the request by setting the `info.cancel` to `true`. The request will not be performed but all the request result subscribers will be called anyway.
+```javascript
+function myRequestCallback ( requestState, subscribeToResult ) {
+  requestState.info.cancel = true;
+}
+```
+
+### `subscribeToResult`
+
+The `subscribeToResult` parameter is a function that adds your another callback to the list of functions that will be called after the current request is performed. Takes the result-callback as the only parameter:
+```javascript
+function myRequestCallback ( requestState, subscribeToResult ) {
+  console.log( 'Before request', requestState );
+  
+  const myResultCallback = function ( requestState ) {
+    console.log( 'After request', requestState );
+  }
+  
+  subscribeToResult( myResultCallback );
+}
+subscribeToCartAjaxRequests( myRequestCallback );
+```
+The result-callback will be called with the only parameter — the [Request state](/reference/requestState/) object with information about the request.
+
+### Use with the state
 The [getCartState](/reference/getCartState/) might be used within your callbacks:
 
 ```html

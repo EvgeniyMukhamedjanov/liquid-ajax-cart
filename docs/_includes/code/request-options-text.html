@@ -22,4 +22,48 @@ The `lastComplete` function will be called with the only parameter — the [Requ
 
 #### info
 
-The `info` parameter is a simple Javascript object that will be attached to the [Request state](/reference/requestState) object. You can add your own data to the request state using the `info` parameter. For example [Product forms](/reference/product-forms/) and [Controls](/reference/controls/) that send Cart Ajax API requests attach the `initiator` property to the `info` parameter.
+The `info` parameter is a simple Javascript object that will be attached to the [Request state](/reference/requestState) object. You can add your own data to the request state using the `info` parameter. 
+
+Don't use the `initiator` and the `cancel` keys:
+* [Product forms](/reference/product-forms/) and [Controls](/reference/controls/) that send Cart Ajax API requests attach their HTMLElement objects to the `initiator` property of the `info` parameter.
+* If the `info` parameter has the `cancel` property and it is `true`, the request will not be performed. It might be useful when you intercept a Shopify Cart API request using the [subscribeToCartAjaxRequests](/reference/subscribeToCartAjaxRequests/) function and decide to cancel the request.
+
+#### newQueue
+
+If the `newQueue` property is `true` then a new queue will be created and the request will be added to the new queue.
+
+If the `newQueue` is not defined or `false`, the request will be added to the end of the first queue.
+
+If your request depends on the result of another request, most likely you want to perform your request immediately after the previous one. Usually they are requests within the `firstComplete` or the `lastComplete` callback, or within a callback defined via the `subscribeToCartAjaxRequests` function. Set the `newQueue` to 'false' or omit it at all:
+
+```javascript
+subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
+	if ( requestState.requestType === 'add' ) {
+		subscribeToResult( requestState => {
+
+			// The cartRequestChange depends on any "add" request.
+			// Omit the "newQueue" parameter or set it to false:
+			cartRequestChange({…});
+		})
+	}
+});
+
+cartRequestAdd({…}, { newQueue: true, lastComplete: ( requestState ) => {
+	
+	// The cartRequestChange depends on the cartRequestAdd request.
+	// Omit the "newQueue"  parameter or set it to false:
+	cartRequestChange({…});
+}});
+```
+
+If your request doesn't depend on any other requests, set the `newQueue` to `true`. Usually they are requests that get performed on user actions and you want the requests to be happen after all the previous request chains are finished:
+```javascript
+const button = document.querySelector('[data-my-button]');
+if (button) {
+	button.addEventListener('click', () => {
+		cartRequestAdd({…}, { newQueue: true });
+	})
+}
+```
+
+Read more in the [Queues](/reference/queues/) reference.
