@@ -11,7 +11,7 @@ The object looks like this:
   "requestBody": {"items": [{"id": 40934235668668, "quantity": 1}], "sections": "my-cart"},
   "requestType": "add",
   "info": {
-    "initiator": {}
+    "initiator": Element {}
   },
   "responseData": {
     "ok": true, 

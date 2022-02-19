@@ -40,16 +40,24 @@ if (button) {
 }
 ```
 
-If the `newQueue` is not defined or `false`, the request will be added to the end of the current queue. Use it for requests within the `firstComplete` or the `lastComplete` callback, within a callback defined via the `subscribeToCartAjaxRequests` function:
+If the `newQueue` is not defined or `false`, the request will be added to the end of the current queue. Use it for requests within `firstComplete`, `lastComplete` or `subscribeToCartAjaxRequests` callback functions when you want to have a request chain:
 
 ```javascript
-cartRequestAdd({…}, { newQueue: true, lastComplete: ( requestState ) => {
+const button = document.querySelector('[data-my-button]');
+if (button) {
+  button.addEventListener('click', () => {
+    // cartRequestAdd goes to a new queue
+    // but when it is finished you want to run cartRequestChange
+    // that should go to the same queue, NOT a new one
+    cartRequestAdd({…}, { newQueue: true, lastComplete: ( requestState ) => {
   
-  // The cartRequestChange depends on the cartRequestAdd request —
-  // the cartRequestChange should be performed right after the cartRequestAdd is finished.
-  // Omit the "newQueue" parameter:
-  cartRequestChange({…});
-}});
+      // The cartRequestChange depends on the cartRequestAdd request —
+      // the cartRequestChange should be performed right after the cartRequestAdd is finished.
+      // Omit the "newQueue" parameter to perform the cartRequestChange in the current queue:
+      cartRequestChange({…});
+    }});
+  })
+}
 ```
 
 Read more in the [Queues](/reference/queues/) reference.

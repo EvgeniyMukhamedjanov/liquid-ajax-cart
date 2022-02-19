@@ -26,11 +26,11 @@ Your callback will be called with an array of updated sections:
 [
   {
     "id": "my-cart",
-    "elements": [ {Element} ]
+    "elements": [ Element {} ]
   },
   {
     "id": "my-mini-cart",
-    "elements": [ {Element}, {Element} ]
+    "elements": [ Element {}, Element {} ]
   }
 ]
 ```

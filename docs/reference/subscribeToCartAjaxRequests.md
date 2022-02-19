@@ -33,9 +33,9 @@ function myRequestCallback ( requestState, subscribeToResult ) {
   // Correct:
   if ( requestState.requestType === 'change' ) {
     if (requestState.requestBody instanceof FormData || requestState.requestBody instanceof URLSearchParams) {
-      requestState.requestBody.set('quantity', 2); // Mutating of the "requestBody" object is allowed
+      requestState.requestBody.set('quantity', 2); // Mutating the "requestBody" object is allowed
     } else {
-      requestState.requestBody.quantity = 2; // Mutating of the "requestBody" object is allowed
+      requestState.requestBody.quantity = 2; // Mutating the "requestBody" object is allowed
     }
   }
 
@@ -45,7 +45,7 @@ function myRequestCallback ( requestState, subscribeToResult ) {
   }
 
   // Correct:
-  requestState.info.my_parameter = 'value'; // Mutating of the "info" object is allowed
+  requestState.info.my_parameter = 'value'; // Mutating the "info" object is allowed
 
   // Wrong:
   requestState.info = { my_parameter: 'value' }; // Assigning another object to the "info" doesn't work

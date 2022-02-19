@@ -1,6 +1,6 @@
 # Queues
 
-All Shopify Cart API requests doesn't get performed immediately but get added to queues.
+All Shopify Cart API requests don't get performed immediately but get added to queues.
 
 ```
 Queue 1: [cartRequestAdd] [cartRequestChange]

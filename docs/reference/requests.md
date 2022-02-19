@@ -10,8 +10,8 @@ It is highly recommended to use the following functions to make Shopify Cart API
 
 ### Subscribe to requests
 
-If you want to run your Javascript before or after a Cart Ajax API request or mutate a request before it is started — use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/) function to add your callback.
+If you want to run your Javascript before or after a Shopify Cart Ajax API request, mutate or cancel a request before it is started — use the [`subscribeToCartAjaxRequests`](/reference/subscribeToCartAjaxRequests/) function to add your callback.
 
 ### Queues of requests
 
-All Cart API requests doesn't get performed immediately but get added to [queues](/reference/queues/).
+All Shopify Cart API requests don't get performed immediately but get added to [queues](/reference/queues/).
