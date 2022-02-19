@@ -131,7 +131,7 @@ links:
           description: A Javascript object with information about each Cart Ajax API request.
         - title: Queues
           file: queues
-          description: Shopfy Cart API requests doesn't get performed immediately but get added to queues.
+          description: Shopfy Cart API requests don't get performed immediately but get added to queues.
     - title: Configuration
       file: configure
       description: Lets you set configuration parameters using the `configureCart` function and the `data-ajax-cart-configuration` attribute
