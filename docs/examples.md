@@ -42,7 +42,16 @@ If you want to use any function from Liquid Ajax Cart, you need to import it:
 ```
 {% endraw %}
 
-You can also call Liquid Ajax Cart functions outside the module using the global `liquidAjaxCart` object:
+Or if you use npm:
+```javascript
+import { subscribeToCartAjaxRequests } from 'liquid-ajax-cart';
+
+subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
+  // Your code
+});
+```
+
+You can also call Liquid Ajax Cart functions outside your module using the global `liquidAjaxCart` object:
 
 ```javascript
 // Check that Liquid Ajax Cart exists
