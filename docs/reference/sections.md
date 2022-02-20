@@ -2,9 +2,9 @@
 
 Liquid Ajax Cart reloads HTML code of the HTML containers that marked with the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute every time when the Shopify cart is changed. 
 
-It uses [Bundled section rendering](https://shopify.dev/api/ajax/reference/cart#bundled-section-rendering) under the hood to ask Shopify to provide re-rendered HTML code for theme sections with each Cart Ajax API request response. Due to this, the `data-ajax-cart-section` must be applied only within sections.
+It uses [Bundled section rendering](https://shopify.dev/api/ajax/reference/cart#bundled-section-rendering) under the hood to ask Shopify to provide re-rendered HTML code for theme sections with each Cart API request response. Due to this, the `data-ajax-cart-section` must be applied only within sections.
 
-After Liquid Ajax Cart received a response of a Cart Ajax API request with the re-rendered sections' HTML, it replaces HTML of the `data-ajax-cart-section` containers within the section with the new ones.
+After Liquid Ajax Cart received a response of a Shopify Cart API request with the re-rendered sections' HTML, it replaces HTML of the `data-ajax-cart-section` containers within the section with the new ones.
 
 ##### Immutable elements
 

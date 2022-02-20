@@ -1,6 +1,6 @@
 # updateOnWindowFocus
 
-Liquid Ajax Cart makes a Cart Ajax API request each time when the browser tab loses focus and gets focus back to keep [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) containers and the [State](/reference/state/) object up to date.
+Liquid Ajax Cart makes a Shopify Cart API request each time when the browser tab loses focus and gets focus back to keep [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) containers and the [State](/reference/state/) object up to date.
 
 It is necessary because a user can open two browser tabs with the same Shopify store, adds a product to the cart in the second tab and then goes back to the first one. The first tab "doesn't know" about the new product in the cart but once the tab gets focus it will get updated.
 

@@ -34,7 +34,7 @@ In the above example the `.my-cart__wrapper` container will be replaced with the
 
 ##### Immutable elements inside
 
-If you want to have an immutable HTML element within a `data-ajax-cart-section` container — add the [`data-ajax-cart-static-element`](/reference/data-ajax-cart-static-element/) attribute to this element. HTML of an immutable container will *not* be replaced when its section gets updated.
+If you want to have an immutable HTML element within a `data-ajax-cart-section` container — add the [`data-ajax-cart-static-element`](/reference/data-ajax-cart-static-element/) attribute to this element. HTML code of an immutable container will *not* be replaced when its section gets updated.
 
 ### Make multiple containers of a section updatable
 

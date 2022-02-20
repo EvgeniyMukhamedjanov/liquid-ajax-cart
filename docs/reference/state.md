@@ -30,7 +30,7 @@ The [`js-ajax-cart-set`](/reference/js-ajax-cart-set/) CSS class will be added t
 
 ##### `status.requestInProgress`
 
-The `status.requestInProgress` is `true` if there are one or more Shopify [Cart API requests](/reference/requests/) in progress.
+The `status.requestInProgress` is `true` if there are one or more Shopify [Cart API requests](/reference/requests/) in [Queues](/reference/queues/).
 
 If the property is `true`:
   * some [controls](/reference/controls/) become inactive,

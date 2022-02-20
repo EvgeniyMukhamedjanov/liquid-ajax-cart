@@ -19,4 +19,4 @@ If the `Shopify.locale` or the `Intl` are not available, the formatter will retu
 return `${ (value / 100).toFixed(2) } ${ state.cart.currency }`;
 ```
 
-You can specify your own formatters using the [`stateBinderFormatters`](/reference/stateBinderFormatters/) configuration parameter.
+You can define your own formatters using the [`stateBinderFormatters`](/reference/stateBinderFormatters/) configuration parameter.

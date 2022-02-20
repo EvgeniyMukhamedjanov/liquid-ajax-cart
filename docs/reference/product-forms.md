@@ -1,6 +1,6 @@
 # Product forms
 
-Liquid Ajax Cart ajaxifies product forms once it is loaded. When a user submits a product form, Liquid Ajax Cart intercepts the submission and sends an Ajax Cart API "Add to cart" request using [`cartRequestAdd`](/reference/cartRequestAdd/) function.
+Liquid Ajax Cart ajaxifies Shopify product forms once it is loaded. When a user submits a product form, Liquid Ajax Cart intercepts the submission and sends a Shopify Cart API "Add to cart" request.
 
 The form remains inactive when the "Add to cart" request is in progress and Liquid Ajax Cart adds the [`js-ajax-cart-form-in-progress`](/reference/js-ajax-cart-form-in-progress/) CSS class to the form.
 

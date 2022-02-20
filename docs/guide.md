@@ -70,7 +70,7 @@ Provide the initial cart state in the JSON format within a script tag with the [
 
 </div>
 <div class="guide-row__col" markdown="1">
-<h5>Via npm <span class="badge badge-success">new</span></h5>
+<h5>Via npm</h5>
  
 <div markdown="1">
 ```
@@ -105,12 +105,12 @@ Provide the initial cart state in the JSON format within a script tag with the [
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1" style="position: relative;">
  
-### Create a section for AJAX cart
+### Create an Ajax cart section
  
 Feel free to use any Liquid tags, objects and filters.
 
 <div class="code-side-note-data-ajax-cart-section"  markdown="1">
-Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute to any HTML container — Liquid Ajax Cart reloads HTML of the containers with this attribute every time when the Shopify cart gets updated.
+Add the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute to any HTML container — Liquid Ajax Cart reloads HTML of the containers every time when the Shopify cart gets updated.
 </div>
 
 <div markdown="1" class="code-side-note" style="top: 716px;">
@@ -147,7 +147,7 @@ If you have a scrollable area within the section, add the [`data-ajax-cart-secti
 </div>
 
 <div markdown="1" class="code-side-note" style="top: 1430px;">
-<h5>Immutable containers <span class="badge badge-success">New in 1.9.0</span></h5>
+##### Immutable containers
 
 If you want to have an immutable HTML element, for example for a third-party app — add the [`data-ajax-cart-static-element`](/reference/data-ajax-cart-static-element/) attribute to this element. HTML of an immutable container will *not* be replaced when its section gets updated.
 </div>
@@ -163,7 +163,7 @@ If you want to have an immutable HTML element, for example for a third-party app
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-Include the section to the place where you want to display the cart.
+Include the section to the place where you want to display the Shopify Ajax cart.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -280,7 +280,7 @@ Liquid Ajax Cart adds the [`js-ajax-cart-form-in-progress`](/reference/js-ajax-c
 
 ### Show/hide a cart section on a button click
 
-Write some CSS to show your cart section if a specific `body` CSS class exists.
+Write some CSS to show your Shopify Ajax cart section if a specific `body` CSS class exists.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -351,7 +351,7 @@ If you want the button to only add or only remove the CSS class — specify the 
 
 ### Show a cart section after adding a product to the cart
 
-Write some CSS to show your cart section if a specific `body` CSS class exists.
+Write some CSS to show your Shopify Ajax cart section if a specific `body` CSS class exists.
 
 </div>
 <div class="{{ right_column_classes }}" markdown="1">
@@ -403,7 +403,8 @@ The parameter also lets you define the time after which the class should be remo
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-### Display properties of the Shopify cart object outside of Ajaxified sections
+### Display properties of the Shopify cart object outside of Ajax cart sections
+### Display Shopify cart's total price and items counter outside of Ajax cart sections
  
 Add the [`data-ajax-cart-bind-state`](/reference/data-ajax-cart-bind-state/) attribute to an HTML element, pass a Cart state property as an attribute's value and Liquid Ajax Cart will display the state property's value within the HTML element and refresh it when cart gets updated.
 

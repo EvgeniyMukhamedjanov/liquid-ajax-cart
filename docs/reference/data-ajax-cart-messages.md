@@ -1,8 +1,8 @@
 # data-ajax-cart-messages
 
-A container with the `data-ajax-cart-messages` attribute gets populated with errors and messages that come after each [Cart Ajax API request](/reference/requests/).
+A container with the `data-ajax-cart-messages` attribute gets populated with errors and messages that come after each Shopify [Cart API request](/reference/requests/).
 
-Messages that appear in a `data-ajax-cart-messages` container depends on the attributes value.
+What messages will appear in a `data-ajax-cart-messages` container depends on the attribute value.
 
 You can completely change the HTML layout of the messages using the [`messageBuilder`](/reference/messageBuilder/) configuration parameter.
 
@@ -10,7 +10,7 @@ You can completely change the HTML layout of the messages using the [`messageBui
 
 ### `form`
 
-Add a container with the `data-ajax-cart-messages="form"` attribute within a product form and Liquid Ajax Cart will put all form related messages in it:
+Add a container with the `data-ajax-cart-messages="form"` attribute within a Shopify product form and Liquid Ajax Cart will put all form related messages in it:
 
 {% include code/data-ajax-cart-form-error.html %}
 

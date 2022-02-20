@@ -1,6 +1,6 @@
 # data-ajax-cart-request-button
 
-Add the `data-ajax-cart-request-button` to links that lead to [`routes.cart_add_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_add_url), [`routes.cart_change_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_change_url), [`routes.cart_clear_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_clear_url), [`routes.cart_update_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_update_url) and [`line_item.url_to_remove`](https://shopify.dev/api/liquid/objects/line_item#line_item-url_to_remove) to ajaxify them.
+Add the `data-ajax-cart-request-button` to links that lead to Shopify [`routes.cart_add_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_add_url), [`routes.cart_change_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_change_url), [`routes.cart_clear_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_clear_url), [`routes.cart_update_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_update_url) and [`line_item.url_to_remove`](https://shopify.dev/api/liquid/objects/line_item#line_item-url_to_remove) routes to ajaxify them.
 
 The most popular usecases are "Plus", "Minus" and "Remove" buttons for a cart line item:
 {% raw %}
@@ -66,7 +66,7 @@ A "Clear cart" button:
 
 ### Not only for links
 
-It is a good practice to use `routes.cart_*_url` links for those buttons because they will work even without JavaScript.
+It is a good practice to use `routes.cart_*_url` links for because they will work even without JavaScript.
 
 But if you can't use the `a` tag with the `href` parameter, Liquid Ajax Cart still offers the same functionality for any HTML element: add the `data-ajax-cart-request-button` attribute to an HTML element and provide a `routes.cart_*_url` route as an attribute's value:
 
@@ -88,6 +88,6 @@ But if you can't use the `a` tag with the `href` parameter, Liquid Ajax Cart sti
 
 ### Inactive state
 
-The `data-ajax-cart-request-button` elements become inactive when there is a [Cart Ajax API request](/reference/requests/) in progress.
+The `data-ajax-cart-request-button` elements become inactive when there is a Shopify [Cart Ajax API request](/reference/requests/) in progress.
 
 Liquid Ajax Cart adds the [`js-ajax-cart-request-in-progress`](/reference/js-ajax-cart-request-in-progress/) CSS class to the body tag so you can show a loading indicator or make the controls visually disabled.
