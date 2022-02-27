@@ -8,7 +8,7 @@ JavaScript API is provided for customization.
 
 ##### 1. Create a theme section for the cart with a `data-ajax-cart-section` container
 
-```liquid
+```html
 {% comment %} sections/my-cart.liquid {% endcomment %}
 
 <form action="{{ routes.cart_url }}" method="post" class="my-cart">
@@ -62,7 +62,7 @@ JavaScript API is provided for customization.
 ```
 
 ##### 2. Include the section and `liquid-ajax-cart.js` in your theme.liquid 
-```liquid
+```html
 {% comment %}
   Put this code within <body> tag —
   in a place where you want the ajax-cart section to appear
