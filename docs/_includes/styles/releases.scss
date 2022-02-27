@@ -5,16 +5,13 @@
 .release {
 	position: relative;
 	padding: 32px 0;
+	margin-bottom: 38px;
 }
 
 .release:first-child {
 	background-color: #fff6a4;
 	margin: 0 -15px;
 	padding: 32px 15px;
-}
-
-.release + .release {
-	margin-top: 38px;
 }
 
 .release__heading {
