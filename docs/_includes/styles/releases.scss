@@ -10,7 +10,8 @@
 
 .release:first-child {
 	background-color: #fff6a4;
-	margin: 0 -15px;
+	margin-left: -15px;
+	margin-right: -15px;
 	padding: 32px 15px;
 }
 
@@ -76,7 +77,8 @@ h2.release__version {
 	}
 
 	.release:first-child {
-		margin: 0;
+		margin-left: -15px;
+		margin-right: -15px;
 		padding: 32px;
 	}
 }
