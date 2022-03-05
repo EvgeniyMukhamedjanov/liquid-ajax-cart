@@ -78,7 +78,7 @@
 	background-color: #252526;
 }
 .built-with__item-image-placeholder--fake:after {
-	display: none;
+	background-color: transparent;
 }
 
 .built-with__item-image {
@@ -130,7 +130,6 @@
     border: 1px dashed;
     border-radius: inherit;
     opacity: .6;
-    line-height: 1.1;
     transition: opacity .3s;
 }
 .built-with__submit span:first-child {
