@@ -373,7 +373,7 @@ when the user's cart gets changed --&gt;
         <marquee behavior="alternate"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></marquee>
     </div>
     <div class="wide-container">
-        <div class="built-with__list">
+        <div class="built-with__list {% if site.links.portfolio.size == 2 %}built-with__list--qty-2{% endif %}">
             {% for p in site.links.portfolio %}
                 <div class="built-with__item-wrapper">
                     <div class="built-with__item">
@@ -386,6 +386,22 @@ when the user's cart gets changed --&gt;
                     </div>
                 </div>
             {% endfor %}
+            <div class="built-with__item-wrapper">
+                <div class="built-with__item">
+                    <div class="built-with__item-image-placeholder built-with__item-image-placeholder--fake">
+                        <div class="built-with__submit">
+                            <div>
+                                <span>Submit your project</span>
+                                <br/>
+                                <span>and support us on GitHub</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="built-with__item-copy">
+                        <a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions/new?title=New%20website:%20https://&body=*%20Select%20the%20%22Show%20and%20Tell%22%20category,%20provide%20your%20website%20address,%20submit%20the%20form%20and%20give%20us%20a%20star%20to%20support!" class="built-with__item-title" target="_blank">Your project</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
