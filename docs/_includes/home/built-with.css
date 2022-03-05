@@ -6,6 +6,9 @@
 .built-with a {
 	border-bottom-color: rgba(255, 255, 255, .3);
 }
+.built-with a:hover {
+	border-bottom-color: currentColor;
+}
 
 .built-with__title {
 	font-family: "Arial Black", "Arial", sans-serif;
@@ -99,6 +102,10 @@
 
 .built-with__item-meta {
 	opacity: .8;
+}
+
+.built-with__item-meta:empty {
+	display: none;
 }
 
 .built-with__item-meta:before {

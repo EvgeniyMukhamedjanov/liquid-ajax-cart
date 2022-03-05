@@ -40,7 +40,7 @@ links:
     - title: Sea to Summit
       url: https://seatosummit.com/
       image: seatosummit.jpg
-      meta: Made by <a href="https://avexdesigns.com/">Avex Designs</a>
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
   footer:
     - title: GitHub
       icon: github
