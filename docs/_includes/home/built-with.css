@@ -102,20 +102,27 @@
 
 .built-with__item-meta {
 	opacity: .8;
+	display: block;
 }
 
 .built-with__item-meta:empty {
 	display: none;
 }
 
-.built-with__item-meta:before {
-	content: '';
-	margin: 0 12px;
-	display: inline-block;
-	vertical-align: middle;
-	width: 1px;
-	height: 1em;
-	background-color: rgba(255, 255, 255, .2);
+@media (min-width: 410px) { 
+	.built-with__item-meta {
+		display: inline;
+	}
+
+	.built-with__item-meta:before {
+		content: '';
+		margin: 0 12px;
+		display: inline-block;
+		vertical-align: middle;
+		width: 1px;
+		height: 1em;
+		background-color: rgba(255, 255, 255, .2);
+	}
 }
 
 @media (min-width: 760px) {
