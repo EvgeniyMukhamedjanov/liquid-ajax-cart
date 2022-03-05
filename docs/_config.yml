@@ -33,6 +33,14 @@ links:
       icon: github
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
+  portfolio:
+    - title: Eigenhain
+      url: https://eigenhain.com/
+      image: eigenhain.jpg
+    - title: Sea to Summit
+      url: https://seatosummit.com/
+      image: seatosummit.jpg
+      meta: Made by <a href="https://avexdesigns.com/">Avex Designs</a>
   footer:
     - title: GitHub
       icon: github

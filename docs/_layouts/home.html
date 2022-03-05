@@ -33,6 +33,7 @@ try {
 	      	{% include home/vs-code.css %}
 	      	{% include home/youtube-link.css %}
 	      	{% include home/result-content.css %}
+            {% include home/built-with.css %}
 
             body {
 				color:  black;
@@ -366,15 +367,35 @@ when the user's cart gets changed --&gt;
     </div>
     {{ content }}
 </div>
+
+<div class="built-with">
+    <div class="built-with__title">
+        <marquee behavior="alternate"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></marquee>
+    </div>
+    <div class="container">
+        <div class="built-with__list">
+            {% for p in site.links.portfolio %}
+                <div class="built-with__item-wrapper">
+                    <div class="built-with__item">
+                        <div class="built-with__item-image-placeholder">
+                            <img class="built-with__item-image" src="/assets/screens/{{ p.image }}" alt="{{ p.title }} screenshot" loading="lazy" />
+                        </div>
+                        <div class="built-with__item-copy">
+                            <a href="{{ p.url }}" class="built-with__item-title">{{ p.title }}</a> <span class="built-with__item-meta">{{ p.meta }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
 {% include footer/full.html %}
 
 
 
 <script type="text/javascript">
 	{% include home/script.js %}
-</script>
-
-    
 </script>
 
 
