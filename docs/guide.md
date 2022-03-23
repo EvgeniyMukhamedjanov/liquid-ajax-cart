@@ -403,7 +403,6 @@ The parameter also lets you define the time after which the class should be remo
 <div class="{{ row_classes }}">
 <div class="{{ left_column_classes }}" markdown="1">
 
-### Display properties of the Shopify cart object outside of Ajax cart sections
 ### Display Shopify cart's total price and items counter outside of Ajax cart sections
  
 Add the [`data-ajax-cart-bind-state`](/reference/data-ajax-cart-bind-state/) attribute to an HTML element, pass a Cart state property as an attribute's value and Liquid Ajax Cart will display the state property's value within the HTML element and refresh it when cart gets updated.
