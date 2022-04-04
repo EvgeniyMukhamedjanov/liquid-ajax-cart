@@ -65,7 +65,7 @@ No JavaScript code needed — just plain Liquid.
 {% schema %} { "name": "My Cart" } {% endschema %}
 ```
 
-##### 2. Include the section and `liquid-ajax-cart.js` in your theme.liquid 
+##### 2. Include the section and the `liquid-ajax-cart.js` in your theme.liquid 
 ```html
 {% comment %}
   Put this code within <body> tag —
@@ -82,7 +82,7 @@ No JavaScript code needed — just plain Liquid.
 
 :tada: That's it! Product forms will be ajaxified automatically.
 
-Check out all features on the [documentation](https://liquid-ajax-cart.js.org) website.
+Download the latest version of the `liquid-ajax-cart.js` from the [documentation](https://liquid-ajax-cart.js.org) website.
 
 ## The repository content
 
