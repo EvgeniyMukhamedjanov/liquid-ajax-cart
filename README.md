@@ -1,4 +1,4 @@
-# Liquid Ajax Cart — a JavaScript asset for Shopify :fire:
+# Liquid Ajax Cart — a JavaScript asset for Shopify [![npm](https://img.shields.io/npm/v/liquid-ajax-cart)](https://www.npmjs.com/package/liquid-ajax-cart)
 
 Ajaxifies Shopify cart sections and product forms.
 
