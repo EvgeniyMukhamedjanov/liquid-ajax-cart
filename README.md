@@ -2,9 +2,13 @@
 
 Ajaxifies Shopify cart sections and product forms.
 
-No JavaScript code needed. 
+Doesn't apply CSS styles — the appearance is up to a developer.
 
-JavaScript API is provided for customization. 
+No JavaScript code needed — just plain Liquid. 
+
+![Liquid Ajax Cart Video](https://liquid-ajax-cart.js.org/assets/images/readme.gif)
+
+## 2-steps installation
 
 ##### 1. Create a theme section for the cart with a `data-ajax-cart-section` container
 
