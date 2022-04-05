@@ -66,7 +66,7 @@ A "Clear cart" button:
 
 ### Not only for links
 
-It is a good practice to use `routes.cart_*_url` links for because they will work even without JavaScript.
+It is a good practice to use `routes.cart_*_url` links because they will work even without JavaScript.
 
 But if you can't use the `a` tag with the `href` parameter, Liquid Ajax Cart still offers the same functionality for any HTML element: add the `data-ajax-cart-request-button` attribute to an HTML element and provide a `routes.cart_*_url` route as an attribute's value:
 

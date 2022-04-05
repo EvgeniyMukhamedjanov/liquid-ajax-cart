@@ -27,12 +27,14 @@ disable_anchors: true
 <div class="guide-row__col">
   <div class="star-promo">
     <div class="star-promo__text">
-      <p>If you have questions or suggestions, welcome to the GitHub Discussions!</p>
-      <p>Don't forget to give the project a star on GitHub. It helps a lot for promotion.</p>
+      <p>Liquid Ajax Cart is not free.</p>
+      <p>It is distributed in exchange for GitHub stars!</p>
+      <p>A star must be sent as soon as you like the project or use it. Your star will be used to promote the project as it is new.</p>
+      <p>We provide dedicated support for the stargazers by email and on <a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions">GitHub discussions</a>.</p>
     </div>
     <p class="star-promo__name">— Evgeniy Mukhamedjanov, dev <img src="https://github.com/EvgeniyMukhamedjanov.png?size=62" width="26" height="26" alt="Evgeniy Mukhamedjanov's photo" /></p>
     <div>
-        <a class="github-button" href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions" data-size="large" data-icon="octicon-comment-discussion" aria-label="Discuss EvgeniyMukhamedjanov/liquid-ajax-cart on GitHub">Discuss</a>
+        <a class="github-button" href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/" data-size="large" data-icon="octicon-star" aria-label="Liquid Ajax Cart on GitHub">Give a star</a>
     </div>
   </div>
 </div>
