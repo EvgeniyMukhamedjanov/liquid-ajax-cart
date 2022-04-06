@@ -16,8 +16,8 @@ function isCompatible() {
 		if (!('FormData' in window)) return false;
 		if (!('WeakMap' in window)) return false;
 		if (!('DOMParser' in window)) return false;
-		eval("`foo`");
-		eval('function foo(bar, ...rest) { return 1; };');
+		// eval("`foo`");
+		// eval('function foo(bar, ...rest) { return 1; };');
 		const obj = { foo: 'bar' }
 		let { foo } = obj;
 
