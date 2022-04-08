@@ -36,6 +36,7 @@ title: Releases
 	<div class="release__heading">
 		<h2 class="release__version">v{{ file_version }}</h2>
 		<div class="release__date">
+			{%- if file_version == '1.10.1' -%}Released on 2022, Apr 8{%- endif -%}
 			{%- if file_version == '1.10.0' -%}Released on 2022, Feb 19{%- endif -%}
 			{%- if file_version == '1.9.0' -%}Released on 2022, Feb 3{%- endif -%}
 			{%- if file_version == '1.8.2' -%}Released on 2022, Feb 2{%- endif -%}
@@ -61,6 +62,10 @@ title: Releases
 ##### Changes:
 
 {% endif %}
+
+{%- if file_version == '1.10.1' -%}
+* The `js-ajax-cart-not-compatible` CSS class is added.
+{%- endif -%}
 
 {%- if file_version == '1.10.0' -%}
 * The `previousCart` parameter is always passed to `subscribeToCartStateUpdate` callback functions.

@@ -101,6 +101,9 @@ links:
         - title: .js-ajax-cart-request-in-progress
           file: js-ajax-cart-request-in-progress
           description: Is added if there are one or more Cart Ajax API requests in progress.
+        - title: .js-ajax-cart-not-compatible 
+          file: js-ajax-cart-not-compatible
+          description: Is added if a user's browser doesn't support all needed features.
     - title: State
       file: state
       description: A Javascript object that keeps the cart and app state.
