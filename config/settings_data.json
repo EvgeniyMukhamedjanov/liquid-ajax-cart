@@ -267,7 +267,7 @@
         "type": "rich-text",
         "settings": {
           "section_title": "About",
-          "text": "<p>The store is based on the \"Minimal\" Shopify theme because it doesn't have any Ajax-cart related functionality (unlike \"Dawn\").<\/p><p>All the Ajax-cart related functionality build with Liquid Ajax Cart.<\/p>",
+          "text": "<p>The store is based on the \"Minimal\" Shopify theme because it doesn't have any Ajax-cart related functionality (unlike \"Dawn\").<\/p><p>All the Ajax-cart related functionality is built with Liquid Ajax Cart.<\/p>",
           "text_size": "medium"
         }
       }

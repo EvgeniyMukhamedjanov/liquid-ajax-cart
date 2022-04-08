@@ -16,10 +16,9 @@ function isCompatible() {
 		if (!('FormData' in window)) return false;
 		if (!('WeakMap' in window)) return false;
 		if (!('DOMParser' in window)) return false;
-		// eval("`foo`");
-		// eval('function foo(bar, ...rest) { return 1; };');
-		const obj = { foo: 'bar' }
+		const obj = { foo: `bar${ 'bar' }` }
 		let { foo } = obj;
+		if (foo !== 'barbar') return false;
 
 		const weakMap = new WeakMap();
 		weakMap.set(obj, 'foo');
@@ -82,20 +81,21 @@ if (!( 'liquidAjaxCart' in window )) {
 		});
 	} else {
 		console.warn('Liquid Ajax Cart is not supported by this browser');
+		document.body.className += ' js-ajax-cart-not-compatible';
 		window.liquidAjaxCart = {
-			configureCart: () => {},
+			configureCart: function() {},
 
-			cartRequestGet: () => {}, 
-			cartRequestAdd: () => {}, 
-			cartRequestChange: () => {}, 
-			cartRequestUpdate: () => {}, 
-			cartRequestClear: () => {}, 
-			subscribeToCartAjaxRequests: () => {},
+			cartRequestGet: function() {}, 
+			cartRequestAdd: function() {}, 
+			cartRequestChange: function() {}, 
+			cartRequestUpdate: function() {}, 
+			cartRequestClear: function() {}, 
+			subscribeToCartAjaxRequests: function() {},
 
 			getCartState,
-			subscribeToCartStateUpdate: () => {},
+			subscribeToCartStateUpdate: function() {},
 
-			subscribeToCartSectionsUpdate: () => {}
+			subscribeToCartSectionsUpdate: function() {}
 		}
 	}
 }
