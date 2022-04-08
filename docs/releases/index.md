@@ -65,7 +65,7 @@ title: Releases
 
 {%- if file_version == '1.10.1' -%}
 * The `js-ajax-cart-not-compatible` CSS class is added.
-* The JavaScript module reduced in size.
+* The JavaScript module is reduced in size.
 {%- endif -%}
 
 {%- if file_version == '1.10.0' -%}
