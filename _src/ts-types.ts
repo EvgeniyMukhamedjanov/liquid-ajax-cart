@@ -112,6 +112,11 @@ declare global {
 			subscribeToCartStateUpdate: ( callback: StateSubscriberType ) => void,
 			subscribeToCartSectionsUpdate: ( callback: SectionsSubscriberType ) => void,
     	}
-    	Shopify: JSONObjectType 
+    	Shopify?: {
+    		locale?: String,
+    		routes?: {
+    			root: String
+    		}
+    	}
     }
 }

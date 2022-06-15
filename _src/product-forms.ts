@@ -15,7 +15,7 @@ const cartProductFormsInit = () => {
 		// let errorMessage = '';
 
 		const formActionUrl = new URL(form.action);
-		if (formActionUrl.pathname !== '/cart/add') {
+		if (formActionUrl.pathname !== `${ window.Shopify?.routes?.root || '/' }cart/add`) {
 			return;
 		}
 

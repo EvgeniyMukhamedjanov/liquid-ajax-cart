@@ -2,10 +2,10 @@ import { settings } from './../settings';
 import { cartRequestChange, cartRequestAdd, cartRequestClear, cartRequestUpdate } from './../ajax-api';
 import { getCartState } from './../state';
 
-const CHANGE_URL = '/cart/change';
-const ADD_URL = '/cart/add';
-const CLEAR_URL = '/cart/clear';
-const UPDATE_URL = '/cart/update';
+const CHANGE_URL = `${ window.Shopify?.routes?.root || '/' }cart/change`;
+const ADD_URL = `${ window.Shopify?.routes?.root || '/' }cart/add`;
+const CLEAR_URL = `${ window.Shopify?.routes?.root || '/' }cart/clear`;
+const UPDATE_URL = `${ window.Shopify?.routes?.root || '/' }cart/update`;
 
 
 function clickHandler (element: Element, e: Event) {

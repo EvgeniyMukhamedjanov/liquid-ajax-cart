@@ -1,6 +1,6 @@
 {
   "name": "liquid-ajax-cart",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "description": "Ajaxifies Shopify cart sections and product forms like a boss",
   "private": false,
   "browser": "./liquid-ajax-cart.js",
@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack-watch": "webpack --mode=development --watch",
-    "themekit-watch": "shopify-themekit open && shopify-themekit watch",
+    "themekit-watch": "theme open && theme watch",
     "watch": "npm-run-all --parallel themekit-watch webpack-watch",
     "build": "rimraf docs/releases/last && webpack --mode=production && webpack --mode=production --env last=true  && webpack --mode=production --env npm=true"
   },

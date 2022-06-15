@@ -289,23 +289,23 @@ function subscribeToCartQueues( callback: QueuesCallbackType ): void {
 function getEndpoint ( requestType: string ): string | undefined {
 	switch ( requestType ) {
 		case REQUEST_ADD:
-			return '/cart/add.js';
+			return `${ window.Shopify?.routes?.root || '/' }cart/add.js`;
 			break;
 
 		case REQUEST_CHANGE:
-			return '/cart/change.js';
+			return `${ window.Shopify?.routes?.root || '/' }cart/change.js`;
 			break;
 
 		case REQUEST_GET:
-			return '/cart.js';
+			return `${ window.Shopify?.routes?.root || '/' }cart.js`;
 			break;
 
 		case REQUEST_CLEAR:
-			return '/cart/clear.js';
+			return `${ window.Shopify?.routes?.root || '/' }cart/clear.js`;
 			break;
 
 		case REQUEST_UPDATE:
-			return '/cart/update.js';
+			return `${ window.Shopify?.routes?.root || '/' }cart/update.js`;
 			break;
 
 		default:
