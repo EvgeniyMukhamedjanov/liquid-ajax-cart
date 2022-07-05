@@ -16,6 +16,7 @@ function isCompatible() {
 		if (!('FormData' in window)) return false;
 		if (!('WeakMap' in window)) return false;
 		if (!('DOMParser' in window)) return false;
+		if (!('CustomEvent' in window)) return false;
 		const obj = { foo: `bar${ 'bar' }` }
 		let { foo } = obj;
 		if (foo !== 'barbar') return false;
@@ -73,6 +74,9 @@ if (!( 'liquidAjaxCart' in window )) {
 
 			subscribeToCartSectionsUpdate
 		}
+
+		const event = new CustomEvent('liquidAjaxCartInit');
+		document.body.dispatchEvent(event);
 
 		window.addEventListener('focus', () => {
 			if ( settings.updateOnWindowFocus ) {

@@ -1,6 +1,6 @@
 {
   "name": "liquid-ajax-cart",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "description": "Ajaxifies Shopify cart sections and product forms like a boss",
   "private": false,
   "browser": "./liquid-ajax-cart.js",
