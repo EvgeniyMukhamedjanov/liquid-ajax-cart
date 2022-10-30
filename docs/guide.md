@@ -29,8 +29,7 @@ disable_anchors: true
     <div class="star-promo__text">
       <p>Liquid Ajax Cart is not free.</p>
       <p>It is distributed in exchange for GitHub stars!</p>
-      <p>A star must be sent as soon as you like the project. <br/>Your star will be used to promote the project as it is new.</p>
-      <p>We provide dedicated support for the stargazers by email and on <a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions">GitHub discussions</a>.</p>
+      <p>A star must be sent as soon as you like the project. <br/>;-)</p>
     </div>
     <p class="star-promo__name">— Evgeniy Mukhamedjanov, dev <img src="https://github.com/EvgeniyMukhamedjanov.png?size=62" width="26" height="26" alt="Evgeniy Mukhamedjanov's photo" /></p>
     <div>
