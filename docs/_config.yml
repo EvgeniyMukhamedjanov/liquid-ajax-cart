@@ -34,6 +34,18 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   portfolio:
+    - title: Novus Shoes
+      url: https://novushoes.com/
+      image: novus.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    - title: Bks Shoes
+      url: https://bksshoes.com/
+      image: bks.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    - title: La Favorita Shoes
+      url: https://lafavorita.com/
+      image: lafavorita.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: Eigenhain
       url: https://eigenhain.com/
       image: eigenhain.jpg
