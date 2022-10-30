@@ -34,6 +34,26 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   portfolio:
+    - title: Aleph Beauty
+      url: https://alephbeauty.com/
+      image: alephbeauty.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
+    - title: Brandon Blackwood
+      url: https://brandonblackwood.com/
+      image: brandonblackwood.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    - title: Pulse
+      url: https://lovemypulse.com/
+      image: lovemypulse.jpg
+      meta: Made by <a href="http://seanmythen.net/" target="_blank">Seán Mythen</a>
+    - title: Natz
+      url: https://www.drinknatz.com/
+      image: drinknatz.jpg
+      meta: Made by <a href="https://haroldao.com/" target="_blank">Harold AO</a>
+    - title: Novus Shoes
+      url: https://novushoes.com/
+      image: novus.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: Novus Shoes
       url: https://novushoes.com/
       image: novus.jpg
