@@ -14,7 +14,7 @@ type SettingsType = {
 		[property: string]: string
 	}
 }
-type SeetingsKeysType = keyof SettingsType;
+type SettingsKeysType = keyof SettingsType;
 
 const cssClassesPrefix = 'js-ajax-cart';
 const dataAttributePrefix = 'data-ajax-cart';
@@ -60,7 +60,7 @@ const settings: SettingsType = {
 
 function configureCart ( property: string, value: ConfigurationValue ) {
 	if ( property in settings && property !== 'computed' ) {
-		(settings[property as SeetingsKeysType] as ConfigurationValue) = value;
+		(settings[property as SettingsKeysType] as ConfigurationValue) = value;
 		if ( property === 'stateBinderFormatters' ) {
 			cartDomBinderRerender();
 		}
