@@ -8,7 +8,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack-watch": "webpack --mode=development --watch",
-    "themekit-watch": "theme open && theme watch",
     "shopify-watch": "shopify theme dev --store=liquid-ajax-cart",
     "start": "npm-run-all --parallel webpack-watch shopify-watch",
     "build": "rimraf docs/releases/last && webpack --mode=production && webpack --mode=production --env last=true  && webpack --mode=production --env npm=true"
