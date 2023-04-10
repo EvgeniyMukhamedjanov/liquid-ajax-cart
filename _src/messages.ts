@@ -1,7 +1,5 @@
 import {
   RequestStateType,
-  RequestResultSubscriberType,
-  LineItemType,
   MessageType
 } from './ts-types';
 
