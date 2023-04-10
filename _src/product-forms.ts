@@ -1,60 +1,69 @@
-import { 
-	RequestStateType
-} from './ts-types';
-
 import { settings } from './settings';
 import { cartRequestAdd } from './ajax-api';
 
 const processesAmount = new WeakMap();
+const listenedForms = new WeakMap();
 
 const cartProductFormsInit = () => {
-	document.addEventListener('submit', e => {
+	(new MutationObserver(() => {
+		addSubmitListeners();
+	})).observe(document.body, {subtree: true, childList: true});
+	addSubmitListeners();
+}
 
-		const form = e.target as HTMLFormElement;
-		let processesAmountBefore;
-		// let errorMessage = '';
-
-		const formActionUrl = new URL(form.action);
-		if (formActionUrl.pathname !== `${ window.Shopify?.routes?.root || '/' }cart/add`) {
+function addSubmitListeners() {
+	document.querySelectorAll('form[action*="/cart/add"]').forEach(form => {
+		if (listenedForms.get(form))
 			return;
-		}
+		form.addEventListener('submit', submitHandler);
+		listenedForms.set(form, true);
+	})
+}
 
-		if ('productFormsFilter' in settings && !settings.productFormsFilter(form) ) {
-			return;
-		}
+function submitHandler(e: Event) {
+	const form = e.target as HTMLFormElement;
+	let processesAmountBefore;
 
-		e.preventDefault();
+	const formActionUrl = new URL(form.action);
+	if (formActionUrl.pathname !== `${ window.Shopify?.routes?.root || '/' }cart/add`) {
+		return;
+	}
 
-		processesAmountBefore = processesAmount.get(form);
-		if ( !(processesAmountBefore > 0) ) {
-			processesAmountBefore = 0;
-		}
-		
-		// if the form has ana Ajax request in progress — ignore the submit
-		if ( processesAmountBefore > 0 ) {
-			return;
-		}
+	if ('productFormsFilter' in settings && !settings.productFormsFilter(form) ) {
+		return;
+	}
 
-		const formData = new FormData(form);
+	e.preventDefault();
 
-		processesAmount.set( form, processesAmountBefore + 1 );
-		updateFormHTML( form );
+	processesAmountBefore = processesAmount.get(form);
+	if ( !(processesAmountBefore > 0) ) {
+		processesAmountBefore = 0;
+	}
 
-		cartRequestAdd( formData, {
-			lastComplete: (requestState: RequestStateType) => {
+	// if the form has ana Ajax request in progress — ignore the submit
+	if ( processesAmountBefore > 0 ) {
+		return;
+	}
 
-				const processesAmountAfter = processesAmount.get( form );
-				if ( processesAmountAfter > 0 ) {
-					processesAmount.set( form, processesAmountAfter - 1 );
-				}
+	const formData = new FormData(form);
 
-				updateFormHTML( form );
-			},
-			newQueue: true,
-			info: {
-				"initiator": form
+	processesAmount.set( form, processesAmountBefore + 1 );
+	updateFormHTML( form );
+
+	cartRequestAdd( formData, {
+		lastComplete: () => {
+
+			const processesAmountAfter = processesAmount.get( form );
+			if ( processesAmountAfter > 0 ) {
+				processesAmount.set( form, processesAmountAfter - 1 );
 			}
-		})
+
+			updateFormHTML( form );
+		},
+		newQueue: true,
+		info: {
+			"initiator": form
+		}
 	})
 }
 

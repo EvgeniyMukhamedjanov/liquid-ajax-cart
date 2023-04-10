@@ -68,6 +68,8 @@ title: Releases
 
 {%- if file_version == '1.11.0' -%}
 * The `lineItemQuantityErrorText` configuration parameter is removed, as Shopify started returning error in the `/cart/change.js` response.
+* Fixed bug when Shopify Pixel analytics `product_added_to_cart` event fired twice on a form submission.
+* Fixed bug when `data-ajax-cart-message` prints out `null` instead of an error message.
 {%- endif -%}
 
 {%- if file_version == '1.10.3' -%}
