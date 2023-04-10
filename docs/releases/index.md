@@ -36,6 +36,7 @@ title: Releases
 	<div class="release__heading">
 		<h2 class="release__version">v{{ file_version }}</h2>
 		<div class="release__date">
+            {%- if file_version == '1.11.0' -%}Released on 2023, Apr 11{%- endif -%}
 			{%- if file_version == '1.10.3' -%}Released on 2022, Jul 5{%- endif -%}
 			{%- if file_version == '1.10.2' -%}Released on 2022, Jun 15{%- endif -%}
 			{%- if file_version == '1.10.1' -%}Released on 2022, Apr 8{%- endif -%}
@@ -64,6 +65,10 @@ title: Releases
 ##### Changes:
 
 {% endif %}
+
+{%- if file_version == '1.11.0' -%}
+* The `lineItemQuantityErrorText` configuration parameter is removed, as Shopify started returning error in the `/cart/change.js` response.
+{%- endif -%}
 
 {%- if file_version == '1.10.3' -%}
 * The `liquidAjaxCartInit` event is added for the `body` tag.

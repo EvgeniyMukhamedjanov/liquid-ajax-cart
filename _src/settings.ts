@@ -7,7 +7,6 @@ type SettingsType = {
 	messageBuilder: (messages: Array<MessageType>) => string,
 	stateBinderFormatters: FormattersObjectType,
 	addToCartCssClass: string | [string, number],
-	lineItemQuantityErrorText: string,
 	requestErrorText: string,
 	updateOnWindowFocus: boolean,
 	computed: {
@@ -31,7 +30,6 @@ const settings: SettingsType = {
 	stateBinderFormatters: {},
 	addToCartCssClass: '',
 
-	lineItemQuantityErrorText: 'You can\'t add more of this item to your cart',
 	requestErrorText: 'There was an error while updating your cart. Please try again.',
 
 	updateOnWindowFocus: true,

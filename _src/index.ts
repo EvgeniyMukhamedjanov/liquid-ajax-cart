@@ -1,107 +1,123 @@
-import { cartSettingsInit, configureCart, settings } from './settings';
-import { cartRequestGet, cartRequestAdd, cartRequestChange, cartRequestUpdate, cartRequestClear, subscribeToCartAjaxRequests } from './ajax-api';
-import { getCartState, cartStateInit, subscribeToCartStateUpdate } from './state';
-import { cartDomBinderInit } from './dom-binder';
-import { cartSectionsInit, subscribeToCartSectionsUpdate } from './sections';
-import { cartControlsInit } from './controls';
-import { cartProductFormsInit } from './product-forms';
-import { cartMessagesInit } from './messages';
-import { cartGlobalClassesInit } from './global-classes';
+import {cartSettingsInit, configureCart, settings} from './settings';
+import {
+  cartRequestGet,
+  cartRequestAdd,
+  cartRequestChange,
+  cartRequestUpdate,
+  cartRequestClear,
+  subscribeToCartAjaxRequests
+} from './ajax-api';
+import {getCartState, cartStateInit, subscribeToCartStateUpdate} from './state';
+import {cartDomBinderInit} from './dom-binder';
+import {cartSectionsInit, subscribeToCartSectionsUpdate} from './sections';
+import {cartControlsInit} from './controls';
+import {cartProductFormsInit} from './product-forms';
+import {cartMessagesInit} from './messages';
+import {cartGlobalClassesInit} from './global-classes';
 
 function isCompatible() {
-	try {
+  try {
 
-		if (!('fetch' in window)) return false;
-		if (!('Promise' in window)) return false;
-		if (!('FormData' in window)) return false;
-		if (!('WeakMap' in window)) return false;
-		if (!('DOMParser' in window)) return false;
-		if (!('CustomEvent' in window)) return false;
-		const obj = { foo: `bar${ 'bar' }` }
-		let { foo } = obj;
-		if (foo !== 'barbar') return false;
+    if (!('fetch' in window)) return false;
+    if (!('Promise' in window)) return false;
+    if (!('FormData' in window)) return false;
+    if (!('WeakMap' in window)) return false;
+    if (!('DOMParser' in window)) return false;
+    if (!('CustomEvent' in window)) return false;
+    const obj = {foo: `bar${'bar'}`}
+    let {foo} = obj;
+    if (foo !== 'barbar') return false;
 
-		const weakMap = new WeakMap();
-		weakMap.set(obj, 'foo');
-		foo = weakMap.get(obj);
-		if (!foo) return false;
+    const weakMap = new WeakMap();
+    weakMap.set(obj, 'foo');
+    foo = weakMap.get(obj);
+    if (!foo) return false;
 
-		const formData = new FormData();
-		formData.set('foo', 'bar');
-		foo = formData.get('foo').toString();
-		if (!foo) return false;
+    const formData = new FormData();
+    formData.set('foo', 'bar');
+    foo = formData.get('foo').toString();
+    if (!foo) return false;
 
-		return true;
-	} catch(error) {
-		console.error(error);
-		return false;
-	}
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 }
 
-if (!( 'liquidAjaxCart' in window )) {
-	
-	if (isCompatible()) {
-	
-		cartSettingsInit();
-		cartProductFormsInit();
+if (!('liquidAjaxCart' in window)) {
 
-		// should be before cartStateInit because 
-		// it must subscribe to ajax-api before state 
-		// so that all state subscribers can work with updated DOM
-		cartSectionsInit();
+  if (isCompatible()) {
 
-		cartStateInit();
-		cartDomBinderInit(); // state subscriber
-		cartControlsInit(); // state subscriber
-		cartGlobalClassesInit(); // state subscriber
+    cartSettingsInit();
+    cartProductFormsInit();
 
-		// API subscriber but must be after cartStateInit because it uses state
-		// to calculate if there is an error
-		cartMessagesInit(); 
+    // should be before cartStateInit because
+    // it must subscribe to ajax-api before state
+    // so that all state subscribers can work with updated DOM
+    cartSectionsInit();
 
-		window.liquidAjaxCart = {
-			configureCart,
+    cartStateInit();
+    cartDomBinderInit(); // state subscriber
+    cartControlsInit(); // state subscriber
+    cartGlobalClassesInit(); // state subscriber
 
-			cartRequestGet, 
-			cartRequestAdd, 
-			cartRequestChange, 
-			cartRequestUpdate, 
-			cartRequestClear, 
-			subscribeToCartAjaxRequests,
+    // API subscriber but must be after cartStateInit because it uses state
+    // to calculate if there is an error
+    cartMessagesInit();
 
-			getCartState,
-			subscribeToCartStateUpdate,
+    (window as Window).liquidAjaxCart = {
+      configureCart,
 
-			subscribeToCartSectionsUpdate
-		}
+      cartRequestGet,
+      cartRequestAdd,
+      cartRequestChange,
+      cartRequestUpdate,
+      cartRequestClear,
+      subscribeToCartAjaxRequests,
 
-		const event = new CustomEvent('liquidAjaxCartInit');
-		document.body.dispatchEvent(event);
+      getCartState,
+      subscribeToCartStateUpdate,
 
-		window.addEventListener('focus', () => {
-			if ( settings.updateOnWindowFocus ) {
-				cartRequestUpdate({}, {});
-			}
-		});
-	} else {
-		console.warn('Liquid Ajax Cart is not supported by this browser');
-		document.body.className += ' js-ajax-cart-not-compatible';
-		window.liquidAjaxCart = {
-			configureCart: function() {},
+      subscribeToCartSectionsUpdate
+    }
 
-			cartRequestGet: function() {}, 
-			cartRequestAdd: function() {}, 
-			cartRequestChange: function() {}, 
-			cartRequestUpdate: function() {}, 
-			cartRequestClear: function() {}, 
-			subscribeToCartAjaxRequests: function() {},
+    const event = new CustomEvent('liquidAjaxCartInit');
+    document.body.dispatchEvent(event);
 
-			getCartState,
-			subscribeToCartStateUpdate: function() {},
+    (window as Window).addEventListener('focus', () => {
+      if (settings.updateOnWindowFocus) {
+        cartRequestUpdate({}, {});
+      }
+    });
+  } else {
+    console.warn('Liquid Ajax Cart is not supported by this browser');
+    document.body.className += ' js-ajax-cart-not-compatible';
+    (window as Window).liquidAjaxCart = {
+      configureCart: function () {
+      },
 
-			subscribeToCartSectionsUpdate: function() {}
-		}
-	}
+      cartRequestGet: function () {
+      },
+      cartRequestAdd: function () {
+      },
+      cartRequestChange: function () {
+      },
+      cartRequestUpdate: function () {
+      },
+      cartRequestClear: function () {
+      },
+      subscribeToCartAjaxRequests: function () {
+      },
+
+      getCartState,
+      subscribeToCartStateUpdate: function () {
+      },
+
+      subscribeToCartSectionsUpdate: function () {
+      }
+    }
+  }
 }
 
 const export_configureCart = window.liquidAjaxCart.configureCart;
@@ -118,18 +134,18 @@ const export_subscribeToCartStateUpdate = window.liquidAjaxCart.subscribeToCartS
 
 const export_subscribeToCartSectionsUpdate = window.liquidAjaxCart.subscribeToCartSectionsUpdate;
 
-export { 
-	export_configureCart as configureCart,
+export {
+  export_configureCart as configureCart,
 
-	export_cartRequestGet as cartRequestGet, 
-	export_cartRequestAdd as cartRequestAdd, 
-	export_cartRequestChange as cartRequestChange, 
-	export_cartRequestUpdate as cartRequestUpdate, 
-	export_cartRequestClear as cartRequestClear, 
-	export_subscribeToCartAjaxRequests as subscribeToCartAjaxRequests,
+  export_cartRequestGet as cartRequestGet,
+  export_cartRequestAdd as cartRequestAdd,
+  export_cartRequestChange as cartRequestChange,
+  export_cartRequestUpdate as cartRequestUpdate,
+  export_cartRequestClear as cartRequestClear,
+  export_subscribeToCartAjaxRequests as subscribeToCartAjaxRequests,
 
-	export_getCartState as getCartState,
-	export_subscribeToCartStateUpdate as subscribeToCartStateUpdate,
+  export_getCartState as getCartState,
+  export_subscribeToCartStateUpdate as subscribeToCartStateUpdate,
 
-	export_subscribeToCartSectionsUpdate as subscribeToCartSectionsUpdate
+  export_subscribeToCartSectionsUpdate as subscribeToCartSectionsUpdate
 }

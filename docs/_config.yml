@@ -191,8 +191,6 @@ links:
           description: Adds a CSS class to the `body` tag after successful adding a product to the cart.
         - file: updateOnWindowFocus
           description: Toggles the functionality that updates cart sections and the State when the `window` loses the focus and gets the focus again.
-        - file: lineItemQuantityErrorText
-          description: Defines the message text for the error when a user tries to set a cart item's quantity higher than the available quantity of the product.
         - file: requestErrorText
           description: Defines the message text for the error when a Cart Ajax API request is not successful and doesn't have any error descriptions, or if the request is not performed.
 

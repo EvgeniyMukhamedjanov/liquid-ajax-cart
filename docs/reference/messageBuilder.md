@@ -42,7 +42,6 @@ The function will be called with the only parameter `messages` — an array with
 ```
 * `type` — is always `error` for now. It is planned to add more message types in future releases.
 * `code`:
-  * `line_item_quantity_error` — if the [`cartRequestChange`](/reference/cartRequestChange/) request tried to set a cart item's quantity higher than the available quantity of the product. Usually it happens when a user uses [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/) buttons or [`data-ajax-cart-quantity-input`](/reference/data-ajax-cart-quantity-input/) input fields.
   * `shopify_error` — if Shopify responded with an error message to a [Cart Ajax API request](/reference/requests/). For example if a user tried to use a product form to add to cart more products than available, Shopify will respond with an error message.
   * `request_error` — if a [Cart Ajax API request](/reference/requests/) is not successful and doesn't have any error description, or if the request is not performed at all due to internet connection, for example.
 * `requestState` — the [Request State](/reference/requestState/) object with information about the request.
