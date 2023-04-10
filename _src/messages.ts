@@ -12,7 +12,6 @@ const MESSAGE_TYPES = {
 }
 
 const MESSAGE_CODES = {
-  LINE_ITEM_QUANTITY_ERROR: 'line_item_quantity_error',
   SHOPIFY_ERROR: 'shopify_error',
   REQUEST_ERROR: 'request_error',
 }
