@@ -34,6 +34,22 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   portfolio:
+    - title: Mahsa
+      url: https://www.mahsa.co.nz/
+      image: mahsa.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
+    - title: Two islands
+      url: https://twoislandsco.com/
+      image: twoislands.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
+    - title: Sadi studios
+      url: https://sadi.love/
+      image: sadi.jpg
+      meta: Made by <a href="https://haroldao.com/" target="_blank">Harold AO</a>
+    - title: Kit and Ace
+      url: https://www.kitandace.com/
+      image: kitandace.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: Aleph Beauty
       url: https://alephbeauty.com/
       image: alephbeauty.jpg
@@ -46,6 +62,10 @@ links:
       url: https://lovemypulse.com/
       image: lovemypulse.jpg
       meta: Made by <a href="http://seanmythen.net/" target="_blank">Seán Mythen</a>
+    - title: Talia di Napoli
+      url: https://www.taliadinapoli.com/
+      image: talia.jpg
+      meta: Integrated by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: Natz
       url: https://www.drinknatz.com/
       image: drinknatz.jpg
@@ -54,6 +74,10 @@ links:
       url: https://starforgesystems.com/
       image: starforge.jpg
       meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    - title: Becuming
+      url: https://becuming.me/
+      image: becuming.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: Novus Shoes
       url: https://novushoes.com/
       image: novus.jpg
