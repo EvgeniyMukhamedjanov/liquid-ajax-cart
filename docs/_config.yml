@@ -34,10 +34,6 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   portfolio:
-    - title: Mahsa
-      url: https://www.mahsa.co.nz/
-      image: mahsa.jpg
-      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: Two islands
       url: https://twoislandsco.com/
       image: twoislands.jpg
@@ -46,6 +42,10 @@ links:
       url: https://sadi.love/
       image: sadi.jpg
       meta: Made by <a href="https://haroldao.com/" target="_blank">Harold AO</a>
+    - title: Mahsa
+      url: https://www.mahsa.co.nz/
+      image: mahsa.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: Kit and Ace
       url: https://www.kitandace.com/
       image: kitandace.jpg
@@ -86,10 +86,18 @@ links:
       url: https://bksshoes.com/
       image: bks.jpg
       meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    - title: Christopher Esber
+      url: https://christopheresber.com.au/
+      image: ce.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: La Favorita Shoes
       url: https://lafavorita.com/
       image: lafavorita.jpg
       meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    - title: Emma Lewisham
+      url: https://emmalewisham.com/
+      image: emmalewisham.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: Eigenhain
       url: https://eigenhain.com/
       image: eigenhain.jpg
