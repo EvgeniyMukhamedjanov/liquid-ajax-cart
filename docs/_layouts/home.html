@@ -223,12 +223,12 @@ when the user's cart gets changed --&gt;
                     <div class="code-examples__notes-block">
                         <div class="code-examples__title">Ajaxifying product forms</div>
                         <div class="code-examples__note-wrapper">
-                            <div class="code-examples__note" data-example-highlight="form" style="top: calc(12 * 21px - 21px)">
+                            <div class="code-examples__note" data-example-highlight="form" style="top: calc(11 * 21px - 21px)">
                                 Product forms will be ajaxified automatically
                             </div>
                         </div>
                         <div class="code-examples__note-wrapper" style="transition-delay: 1310ms">
-                            <div class="code-examples__note" data-example-highlight="form-error" style="top: calc(15 * 21px - 21px)">
+                            <div class="code-examples__note" data-example-highlight="form-error" style="top: calc(14 * 21px - 21px)">
                                 Place a <code>data-ajax-cart-messages</code> container for error messages
                             </div>
                         </div>
@@ -385,6 +385,23 @@ when the user's cart gets changed --&gt;
                         </div>
                     </div>
                 </div>
+                {% if forloop.index == 2 %}
+                  <div class="built-with__item-wrapper">
+                      <div class="built-with__item">
+                          <div class="built-with__item-image-placeholder built-with__item-image-placeholder--fake">
+                              <div class="built-with__submit">
+                                  <div>
+                                    If a website uses Liquid Ajax Cart,
+                                    <br/>
+                                    you'll find <code>window.liquidAjaxCart</code> object
+                                    <br/>
+                                    in the browser console.
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                {% endif %}
             {% endfor %}
             <div class="built-with__item-wrapper">
                 <div class="built-with__item">

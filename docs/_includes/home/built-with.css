@@ -138,6 +138,9 @@
 .built-with__item:hover .built-with__submit {
 	opacity: 1;
 }
+.built-with__submit code {
+	background-color: transparent;
+}
 
 @media (min-width: 410px) { 
 	.built-with__item-meta {
