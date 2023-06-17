@@ -1,3 +1,8 @@
+---
+title: data-ajax-cart-property-input
+layout: page
+---
+
 # data-ajax-cart-property-input
 
 Add the `data-ajax-cart-property-input` attribute to a line item property input, a cart note input or a cart attribute input to ajaxify them: once a user changes the input's value, Liquid Ajax Cart will send a Shopify [Cart API request](/reference/requests/) to update the cart.

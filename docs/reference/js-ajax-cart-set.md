@@ -1,3 +1,8 @@
+---
+title: .js-ajax-cart-set
+layout: page
+---
+
 # .js-ajax-cart-set
 
 Liquid Ajax Cart adds the `js-ajax-cart-set` CSS class to the `body` tag if Liquid Ajax Cart has been loaded and got information about a user’s cart state.

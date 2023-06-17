@@ -1,3 +1,8 @@
+---
+title: State
+layout: page
+---
+
 # State
 State is a Javascript object where Liquid Ajax Cart keeps the information related to user’s cart.
 

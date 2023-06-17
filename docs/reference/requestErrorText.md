@@ -1,3 +1,8 @@
+---
+title: requestErrorText
+layout: page
+---
+
 # requestErrorText
 
 The `requestErrorText` configuration parameter sets the error message text that will appear in [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) containers when a Shopify Cart API request is not successful and doesn't have any error description, or if the request is not performed at all due to internet connection, for example.

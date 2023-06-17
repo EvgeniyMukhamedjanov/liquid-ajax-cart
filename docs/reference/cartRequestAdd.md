@@ -1,3 +1,8 @@
+---
+title: cartRequestAdd
+layout: page
+---
+
 # cartRequestAdd
 
 Performs a request to the Shopify Cart API `POST /cart/add.js` endpoint.

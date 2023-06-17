@@ -1,3 +1,8 @@
+---
+title: data-ajax-cart-messages
+layout: page
+---
+
 # data-ajax-cart-messages
 
 A container with the `data-ajax-cart-messages` attribute gets populated with errors and messages that come after each Shopify [Cart API request](/reference/requests/).

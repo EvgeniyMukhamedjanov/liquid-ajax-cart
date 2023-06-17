@@ -1,4 +1,9 @@
-# cartRequestClear
+---
+title: cartRequestClear()
+layout: page
+---
+
+# cartRequestClear()
 
 Performs a request to the Shopify Cart API `POST /cart/clear.js` endpoint.
 

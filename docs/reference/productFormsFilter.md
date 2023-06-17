@@ -1,3 +1,8 @@
+---
+title: productFormsFilter
+layout: page
+---
+
 # productFormsFilter
 
 Liquid Ajax Cart ajaxifies all Shopify product forms by default.

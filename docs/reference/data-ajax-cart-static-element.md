@@ -1,3 +1,8 @@
+---
+title: data-ajax-cart-static-element
+layout: page
+---
+
 # data-ajax-cart-static-element
 
 If you want to have an immutable HTML element within a [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) container — add the `data-ajax-cart-static-element` attribute to this element. HTML of the immutable element will *not* be replaced when its section gets updated.

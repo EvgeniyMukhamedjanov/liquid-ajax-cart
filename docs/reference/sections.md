@@ -1,3 +1,8 @@
+---
+title: Ajaxified sections
+layout: page
+---
+
 # Ajaxified sections
 
 Liquid Ajax Cart reloads HTML code of the HTML containers that marked with the [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) attribute every time when the Shopify cart is changed. 

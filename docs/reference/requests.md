@@ -1,3 +1,8 @@
+---
+title: Cart Ajax API requests
+layout: page
+---
+
 # Cart Ajax API requests
 
 It is highly recommended to use the following functions to make Shopify Cart Ajax API calls so Liquid Ajax Cart will keep the [State](/reference/state/), [cart sections](/reference/sections/), [body CSS classes](/reference/body-css-classes/) and [`data-ajax-cart-bind-state`](/reference/data-ajax-cart-bind-state/) content up to date:

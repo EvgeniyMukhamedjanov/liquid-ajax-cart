@@ -1,3 +1,8 @@
+---
+title: data-ajax-cart-request-button
+layout: page
+---
+
 # data-ajax-cart-request-button
 
 Add the `data-ajax-cart-request-button` to links that lead to Shopify [`routes.cart_add_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_add_url), [`routes.cart_change_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_change_url), [`routes.cart_clear_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_clear_url), [`routes.cart_update_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_update_url) and [`line_item.url_to_remove`](https://shopify.dev/api/liquid/objects/line_item#line_item-url_to_remove) routes to ajaxify them.

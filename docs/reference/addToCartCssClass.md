@@ -1,3 +1,8 @@
+---
+title: addToCartCssClass
+layout: page
+---
+
 # addToCartCssClass
 
 The `addToCartCssClass` configuration parameter lets you specify a CSS class that will be attached to the `body` tag after successful adding a product to the cart.

@@ -1,3 +1,8 @@
+---
+title: stateBinderFormatters
+layout: page
+---
+
 # stateBinderFormatters
 
 The `stateBinderFormatters` configuration parameter lets you define custom formatters that you can use with the [`data-ajax-cart-bind-state`](/reference/data-ajax-cart-bind-state/) attribute.

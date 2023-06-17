@@ -1,3 +1,8 @@
+---
+title: .js-ajax-cart-empty
+layout: page
+---
+
 # .js-ajax-cart-empty
 
 Liquid Ajax Cart adds the `js-ajax-cart-not-empty` CSS class to the `body` tag if the user’s cart is empty.

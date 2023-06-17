@@ -1,3 +1,8 @@
+---
+title: getCartState()
+layout: page
+---
+
 # getCartState()
 The `getCartState` function returns the current [State object](/reference/state/).
 

@@ -1,3 +1,8 @@
+---
+title: Queues
+layout: page
+---
+
 # Queues
 
 All Shopify Cart API requests don't get performed immediately but get added to queues.

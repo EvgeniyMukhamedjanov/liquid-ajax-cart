@@ -1,3 +1,8 @@
+---
+title: data-ajax-cart-initial-state
+layout: page
+---
+
 # data-ajax-cart-initial-state
 
 To do its job Liquid Ajax Cart needs to know current Shopify cart state: what products are in the cart, what total price is, what discounts are applied etc. This information is stored in the [`cart`](https://shopify.dev/api/liquid/objects/cart) liquid object.

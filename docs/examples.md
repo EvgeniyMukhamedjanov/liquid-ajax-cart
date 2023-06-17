@@ -1,5 +1,6 @@
 ---
 title: JavaScript examples
+layout: page
 ---
 
 ### Access to Liquid Ajax Cart JavaScript functions

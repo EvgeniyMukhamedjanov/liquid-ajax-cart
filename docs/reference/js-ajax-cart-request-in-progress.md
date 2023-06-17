@@ -1,3 +1,8 @@
+---
+title: .js-ajax-cart-request-in-progress
+layout: page
+---
+
 # .js-ajax-cart-request-in-progress
 
 Liquid Ajax Cart adds the `js-ajax-cart-request-in-progress` CSS class to the `body` if there are one or more Shopify Cart API requests in progress.

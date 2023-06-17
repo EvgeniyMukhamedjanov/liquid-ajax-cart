@@ -1,3 +1,8 @@
+---
+title: Request state
+layout: page
+---
+
 # Request state
 
 Liquid Ajax Cart keeps the information about each Shopify Cart Ajax API request in Javascript objects that are called "Request state".

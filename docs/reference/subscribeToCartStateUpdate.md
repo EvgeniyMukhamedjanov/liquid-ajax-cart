@@ -1,3 +1,8 @@
+---
+title: subscribeToCartStateUpdate()
+layout: page
+---
+
 # subscribeToCartStateUpdate()
 
 The `subscribeToCartStateUpdate` function adds your callback function to the list of functions that will be called each time after the [State object](/reference/state/) is changed. The callback should be passed as the only parameter.

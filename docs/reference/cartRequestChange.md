@@ -1,4 +1,9 @@
-# cartRequestChange
+---
+title: cartRequestChange()
+layout: page
+---
+
+# cartRequestChange()
 
 Performs a request to the Shopify Cart API `POST /cart/change.js` endpoint.
 

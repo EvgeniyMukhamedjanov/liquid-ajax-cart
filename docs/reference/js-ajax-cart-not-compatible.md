@@ -1,3 +1,8 @@
+---
+title: .js-ajax-cart-not-compatible
+layout: page
+---
+
 # .js-ajax-cart-not-compatible
 
 Liquid Ajax Cart adds the `js-ajax-cart-not-compatible` CSS class to the `body` tag if the current browser doesn't support all the features needed for Liquid Ajax Cart.

@@ -1,4 +1,9 @@
-# cartRequestUpdate
+---
+title: cartRequestUpdate()
+layout: page
+---
+
+# cartRequestUpdate()
 
 Performs a request to the Shopify Cart API `POST /cart/update.js` endpoint.
 

@@ -1,3 +1,8 @@
+---
+title: messageBuilder
+layout: page
+---
+
 # messageBuilder
 
 The `messageBuilder` configuration parameter lets you change the HTML layout of the messages that are put in [`data-ajax-cart-messages`](/reference/data-ajax-cart-messages/) containers.

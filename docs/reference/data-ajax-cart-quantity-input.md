@@ -1,3 +1,8 @@
+---
+title: data-ajax-cart-quantity-input
+layout: page
+---
+
 # data-ajax-cart-quantity-input
 
 Add the `data-ajax-cart-quantity-input` attribute with a cart item's index or a cart item's key as the value to an input element to ajaxify the input field: once a user changes the input's value, Liquid Ajax Cart will send a Shopify [Cart API request](/reference/requests/) to update the quantity.

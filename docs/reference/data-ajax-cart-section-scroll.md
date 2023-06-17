@@ -1,3 +1,8 @@
+---
+title: data-ajax-cart-section-scroll
+layout: page
+---
+
 # data-ajax-cart-section-scroll
 
 If you have a scrollable area within a [`data-ajax-cart-section`](/reference/data-ajax-cart-section/) section, the scroll position will be reset to top every time when the cart is changed because the section’s HTML will be completely replaced with a new one. 

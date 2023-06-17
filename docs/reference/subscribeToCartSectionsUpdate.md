@@ -1,4 +1,9 @@
-# subscribeToCartSectionsUpdate
+---
+title: subscribeToCartSectionsUpdate()
+layout: page
+---
+
+# subscribeToCartSectionsUpdate()
 
 <p style="text-align: right;"><small><a href="https://github.com/kaboomdev/">@Kobi</a>, especially for you.</small></p>
 

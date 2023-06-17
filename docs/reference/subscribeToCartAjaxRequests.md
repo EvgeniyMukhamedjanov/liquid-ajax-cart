@@ -1,3 +1,8 @@
+---
+title: subscribeToCartAjaxRequests()
+layout: page
+---
+
 # subscribeToCartAjaxRequests()
 The `subscribeToCartAjaxRequests` function adds your callback function to the list of functions that will be called each time before another Shopify Cart API request is getting performed.
 The callback should be passed as the only parameter.

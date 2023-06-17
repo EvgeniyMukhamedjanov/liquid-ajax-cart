@@ -1,3 +1,8 @@
+---
+title: cartRequestGet()
+layout: page
+---
+
 # cartRequestGet() 
 
 Performs a request to the Shopify Cart API `GET /cart.js` endpoint.

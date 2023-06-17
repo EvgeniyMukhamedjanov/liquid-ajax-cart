@@ -1,3 +1,8 @@
+---
+title: Controls
+layout: page
+---
+
 # Controls
 
 ### [`data-ajax-cart-request-button`](/reference/data-ajax-cart-request-button/)

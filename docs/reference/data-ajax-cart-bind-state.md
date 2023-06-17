@@ -1,3 +1,8 @@
+---
+title: data-ajax-cart-bind-state
+layout: page
+---
+
 # data-ajax-cart-bind-state
 
 Add the `data-ajax-cart-bind-state` attribute to an HTML element, pass a [State object](/reference/state/) property as the attribute's value and Liquid Ajax Cart will display the state property's value within the HTML element and refresh it when the cart gets updated.

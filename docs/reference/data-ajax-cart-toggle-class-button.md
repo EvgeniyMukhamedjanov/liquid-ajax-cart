@@ -1,3 +1,9 @@
+---
+title: data-ajax-cart-toggle-class-button
+layout: page
+---
+
+
 # data-ajax-cart-toggle-class-button
 
 Add the `data-ajax-cart-toggle-class-button` attribute to an HTML element, pass a CSS class name as a parameter, and  Liquid Ajax Cart will "toggle" the CSS class for the `body` tag when a user clicks on the element.

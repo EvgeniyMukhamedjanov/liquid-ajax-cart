@@ -1,3 +1,8 @@
+---
+title: Configuration
+layout: page
+---
+
 # Configuration
 
 ### data-ajax-cart-configuration
