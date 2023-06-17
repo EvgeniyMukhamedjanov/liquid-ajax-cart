@@ -106,7 +106,8 @@ export type UpdatedSectionType = {
   id: string,
   elements: Array<Element>
 }
-export type SectionsSubscriberType = (sections: Array<UpdatedSectionType>) => void;
+// export type SectionsSubscriberType = (sections: Array<UpdatedSectionType>) => void;
+export type EventSectionsType = CustomEvent<Array<UpdatedSectionType>>;
 
 declare global {
   interface Window {
@@ -120,7 +121,7 @@ declare global {
       // subscribeToCartAjaxRequests: (callback: RequestCallbackType) => void,
       getCartState: () => AppStateType,
       // subscribeToCartStateUpdate: (callback: StateSubscriberType) => void,
-      subscribeToCartSectionsUpdate: (callback: SectionsSubscriberType) => void,
+      // subscribeToCartSectionsUpdate: (callback: SectionsSubscriberType) => void,
     }
     Shopify?: {
       locale?: String,

@@ -3,12 +3,16 @@ import {
   // RequestResultSubscriberType,
   JSONValueType,
   UpdatedSectionType,
-  SectionsSubscriberType,
+  // SectionsSubscriberType,
+  EventSectionsType,
   EventRequestType
 } from './ts-types';
 
 import {EVENT_REQUEST, /*subscribeToCartAjaxRequests,*/ REQUEST_ADD} from './ajax-api';
 import {settings} from './settings';
+import {EVENT_PREFIX} from "./const";
+
+const EVENT_SECTIONS = `${EVENT_PREFIX}sections`;
 
 type StaticElementsListType = {
   [elementId: string]: Array<Element>
@@ -19,7 +23,7 @@ type ScrollAreasListType = {
 }
 
 const shopifySectionPrefix = 'shopify-section-';
-const subscribers: Array<SectionsSubscriberType> = [];
+// const subscribers: Array<SectionsSubscriberType> = [];
 
 function cartSectionsInit() {
   // subscribeToCartAjaxRequests (( requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType ) => {
@@ -70,7 +74,7 @@ function cartSectionsInit() {
     onResult((requestState: RequestStateType) => {
       const {sectionsAttribute, sectionScrollAreaAttribute} = settings.computed;
       const parser = new DOMParser();
-      const updatedSections: Array<UpdatedSectionType> = []; // for subscribers
+      const updatedSections: Array<UpdatedSectionType> = []; // for sections event
 
       if (requestState.responseData?.ok && 'sections' in requestState.responseData.body) {
         let sections = requestState.responseData.body.sections as ({ [key: string]: string });
@@ -85,7 +89,7 @@ function cartSectionsInit() {
 
           document.querySelectorAll(`#shopify-section-${sectionId}`).forEach(sectionNode => {
 
-            let newNodes: Array<Element> = []; // for subscribers
+            let newNodes: Array<Element> = []; // for sections event
             const noId = "__noId__"; // for memorizing scroll positions and static elements
 
             // Memorize scroll positions
@@ -177,22 +181,27 @@ function cartSectionsInit() {
         }
       }
 
-      if (updatedSections.length > 0 && subscribers.length > 0) {
-        subscribers.forEach(callback => {
-          try {
-            callback(updatedSections);
-          } catch (e) {
-            console.error('Liquid Ajax Cart: Error during a call of a sections update subscriber');
-            console.error(e);
-          }
-        });
+      if (updatedSections.length > 0/* && subscribers.length > 0*/) {
+        const event: EventSectionsType = new CustomEvent(EVENT_SECTIONS, {
+          detail: updatedSections
+        })
+        document.dispatchEvent(event);
+
+        // subscribers.forEach(callback => {
+        //   try {
+        //     callback(updatedSections);
+        //   } catch (e) {
+        //     console.error('Liquid Ajax Cart: Error during a call of a sections update subscriber');
+        //     console.error(e);
+        //   }
+        // });
       }
     })
   })
 }
 
-function subscribeToCartSectionsUpdate(callback: SectionsSubscriberType) {
-  subscribers.push(callback);
-}
+// function subscribeToCartSectionsUpdate(callback: SectionsSubscriberType) {
+//   subscribers.push(callback);
+// }
 
-export {cartSectionsInit, subscribeToCartSectionsUpdate};
+export {cartSectionsInit/*, subscribeToCartSectionsUpdate*/};
