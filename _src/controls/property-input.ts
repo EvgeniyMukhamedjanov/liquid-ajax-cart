@@ -1,9 +1,9 @@
-import { AppStateType, JSONValueType, RequestBodyType } from './../ts-types';
+import {AppStateType, EventStateType, JSONValueType, RequestBodyType} from '../ts-types';
 
-import { settings } from './../settings';
-import { cartRequestChange, cartRequestUpdate } from './../ajax-api';
-import { getCartState, subscribeToCartStateUpdate } from './../state';
-import { findLineItemByCode } from './../helpers';
+import { settings } from '../settings';
+import { cartRequestChange, cartRequestUpdate } from '../ajax-api';
+import {EVENT_STATE, getCartState/*, subscribeToCartStateUpdate*/} from '../state';
+import { findLineItemByCode } from '../helpers';
 
 type ValidElementType = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
@@ -22,13 +22,9 @@ function isValidElement(element: Element): boolean {
 		return false;
 	}
 
-	if((!(element instanceof HTMLInputElement) || element.type === 'hidden')
+	return !((!(element instanceof HTMLInputElement) || element.type === 'hidden')
 		&& !(element instanceof HTMLTextAreaElement)
-		&& !(element instanceof HTMLSelectElement)) {
-		return false;
-	}
-
-	return true;
+		&& !(element instanceof HTMLSelectElement));
 }
 
 type InputDataType = {
@@ -68,7 +64,6 @@ function getInputData(element: Element): InputDataType {
 	}
 
 	let [objectCode, ...propertyName] = attributeValue.trim().split('[');
-	let isNotValid = false;
 	if(!propertyName 
 		|| propertyName.length !== 1 
 		|| propertyName[0].length < 2 
@@ -145,11 +140,7 @@ function stateHandler ( state: AppStateType ) {
 			}
 
 			if( element instanceof HTMLInputElement && (element.type === 'checkbox' || element.type === 'radio')) {
-				if((element as HTMLInputElement).value === propertyValue) {
-					(element as HTMLInputElement).checked = true;
-				} else {
-					(element as HTMLInputElement).checked = false;
-				}
+				(element as HTMLInputElement).checked = (element as HTMLInputElement).value === propertyValue;
 			} else {
 				if ( typeof propertyValue !== 'string' 
 					&& !(propertyValue instanceof String) 
@@ -301,7 +292,10 @@ function escHandler (element: Element) {
 
 function cartPropertyInputInit () {
 	initEventListeners();
-	subscribeToCartStateUpdate( stateHandler );
+	// subscribeToCartStateUpdate( stateHandler );
+	document.addEventListener(EVENT_STATE, (event: EventStateType) => {
+		stateHandler(event.detail.state);
+	})
 	stateHandler( getCartState() );
 }
 

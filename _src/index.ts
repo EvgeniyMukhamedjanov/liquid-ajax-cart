@@ -7,7 +7,7 @@ import {
   cartRequestClear,
   // subscribeToCartAjaxRequests
 } from './ajax-api';
-import {getCartState, cartStateInit, subscribeToCartStateUpdate} from './state';
+import {getCartState, cartStateInit, /*subscribeToCartStateUpdate*/} from './state';
 import {cartDomBinderInit} from './dom-binder';
 import {cartSectionsInit, subscribeToCartSectionsUpdate} from './sections';
 import {cartControlsInit} from './controls';
@@ -77,7 +77,7 @@ if (!('liquidAjaxCart' in window)) {
       // subscribeToCartAjaxRequests,
 
       getCartState,
-      subscribeToCartStateUpdate,
+      // subscribeToCartStateUpdate,
 
       subscribeToCartSectionsUpdate
     }
@@ -111,8 +111,8 @@ if (!('liquidAjaxCart' in window)) {
       // },
 
       getCartState,
-      subscribeToCartStateUpdate: function () {
-      },
+      // subscribeToCartStateUpdate: function () {
+      // },
 
       subscribeToCartSectionsUpdate: function () {
       }
@@ -130,7 +130,7 @@ const export_cartRequestClear = window.liquidAjaxCart.cartRequestClear;
 // const export_subscribeToCartAjaxRequests = window.liquidAjaxCart.subscribeToCartAjaxRequests;
 
 const export_getCartState = window.liquidAjaxCart.getCartState;
-const export_subscribeToCartStateUpdate = window.liquidAjaxCart.subscribeToCartStateUpdate;
+// const export_subscribeToCartStateUpdate = window.liquidAjaxCart.subscribeToCartStateUpdate;
 
 const export_subscribeToCartSectionsUpdate = window.liquidAjaxCart.subscribeToCartSectionsUpdate;
 
@@ -145,7 +145,7 @@ export {
   // export_subscribeToCartAjaxRequests as subscribeToCartAjaxRequests,
 
   export_getCartState as getCartState,
-  export_subscribeToCartStateUpdate as subscribeToCartStateUpdate,
+  // export_subscribeToCartStateUpdate as subscribeToCartStateUpdate,
 
   export_subscribeToCartSectionsUpdate as subscribeToCartSectionsUpdate
 }

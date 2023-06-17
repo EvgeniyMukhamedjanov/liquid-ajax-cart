@@ -146,7 +146,7 @@
   </script>
 
   <script type="module">
-    import { /*subscribeToCartAjaxRequests,*/ subscribeToCartStateUpdate, cartRequestAdd, cartRequestChange, configureCart } from '{{ 'liquid-ajax-cart.js' | asset_url }}';
+    import { /*subscribeToCartAjaxRequests, subscribeToCartStateUpdate,*/ cartRequestAdd, cartRequestChange, configureCart } from '{{ 'liquid-ajax-cart.js' | asset_url }}';
 
     configureCart('addToCartCssClass', 'js-ajax-cart-open');
 
@@ -170,7 +170,9 @@
       }
     });
 
-    subscribeToCartStateUpdate( state => {
+    // subscribeToCartStateUpdate( state => {
+    document.addEventListener('liquid-ajax-cart:state', event => {
+      const state = event.detail.state;
       const promoVariant = 40934235668668;
       const promoSubtotal = 10000;
 

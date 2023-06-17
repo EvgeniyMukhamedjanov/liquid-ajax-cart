@@ -79,7 +79,11 @@ export type AppStateType = JSONObjectType & {
   cart: AppStateCartType,
   previousCart: AppStateCartType | undefined
 }
-export type StateSubscriberType = (state: AppStateType, isCartUpdated: boolean) => void;
+export type EventStateType = CustomEvent<{
+  state: AppStateType,
+  isCartUpdated: boolean
+}>;
+// export type StateSubscriberType = (state: AppStateType, isCartUpdated: boolean) => void;
 
 export type ConfigurationValue =
   | string
@@ -115,7 +119,7 @@ declare global {
       cartRequestClear: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
       // subscribeToCartAjaxRequests: (callback: RequestCallbackType) => void,
       getCartState: () => AppStateType,
-      subscribeToCartStateUpdate: (callback: StateSubscriberType) => void,
+      // subscribeToCartStateUpdate: (callback: StateSubscriberType) => void,
       subscribeToCartSectionsUpdate: (callback: SectionsSubscriberType) => void,
     }
     Shopify?: {

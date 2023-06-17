@@ -1,9 +1,9 @@
-import { AppStateType } from './../ts-types';
+import {AppStateType, EventStateType} from '../ts-types';
 
-import { settings } from './../settings';
-import { cartRequestChange } from './../ajax-api';
-import { getCartState, subscribeToCartStateUpdate } from './../state';
-import { findLineItemByCode } from './../helpers';
+import { settings } from '../settings';
+import { cartRequestChange } from '../ajax-api';
+import {EVENT_STATE, getCartState/*, subscribeToCartStateUpdate*/} from '../state';
+import { findLineItemByCode } from '../helpers';
 
 function initEventListeners() {
 	document.addEventListener('change', function(e) {
@@ -136,7 +136,10 @@ function escHandler (element: Element) {
 
 function cartQuantityInputInit () {
 	initEventListeners();
-	subscribeToCartStateUpdate( stateHandler );
+	// subscribeToCartStateUpdate( stateHandler );
+	document.addEventListener(EVENT_STATE, (event: EventStateType) => {
+		stateHandler(event.detail.state);
+	})
 	stateHandler( getCartState() );
 }
 

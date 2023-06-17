@@ -2,12 +2,14 @@ import {
   AppStateType,
   AppStateCartType,
   AppStateStatusType,
-  StateSubscriberType,
+  // StateSubscriberType,
   RequestStateType,
   JSONObjectType,
   JSONValueType,
   LineItemType,
-  EventQueuesType, EventRequestType
+  EventQueuesType,
+  EventRequestType,
+  EventStateType
 } from './ts-types';
 
 import {
@@ -16,11 +18,15 @@ import {
   cartRequestGet,
   cartRequestUpdate,
   REQUEST_ADD,
-  EVENT_QUEUES, EVENT_REQUEST
+  EVENT_QUEUES,
+  EVENT_REQUEST
 } from './ajax-api';
 import {settings} from './settings';
+import {EVENT_PREFIX} from "./const";
 
-const subscribers: Array<StateSubscriberType> = [];
+const EVENT_STATE = `${EVENT_PREFIX}state`;
+
+// const subscribers: Array<StateSubscriberType> = [];
 let cart: AppStateCartType = null;
 let previousCart: AppStateCartType | undefined = undefined
 let status: AppStateStatusType = {
@@ -132,9 +138,9 @@ function cartStateFromObject(data: JSONObjectType): AppStateCartType {
   }
 }
 
-function subscribeToCartStateUpdate(callback: StateSubscriberType) {
-  subscribers.push(callback);
-}
+// function subscribeToCartStateUpdate(callback: StateSubscriberType) {
+//   subscribers.push(callback);
+// }
 
 function getCartState(): AppStateType {
   return {
@@ -145,14 +151,21 @@ function getCartState(): AppStateType {
 }
 
 const notify = (isCartUpdated: boolean) => {
-  subscribers.forEach((callback: StateSubscriberType) => {
-    try {
-      callback(getCartState(), isCartUpdated);
-    } catch (e) {
-      console.error('Liquid Ajax Cart: Error during a call of a cart state update subscriber');
-      console.error(e);
+  const event: EventStateType = new CustomEvent(EVENT_STATE, {
+    detail: {
+      state: getCartState(),
+      isCartUpdated
     }
-  })
+  });
+  document.dispatchEvent(event)
+  // subscribers.forEach((callback: StateSubscriberType) => {
+  //   try {
+  //     callback(getCartState(), isCartUpdated);
+  //   } catch (e) {
+  //     console.error('Liquid Ajax Cart: Error during a call of a cart state update subscriber');
+  //     console.error(e);
+  //   }
+  // })
 }
 
-export {cartStateInit, subscribeToCartStateUpdate, getCartState};
+export {cartStateInit, /*subscribeToCartStateUpdate,*/ getCartState, EVENT_STATE};

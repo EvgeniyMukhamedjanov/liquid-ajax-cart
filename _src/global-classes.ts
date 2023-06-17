@@ -1,7 +1,7 @@
-import {AppStateType, EventRequestType} from './ts-types';
+import {AppStateType, EventRequestType, EventStateType} from './ts-types';
 
 import {settings} from './settings';
-import {getCartState, subscribeToCartStateUpdate} from './state';
+import {EVENT_STATE, getCartState/*, subscribeToCartStateUpdate*/} from './state';
 import {EVENT_REQUEST, REQUEST_ADD} from "./ajax-api";
 
 // import { subscribeToCartAjaxRequests } from './ajax-api';
@@ -141,7 +141,10 @@ function addToCartCssClassInit() {
 }
 
 const cartGlobalClassesInit = () => {
-  subscribeToCartStateUpdate(updateClasses);
+  // subscribeToCartStateUpdate(updateClasses);
+  document.addEventListener(EVENT_STATE, (event: EventStateType) => {
+    updateClasses(event.detail.state);
+  })
   updateClasses(getCartState());
   addToCartCssClassInit();
 }
