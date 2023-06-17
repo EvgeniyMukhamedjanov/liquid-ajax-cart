@@ -1,9 +1,9 @@
 import {
   RequestStateType,
-  MessageType
+  MessageType, EventRequestType
 } from './ts-types';
 
-import {subscribeToCartAjaxRequests, REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
+import {EVENT_REQUEST,/*subscribeToCartAjaxRequests,*/ REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
 import {getCartState} from './state';
 import {settings} from './settings';
 
@@ -109,7 +109,10 @@ const addRequestContainers = (requestState: RequestStateType): NodeListOf<Elemen
 }
 
 const cartMessagesInit = () => {
-  subscribeToCartAjaxRequests((requestState, subscribeToResult) => {
+  // subscribeToCartAjaxRequests((requestState, subscribeToResult) => {
+  document.addEventListener(EVENT_REQUEST, (event: EventRequestType) => {
+    const {requestState, onResult} = event.detail;
+
     let errorContainers: NodeListOf<Element>;
 
     if (requestState.requestType === REQUEST_ADD)
@@ -122,7 +125,7 @@ const cartMessagesInit = () => {
         element.innerHTML = '';
       });
 
-      subscribeToResult((requestState) => {
+      onResult((requestState) => {
         if (requestState.info.cancel) return;
 
         const {messageBuilder} = settings;

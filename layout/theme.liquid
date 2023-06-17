@@ -146,15 +146,18 @@
   </script>
 
   <script type="module">
-    import { subscribeToCartAjaxRequests, subscribeToCartStateUpdate, cartRequestAdd, cartRequestChange, configureCart } from '{{ 'liquid-ajax-cart.js' | asset_url }}';
+    import { /*subscribeToCartAjaxRequests,*/ subscribeToCartStateUpdate, cartRequestAdd, cartRequestChange, configureCart } from '{{ 'liquid-ajax-cart.js' | asset_url }}';
 
     configureCart('addToCartCssClass', 'js-ajax-cart-open');
 
-    subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
+    // subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
+    document.addEventListener('liquid-ajax-cart:request', event => {
+      const {requestState, onResult} = event.detail;
+
       if ( requestState.requestType === 'add' ) {
         const checkbox = document.getElementById( 'addToCartPopupCheckbox' );
         if ( checkbox && checkbox.checked ) {
-          subscribeToResult( requestState => {
+          onResult( requestState => {
             if ( requestState.responseData?.ok ) {
               let productName = requestState.responseData.body.title;
               if ( requestState.responseData.body.items?.length === 1 ) {

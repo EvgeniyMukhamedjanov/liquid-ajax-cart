@@ -45,8 +45,14 @@ export type CartRequestOptionsType = {
 export type RequestResultCallback = (requestState: RequestStateType) => void;
 export type RequestResultSubscriberType = (resultCallback: RequestResultCallback) => void;
 
-export type RequestCallbackType = (requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType) => void;
-export type QueuesCallbackType = (inProgress: boolean) => void;
+// export type RequestCallbackType = (requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType) => void;
+// export type QueuesCallbackType = (inProgress: boolean) => void;
+
+export type EventQueuesType = CustomEvent<{inProgress: boolean}>;
+export type EventRequestType = CustomEvent<{
+  requestState: RequestStateType,
+  onResult: RequestResultSubscriberType
+}>
 
 export type LineItemType = {
   key: string,
@@ -107,7 +113,7 @@ declare global {
       cartRequestChange: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
       cartRequestUpdate: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
       cartRequestClear: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
-      subscribeToCartAjaxRequests: (callback: RequestCallbackType) => void,
+      // subscribeToCartAjaxRequests: (callback: RequestCallbackType) => void,
       getCartState: () => AppStateType,
       subscribeToCartStateUpdate: (callback: StateSubscriberType) => void,
       subscribeToCartSectionsUpdate: (callback: SectionsSubscriberType) => void,
