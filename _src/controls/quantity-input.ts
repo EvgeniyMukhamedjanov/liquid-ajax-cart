@@ -5,7 +5,7 @@ import {EVENT_STATE, getCartState/*, subscribeToCartStateUpdate*/} from '../stat
 import {findLineItemByCode} from '../helpers';
 import {DATA_ATTR_PREFIX} from "../const";
 
-const DATA_ATTR_QUANTITY_INPUT = `${DATA_ATTR_PREFIX}quantity-input`
+const DATA_ATTR_QUANTITY_INPUT = `${DATA_ATTR_PREFIX}-quantity-input`
 
 function initEventListeners() {
   document.addEventListener('change', function (e) {

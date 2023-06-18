@@ -1,24 +1,14 @@
 import {
   RequestStateType,
-  // MessageType,
   EventRequestType
 } from './ts-types';
 
-import {EVENT_REQUEST,/*subscribeToCartAjaxRequests,*/ REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
+import {EVENT_REQUEST, REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
 import {getCartState} from './state';
 import {settings} from './settings';
 import {DATA_ATTR_PREFIX} from "./const";
 
-const DATA_ATTR_ERRORS = `${DATA_ATTR_PREFIX}errors`;
-
-// const MESSAGE_TYPES = {
-//   ERROR: 'error'
-// }
-//
-// const MESSAGE_CODES = {
-//   SHOPIFY_ERROR: 'shopify_error',
-//   REQUEST_ERROR: 'request_error',
-// }
+const DATA_ATTR_ERRORS = `${DATA_ATTR_PREFIX}-errors`;
 
 function getRequestError(requestState: RequestStateType): string {
 
@@ -98,7 +88,6 @@ const addRequestContainers = (requestState: RequestStateType): NodeListOf<Elemen
 }
 
 const cartMessagesInit = () => {
-  // subscribeToCartAjaxRequests((requestState, subscribeToResult) => {
   document.addEventListener(EVENT_REQUEST, (event: EventRequestType) => {
     const {requestState, onResult} = event.detail;
 
@@ -117,7 +106,6 @@ const cartMessagesInit = () => {
       onResult((requestState) => {
         if (requestState.info.cancel) return;
 
-        // const {messageBuilder} = settings;
         const errorMessage = getRequestError(requestState);
         if (errorMessage) {
           errorContainers.forEach((element: Element) => {

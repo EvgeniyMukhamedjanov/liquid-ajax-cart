@@ -1,10 +1,10 @@
 import {DATA_ATTR_QUANTITY_INPUT} from "./quantity-input";
-import {DATA_ATTR_PREFIX} from "../const";
+import {CUSTOM_ELEMENT_PREFIX, DATA_ATTR_PREFIX} from "../const";
 import {getCartState} from "../state";
 
-const ELEMENT_TAG = 'ajax-cart-quantity'; // TODO: rename here, in liquid, in css
-const DATA_ATTR_QUANTITY_PLUS = `${DATA_ATTR_PREFIX}quantity-plus`;
-const DATA_ATTR_QUANTITY_MINUS = `${DATA_ATTR_PREFIX}quantity-minus`;
+const ELEMENT_TAG = `${CUSTOM_ELEMENT_PREFIX}-quantity`;
+const DATA_ATTR_QUANTITY_PLUS = `${DATA_ATTR_PREFIX}-quantity-plus`;
+const DATA_ATTR_QUANTITY_MINUS = `${DATA_ATTR_PREFIX}-quantity-minus`;
 const AWAITING_TIME = 300;
 
 function cartQuantityElementInit() {

@@ -190,7 +190,7 @@
             </div>
           {%- endif -%}
 
-          <product-form-alpha>
+          <ajax-cart-product-form>
             {% form 'product', product, class: productform_class %}
               {{ form | payment_terms }}
               <select name="id" id="ProductSelect-{{ section.id }}" class="product-single__variants">
@@ -224,7 +224,7 @@
                 {{ form | payment_button }}
               {% endif %}
             {% endform %}
-          </product-form-alpha>
+          </ajax-cart-product-form>
 
           {% unless section.settings.show_extra_tab == false or pages[section.settings.extra_tab_content] == empty %}
             <div class="tabs">

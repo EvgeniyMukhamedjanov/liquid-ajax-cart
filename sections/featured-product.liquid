@@ -140,7 +140,7 @@
           {%- endif -%}
 
           {% unless product == empty %}
-            <product-form-alpha>
+            <ajax-cart-product-form>
               {% form 'product', product, class: productform_class %}
                 {{ form | payment_terms }}
                 <select name="id" id="ProductSelect-{{ section.id }}" class="product-single__variants">
@@ -174,7 +174,7 @@
                   {{ form | payment_button }}
                 {% endif %}
               {% endform %}
-            </product-form-alpha>
+            </ajax-cart-product-form>
           {% else %}
             <form>
               <button type="submit" name="add" id="AddToCart" class="btn {{ btn_class }}{% if section.settings.enable_payment_button %} btn--secondary{% endif %}"{% unless current_variant.available %} disabled="disabled"{% endunless %}>

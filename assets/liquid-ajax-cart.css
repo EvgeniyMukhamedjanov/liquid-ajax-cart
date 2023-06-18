@@ -101,7 +101,7 @@
 #shopify-section-my-cart > form > div:first-child h2 {
 	margin-bottom: 0;
 }
-.js-ajax-cart-request-in-progress #shopify-section-my-cart > form > div:first-child:before {
+.js-ajax-cart-in-progress #shopify-section-my-cart > form > div:first-child:before {
 	content: '';
     position: absolute;
     top: 46px;
@@ -147,7 +147,7 @@
 #shopify-section-my-cart > form > div:nth-child(2)::-webkit-scrollbar-thumb {
     background: #757575;
 }
-.js-ajax-cart-request-in-progress #shopify-section-my-cart > form > div:nth-child(2) {
+.js-ajax-cart-in-progress #shopify-section-my-cart > form > div:nth-child(2) {
 	opacity: .6;
 }
 
@@ -187,11 +187,11 @@ form[action="/cart/add"] button:after {
     opacity: 0;
     transition: all .3s;
 }
-product-form-alpha[loading] [type="submit"] {
+ajax-cart-product-form[in-progress] [type="submit"] {
 	opacity: .7;
 	background-color: gray;
 }
-product-form-alpha[loading] [type="submit"]:after {
+ajax-cart-product-form[in-progress] [type="submit"]:after {
 	opacity: 1;
 }
 
@@ -199,7 +199,7 @@ product-form-alpha[loading] [type="submit"]:after {
 	position: relative;
 }
 
-.js-ajax-cart-request-in-progress .cart-page-link:after {
+.js-ajax-cart-in-progress .cart-page-link:after {
     content: '';
     position: absolute;
     border-radius: 100%;

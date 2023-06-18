@@ -1,23 +1,23 @@
-import { settings } from './../settings';
-import { cartRequestChange, cartRequestAdd, cartRequestClear, cartRequestUpdate } from './../ajax-api';
-import { getCartState } from './../state';
+import { cartRequestChange, cartRequestAdd, cartRequestClear, cartRequestUpdate } from '../ajax-api';
+import { getCartState } from '../state';
+import {DATA_ATTR_PREFIX} from "../const";
 
 const CHANGE_URL = `${ window.Shopify?.routes?.root || '/' }cart/change`;
 const ADD_URL = `${ window.Shopify?.routes?.root || '/' }cart/add`;
 const CLEAR_URL = `${ window.Shopify?.routes?.root || '/' }cart/clear`;
 const UPDATE_URL = `${ window.Shopify?.routes?.root || '/' }cart/update`;
 
+const DATA_ATTR_REQUEST_BUTTON = `${DATA_ATTR_PREFIX}-request-button`;
 
 function clickHandler (element: Element, e: Event) {
-	const { requestButtonAttribute } = settings.computed;
 	let url = undefined;
 	const validURLs = [ CHANGE_URL, ADD_URL, CLEAR_URL, UPDATE_URL ];
 
-	if ( !(element.hasAttribute( requestButtonAttribute )) ) {
+	if ( !(element.hasAttribute( DATA_ATTR_REQUEST_BUTTON )) ) {
 		return;
 	}
 
-	const attr = element.getAttribute( requestButtonAttribute );
+	const attr = element.getAttribute( DATA_ATTR_REQUEST_BUTTON );
 	if ( attr ) {
 		let attrURL;
 		try {
@@ -28,16 +28,16 @@ function clickHandler (element: Element, e: Event) {
 				throw `URL should be one of the following: ${CHANGE_URL}, ${ADD_URL}, ${UPDATE_URL}, ${CLEAR_URL}`
 			}
 		} catch (error) {
-			console.error(`Liquid Ajax Cart: ${requestButtonAttribute} contains an invalid URL as a parameter.`, error);
+			console.error(`Liquid Ajax Cart: ${DATA_ATTR_REQUEST_BUTTON} contains an invalid URL as a parameter.`, error);
 		}
 	} else {
 		if ( element instanceof HTMLAnchorElement && element.hasAttribute( 'href' ) ) {
 			const linkURL = new URL((element as HTMLAnchorElement).href);
 			if ( validURLs.includes( linkURL.pathname ) ) {
 				url = linkURL;
-			} else if ( element.hasAttribute( requestButtonAttribute ) ) {
+			} else if ( element.hasAttribute( DATA_ATTR_REQUEST_BUTTON ) ) {
 				console.error(
-					`Liquid Ajax Cart: a link with the ${requestButtonAttribute} contains an invalid href URL.`, 
+					`Liquid Ajax Cart: a link with the ${DATA_ATTR_REQUEST_BUTTON} contains an invalid href URL.`,
 					`URL should be one of the following: ${CHANGE_URL}, ${ADD_URL}, ${UPDATE_URL}, ${CLEAR_URL}`
 				);
 			}
@@ -45,7 +45,7 @@ function clickHandler (element: Element, e: Event) {
 	}
 
 	if ( url === undefined ) {
-		console.error( `Liquid Ajax Cart: a ${requestButtonAttribute} element doesn't have a valid URL` );
+		console.error( `Liquid Ajax Cart: a ${DATA_ATTR_REQUEST_BUTTON} element doesn't have a valid URL` );
 		return;
 	}
 
@@ -54,7 +54,7 @@ function clickHandler (element: Element, e: Event) {
 	}
 
 	const state = getCartState();
-	if ( state.status.requestInProgress ) {
+	if (state.status.requestInProgress) {
 		return;
 	}
 

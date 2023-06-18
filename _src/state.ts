@@ -2,7 +2,6 @@ import {
   AppStateType,
   AppStateCartType,
   AppStateStatusType,
-  // StateSubscriberType,
   RequestStateType,
   JSONObjectType,
   JSONValueType,
@@ -13,20 +12,17 @@ import {
 } from './ts-types';
 
 import {
-  // subscribeToCartAjaxRequests,
-  // subscribeToCartQueues,
   cartRequestGet,
   cartRequestUpdate,
   REQUEST_ADD,
   EVENT_QUEUES,
   EVENT_REQUEST
 } from './ajax-api';
-import {settings} from './settings';
-import {EVENT_PREFIX} from "./const";
+import {DATA_ATTR_PREFIX, EVENT_PREFIX} from "./const";
 
-const EVENT_STATE = `${EVENT_PREFIX}state`;
+const EVENT_STATE = `${EVENT_PREFIX}:state`;
+const DATA_ATTR_INITIAL_STATE = `${DATA_ATTR_PREFIX}-initial-state`;
 
-// const subscribers: Array<StateSubscriberType> = [];
 let cart: AppStateCartType = null;
 let previousCart: AppStateCartType | undefined = undefined
 let status: AppStateStatusType = {
@@ -35,20 +31,14 @@ let status: AppStateStatusType = {
 };
 
 function cartStateInit() {
-
-  // subscribeToCartQueues(inProgress => {
-  //   status.requestInProgress = inProgress;
-  //   notify(false);
-  // });
   document.addEventListener(EVENT_QUEUES, (event: EventQueuesType) => {
     status.requestInProgress = event.detail.inProgress;
     notify(false);
   });
 
-  // subscribeToCartAjaxRequests((requestState: RequestStateType, subscribeToResult) => {
   document.addEventListener(EVENT_REQUEST, (event: EventRequestType) => {
-
-    event.detail.onResult((requestState: RequestStateType) => {
+    const {onResult} = event.detail;
+    onResult((requestState: RequestStateType) => {
       let newCart: AppStateCartType | undefined = undefined;
       if (requestState.extraResponseData?.ok) {
         newCart = cartStateFromObject(requestState.extraResponseData.body);
@@ -72,19 +62,19 @@ function cartStateInit() {
     })
   });
 
-  const initialStateContainer = document.querySelector(`[${settings.computed.initialStateAttribute}]`);
+  const initialStateContainer = document.querySelector(`[${DATA_ATTR_INITIAL_STATE}]`);
   if (initialStateContainer) {
     try {
       const initialState = JSON.parse(initialStateContainer.textContent);
       cart = cartStateFromObject(initialState);
       if (cart === null) {
-        throw `JSON from ${settings.computed.initialStateAttribute} script is not correct cart object`;
+        throw `JSON from ${DATA_ATTR_INITIAL_STATE} script is not correct cart object`;
       } else {
         status.cartStateSet = true;
         notify(true);
       }
     } catch (e) {
-      console.error(`Liquid Ajax Cart: can't parse cart JSON from the "${settings.computed.initialStateAttribute}" script. A /cart.js request will be performed to receive the cart state`);
+      console.error(`Liquid Ajax Cart: can't parse cart JSON from the "${DATA_ATTR_INITIAL_STATE}" script. A /cart.js request will be performed to receive the cart state`);
       console.error(e);
       cartRequestGet();
     }
@@ -138,10 +128,6 @@ function cartStateFromObject(data: JSONObjectType): AppStateCartType {
   }
 }
 
-// function subscribeToCartStateUpdate(callback: StateSubscriberType) {
-//   subscribers.push(callback);
-// }
-
 function getCartState(): AppStateType {
   return {
     cart,
@@ -158,14 +144,6 @@ const notify = (isCartUpdated: boolean) => {
     }
   });
   document.dispatchEvent(event)
-  // subscribers.forEach((callback: StateSubscriberType) => {
-  //   try {
-  //     callback(getCartState(), isCartUpdated);
-  //   } catch (e) {
-  //     console.error('Liquid Ajax Cart: Error during a call of a cart state update subscriber');
-  //     console.error(e);
-  //   }
-  // })
 }
 
-export {cartStateInit, /*subscribeToCartStateUpdate,*/ getCartState, EVENT_STATE};
+export {cartStateInit, getCartState, EVENT_STATE};

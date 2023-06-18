@@ -11,7 +11,7 @@
     <h2>Cart</h2>
     <p>The section gets updated after each action because it has a content wrapper with the <a href="https://liquid-ajax-cart.js.org/reference/data-ajax-cart-section/" target="_blank">data-ajax-cart-section</a> attribute.</p>
   </div>
-  <div data-ajax-cart-section-scroll >
+  <div data-ajax-cart-section-scroll>
     {% for item in cart.items %}
       <div class="ajax-cart__line-item" >
         <div><a class="h3" href="{{ item.url }}">{{ item.product.title }}</a></div>

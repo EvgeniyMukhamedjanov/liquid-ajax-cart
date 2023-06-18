@@ -83,30 +83,19 @@ export type EventStateType = CustomEvent<{
   state: AppStateType,
   isCartUpdated: boolean
 }>;
-// export type StateSubscriberType = (state: AppStateType, isCartUpdated: boolean) => void;
 
 export type ConfigurationValue =
   | string
-  | boolean
-  | ((formNode: HTMLFormElement) => boolean)
-  /*| ((messages: Array<MessageType>) => string)*/;
+  | boolean;
 
 export type FormattersObjectType = {
   [key: string]: (value: JSONValueType | undefined) => JSONValueType | undefined
 }
 
-// export type MessageType = {
-//   type: string,
-//   text: string,
-//   code: string,
-//   requestState: RequestStateType
-// }
-
 export type UpdatedSectionType = {
   id: string,
   elements: Array<Element>
 }
-// export type SectionsSubscriberType = (sections: Array<UpdatedSectionType>) => void;
 export type EventSectionsType = CustomEvent<Array<UpdatedSectionType>>;
 
 declare global {
@@ -118,10 +107,7 @@ declare global {
       cartRequestChange: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
       cartRequestUpdate: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
       cartRequestClear: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
-      // subscribeToCartAjaxRequests: (callback: RequestCallbackType) => void,
       getCartState: () => AppStateType,
-      // subscribeToCartStateUpdate: (callback: StateSubscriberType) => void,
-      // subscribeToCartSectionsUpdate: (callback: SectionsSubscriberType) => void,
     }
     Shopify?: {
       locale?: String,

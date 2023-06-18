@@ -1,8 +1,6 @@
 import {
   EventQueuesType,
   EventRequestType,
-  // RequestCallbackType,
-  // QueuesCallbackType,
   RequestStateType,
   CartRequestOptionsType,
   JSONObjectType,
@@ -36,11 +34,9 @@ const REQUEST_UPDATE = 'update';
 const REQUEST_CLEAR = 'clear';
 const REQUEST_GET = 'get';
 
-const EVENT_QUEUES = `${EVENT_PREFIX}queues`;
-const EVENT_REQUEST = `${EVENT_PREFIX}request`;
+const EVENT_QUEUES = `${EVENT_PREFIX}:queues`;
+const EVENT_REQUEST = `${EVENT_PREFIX}:request`;
 
-// const requestSubscribers: RequestCallbackType[] = [];
-// const queuesSubscribers: QueuesCallbackType[] = [];
 const queues: QueueItemType[][] = [];
 
 function addToQueues(queueItem: QueueItemType) {
@@ -82,15 +78,6 @@ function notifyQueuesSubscribers(inProgress: boolean) {
     detail: {inProgress}
   });
   document.dispatchEvent(event);
-
-  // queuesSubscribers.forEach(callback => {
-  //   try {
-  //     callback(inProgress);
-  //   } catch (e) {
-  //     console.error('Liquid Ajax Cart: Error during queues subscriber callback in ajax-api');
-  //     console.error(e);
-  //   }
-  // });
 }
 
 function cartRequest(requestType: string, body: RequestBodyType, options: CartRequestOptionsType, finalCallback: () => void | undefined = undefined) {
@@ -109,22 +96,6 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
     info
   }
   const redundandSections: string[] = [];
-
-  // requestSubscribers.forEach(callback => {
-  //   try {
-  //     callback({
-  //       requestType,
-  //       endpoint,
-  //       info,
-  //       requestBody
-  //     }, (resultCallback: RequestResultCallback) => {
-  //       resultSubscribers.push(resultCallback)
-  //     });
-  //   } catch (e) {
-  //     console.error('Liquid Ajax Cart: Error during Ajax request subscriber callback in ajax-api');
-  //     console.error(e);
-  //   }
-  // });
 
   const event: EventRequestType = new CustomEvent(EVENT_REQUEST, {
     detail: {
@@ -225,7 +196,6 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
     console.error('Liquid Ajax Cart: Error while performing cart Ajax request')
     console.error(error);
     requestState.fetchError = error;
-    // throw requestState;
   }).finally(() => {
     cartRequestFinally(resultSubscribers, finalCallback, requestState);
   });
@@ -259,7 +229,7 @@ function extraRequest(sections: string[] = []): Promise<{ ok: boolean, status: n
   if (sections.length > 0) {
     requestBody.sections = sections.slice(0, 5).join(',');
   }
-  let result = undefined;
+
   return fetch(getEndpoint(REQUEST_UPDATE), {
     method: 'POST',
     headers: {
@@ -309,14 +279,6 @@ function cartRequestClear(body: RequestBodyType = {}, options: CartRequestOption
   addToQueues({requestType: REQUEST_CLEAR, body, options});
 }
 
-// function subscribeToCartAjaxRequests(callback: RequestCallbackType): void {
-//   requestSubscribers.push(callback);
-// }
-
-// function subscribeToCartQueues(callback: QueuesCallbackType): void {
-//   queuesSubscribers.push(callback);
-// }
-
 function getEndpoint(requestType: string): string | undefined {
   switch (requestType) {
     case REQUEST_ADD:
@@ -345,8 +307,6 @@ export {
   cartRequestClear,
   cartRequestGet,
   cartRequestUpdate,
-  // subscribeToCartAjaxRequests,
-  // subscribeToCartQueues,
   REQUEST_ADD,
   REQUEST_CHANGE,
   EVENT_QUEUES,

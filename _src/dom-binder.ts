@@ -1,17 +1,17 @@
 import {AppStateType, JSONValueType, JSONObjectType, FormattersObjectType, EventStateType} from './ts-types';
 
-import {EVENT_STATE, getCartState/*, subscribeToCartStateUpdate */} from './state';
+import {EVENT_STATE, getCartState} from './state';
 import {settings} from './settings';
+import {DATA_ATTR_PREFIX} from "./const";
 
 type StateValueType = JSONValueType | undefined;
 
+const DATA_ATTR_BIND_STATE = `${DATA_ATTR_PREFIX}-bind-state`
+
 function updateDOM(state: AppStateType) {
-
-  const {binderAttribute} = settings.computed;
-
   if (state.status.cartStateSet) {
-    document.querySelectorAll(`[${binderAttribute}]`).forEach((element: Element) => {
-      const path = element.getAttribute(binderAttribute);
+    document.querySelectorAll(`[${DATA_ATTR_BIND_STATE}]`).forEach((element: Element) => {
+      const path = element.getAttribute(DATA_ATTR_BIND_STATE);
       element.textContent = computeValue(path);
     });
   }
@@ -19,7 +19,6 @@ function updateDOM(state: AppStateType) {
 
 function computeValue(str: string): string {
   const {stateBinderFormatters} = settings;
-  const {binderAttribute} = settings.computed;
 
   const [path, ...filters] = str.split('|');
   const state = <JSONObjectType>getCartState();
@@ -39,7 +38,7 @@ function computeValue(str: string): string {
   if (typeof value === 'string' || value instanceof String || typeof value === 'number' || value instanceof Number) {
     return (<string | number>value).toString();
   }
-  console.error(`Liquid Ajax Cart: the calculated value for the ${binderAttribute}="${str}" element must be string or number. But the value is`, value);
+  console.error(`Liquid Ajax Cart: the calculated value for the ${DATA_ATTR_BIND_STATE}="${str}" element must be string or number. But the value is`, value);
   return '';
 }
 
@@ -79,7 +78,6 @@ function cartDomBinderRerender() {
 }
 
 function cartDomBinderInit() {
-  // subscribeToCartStateUpdate(updateDOM);
   document.addEventListener(EVENT_STATE, (event: EventStateType) => {
     updateDOM(event.detail.state);
   })
