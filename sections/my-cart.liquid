@@ -89,29 +89,31 @@
           <span>Quantity: </span>
           {% if item.properties._autoadded == 'Yes' %}
             <span>{{ item.quantity }}</span>
-          {% else %}       
-            <a 
-              href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" 
-              class="ajax-cart__quantity-button"
-              data-ajax-cart-request-button
-            >
-              <i>-</i>
-            </a>
-            <input 
-              class="my-cart__input my-cart__input--qty"
-              type="number" 
-              value="{{ item.quantity }}" 
-              min="0" 
-              name="updates[]"
-              data-ajax-cart-quantity-input="{{ forloop.index }}"
-            />
-            <a 
-              href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" 
-              class="ajax-cart__quantity-button"
-              data-ajax-cart-request-button
-            >
-              <i>+</i>
-            </a>
+          {% else %}
+            <ajax-cart-quantity>
+              <a
+                href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}"
+                class="ajax-cart__quantity-button"
+                data-ajax-cart-quantity-minus
+              >
+                <i>-</i>
+              </a>
+              <input
+                class="my-cart__input my-cart__input--qty"
+                type="number"
+                value="{{ item.quantity }}"
+                min="0"
+                name="updates[]"
+                data-ajax-cart-quantity-input="{{ forloop.index }}"
+              />
+              <a
+                href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}"
+                class="ajax-cart__quantity-button"
+                data-ajax-cart-quantity-plus
+              >
+                <i>+</i>
+              </a>
+            </ajax-cart-quantity>
           {% endif %}
         </div>
         <div data-ajax-cart-errors="{{ item.key }}"></div>

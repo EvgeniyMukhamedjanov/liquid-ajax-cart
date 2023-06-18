@@ -3,7 +3,7 @@ import {cartRequestAdd} from "../ajax-api";
 const ELEMENT_TAG = 'product-form-alpha'; // TODO: rename here, in liquid, in css
 const DATA_ATTR_LOADING = 'loading';
 
-function productFormInit() {
+function cartProductFormInit() {
   customElements.define(ELEMENT_TAG, class extends HTMLElement {
     constructor() {
       super();
@@ -51,4 +51,4 @@ function productFormInit() {
   });
 }
 
-export {productFormInit}
+export {cartProductFormInit}

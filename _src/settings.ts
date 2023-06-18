@@ -43,7 +43,7 @@ const settings: SettingsType = {
     toggleClassButtonAttribute: `${dataAttributePrefix}-toggle-class-button`,
     initialStateAttribute: `${dataAttributePrefix}-initial-state`,
     sectionScrollAreaAttribute: `${dataAttributePrefix}-section-scroll`,
-    quantityInputAttribute: `${dataAttributePrefix}-quantity-input`,
+    // quantityInputAttribute: `${dataAttributePrefix}-quantity-input`,
     propertyInputAttribute: `${dataAttributePrefix}-property-input`,
     // messagesAttribute: `${dataAttributePrefix}-messages`,
     configurationAttribute: `${dataAttributePrefix}-configuration`,
