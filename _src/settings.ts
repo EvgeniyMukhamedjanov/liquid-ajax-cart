@@ -45,7 +45,7 @@ const settings: SettingsType = {
     sectionScrollAreaAttribute: `${dataAttributePrefix}-section-scroll`,
     quantityInputAttribute: `${dataAttributePrefix}-quantity-input`,
     propertyInputAttribute: `${dataAttributePrefix}-property-input`,
-    messagesAttribute: `${dataAttributePrefix}-messages`, // TODO: rename to -error
+    // messagesAttribute: `${dataAttributePrefix}-messages`,
     configurationAttribute: `${dataAttributePrefix}-configuration`,
 
     cartStateSetBodyClass: `${cssClassesPrefix}-set`,

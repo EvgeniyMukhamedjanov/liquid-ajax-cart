@@ -7,6 +7,9 @@ import {
 import {EVENT_REQUEST,/*subscribeToCartAjaxRequests,*/ REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
 import {getCartState} from './state';
 import {settings} from './settings';
+import {DATA_ATTR_PREFIX} from "./const";
+
+const DATA_ATTR_ERRORS = `${DATA_ATTR_PREFIX}errors`;
 
 // const MESSAGE_TYPES = {
 //   ERROR: 'error'
@@ -38,7 +41,7 @@ function getRequestError(requestState: RequestStateType): string {
 const changeRequestContainers = (requestState: RequestStateType): NodeListOf<Element> => {
   let errorContainers: NodeListOf<Element>;
 
-  const {messagesAttribute} = settings.computed;
+  // const {messagesAttribute} = settings.computed;
   const state = getCartState();
 
   let requestedId: string,
@@ -70,12 +73,12 @@ const changeRequestContainers = (requestState: RequestStateType): NodeListOf<Ele
 
   if (requestedId) {
     if (requestedId.indexOf(':') > -1) {
-      errorContainers = document.querySelectorAll(`[${messagesAttribute}="${requestedId}"]`);
+      errorContainers = document.querySelectorAll(`[${DATA_ATTR_ERRORS}="${requestedId}"]`);
     } else if (state.status.cartStateSet) {
       errorContainers = document.querySelectorAll(
         state.cart.items.reduce((acc, element) => {
           if (element.key === requestedId || element.id === Number(requestedId)) {
-            acc.push(`[${messagesAttribute}="${element.key}"]`);
+            acc.push(`[${DATA_ATTR_ERRORS}="${element.key}"]`);
           }
           return acc;
         }, []).join(',')
@@ -89,7 +92,7 @@ const addRequestContainers = (requestState: RequestStateType): NodeListOf<Elemen
   let errorContainers: NodeListOf<Element>;
   const initiator: Element = requestState.info?.initiator;
   if (initiator instanceof HTMLFormElement) {
-    errorContainers = initiator.querySelectorAll(`[${settings.computed.messagesAttribute}="form"]`);
+    errorContainers = initiator.querySelectorAll(`[${DATA_ATTR_ERRORS}="form"]`);
   }
   return errorContainers;
 }
