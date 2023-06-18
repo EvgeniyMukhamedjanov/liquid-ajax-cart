@@ -3,7 +3,7 @@ import {/*MessageType,*/ FormattersObjectType, ConfigurationValue} from './ts-ty
 import {cartDomBinderRerender} from './dom-binder';
 
 type SettingsType = {
-  productFormsFilter: (formNode: HTMLFormElement) => boolean,
+  // productFormsFilter: (formNode: HTMLFormElement) => boolean,
   // messageBuilder: (messages: Array<MessageType>) => string,
   stateBinderFormatters: FormattersObjectType,
   // addToCartCssClass: string | [string, number],
@@ -19,7 +19,7 @@ const cssClassesPrefix = 'js-ajax-cart';
 const dataAttributePrefix = 'data-ajax-cart';
 
 const settings: SettingsType = {
-  productFormsFilter: (formNode: HTMLFormElement): boolean => true,
+  // productFormsFilter: (formNode: HTMLFormElement): boolean => true,
   // messageBuilder: (messages: Array<MessageType>): string => {
   //   let result = '';
   //   messages.forEach(element => {
@@ -35,7 +35,7 @@ const settings: SettingsType = {
   updateOnWindowFocus: true,
 
   computed: {
-    productFormsErrorsAttribute: `${dataAttributePrefix}-form-error`,
+    // productFormsErrorsAttribute: `${dataAttributePrefix}-form-error`,
     sectionsAttribute: `${dataAttributePrefix}-section`,
     staticElementAttribute: `${dataAttributePrefix}-static-element`,
     binderAttribute: `${dataAttributePrefix}-bind-state`,
@@ -52,7 +52,7 @@ const settings: SettingsType = {
     requestInProgressBodyClass: `${cssClassesPrefix}-request-in-progress`,
     emptyCartBodyClass: `${cssClassesPrefix}-empty`,
     notEmptyCartBodyClass: `${cssClassesPrefix}-not-empty`,
-    productFormsProcessingClass: `${cssClassesPrefix}-form-in-progress`
+    // productFormsProcessingClass: `${cssClassesPrefix}-form-in-progress`
   }
 }
 

@@ -11,7 +11,7 @@ import {getCartState, cartStateInit, /*subscribeToCartStateUpdate*/} from './sta
 import {cartDomBinderInit} from './dom-binder';
 import {cartSectionsInit/*, subscribeToCartSectionsUpdate*/} from './sections';
 import {cartControlsInit} from './controls';
-import {cartProductFormsInit} from './product-forms';
+// import {cartProductFormsInit} from './product-forms';
 import {cartMessagesInit} from './messages';
 import {cartGlobalClassesInit} from './global-classes';
 import {EVENT_PREFIX} from "./const";
@@ -19,7 +19,7 @@ import {EVENT_PREFIX} from "./const";
 if (!('liquidAjaxCart' in window)) {
 
   cartSettingsInit();
-  cartProductFormsInit();
+  // cartProductFormsInit();
 
   // should be before cartStateInit because
   // it must subscribe to ajax-api before state

@@ -29,9 +29,9 @@ function submitHandler(e: Event) {
 		return;
 	}
 
-	if ('productFormsFilter' in settings && !settings.productFormsFilter(form) ) {
-		return;
-	}
+	// if ('productFormsFilter' in settings && !settings.productFormsFilter(form) ) {
+	// 	return;
+	// }
 
 	e.preventDefault();
 
@@ -79,5 +79,6 @@ function updateFormHTML ( form: HTMLFormElement ) {
 		}
 	}
 }
+
 
 export { cartProductFormsInit }

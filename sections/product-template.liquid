@@ -190,39 +190,41 @@
             </div>
           {%- endif -%}
 
-          {% form 'product', product, class: productform_class %}
-            {{ form | payment_terms }}
-            <select name="id" id="ProductSelect-{{ section.id }}" class="product-single__variants">
-              {% for variant in product.variants %}
-                {% if variant.available %}
+          <product-form-alpha>
+            {% form 'product', product, class: productform_class %}
+              {{ form | payment_terms }}
+              <select name="id" id="ProductSelect-{{ section.id }}" class="product-single__variants">
+                {% for variant in product.variants %}
+                  {% if variant.available %}
 
-                  <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>
+                    <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>
 
-                {% else %}
-                  <option disabled="disabled">
-                    {{ variant.title }} - {{ 'products.product.sold_out' | t }}
-                  </option>
-                {% endif %}
-              {% endfor %}
-            </select>
+                  {% else %}
+                    <option disabled="disabled">
+                      {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+                    </option>
+                  {% endif %}
+                {% endfor %}
+              </select>
 
-            {% if product.id == 7149119373500 %}
-              {% render 'product-properties' %}
-            {% endif %}
+              {% if product.id == 7149119373500 %}
+                {% render 'product-properties' %}
+              {% endif %}
 
-            <div class="product-single__quantity{% unless section.settings.product_quantity_enable %} is-hidden{% endunless %}">
-              <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
-              <input type="number" id="Quantity" name="quantity" value="1" min="1" class="quantity-selector">
-            </div>
+              <div class="product-single__quantity{% unless section.settings.product_quantity_enable %} is-hidden{% endunless %}">
+                <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
+                <input type="number" id="Quantity" name="quantity" value="1" min="1" class="quantity-selector">
+              </div>
 
-            <button type="submit" name="add" id="AddToCart" class="btn {{ btn_class }}{% if section.settings.enable_payment_button and product.selling_plan_groups == empty %} btn--secondary{% endif %}">
-              <span id="AddToCartText">{{ 'products.product.add_to_cart' | t }}</span>
-            </button>
-            <div data-ajax-cart-errors="form"></div>
-            {% if section.settings.enable_payment_button %}
-              {{ form | payment_button }}
-            {% endif %}
-          {% endform %}
+              <button type="submit" name="add" id="AddToCart" class="btn {{ btn_class }}{% if section.settings.enable_payment_button and product.selling_plan_groups == empty %} btn--secondary{% endif %}">
+                <span id="AddToCartText">{{ 'products.product.add_to_cart' | t }}</span>
+              </button>
+              <div data-ajax-cart-errors="form"></div>
+              {% if section.settings.enable_payment_button %}
+                {{ form | payment_button }}
+              {% endif %}
+            {% endform %}
+          </product-form-alpha>
 
           {% unless section.settings.show_extra_tab == false or pages[section.settings.extra_tab_content] == empty %}
             <div class="tabs">

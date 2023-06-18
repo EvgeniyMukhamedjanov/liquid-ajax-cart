@@ -1,0 +1,54 @@
+import {cartRequestAdd} from "../ajax-api";
+
+const ELEMENT_TAG = 'product-form-alpha'; // TODO: rename here, in liquid, in css
+const DATA_ATTR_LOADING = 'loading';
+
+function productFormInit() {
+  customElements.define(ELEMENT_TAG, class extends HTMLElement {
+    constructor() {
+      super();
+      const $element = this;
+
+      const $innerForms = this.querySelectorAll('form')
+      if ($innerForms.length !== 1) {
+        console.error(
+          `Liquid Ajax Cart: "${ELEMENT_TAG}" element must have one "form" element as a child, ${$innerForms.length} found`,
+          $element
+        );
+        return;
+      }
+
+      const $form = $innerForms[0];
+
+      const formActionUrl = new URL($form.action);
+      if (formActionUrl.pathname !== `${window.Shopify?.routes?.root || '/'}cart/add`) {
+        console.error(
+          `Liquid Ajax Cart: "${ELEMENT_TAG}" element's form "action" attribute value isn't a product form action URL`,
+          $form,
+          $element
+        );
+        return;
+      }
+
+      $form.addEventListener('submit', event => {
+        if (!$element.hasAttribute(DATA_ATTR_LOADING)) {
+          const formData = new FormData($form);
+          $element.setAttribute(DATA_ATTR_LOADING, '');
+
+          cartRequestAdd(formData, {
+            lastComplete: () => {
+              $element.removeAttribute(DATA_ATTR_LOADING)
+            },
+            newQueue: true,
+            info: {
+              "initiator": $element
+            }
+          })
+        }
+        event.preventDefault();
+      });
+    }
+  });
+}
+
+export {productFormInit}
