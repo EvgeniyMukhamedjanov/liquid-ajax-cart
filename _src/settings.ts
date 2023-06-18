@@ -6,7 +6,7 @@ type SettingsType = {
   productFormsFilter: (formNode: HTMLFormElement) => boolean,
   messageBuilder: (messages: Array<MessageType>) => string,
   stateBinderFormatters: FormattersObjectType,
-  addToCartCssClass: string | [string, number],
+  // addToCartCssClass: string | [string, number],
   requestErrorText: string,
   updateOnWindowFocus: boolean,
   computed: {
@@ -28,7 +28,7 @@ const settings: SettingsType = {
     return result;
   },
   stateBinderFormatters: {},
-  addToCartCssClass: '',
+  // addToCartCssClass: '',
 
   requestErrorText: 'There was an error while updating your cart. Please try again.',
 
