@@ -104,13 +104,13 @@
 
           <div class="header-bar__module">
             <span class="header-bar__sep" aria-hidden="true"></span>
-            <a href="{{ routes.cart_url }}" class="cart-page-link" data-ajax-cart-toggle-class-button="js-ajax-cart-open">
+            <a href="{{ routes.cart_url }}" class="cart-page-link" onclick="document.querySelector('html').classList.toggle('js-ajax-cart-open'); return false;">
               <span class="icon icon-cart header-bar__cart-icon" aria-hidden="true"></span>
             </a>
           </div>
 
           <div class="header-bar__module">
-            <a href="{{ routes.cart_url }}" class="cart-page-link" data-ajax-cart-toggle-class-button="js-ajax-cart-open">
+            <a href="{{ routes.cart_url }}" class="cart-page-link" onclick="document.querySelector('html').classList.toggle('js-ajax-cart-open'); return false;">
               {{ 'layout.cart.title' | t }}
               <span class="cart-count header-bar__cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}">
                 <span data-ajax-cart-bind-state="cart.item_count">{{ cart.item_count }}</span> | 
@@ -150,7 +150,7 @@
           {{ 'layout.navigation.menu' | t }}
         </button>
       {% endunless %}
-      <a href="{{ routes.cart_url }}" class="cart-page-link mobile-cart-page-link" data-ajax-cart-toggle-class-button="js-ajax-cart-open">
+      <a href="{{ routes.cart_url }}" class="cart-page-link mobile-cart-page-link" onclick="document.querySelector('html').classList.toggle('js-ajax-cart-open'); return false;">
         <span class="icon icon-cart header-bar__cart-icon" aria-hidden="true"></span>
         {{ 'layout.cart.title' | t }} <span class="cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}">
           <span data-ajax-cart-bind-state="cart.item_count">{{ cart.item_count }}</span> | 
