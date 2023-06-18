@@ -61,32 +61,34 @@ if (!('liquidAjaxCart' in window)) {
   });
 }
 
-const export_configureCart = window.liquidAjaxCart.configureCart;
+const export_liquidAjaxCart = window.liquidAjaxCart;
+export default export_liquidAjaxCart;
 
-const export_cartRequestGet = window.liquidAjaxCart.cartRequestGet;
-const export_cartRequestAdd = window.liquidAjaxCart.cartRequestAdd;
-const export_cartRequestChange = window.liquidAjaxCart.cartRequestChange;
-const export_cartRequestUpdate = window.liquidAjaxCart.cartRequestUpdate;
-const export_cartRequestClear = window.liquidAjaxCart.cartRequestClear;
+// const export_configureCart = window.liquidAjaxCart.configureCart;
+
+// const export_cartRequestGet = window.liquidAjaxCart.cartRequestGet;
+// const export_cartRequestAdd = window.liquidAjaxCart.cartRequestAdd;
+// const export_cartRequestChange = window.liquidAjaxCart.cartRequestChange;
+// const export_cartRequestUpdate = window.liquidAjaxCart.cartRequestUpdate;
+// const export_cartRequestClear = window.liquidAjaxCart.cartRequestClear;
 // const export_subscribeToCartAjaxRequests = window.liquidAjaxCart.subscribeToCartAjaxRequests;
 
-const export_getCartState = window.liquidAjaxCart.getCartState;
+// const export_getCartState = window.liquidAjaxCart.getCartState;
 // const export_subscribeToCartStateUpdate = window.liquidAjaxCart.subscribeToCartStateUpdate;
 
 // const export_subscribeToCartSectionsUpdate = window.liquidAjaxCart.subscribeToCartSectionsUpdate;
 
-export {
-  export_configureCart as configureCart,
+// export {
 
-  export_cartRequestGet as cartRequestGet,
-  export_cartRequestAdd as cartRequestAdd,
-  export_cartRequestChange as cartRequestChange,
-  export_cartRequestUpdate as cartRequestUpdate,
-  export_cartRequestClear as cartRequestClear,
+  // export_cartRequestGet as cartRequestGet,
+  // export_cartRequestAdd as cartRequestAdd,
+  // export_cartRequestChange as cartRequestChange,
+  // export_cartRequestUpdate as cartRequestUpdate,
+  // export_cartRequestClear as cartRequestClear,
   // export_subscribeToCartAjaxRequests as subscribeToCartAjaxRequests,
 
-  export_getCartState as getCartState,
+  // export_getCartState as getCartState,
   // export_subscribeToCartStateUpdate as subscribeToCartStateUpdate,
 
   // export_subscribeToCartSectionsUpdate as subscribeToCartSectionsUpdate
-}
+// }

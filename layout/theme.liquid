@@ -146,9 +146,9 @@
   </script>
 
   <script type="module">
-    import { /*subscribeToCartAjaxRequests, subscribeToCartStateUpdate,*/ cartRequestAdd, cartRequestChange, configureCart } from '{{ 'liquid-ajax-cart.js' | asset_url }}';
+    import liquidAjaxCart from '{{ 'liquid-ajax-cart.js' | asset_url }}';
 
-    configureCart('addToCartCssClass', 'js-ajax-cart-open');
+    liquidAjaxCart.configureCart('addToCartCssClass', 'js-ajax-cart-open');
 
     // subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
     document.addEventListener('liquid-ajax-cart:request', event => {
@@ -192,7 +192,7 @@
             return lineItem.variant_id === promoVariant && lineItem.discounts.length > 0;
           });
           if ( promoVariantLineItem === -1 ) {
-            cartRequestAdd({ 
+            liquidAjaxCart.cartRequestAdd({
               items: [{
                   id: promoVariant,
                   quantity: 1,
@@ -202,7 +202,7 @@
           }
         } else {
           if ( autoAddedLineItem > -1 ) {
-            cartRequestChange({ 
+            liquidAjaxCart.cartRequestChange({
               "line": autoAddedLineItem + 1,
               "quantity": 0
             });

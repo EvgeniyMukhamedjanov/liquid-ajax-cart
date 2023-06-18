@@ -81,7 +81,6 @@ function cartDomBinderRerender() {
 function cartDomBinderInit() {
   // subscribeToCartStateUpdate(updateDOM);
   document.addEventListener(EVENT_STATE, (event: EventStateType) => {
-    console.log(event.detail.state);
     updateDOM(event.detail.state);
   })
   updateDOM(getCartState());
