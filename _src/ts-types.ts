@@ -89,18 +89,18 @@ export type ConfigurationValue =
   | string
   | boolean
   | ((formNode: HTMLFormElement) => boolean)
-  | ((messages: Array<MessageType>) => string);
+  /*| ((messages: Array<MessageType>) => string)*/;
 
 export type FormattersObjectType = {
   [key: string]: (value: JSONValueType | undefined) => JSONValueType | undefined
 }
 
-export type MessageType = {
-  type: string,
-  text: string,
-  code: string,
-  requestState: RequestStateType
-}
+// export type MessageType = {
+//   type: string,
+//   text: string,
+//   code: string,
+//   requestState: RequestStateType
+// }
 
 export type UpdatedSectionType = {
   id: string,

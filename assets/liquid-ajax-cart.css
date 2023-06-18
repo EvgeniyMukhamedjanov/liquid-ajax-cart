@@ -57,11 +57,16 @@
     text-indent: 0;
 }
 
-.js-ajax-cart-message {
-	font-size: .8em;
-}
+/*.js-ajax-cart-message {*/
+/*	font-size: .8em;*/
+/*}*/
 
-.js-ajax-cart-message--error {
+/*.js-ajax-cart-message--error {*/
+/*	color: red;*/
+/*}*/
+
+[data-ajax-cart-messages] {
+	font-size: .8em;
 	color: red;
 }
 

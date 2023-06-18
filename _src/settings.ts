@@ -1,10 +1,10 @@
-import {MessageType, FormattersObjectType, ConfigurationValue} from './ts-types';
+import {/*MessageType,*/ FormattersObjectType, ConfigurationValue} from './ts-types';
 
 import {cartDomBinderRerender} from './dom-binder';
 
 type SettingsType = {
   productFormsFilter: (formNode: HTMLFormElement) => boolean,
-  messageBuilder: (messages: Array<MessageType>) => string,
+  // messageBuilder: (messages: Array<MessageType>) => string,
   stateBinderFormatters: FormattersObjectType,
   // addToCartCssClass: string | [string, number],
   requestErrorText: string,
@@ -20,13 +20,13 @@ const dataAttributePrefix = 'data-ajax-cart';
 
 const settings: SettingsType = {
   productFormsFilter: (formNode: HTMLFormElement): boolean => true,
-  messageBuilder: (messages: Array<MessageType>): string => {
-    let result = '';
-    messages.forEach(element => {
-      result += `<div class="${cssClassesPrefix}-message ${cssClassesPrefix}-message--${element.type}">${element.text}</div>`;
-    })
-    return result;
-  },
+  // messageBuilder: (messages: Array<MessageType>): string => {
+  //   let result = '';
+  //   messages.forEach(element => {
+  //     result += `<div class="${cssClassesPrefix}-message ${cssClassesPrefix}-message--${element.type}">${element.text}</div>`;
+  //   })
+  //   return result;
+  // },
   stateBinderFormatters: {},
   // addToCartCssClass: '',
 
@@ -45,7 +45,7 @@ const settings: SettingsType = {
     sectionScrollAreaAttribute: `${dataAttributePrefix}-section-scroll`,
     quantityInputAttribute: `${dataAttributePrefix}-quantity-input`,
     propertyInputAttribute: `${dataAttributePrefix}-property-input`,
-    messagesAttribute: `${dataAttributePrefix}-messages`,
+    messagesAttribute: `${dataAttributePrefix}-messages`, // TODO: rename to -error
     configurationAttribute: `${dataAttributePrefix}-configuration`,
 
     cartStateSetBodyClass: `${cssClassesPrefix}-set`,
@@ -72,7 +72,7 @@ function cartSettingsInit() {
   if (configurationContainer) {
     try {
       const configuration = JSON.parse(configurationContainer.textContent);
-      const notSupportedProperties = ['productFormsFilter', 'messageBuilder'];
+      const notSupportedProperties = ['productFormsFilter'/*, 'messageBuilder'*/];
       for (let property in configuration) {
         if (notSupportedProperties.includes(property)) {
           console.error(`Liquid Ajax Cart: the "${property}" parameter is not supported inside the "${settings.computed.configurationAttribute}" script — use the "configureCart" function for it`);

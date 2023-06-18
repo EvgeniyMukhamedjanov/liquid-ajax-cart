@@ -1,52 +1,38 @@
 import {
   RequestStateType,
-  MessageType, EventRequestType
+  // MessageType,
+  EventRequestType
 } from './ts-types';
 
 import {EVENT_REQUEST,/*subscribeToCartAjaxRequests,*/ REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
 import {getCartState} from './state';
 import {settings} from './settings';
 
-const MESSAGE_TYPES = {
-  ERROR: 'error'
-}
+// const MESSAGE_TYPES = {
+//   ERROR: 'error'
+// }
+//
+// const MESSAGE_CODES = {
+//   SHOPIFY_ERROR: 'shopify_error',
+//   REQUEST_ERROR: 'request_error',
+// }
 
-const MESSAGE_CODES = {
-  SHOPIFY_ERROR: 'shopify_error',
-  REQUEST_ERROR: 'request_error',
-}
-
-function getRequestError(requestState: RequestStateType): MessageType | undefined {
+function getRequestError(requestState: RequestStateType): string {
 
   const {requestErrorText} = settings;
 
-  if (requestState.responseData?.ok) return undefined;
+  if (requestState.responseData?.ok) return '';
 
   if ('responseData' in requestState) {
     if ('description' in requestState.responseData.body && requestState.responseData.body.description) {
-      return {
-        type: MESSAGE_TYPES.ERROR,
-        text: <string>requestState.responseData.body.description,
-        code: MESSAGE_CODES.SHOPIFY_ERROR,
-        requestState
-      }
+      return <string>requestState.responseData.body.description
     }
     if ('message' in requestState.responseData.body && requestState.responseData.body.message) {
-      return {
-        type: MESSAGE_TYPES.ERROR,
-        text: <string>requestState.responseData.body.message,
-        code: MESSAGE_CODES.SHOPIFY_ERROR,
-        requestState
-      }
+      return <string>requestState.responseData.body.message
     }
   }
 
-  return {
-    type: MESSAGE_TYPES.ERROR,
-    text: requestErrorText,
-    code: MESSAGE_CODES.REQUEST_ERROR,
-    requestState
-  }
+  return requestErrorText;
 }
 
 const changeRequestContainers = (requestState: RequestStateType): NodeListOf<Element> => {
@@ -122,17 +108,17 @@ const cartMessagesInit = () => {
 
     if (errorContainers && errorContainers.length > 0) {
       errorContainers.forEach((element) => {
-        element.innerHTML = '';
+        element.textContent = '';
       });
 
       onResult((requestState) => {
         if (requestState.info.cancel) return;
 
-        const {messageBuilder} = settings;
+        // const {messageBuilder} = settings;
         const errorMessage = getRequestError(requestState);
         if (errorMessage) {
           errorContainers.forEach((element: Element) => {
-            element.innerHTML = messageBuilder([errorMessage]);
+            element.textContent = errorMessage;
           });
         }
       });
