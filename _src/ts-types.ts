@@ -101,13 +101,13 @@ export type EventSectionsType = CustomEvent<Array<UpdatedSectionType>>;
 declare global {
   interface Window {
     liquidAjaxCart: {
-      configureCart: (property: string, value: ConfigurationValue) => void,
-      cartRequestGet: (options: CartRequestOptionsType | undefined) => void,
-      cartRequestAdd: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
-      cartRequestChange: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
-      cartRequestUpdate: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
-      cartRequestClear: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
-      getCartState: () => AppStateType,
+      conf: (property: string, value: ConfigurationValue) => void,
+      get: (options: CartRequestOptionsType | undefined) => void,
+      add: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
+      change: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
+      update: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
+      clear: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
+      state: AppStateType,
     }
     Shopify?: {
       locale?: String,

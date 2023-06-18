@@ -27,17 +27,20 @@ if (!('liquidAjaxCart' in window)) {
   cartControlsInit(); // state subscriber
   cartGlobalClassesInit(); // state subscriber
 
-  (window as Window).liquidAjaxCart = {
-    configureCart,
-
-    cartRequestGet,
-    cartRequestAdd,
-    cartRequestChange,
-    cartRequestUpdate,
-    cartRequestClear,
-
-    getCartState // todo: rename
-  }
+  (window as Window).liquidAjaxCart = new (class {
+    conf = configureCart;
+    get = cartRequestGet;
+    add = cartRequestAdd;
+    change = cartRequestChange;
+    update = cartRequestUpdate;
+    clear = cartRequestClear;
+    get state() {
+      return getCartState();
+    }
+    set state(_) {
+      throw new Error('Liquid Ajax Cart: the "state" is a read-only property');
+    }
+  });
 
   const event = new CustomEvent(`${EVENT_PREFIX}:init`);
   document.body.dispatchEvent(event);

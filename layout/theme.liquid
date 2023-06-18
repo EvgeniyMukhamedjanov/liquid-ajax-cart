@@ -204,7 +204,7 @@
           return lineItem.variant_id === promoVariant && lineItem.discounts.length > 0;
         });
         if (promoVariantLineItem === -1) {
-          liquidAjaxCart.cartRequestAdd({
+          liquidAjaxCart.add({
             items: [{
               id: promoVariant,
               quantity: 1,
@@ -214,7 +214,7 @@
         }
       } else {
         if (autoAddedLineItem > -1) {
-          liquidAjaxCart.cartRequestChange({
+          liquidAjaxCart.change({
             "line": autoAddedLineItem + 1,
             "quantity": 0
           });
