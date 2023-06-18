@@ -14,6 +14,7 @@ import {cartControlsInit} from './controls';
 import {cartProductFormsInit} from './product-forms';
 import {cartMessagesInit} from './messages';
 import {cartGlobalClassesInit} from './global-classes';
+import {EVENT_PREFIX} from "./const";
 
 if (!('liquidAjaxCart' in window)) {
 
@@ -50,7 +51,7 @@ if (!('liquidAjaxCart' in window)) {
     // subscribeToCartSectionsUpdate
   }
 
-  const event = new CustomEvent('liquidAjaxCartInit');
+  const event = new CustomEvent(`${EVENT_PREFIX}init`);
   document.body.dispatchEvent(event);
 
   (window as Window).addEventListener('focus', () => {
@@ -58,7 +59,6 @@ if (!('liquidAjaxCart' in window)) {
       cartRequestUpdate({}, {});
     }
   });
-
 }
 
 const export_configureCart = window.liquidAjaxCart.configureCart;
