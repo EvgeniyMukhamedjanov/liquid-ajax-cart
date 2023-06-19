@@ -7,6 +7,7 @@ import {EVENT_REQUEST, REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
 import {getCartState} from './state';
 import {settings} from './settings';
 import {DATA_ATTR_PREFIX} from "./const";
+import {HTMLProductFormElement} from "./controls/product-form-element";
 
 const DATA_ATTR_ERRORS = `${DATA_ATTR_PREFIX}-errors`;
 
@@ -81,7 +82,7 @@ const changeRequestContainers = (requestState: RequestStateType): NodeListOf<Ele
 const addRequestContainers = (requestState: RequestStateType): NodeListOf<Element> => {
   let errorContainers: NodeListOf<Element>;
   const initiator: Element = requestState.info?.initiator;
-  if (initiator instanceof HTMLFormElement) {
+  if (initiator instanceof HTMLProductFormElement) {
     errorContainers = initiator.querySelectorAll(`[${DATA_ATTR_ERRORS}="form"]`);
   }
   return errorContainers;
