@@ -1,5 +1,5 @@
 ---
-layout: home-v2
+layout: home
 homepage: true
 description: A Javascript library for building Shopify Ajax-carts using Liquid templates
 disable_anchors: true

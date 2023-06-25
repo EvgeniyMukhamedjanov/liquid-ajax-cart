@@ -105,7 +105,7 @@ layout: default
             <div class="reference-link-block">
                 <div class="reference-link-block__text">
                     <h2 class="reference-link-block__title">
-                        <span>{{ forloop.index }}. </span><a href="/reference/{{ ref_link.file }}/" 
+                        <span>{{ forloop.index }}. </span><a href="/v1/reference/{{ ref_link.file }}/"
                             class="{{ include.anchor_class }} {% if md_file_name == page.name %} active {% endif %}">
                                 {%- if ref_link.title -%} {{ ref_link.title }} {%- else -%} {{ ref_link.file }} {%- endif -%}
                         </a>
@@ -121,7 +121,7 @@ layout: default
                         {%- assign md_file_name = ref_child_link.file | append: '.md' -%}
                         <div class="reference-link-block__sub-section">
                             <h3 class="reference-link-block__sub-title">
-                                <a href="/reference/{{ ref_child_link.file }}/">
+                                <a href="/v1/reference/{{ ref_child_link.file }}/">
                                     {%- if ref_child_link.title -%} {{ ref_child_link.title }} {%- else -%} {{ ref_child_link.file }} {%- endif -%}
                                 </a>
                             </h3>

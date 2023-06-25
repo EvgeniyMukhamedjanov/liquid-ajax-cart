@@ -1,25 +1,25 @@
-{% assign reference_url = '/reference/' %}
+{% assign reference_url = '/v1/reference/' %}
 {% assign page_url_reference_slice = page.url | slice: 0, reference_url.size %}
 {% assign is_reference_subpage = false %}
 {% if page_url_reference_slice == reference_url and page.url.size > reference_url.size %}
     {% assign is_reference_subpage = true %}
 {% endif %}
 
-{% assign guide_url = '/guide/' %}
+{% assign guide_url = '/v1/guide/' %}
 {% assign page_url_guide_slice = page.url | slice: 0, guide_url.size %}
 {% assign is_guide = false %}
 {% if page_url_guide_slice == guide_url and page.url.size == guide_url.size %}
     {% assign is_guide = true %}
 {% endif %}
 
-{% assign releases_url = '/releases/' %}
+{% assign releases_url = '/v1/releases/' %}
 {% assign page_url_releases_slice = page.url | slice: 0, releases_url.size %}
 {% assign is_releases = false %}
 {% if page_url_releases_slice == releases_url and page.url.size == releases_url.size %}
     {% assign is_releases = true %}
 {% endif %}
 
-{% assign examples_url = '/examples/' %}
+{% assign examples_url = '/v1/examples/' %}
 {% assign page_url_examples_slice = page.url | slice: 0, examples_url.size %}
 {% assign is_examples = false %}
 {% if page_url_examples_slice == examples_url and page.url.size == examples_url.size %}
@@ -61,11 +61,13 @@
                 <div class="container">
                     <h1 class="site-masthead__title">
                         <span class="heading-line">{{ page.title | default: site.name }}</span>
+                        {% comment %}
                         {% if is_releases %}
-                            <a href="https://www.npmjs.com/package/liquid-ajax-cart" class="site-masthead__npm">
+                            <a href="https://www.npmjs.com/package/liquid-ajax-cart/v/1.11.0" class="site-masthead__npm">
                                 <img alt="npm" src="https://img.shields.io/npm/v/liquid-ajax-cart">
                             </a>
                         {% endif %}
+                        {% endcomment %}
                     </h1>
                 </div>
             </div>

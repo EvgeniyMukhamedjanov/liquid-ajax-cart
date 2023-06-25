@@ -1,0 +1,10 @@
+.docs-page {
+  display: grid;
+  grid-template-columns: 20rem 1fr 20rem;
+}
+
+.docs-page__breadcrumbs {
+  font-size: 14px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+}

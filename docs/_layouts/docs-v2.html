@@ -1,0 +1,70 @@
+---
+layout: default-v2
+---
+
+<style type="text/css">
+  {% capture critical_css %}
+  {% include v2/styles/docs-page.scss %}
+  {% include v2/styles/tabs.scss %}
+  {% include v2/styles/side-menu.scss %}
+  {% include v2/styles/markdown.scss %}
+  {% endcapture %}
+  {{ critical_css | scssify }}
+</style>
+
+{%- assign docs_breadcrumbs = '' -%}
+
+<div class="container">
+  <div class="docs-page">
+    <div class="docs-page__section-nav">
+      <div class="side-menu">
+        {%- for docs_section in site.links_v2.docs -%}
+          <div class="side-menu__section">
+            <div class="side-menu__section-title">
+              {{- docs_section.title | escape -}}
+            </div>
+            <div class="side-menu__section-content">
+              {%- for docs_subsection in docs_section.subsections -%}
+                <div class="side-menu__subsection">
+                  {%- if docs_subsection.title and docs_subsection.title != '' -%}
+                    <div class="side-menu__subsection-title">
+                      {{- docs_subsection.title | escape -}}
+                    </div>
+                  {%- endif -%}
+                  <div class="side-menu__subsection-content">
+                    {%- for docs_link in docs_subsection.links -%}
+                      {%- assign is_docs_link_active = false -%}
+                      {%- assign docs_link_md_file = docs_link.file | append: '.md' -%}
+                      {%- if page.name == docs_link_md_file -%}
+                        {%- assign is_docs_link_active = true -%}
+                        {%- assign docs_breadcrumbs = docs_breadcrumbs | append: docs_section.title -%}
+                        {%- if docs_subsection.title and docs_subsection.title != '' -%}
+                          {%- assign docs_breadcrumbs = docs_breadcrumbs | append: ' / ' | append: docs_subsection.title -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                      <a
+                        class="side-menu__link {% if is_docs_link_active %}side-menu__link--active{% endif %}"
+                        href="/v2/docs/{{ docs_link.file | append: '/' | replace: 'index/', '' }}"
+                      >
+                        {{- docs_link.title | escape -}}
+                      </a>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+    <div class="docs-page__content">
+      <div class="docs-page__breadcrumbs">
+        {{- docs_breadcrumbs | escape -}}
+      </div>
+      <div class="markdown">
+        {% include jekyll-docs-theme/anchor_headings.html %}
+      </div>
+    </div>
+    <div class="docs-page__page-menu"></div>
+  </div>
+</div>

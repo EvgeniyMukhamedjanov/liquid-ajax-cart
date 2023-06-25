@@ -10,7 +10,7 @@
     "webpack-watch": "webpack --mode=development --watch",
     "shopify-watch": "shopify theme dev --store=liquid-ajax-cart",
     "start": "npm-run-all --parallel webpack-watch shopify-watch",
-    "build": "rimraf docs/releases/last && webpack --mode=production && webpack --mode=production --env last=true  && webpack --mode=production --env npm=true"
+    "build": "rimraf docs/v2/releases/last && webpack --mode=production && webpack --mode=production --env last=true  && webpack --mode=production --env npm=true"
   },
   "keywords": [
     "shopify",

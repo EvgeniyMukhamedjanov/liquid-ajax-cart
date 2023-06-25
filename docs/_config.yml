@@ -11,18 +11,66 @@ license:
   docs: CC BY 3.0
   docs_url: https://creativecommons.org/licenses/by/3.0/
 
-links:
+links_v2:
   main:
     - title: Home
       url: /
-    - title: Guide
-      url: /guide/
-    - title: JavaScript examples
-      url: /examples/
-    - title: Reference
-      url: /reference/
+    - title: Documentation
+      url: /v2/docs/
     - title: Download
-      url: /releases/
+      url: /v2/releases/
+
+  docs:
+    - title: Guides
+      subsections:
+        - title: Setup
+          links:
+            - title: Installation
+              file: index
+            - title: Cart section
+              file: cart-section
+            - title: Product forms
+              file: product-forms
+
+        - title: Extension with JS
+          links:
+            - title: Altering Ajax requests
+              file: test
+            - title: Making Ajax requests
+              file: test
+            - title: Examples
+              file: test
+
+    - title: Reference
+      subsections:
+        - title: Core concepts
+          links:
+            - title: Cart state
+              file: test
+            - title: Request state
+              file: test
+            - title: Queue of requests
+              file: test
+
+        - title: Custom elements
+          links:
+            - title: <ajax-cart-product-form>
+              file: test
+            - title: <ajax-cart-quantity>
+              file: test
+
+links:
+  main:
+    - title: Home
+      url: /v1/
+    - title: Guide
+      url: /v1/guide/
+    - title: JavaScript examples
+      url: /v1/examples/
+    - title: Reference
+      url: /v1/reference/
+    - title: Download
+      url: /v1/releases/
   header:
     - title: Demo Store
       url: https://liquid-ajax-cart.myshopify.com/

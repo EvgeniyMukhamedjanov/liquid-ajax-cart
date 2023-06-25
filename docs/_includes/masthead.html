@@ -1,4 +1,4 @@
-{% assign reference_url = '/reference/' %}
+{% assign reference_url = '/v1/reference/' %}
 {% assign page_url_reference_slice = page.url | slice: 0, reference_url.size %}
 
 {% if page_url_reference_slice == reference_url and page.url.size > reference_url.size %}

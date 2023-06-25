@@ -1,0 +1,31 @@
+:root,
+::before,
+::after {
+  // TODO: put global CSS vars here
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  font-size: 1rem;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+  text-rendering: optimizespeed;
+}
+
+code {
+  font-family: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1600px;
+  padding: 0 2rem;
+}
+
+.lead {
+  font-size: 1.125rem;
+}

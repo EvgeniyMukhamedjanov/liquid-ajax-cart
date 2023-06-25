@@ -6,27 +6,27 @@ The `options` parameter is an object and it might have the following properties:
 
 The `firstComplete` parameter is a function that will be called right after the request is finished and before any other callbacks that are subscribed to the request. 
 
-This function is called before updating of the [State](/reference/state/) object, the `data-ajax-cart-section` sections, the `body` CSS classes, the `data-ajax-cart-bind-state` elements.
+This function is called before updating of the [State](/v1/reference/state/) object, the `data-ajax-cart-section` sections, the `body` CSS classes, the `data-ajax-cart-bind-state` elements.
 
-The `firstComplete` function will be called with the only parameter — the [Request state](/reference/requestState) object.
+The `firstComplete` function will be called with the only parameter — the [Request state](/v1/reference/requestState) object.
 
 #### lastComplete
 
 The `lastComplete` parameter is a function that will be called after the request is finished and after any other callbacks that are subscribed to the request. 
 
-You can use the [`getCartState`](/reference/getCartState/) function to read the [`State`](/reference/state/) object because it is already updated.
+You can use the [`getCartState`](/v1/reference/getCartState/) function to read the [`State`](/v1/reference/state/) object because it is already updated.
 
 Also the `data-ajax-cart-section` sections, the `body` CSS classes, the `data-ajax-cart-bind-state` are updated when the function is called.
 
-The `lastComplete` function will be called with the only parameter — the [Request state](/reference/requestState) object.
+The `lastComplete` function will be called with the only parameter — the [Request state](/v1/reference/requestState) object.
 
 #### info
 
-The `info` parameter is a simple Javascript object that will be attached to the [Request state](/reference/requestState) object. You can add your own data to the request state using the `info` parameter. 
+The `info` parameter is a simple Javascript object that will be attached to the [Request state](/v1/reference/requestState) object. You can add your own data to the request state using the `info` parameter.
 
 Don't use the `initiator` and the `cancel` keys:
-* [Product forms](/reference/product-forms/) and [Controls](/reference/controls/) that send Cart Ajax API requests attach their HTMLElement objects to the `initiator` property of the `info` parameter.
-* If the `info` parameter has the `cancel` property and it is `true`, the request will not be performed. It might be useful when you intercept a Shopify Cart API request using the [subscribeToCartAjaxRequests](/reference/subscribeToCartAjaxRequests/) function and decide to cancel the request.
+* [Product forms](/v1/reference/product-forms/) and [Controls](/v1/reference/controls/) that send Cart Ajax API requests attach their HTMLElement objects to the `initiator` property of the `info` parameter.
+* If the `info` parameter has the `cancel` property and it is `true`, the request will not be performed. It might be useful when you intercept a Shopify Cart API request using the [subscribeToCartAjaxRequests](/v1/reference/subscribeToCartAjaxRequests/) function and decide to cancel the request.
 
 #### newQueue
 
@@ -57,4 +57,4 @@ subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
 });
 ```
 
-Read more in the [Queues](/reference/queues/) reference.
+Read more in the [Queues](/v1/reference/queues/) reference.

@@ -1,5 +1,5 @@
 {%- assign last_release_file = blank -%}
-{%- assign last_release_slice = '/v1/releases/last/liquid-ajax-cart-v' -%}
+{%- assign last_release_slice = '/v2/releases/last/liquid-ajax-cart-v' -%}
 {%- for file in site.static_files -%}
     {%- assign file_slice = file.path | slice: 0, last_release_slice.size -%}
     {%- if last_release_slice == file_slice -%}

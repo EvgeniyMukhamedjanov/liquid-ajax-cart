@@ -1,5 +1,5 @@
 {% assign version = blank %}
-{% assign last_release_slice = '/releases/last/liquid-ajax-cart-v' %}
+{% assign last_release_slice = '/v1/releases/last/liquid-ajax-cart-v' %}
 {% for file in site.static_files %}
     {% assign file_slice = file.path | slice: 0, last_release_slice.size %}
     {% if last_release_slice == file_slice %}
@@ -216,7 +216,7 @@ when the user's cart gets changed --&gt;
                         </div>
                     </div>
                     <div class="code-examples__cta-wrapper" data-example-cta>
-                        <a href="/guide/" class="code-examples__cta"><span>Installation guide</span></a>
+                        <a href="/v1/guide/" class="code-examples__cta"><span>Installation guide</span></a>
                     </div>
                 </div>
                 <div class="code-examples__example" data-example id="product-forms-example">
@@ -281,7 +281,7 @@ when the user's cart gets changed --&gt;
                         </div>
                     </div>
                     <div class="code-examples__cta-wrapper" data-example-cta>
-                        <a href="/guide/" class="code-examples__cta"><span>Installation guide</span></a>
+                        <a href="/v1/guide/" class="code-examples__cta"><span>Installation guide</span></a>
                     </div>
                 </div>
                 <div class="code-examples__example" data-example id="api-example">
@@ -351,7 +351,7 @@ when the user's cart gets changed --&gt;
                         </div>
                     </div> -->
                     <div class="code-examples__cta-wrapper" data-example-cta>
-                        <a href="/guide/" class="code-examples__cta"><span>Installation guide</span></a>
+                        <a href="/v1/guide/" class="code-examples__cta"><span>Installation guide</span></a>
                     </div>
                 </div>
             </div>
