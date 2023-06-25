@@ -14,9 +14,12 @@ In both cases Liquid Ajax Cart will be available globally on the website.
 ## Include the library
 
 <div class="tabs">
-    <input type="radio" name="installation_types" id="installation_type_direct" checked />
-    <label for="installation_type_direct">Directly to theme</label>
-<div class="guide-row__col" markdown="1">
+
+<input type="radio" name="installation_types" id="installation_type_direct" checked />
+<label for="installation_type_direct">Directly to theme</label>
+<div markdown="1">
+
+<div class="code-editor-header">layout/theme.liquid</div>
 
 {% raw %}
 ```html
@@ -32,16 +35,44 @@ In both cases Liquid Ajax Cart will be available globally on the website.
 ```
 {% endraw %}
 
-Upload the <a href="{{ last_release_file.path }}" download >{% include code/last-release-file-name.html %}</a> file to your Shopify theme's `asset` folder and include it in the `layout/theme.liquid` template.
+Upload the <a href="{% include code/v2/last-release-file-name.html path=true %}" download >`{% include code/v2/last-release-file-name.html %}`</a> file to your Shopify theme's `asset` folder and include it in the `layout/theme.liquid` template.
 
-Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/v1/reference/data-ajax-cart-initial-state/) attribute. If not — Liquid Ajax Cart will make another Shopify Cart API request to get the cart state.
-
+Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/v2/reference/data-ajax-cart-initial-state/) attribute. If not — Liquid Ajax Cart will make another Shopify Cart API request to get the cart state.
 </div>
-    <input type="radio" name="installation_types" id="installation_type_npm" />
-    <label for="installation_type_npm">From npm-package</label> 
-    <div>
-        Npm installation
-    </div>
+
+<input type="radio" name="installation_types" id="installation_type_npm" />
+<label for="installation_type_npm">From npm-package</label> 
+<div markdown="1">
+
+<div class="code-editor-header">Terminal</div>
+
+```
+npm install liquid-ajax-cart
+```
+
+<div class="code-editor-header">your-module.js</div>
+
+```javascript
+import 'liquid-ajax-cart';
+```
+
+<div class="code-editor-header">layout/theme.liquid</div>
+
+{% raw %}
+```html
+{% comment %} Somewhere in layout/theme.liquid {% endcomment %}
+
+<script type="application/json" data-ajax-cart-initial-state >
+  {{ cart | json }}
+</script>
+```
+{% endraw %}
+
+Import the `liquid-ajax-cart` package to a JavaScript module that is going to be processed by Webpack or any other bundler.
+
+Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/v2/reference/data-ajax-cart-initial-state/) attribute. If not — Liquid Ajax Cart will make another Shopify Cart API request to get the cart state.
+</div>
+
 </div>
 
 ### Providing the initial cart state

@@ -1,12 +1,16 @@
 {%- assign last_release_file = blank -%}
 {%- assign last_release_slice = '/v2/releases/last/liquid-ajax-cart-v' -%}
 {%- for file in site.static_files -%}
-    {%- assign file_slice = file.path | slice: 0, last_release_slice.size -%}
-    {%- if last_release_slice == file_slice -%}
-        {%- assign last_release_file = file -%}
-    {%- endif -%}
+  {%- assign file_slice = file.path | slice: 0, last_release_slice.size -%}
+  {%- if last_release_slice == file_slice -%}
+    {%- assign last_release_file = file -%}
+  {%- endif -%}
 {%- endfor -%}
 
-{%- if include.asset_url -%}{% raw %}'{{ "{% endraw %}{%- endif -%}
-{{ last_release_file.name }}
-{%- if include.asset_url -%}{% raw %}" | asset_url }}'{% endraw %}{%- endif -%}
+{%- if include.path -%}
+  {{- last_release_file.path -}}
+{%- else -%}
+  {%- if include.asset_url -%}{% raw %}'{{ "{% endraw %}{%- endif -%}
+  {{- last_release_file.name -}}
+  {%- if include.asset_url -%}{% raw %}" | asset_url }}'{% endraw %}{%- endif -%}
+{%- endif -%}

@@ -18,6 +18,7 @@ body {
 
 code {
   font-family: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.875rem;
 }
 
 .container {
@@ -28,4 +29,13 @@ code {
 
 .lead {
   font-size: 1.125rem;
+}
+
+.code-editor-header {
+  background-color: black;
+  color: white;
+  font-family: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: .75rem;
+  padding: .5rem 1.5rem;
+  border-radius: .75rem .75rem 0 0;
 }

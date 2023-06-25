@@ -27,7 +27,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono&display=swap"
         rel="stylesheet">
 
-  <style type="text/css">
+  <style>
     {% capture critical_css %}
     {% include v2/styles/reset.scss %}
     {% include v2/styles/critical.scss %}
@@ -35,7 +35,7 @@
     {% comment %}{% include styles/containers.scss %}{% endcomment %}
     {% comment %}{% include styles/navigation.scss %}{% endcomment %}
     {% comment %}{% include styles/masthead.scss %}{% endcomment %}
-    {% comment %}{% include styles/highlight.scss %}{% endcomment %}
+    {% include v2/styles/highlight.scss %}
     {% comment %}if is_reference_subpage or is_examples %}{% endcomment %}
     {% comment %}{% include styles/sidebar.scss %}{% endcomment %}
     {% comment %}endif %}{% endcomment %}
