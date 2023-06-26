@@ -21,8 +21,8 @@ In both cases Liquid Ajax Cart will be available globally on the website.
 
 <div class="code-editor-header">layout/theme.liquid</div>
 
-{% raw %}
-```html
+{% capture code_my %}
+{%- raw -%}
 {% comment %} Somewhere in layout/theme.liquid {% endcomment %}
  
 <script type="application/json" data-ajax-cart-initial-state >
@@ -32,8 +32,11 @@ In both cases Liquid Ajax Cart will be available globally on the website.
 <script type="module">
   import {% endraw %}{% include code/v2/last-release-file-name.html asset_url=true %}{% raw %};
 </script>
-```
 {% endraw %}
+{% endcapture %}
+
+<pre><code class="language-liquid">{{- code_my | escape -}}</code></pre>
+
 
 Upload the <a href="{% include code/v2/last-release-file-name.html path=true %}" download >`{% include code/v2/last-release-file-name.html %}`</a> file to your Shopify theme's `asset` folder and include it in the `layout/theme.liquid` template.
 

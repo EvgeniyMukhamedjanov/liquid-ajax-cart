@@ -27,6 +27,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono&display=swap"
         rel="stylesheet">
 
+  <link
+    rel="stylesheet"
+    href="{{ '/assets/css/prism.css' | relative_url }}?v=1"
+  />
+
   <style>
     {% capture critical_css %}
     {% include v2/styles/reset.scss %}
@@ -58,5 +63,7 @@
 <div>{{ content }}</div>
 
 {% include footer/full.html %}
+
+<script async="" defer="" src="{{ '/assets/js/prism.js' | relative_url }}"></script>
 </body>
 </html>
