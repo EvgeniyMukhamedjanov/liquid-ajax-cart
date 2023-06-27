@@ -18,7 +18,14 @@ body {
 
 code {
   font-family: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  font-size: 0.875rem;
+}
+:not(pre) > code {
+  font-size: .9375em !important;
+  color: inherit !important;
+  background-color: #f9f9f9;
+  border: 1px solid #999999;
+  padding: 0 .25em;
+  border-radius: .125em;
 }
 
 .container {
@@ -29,13 +36,4 @@ code {
 
 .lead {
   font-size: 1.125rem;
-}
-
-.code-editor-header {
-  background-color: black;
-  color: white;
-  font-family: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  font-size: .75rem;
-  padding: .5rem 1.5rem;
-  border-radius: .75rem .75rem 0 0;
 }

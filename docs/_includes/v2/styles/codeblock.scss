@@ -1,0 +1,25 @@
+.codeblock {
+  margin: 1rem 0;
+}
+
+.codeblock__header {
+  background-color: black;
+  color: white;
+  font-family: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: .75rem;
+  padding: .5rem 1.5rem;
+  border-radius: .75rem .75rem 0 0;
+}
+
+.codeblock__content {
+  background-color: #304B4F !important;
+  margin: 0 !important;
+  border-radius: .75rem;
+  padding: 1rem;
+  color: white;
+  font-size: .9375rem;
+
+  .codeblock__header + & {
+    border-radius: 0 0 .75rem .75rem;
+  }
+}
