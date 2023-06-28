@@ -1,5 +1,5 @@
 ---
-title: Installation
+title: Cart section
 layout: docs-v2
 disable_anchors: true
 ---
@@ -93,7 +93,7 @@ Liquid Ajax Cart will listen to the `change` event, send an Ajax request to chan
 and update the content of the container with the `data-ajax-cart-section` attribute.
 
 In order to bind "Plus" and "Minus" buttons to the line-item quantity input, wrap them all into the [`ajax-cart-quantity`](/v2/docs/ajax-cart-quantity) tag
-and add the [`data-ajax-cart-quantity-plus`](/v2/docs/data-ajax-cart-quantity-plus) and [`data-ajax-cart-quantity-minus`](/v2/docs/data-ajax-cart-quantity-minus) attributes to the buttons.
+and add the `data-ajax-cart-quantity-plus` and `data-ajax-cart-quantity-minus` attributes to the buttons.
 Liquid Ajax Cart will listen to the `click` event on the buttons and triggers the `change` event on the quantity input when they are clicked.
 
 Add the [`data-ajax-cart-request-button`](/v2/docs/data-ajax-cart-request-button) attribute to the "Remove" button —
@@ -258,3 +258,13 @@ to the parent element of the area — Liquid Ajax Cart will keep this element's 
 {% endraw %}
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+
+## JavaScript callback when section is re-rendered
+
+Listen to the [`liquid-ajax-cart:sections`](/v2/docs/liquid-ajax-cart-sections) event 
+if you need to run JavaScript code when `data-ajax-cart-section` elements get updated.
+
+For example, you might need to attach event listeners to the Ajax cart section each time when the section gets updates,
+because Liquid Ajax Cart replaces its HTML with a new one on each update. 
+
+{% include v2/content/sections-event-code-example.html %}

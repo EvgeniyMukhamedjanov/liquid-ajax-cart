@@ -21,7 +21,7 @@ In both cases it will be available globally on the website.
 
 <p markdown="1">Upload the <a href="{% include v2/last-release-file-name.html path=true %}" download >`{% include v2/last-release-file-name.html %}`</a> file to your Shopify theme's `asset` folder and include it in the `layout/theme.liquid` template.</p>
 
-<p markdown="1">Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/v2/reference/data-ajax-cart-initial-state/) attribute. If not — Liquid Ajax Cart will make another Shopify Cart API request to get the cart state.</p>
+<p markdown="1">Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/v2/docs/data-ajax-cart-initial-state/) attribute. If not — Liquid Ajax Cart will make another Shopify Cart API request to get the cart state.</p>
 
 {%- capture highlight_code -%}
 {% raw %}{% comment %} Somewhere in layout/theme.liquid {% endcomment %}
@@ -44,7 +44,6 @@ In both cases it will be available globally on the website.
 <div>
 
 <p markdown="1">If you build your JavaScript using Webpack or any other bundler, download Liquid Ajax Cart from `npm`.</p>
-<p markdown="1">Download the `liquid-ajax-cart` package:</p>
 
 {%- capture highlight_code -%}
 npm install liquid-ajax-cart
@@ -57,7 +56,7 @@ import "liquid-ajax-cart";
 {%- endcapture -%}
 {% include v2/codeblock.html title="index.js" language="javascript" code=highlight_code %}
 
-<p markdown="1">Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/v2/reference/data-ajax-cart-initial-state/) attribute.</p> 
+<p markdown="1">Provide the initial cart state in the JSON format within a script tag with the [`data-ajax-cart-initial-state`](/v2/docs/data-ajax-cart-initial-state/) attribute.</p> 
 <p>If not — Liquid Ajax Cart will make another Shopify Cart API request to get the cart state.</p>
 {%- capture highlight_code -%}
 {% raw %}
@@ -69,6 +68,8 @@ import "liquid-ajax-cart";
 {% endraw %}
 {%- endcapture -%}
 {% include v2/codeblock.html title="layout/theme.liquid" language="liquid" code=highlight_code %}
+
+<p markdown="1">Make sure at the moment when you JavaScript bundle is loaded, the `data-ajax-cart-initial-state` element is accessible.</p> 
 
 </div>
 

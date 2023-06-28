@@ -46,7 +46,7 @@ links_v2:
         - title: Core concepts
           links:
             - title: Cart state
-              file: test
+              file: cart-state
             - title: Request state
               file: test
             - title: Queue of requests
@@ -54,10 +54,30 @@ links_v2:
 
         - title: Custom elements
           links:
-            - title: <ajax-cart-product-form>
-              file: test
-            - title: <ajax-cart-quantity>
-              file: test
+            - title: ajax-cart-quantity
+              file: ajax-cart-quantity
+
+        - title: Data attributes
+          links:
+            - title: data-ajax-cart-quantity-input
+              file: data-ajax-cart-quantity-input
+            - title: data-ajax-cart-quantity-minus
+              file: data-ajax-cart-quantity-minus
+            - title: data-ajax-cart-quantity-plus
+              file: data-ajax-cart-quantity-plus
+            - title: data-ajax-cart-initial-state
+              file: data-ajax-cart-initial-state
+            - title: data-ajax-cart-section
+              file: data-ajax-cart-section
+            - title: data-ajax-cart-section-scroll
+              file: data-ajax-cart-section-scroll
+            - title: data-ajax-cart-static-element
+              file: data-ajax-cart-static-element
+
+        - title: Events
+          links:
+            - title: liquid-ajax-cart:sections
+              file: liquid-ajax-cart-sections
 
 links:
   main:

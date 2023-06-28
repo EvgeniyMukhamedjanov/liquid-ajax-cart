@@ -2,6 +2,7 @@
   h1 {
     font-size: 2rem;
     font-weight: 900;
+    margin-bottom: 1rem
   }
 
   h2 {
@@ -11,12 +12,24 @@
   }
 
   h3 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: bold;
-    margin-top: 2.5rem;
+    margin: 2.5rem 0 .6rem;
   }
 
   p {
-    margin-bottom: 1rem;
+    margin-bottom: .6rem;
+  }
+
+  ul {
+    margin-bottom: .6rem;
+    padding-left: 1rem;
+    list-style-type: disc;
+  }
+
+  ol {
+    margin-bottom: .6rem;
+    padding-left: 1rem;
+    list-style-type: decimal;
   }
 }

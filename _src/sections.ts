@@ -173,7 +173,7 @@ function cartSectionsInit() {
 
             if (newNodes.length > 0) {
               updatedSections.push({
-                id: sectionId,
+                id: sectionId, // TODO: add shopify-section- prefix
                 elements: newNodes
               });
             }
