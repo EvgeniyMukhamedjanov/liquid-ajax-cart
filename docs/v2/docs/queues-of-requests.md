@@ -7,7 +7,7 @@ disable_anchors: true
 # Queues of requests
 
 <p class="lead">
-Liquid Ajax Cart doesn't perform Ajax requests immediately, it adds them to queues.
+Liquid Ajax Cart doesn't perform Shopify Cart API Ajax requests immediately, it adds them to queues.
 </p>
 
 ## How it works 
@@ -15,9 +15,9 @@ Liquid Ajax Cart doesn't perform Ajax requests immediately, it adds them to queu
 The queues of requests might look like this:
 
 {%- capture highlight_code -%}
-Queue 1: [/cart/add.js] [/cart/change.js]
-Queue 2: [/cart/add.js]
-Queue 3: [/cart/add.js]
+Queue #1: [/cart/add.js] [/cart/change.js]
+Queue #2: [/cart/add.js]
+Queue #3: [/cart/add.js]
 {%- endcapture -%}
 {% include v2/codeblock.html language="plain" code=highlight_code %}
 
