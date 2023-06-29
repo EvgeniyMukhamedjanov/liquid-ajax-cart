@@ -48,36 +48,68 @@ links_v2:
             - title: Cart state
               file: cart-state
             - title: Request state
-              file: test
-            - title: Queue of requests
-              file: test
+              file: request-state
+            - title: Queues of requests
+              file: queues-of-requests
 
         - title: Custom elements
           links:
             - title: ajax-cart-quantity
               file: ajax-cart-quantity
+            - title: ajax-cart-product-form
+              file: ajax-cart-product-form
 
         - title: Data attributes
           links:
+            - title: data-ajax-cart-bind-state
+              file: data-ajax-cart-bind-state
+            - title: data-ajax-cart-errors
+              file: data-ajax-cart-errors
+            - title: data-ajax-cart-initial-state
+              file: data-ajax-cart-initial-state
             - title: data-ajax-cart-quantity-input
               file: data-ajax-cart-quantity-input
             - title: data-ajax-cart-quantity-minus
               file: data-ajax-cart-quantity-minus
             - title: data-ajax-cart-quantity-plus
               file: data-ajax-cart-quantity-plus
-            - title: data-ajax-cart-initial-state
-              file: data-ajax-cart-initial-state
+            - title: data-ajax-cart-request-button
+              file: data-ajax-cart-request-button
             - title: data-ajax-cart-section
               file: data-ajax-cart-section
             - title: data-ajax-cart-section-scroll
               file: data-ajax-cart-section-scroll
             - title: data-ajax-cart-static-element
               file: data-ajax-cart-static-element
+            - title: data-ajax-cart-property-input
+              file: data-ajax-cart-property-input
+
+        - title: CSS classes
+          links:
+            - title: js-ajax-cart-empty
+              file: js-ajax-cart-empty
+            - title: js-ajax-cart-not-empty
+              file: js-ajax-cart-not-empty
+            - title: js-ajax-cart-in-progress
+              file: js-ajax-cart-in-progress
+            - title: js-ajax-cart-set
+              file: js-ajax-cart-set
 
         - title: Events
           links:
+            - title: liquid-ajax-cart:init
+              file: init-event
             - title: liquid-ajax-cart:sections
-              file: liquid-ajax-cart-sections
+              file: sections-event
+
+        - title: Configuration
+          links:
+            - title: requestErrorText
+              file: request-error-text
+            - title: stateBinderFormatters
+              file: state-binder-formatters
+            - title: updateOnWindowFocus
+              file: update-on-window-focus
 
 links:
   main:

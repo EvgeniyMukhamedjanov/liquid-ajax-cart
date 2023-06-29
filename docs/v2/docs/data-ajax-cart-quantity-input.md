@@ -15,9 +15,9 @@ once a user changes the input value, Liquid Ajax Cart will send a Shopify Cart A
 
 The request will be sent on the input `change` event and on the `Enter` key `keydown` event.
 
-If a user presses the `Esc` key within the input, its value will be reset to the current item quantity according to the [State](/v2/docs/cart-state/) object.
+If a user presses the `Esc` key within the input, its value will be reset to the current item quantity according to the [Cart state](/v2/docs/cart-state/) object.
 
-The `data-ajax-cart-quantity-input` input fields become `readonly` when there is a Shopify Cart API request in progress (if the [State](/v2/docs/cart-state/) `status.requestInProgress` property is `true`)
+The `data-ajax-cart-quantity-input` input fields become `readonly` when there is a Shopify Cart API request in progress (if the [Cart state](/v2/docs/cart-state/) `status.requestInProgress` property is `true`)
 
 ## Using a line item index
 

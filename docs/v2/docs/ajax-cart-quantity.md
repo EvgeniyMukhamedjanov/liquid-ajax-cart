@@ -96,4 +96,4 @@ If the user doesn't click the same button again within the 300 ms, the `ajax-car
 Otherwise, if the user clicks the same button within these 300 ms, the timer gets restarted, thus the `ajax-cart-quantity` will wait for another 300 ms before sending the request.
 
 This approach lets the user change the quantity by more than one
-before sending a Shopify Cart API Ajax request is sent and before the cart goes to the "loading" state.
+before sending a Shopify Cart API Ajax request and before the cart goes to the "loading" state.

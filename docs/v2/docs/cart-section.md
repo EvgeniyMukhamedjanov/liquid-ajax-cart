@@ -167,25 +167,7 @@ if Shopify responds with an error message to an Ajax request, Liquid Ajax Cart w
 When Liquid Ajax Cart sends an Ajax request, it adds the [`js-ajax-cart-in-progress`](/v2/docs/js-ajax-cart-in-progress) CSS class to the `html` tag.
 Use it to indicate that the cart is updating.
 
-{%- capture highlight_code -%}
-.my-cart__items {
-  opacity: 1;
-  transition: opacity .2s;
-}
-
-/* Make the cart content visually disabled while updating */
-html.js-ajax-cart-in-progress .my-cart__items {
-  opacity: .7;
-}
-
-/* Show a loading indicator */
-html.js-ajax-cart-in-progress .my-cart__items:before {
-  content: 'Loading';
-  display: block;
-}
-
-{%- endcapture -%}
-{% include v2/codeblock.html title="assets/style.css" language="css" code=highlight_code %}
+{% include v2/content/cart-loading-state-css-example.html %}
 
 ## Line item properties, cart note and attributes
 
@@ -261,7 +243,7 @@ to the parent element of the area — Liquid Ajax Cart will keep this element's 
 
 ## JavaScript callback when section is re-rendered
 
-Listen to the [`liquid-ajax-cart:sections`](/v2/docs/liquid-ajax-cart-sections) event 
+Listen to the [`liquid-ajax-cart:sections`](/v2/docs/sections-event) event 
 if you need to run JavaScript code when `data-ajax-cart-section` elements get updated.
 
 For example, you might need to attach event listeners to the Ajax cart section each time when the section gets updates,

@@ -1,0 +1,19 @@
+{%- capture highlight_code -%}
+.my-cart__items {
+  opacity: 1;
+  transition: opacity .2s;
+}
+
+/* Make the cart content look visually disabled while updating */
+html.js-ajax-cart-in-progress .my-cart__items {
+  opacity: .7;
+}
+
+/* Show a loading indicator */
+html.js-ajax-cart-in-progress .my-cart__items:before {
+  content: 'Loading';
+  display: block;
+}
+
+{%- endcapture -%}
+{% include v2/codeblock.html title="assets/style.css" language="css" code=highlight_code %}
