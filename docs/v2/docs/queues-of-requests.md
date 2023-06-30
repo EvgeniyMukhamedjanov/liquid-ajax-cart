@@ -24,7 +24,7 @@ Queue #3: [/cart/add.js]
 While the first queue contains requests, they will be performed in order: `/cart/add.js`, then `/cart/change.js`.
 
 When the requests from the first queue are finished — the queue gets removed, 
-the second queue becomes first and the process repeats until there are no queue left.
+the second queue becomes first and the process repeats until there are no queues left.
 
 ## The `newQueue` property
 
@@ -39,7 +39,7 @@ or it will be added to the end of the first queue.
 
 ### If `newQueue` is `true`
 
-If the `newQueue` property of is `true` then a new queue will be created and the request will be added to the new queue.
+If the `newQueue` property is `true` then a new queue will be created and the request will be added to the new queue.
 
 Use this option when you want your request to be performed according to the callstack order. 
 Your request will be performed only after all the previously added requests are finished.
@@ -47,8 +47,8 @@ Your request will be performed only after all the previously added requests are 
 The use case is requests that get performed on a user action, such as a button click or a form submission.
 
 For example, you want to create a button that performs `/cart/add.js` request. 
-If there are other requests in progress at the moment when a user clicks the button, 
-you want your button's request to be performed when all the requests are finished, that are currently in progress.
+If there are other requests in progress when a user clicks the button, 
+you want your button's request to be performed after all those requests are finished.
 
 You should set `newQueue` option to `true` to achieve this: 
 
