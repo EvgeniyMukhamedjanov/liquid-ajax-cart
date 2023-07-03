@@ -1,0 +1,27 @@
+const options = {
+  firstComplete: function(requestState) {
+    /**
+     * This callback function will be called first after the request is performed,
+     * thus none of request subscribers knows the result of the request,
+     * thus Cart state is not updated yet, sections are not updated yet,
+     * everything is not updated yet.
+     */
+  },
+  lastComplete: function(requestState) {
+    /**
+     * This callback-function will be called the latest
+     * among request subscribers,
+     * thus all the request subscribers are executed,
+     * thus Cart state is updated, sections are updated,
+     * everything is updated.
+     */
+  },
+  info: {
+    /**
+     * Any additional data you want to attach to the Request state object.
+     * Don't use the "initiator" and the "cancel" keys.
+     */
+    myParameter: 'value'
+  },
+  newQueue: true // whether the request should go to a new queue or to the first queue
+}

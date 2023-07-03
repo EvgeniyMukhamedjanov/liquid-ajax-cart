@@ -9,7 +9,7 @@ Performs a request to the Shopify Cart API `POST /cart/add.js` endpoint.
 
 Takes the request's body as a first parameter, the options object as the second parameter.
 
-See what parameters Shopify expects from the request's body in the [`/cart/add.js`](https://shopify.dev/api/ajax/reference/cart#post-cart-add-js) documentation.
+See what parameters Shopify expects from the request's body in the [`/cart/add.js`](https://shopify.dev/docs/api/ajax/reference/cart#post-locale-cart-add-js) documentation.
 
 ```html
 <script type="module">

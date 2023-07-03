@@ -1,10 +1,15 @@
 .codeblock {
   margin: 1rem 0;
+  background-color: #e7f2e39e !important;
+  border: 1px solid ;
+  border-radius: .75rem;
+  overflow: hidden;
 }
 
 .codeblock__header {
-  background-color: black;
-  color: white;
+  //background-color: black;
+  //color: white;
+  border-bottom: 1px solid;
   font-family: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   font-size: .75rem;
   padding: .5rem 1.5rem;
@@ -12,12 +17,13 @@
 }
 
 .codeblock__content {
-  background-color: #304B4F !important;
+  //background-color: #e7f2e39e !important;
+  //border: 1px solid ;
   margin: 0 !important;
-  border-radius: .75rem;
+  //border-radius: .75rem;
   padding: 1rem;
   color: white;
-  font-size: .9375rem;
+  font-size: .875rem;
 
   .codeblock__header + & {
     border-radius: 0 0 .75rem .75rem;

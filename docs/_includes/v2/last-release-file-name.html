@@ -9,6 +9,8 @@
 
 {%- if include.path -%}
   {{- last_release_file.path -}}
+{%- elsif include.version -%}
+  {{- last_release_file.basename | split: '-v' | last -}}
 {%- else -%}
   {%- if include.asset_url -%}{% raw %}'{{ "{% endraw %}{%- endif -%}
   {{- last_release_file.name -}}

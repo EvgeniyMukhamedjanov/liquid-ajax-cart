@@ -1,0 +1,45 @@
+## Options
+
+The `options` parameter is an object, and it might have the following properties:
+
+### firstComplete
+
+The `firstComplete` parameter is a callback function that **will be called first** after the request is finished
+and **before** any other callback functions that are subscribed to the request.
+
+This function is called before updating of the [Cart state](/v2/docs/cart-state/) object,
+the `data-ajax-cart-section` sections, the global CSS classes, the `data-ajax-cart-bind-state` elements.
+
+The `firstComplete` function will be called with the only parameter — the [Request state](/v2/docs/request-state/) object.
+
+### lastComplete
+
+The `lastComplete` parameter is a callback function that **will be called last** after the request is finished
+and **after** any other callback function that are subscribed to the request.
+
+You can use the [`state`](/v2/docs/liquid-ajax-cart-state/) property of the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart/)
+to read the [Cart state](/v2/docs/cart-state/) because it is already updated.
+
+Also, the `data-ajax-cart-section` sections, the global CSS classes, the `data-ajax-cart-bind-state` elements
+are updated before the `lastComplete` function is called.
+
+The `lastComplete` function will be called with the only parameter — the [Request state](/v2/docs/request-state/) object.
+
+### info
+
+The `info` parameter is a simple Javascript object that will be attached to the [Request state](/v2/docs/request-state/) object of the request.
+You can attach your custom data to the Request state using the `info` parameter.
+
+Don't use the `initiator` and the `cancel` keys as they are reserved properties.
+
+### newQueue
+
+If you make a request from a `firstComplete` or `lastComplete` callback
+or from a callback that you pass to the `onResult` function,
+most likely you want your request to be performed right now even if there might be other requests in the queue.
+Set `newQueue` to `false` in this case.
+
+In any other cases you want your request to be performed in a regular order.
+Set `newQueue` to `false` in this case.
+
+Read more about [Queues or Requests](/v2/docs/queues-of-requests/) to make the right choice.

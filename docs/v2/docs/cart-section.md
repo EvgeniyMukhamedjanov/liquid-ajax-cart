@@ -1,7 +1,6 @@
 ---
 title: Cart section
 layout: docs-v2
-disable_anchors: true
 ---
 
 # Cart section
@@ -101,7 +100,7 @@ Liquid Ajax Cart will listen to the `click` event, send an Ajax request accordin
 then it will update the content of the container with the `data-ajax-cart-section` attribute.
 
 In order to show error messages, for example when a user tries to add more items than in stock, 
-add an element with the [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors) — 
+add an element with the [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors) attribute and the cart item key as its value — 
 if Shopify responds with an error message to an Ajax request, Liquid Ajax Cart will put the message text to the element. 
 
 {%- capture highlight_code -%}

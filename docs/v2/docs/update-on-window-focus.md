@@ -20,7 +20,7 @@ The additional Ajax request is supposed to prevent this issue.
 You might want to disable this functionality during the development process because when you switch from DevTools to a page content, 
 `window` object will get and lose focus all the time and cart sections will be updating constantly. 
 
-Use the [`conf`](v2/docs/liquid-ajax-cart-conf) method of the [`liquidAjaxCart`](v2/docs/liquid-ajax-cart) object 
+Use the [`conf`](/v2/docs/liquid-ajax-cart-conf) method of the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart) object 
 to switch this functionality off:
 {%- capture highlight_code -%}
 liquidAjaxCart.conf("updateOnWindowFocus", false);

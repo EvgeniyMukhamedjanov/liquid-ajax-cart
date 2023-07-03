@@ -22,6 +22,7 @@ links_v2:
 
   docs:
     - title: Guides
+      eyebrow: Guide
       subsections:
         - title: Setup
           links:
@@ -31,6 +32,8 @@ links_v2:
               file: cart-section
             - title: Product forms
               file: product-forms
+            - title: Cart items counter
+              file: cart-items-counter
 
         - title: Extension with JS
           links:
@@ -44,6 +47,7 @@ links_v2:
     - title: Reference
       subsections:
         - title: Core concepts
+          eyebrow: Core concept
           links:
             - title: Cart state
               file: cart-state
@@ -53,13 +57,15 @@ links_v2:
               file: queues-of-requests
 
         - title: Custom elements
+          eyebrow: Custom element
           links:
-            - title: ajax-cart-quantity
-              file: ajax-cart-quantity
             - title: ajax-cart-product-form
               file: ajax-cart-product-form
+            - title: ajax-cart-quantity
+              file: ajax-cart-quantity
 
         - title: Data attributes
+          eyebrow: Data attribute
           links:
             - title: data-ajax-cart-bind-state
               file: data-ajax-cart-bind-state
@@ -85,6 +91,7 @@ links_v2:
               file: data-ajax-cart-property-input
 
         - title: CSS classes
+          eyebrow: CSS class
           links:
             - title: js-ajax-cart-empty
               file: js-ajax-cart-empty
@@ -96,13 +103,40 @@ links_v2:
               file: js-ajax-cart-set
 
         - title: Events
+          eyebrow: Event
           links:
             - title: liquid-ajax-cart:init
               file: init-event
+            - title: liquid-ajax-cart:request
+              file: request-event
             - title: liquid-ajax-cart:sections
               file: sections-event
+            - title: liquid-ajax-cart:state
+              file: state-event
+
+        - title: JS API
+          id: js-api-subsection
+          links:
+            - title: liquidAjaxCart object
+              file: liquid-ajax-cart
+            - title: get()
+              file: liquid-ajax-cart-get
+            - title: add()
+              file: liquid-ajax-cart-add
+            - title: change()
+              file: liquid-ajax-cart-change
+            - title: update()
+              file: liquid-ajax-cart-update
+            - title: clear()
+              file: liquid-ajax-cart-clear
+            - title: state
+              file: liquid-ajax-cart-state
+            - title: conf()
+              file: liquid-ajax-cart-conf
 
         - title: Configuration
+          eyebrow: Configuration parameter
+          id: configuration-subsection
           links:
             - title: requestErrorText
               file: request-error-text

@@ -1,8 +1,34 @@
+@keyframes target-animation {
+  0% {
+    background: transparent;
+  }
+  5% {
+    background: #0a730759;
+  }
+  75% {
+    background: #0a730759;
+  }
+  100% {
+    background: transparent;
+  }
+}
+
 .markdown {
+  h1, h2, h3 {
+    scroll-margin-top: calc(var(--header-height) + 1rem);
+    code {
+      background: transparent;
+    }
+
+    &:target {
+      animation: 2s target-animation;
+    }
+  }
+
   h1 {
     font-size: 2rem;
     font-weight: 900;
-    margin-bottom: 1rem
+    margin-bottom: .2rem;
   }
 
   h2 {
@@ -18,7 +44,7 @@
   }
 
   p {
-    margin-bottom: .6rem;
+    margin-bottom: 1rem;
   }
 
   ul {

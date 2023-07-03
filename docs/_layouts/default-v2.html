@@ -24,7 +24,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono&family=Roboto+Mono&display=swap"
         rel="stylesheet">
 
   <link
@@ -36,6 +36,7 @@
     {% capture critical_css %}
     {% include v2/styles/reset.scss %}
     {% include v2/styles/critical.scss %}
+    {% include v2/styles/header-nav.scss %}
     {% comment %}{% include styles/base.scss %}{% endcomment %}
     {% comment %}{% include styles/containers.scss %}{% endcomment %}
     {% comment %}{% include styles/navigation.scss %}{% endcomment %}
@@ -59,11 +60,10 @@
 
 <body class="layout-{{ page.layout }}">
 {% include v2/navigation.html %}
-<hr class="nav-hr"/>
 
 <div>{{ content }}</div>
 
-{% include footer/full.html %}
+{% comment %}{% include footer/full.html %}{% endcomment %}
 
 <script src="{{ '/assets/js/prism.js' | relative_url }}"></script>
 </body>

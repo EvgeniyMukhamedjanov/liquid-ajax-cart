@@ -1,10 +1,10 @@
 ---
-title: liquid-ajax-cart:sections event
+title: liquid-ajax-cart:sections
 layout: docs-v2
 disable_anchors: true
 ---
 
-# liquid-ajax-cart:sections event
+# liquid-ajax-cart:sections
 
 <p class="lead" markdown="1">
 The `liquid-ajax-cart:sections` event is fired at the `document` when `data-ajax-cart-section` sections HTML is updated.
