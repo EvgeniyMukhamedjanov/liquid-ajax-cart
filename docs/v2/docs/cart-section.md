@@ -10,49 +10,52 @@ Liquid Ajax Cart re-renders cart HTML after each user action such as adding a pr
 It uses Shopify <a href="https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering">Bundled section rendering</a> under the hood, so the cart content must be a Shopify section.
 </p>
 
-## Building a cart section
+## Build a cart section
 
 Create a new Shopify section that works without Ajax. Use any Liquid objects, tags and filters. Styling is up to you as well.
 
 {%- capture highlight_code -%}
 {% raw %}
 <div class="my-cart">
-  <h2>Cart</h2>
+  <h2>Cart ({{ cart.item_count }})</h2>
 
   <div class="my-cart__items">
-    {% for item in cart.items %}
-      {% assign item_index = forloop.index %}
-      <hr />  
-      <div><a href="{{ item.url }}">{{ item.title }}</a></div>
-      <div>Price: {{ item.final_price | money }}</div>
+    <!-- Loop through cart items -->
+    {% for line_item in cart.items %}
+      {% assign line_item_index = forloop.index %}
+
+      <div><a href="{{ line_item.url }}">{{ line_item.title | escape }}</a></div>
+      <div>Price: {{ line_item.final_price | money }}</div>
   
       <div>
         Quantity:
-        <!-- data-ajax-cart-request-button ajaxifies the "Minus one" button -->
-        <a
-          href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
+
+        <!-- "Minus one" button -->
+        <a href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ line_item.quantity | minus: 1 }}" > 
           Minus one 
         </a>
   
-        <!-- data-ajax-cart-quantity-input ajaxifies the line item quantity input -->
+        <!-- Item quantity input -->
         <input
           name="updates[]" 
-          value="{{ item.quantity }}" 
+          value="{{ line_item.quantity }}" 
           type="number" 
           form="my-ajax-cart-form" />
-  
-        <!-- data-ajax-cart-request-button ajaxifies the "Plus one" button -->
-        <a
-          href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | plus: 1 }}"> 
+
+        <!-- "Plus one" button -->
+        <a href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ line_item.quantity | plus: 1 }}"> 
           Plus one 
         </a>
       </div>
   
-      <div>Total: <strong>{{ item.final_line_price | money }}</strong></div>
+      <div>Total: <strong>{{ line_item.final_line_price | money }}</strong></div>
 
-      <a href="{{ item.url_to_remove }}">
+      <!-- "Remove item" button -->
+      <a href="{{ line_item.url_to_remove }}">
         Remove
       </a>
+
+      <hr/>
     {% endfor %}
   </div>
   
@@ -68,7 +71,7 @@ Create a new Shopify section that works without Ajax. Use any Liquid objects, ta
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
 
-Include the section to the place in `theme.liquid` where you want to show the Ajax cart.
+Include the section to the `layout/theme.liquid` where you want to show the Ajax cart.
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -77,77 +80,149 @@ Include the section to the place in `theme.liquid` where you want to show the Aj
 {%- endcapture -%}
 {% include v2/codeblock.html title="layout/theme.liquid" language="liquid" code=highlight_code %}
 
-At this point the section should appear on all the pages and a click on the "Plus", "Minus", "Remove" buttons should work, but still with page refresh.
+The section will appear on the page. The "Plus", "Minus", "Remove" button clicks will update the cart, 
+but still with the page refresh.
 
-## Ajaxifing the cart section
+## Ajaxify the cart section
 
-Add the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section) attribute to the root element — 
-it will let Liquid Ajax Cart know that the content inside should be updated after each user action. 
+Use HTML attributes and custom tags to mark elements that should be ajaxified. 
 
-If you have an area with a scrollbar, add the [`data-ajax-cart-section-scroll`](/v2/docs/data-ajax-cart-section-scroll) attribute to it — 
-Liquid Ajax Cart will keep the scroll position unchanged while updating sections’ HTML.
+### Container to re-render
+Add the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) attribute to an element 
+whose content should be re-rendered after each user action, such as adding a product to the cart or changing cart item quantity. 
 
-Add the [`data-ajax-cart-quantity-input`](/v2/docs/data-ajax-cart-quantity-input) attribute to the line-item quantity input —
-Liquid Ajax Cart will listen to the `change` event, send an Ajax request to change the quantity when the event is triggered
-and update the content of the container with the `data-ajax-cart-section` attribute.
+In our case we want the whole section content to be updatable, so add the attribute to the root element — 
+the one with the `my-cart` CSS class.
 
-In order to bind "Plus" and "Minus" buttons to the line-item quantity input, wrap them all into the [`ajax-cart-quantity`](/v2/docs/ajax-cart-quantity) tag
+### Scrollable area
+If you have an area with a scrollbar, add the [`data-ajax-cart-section-scroll`](/v2/docs/data-ajax-cart-section-scroll/) attribute to it — 
+Liquid Ajax Cart will keep the scroll position unchanged while re-rendering.
+
+### Quantity input
+Add the [`data-ajax-cart-quantity-input`](/v2/docs/data-ajax-cart-quantity-input/) attribute to the cart item quantity input.
+
+When a user changes the input value, Liquid Ajax Cart will send a Shopify Cart API "change quantity" request 
+and re-render the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers.
+
+### "Plus" and "Minus" buttons 
+In order to bind "Plus" and "Minus" buttons to the cart item quantity input, 
+wrap them all with the [`<ajax-cart-quantity>`](/v2/docs/ajax-cart-quantity/) tag
 and add the `data-ajax-cart-quantity-plus` and `data-ajax-cart-quantity-minus` attributes to the buttons.
-Liquid Ajax Cart will listen to the `click` event on the buttons and triggers the `change` event on the quantity input when they are clicked.
 
-Add the [`data-ajax-cart-request-button`](/v2/docs/data-ajax-cart-request-button) attribute to the "Remove" button —
-Liquid Ajax Cart will listen to the `click` event, send an Ajax request according to the URL from the `href` attribute when the event is triggered,
-then it will update the content of the container with the `data-ajax-cart-section` attribute.
+When a user clicks on the button, Liquid Ajax Cart will update the input value,
+send a Shopify Cart API "change quantity" request
+and re-render the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers.
 
-In order to show error messages, for example when a user tries to add more items than in stock, 
-add an element with the [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors) attribute and the cart item key as its value — 
-if Shopify responds with an error message to an Ajax request, Liquid Ajax Cart will put the message text to the element. 
+### "Remove item" button
+Add the [`data-ajax-cart-request-button`](/v2/docs/data-ajax-cart-request-button/) attribute to the "Remove item" button —
+the one with the `href="{% raw %}{{ line_item.url_to_remove }}{% endraw %}"` attribute.
+
+When a user clicks on a link with the `data-ajax-cart-request-button` attribute,
+Liquid Ajax Cart sends a Shopify Cart API Ajax request based on the URL from the `href` parameter
+and re-renders the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers 
+if the request is successful.
+
+Check out all the supported URLs on the [`data-ajax-cart-request-button`](/v2/docs/data-ajax-cart-request-button/) page.
+
+### Error messages
+In order to show error messages, for example when a user tries to add more items to the cart than exist in stock, 
+add an element with the [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors/) attribute and a cart item key as the value.
+
+When Shopify responds with an error message to an Ajax request related to a cart item, 
+Liquid Ajax Cart looks for the cart item error messages element and puts the error text in there.
+
+### Result code
 
 {%- capture highlight_code -%}
 {% raw %}
 <div class="my-cart" data-ajax-cart-section>
-  <h2>Cart</h2>
+  <h2>Cart ({{ cart.item_count }})</h2>
 
   <div class="my-cart__items" data-ajax-cart-section-scroll>
-    {% for item in cart.items %}
-      {% assign item_index = forloop.index %}
-      <hr />  
-      <div><a href="{{ item.url }}">{{ item.title }}</a></div>
-      <div>Price: {{ item.final_price | money }}</div>
+    <!-- Loop through cart items -->
+    {% for line_item in cart.items %}
+      {% assign line_item_index = forloop.index %}
+
+      <div><a href="{{ line_item.url }}">{{ line_item.title | escape }}</a></div>
+      <div>Price: {{ line_item.final_price | money }}</div>
 
       <div>
         Quantity:
-        <!-- data-ajax-cart-request-button ajaxifies the "Minus one" button -->
-        <ajax-cart-quantity>
-          <a data-ajax-cart-quantity-minus
-            href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
-            Minus one 
-          </a>
-    
-          <!-- data-ajax-cart-quantity-input ajaxifies the line item quantity input -->
-          <input data-ajax-cart-quantity-input="{{ item_index }}"
-            name="updates[]" 
-            value="{{ item.quantity }}" 
-            type="number" 
-            form="my-ajax-cart-form" />
-    
-          <!-- data-ajax-cart-request-button ajaxifies the "Plus one" button -->
-          <a data-ajax-cart-quantity-plus
-            href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | plus: 1 }}"> 
-            Plus one 
-          </a>
-        </ajax-cart-quantity>
-      </div>
-  
-      <div>Total: <strong>{{ item.final_line_price | money }}</strong></div>
 
-      <a data-ajax-cart-request-button href="{{ item.url_to_remove }}">
+        <!-- "Minus one" button -->
+        <a data-ajax-cart-quantity-minus
+          href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ line_item.quantity | minus: 1 }}" > 
+          Minus one 
+        </a>
+  
+        <!-- Item quantity input -->
+        <input data-ajax-cart-quantity-input="{{ line_item_index }}"
+          name="updates[]" 
+          value="{{ line_item.quantity }}" 
+          type="number" 
+          form="my-ajax-cart-form" />
+
+        <!-- "Plus one" button -->
+        <a data-ajax-cart-quantity-plus
+          href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ line_item.quantity | plus: 1 }}"> 
+          Plus one 
+        </a>
+      </div>
+
+      <!-- Item error messages -->
+      <div data-ajax-cart-errors="{{ line_item.key }}"></div>
+  
+      <div>Total: <strong>{{ line_item.final_line_price | money }}</strong></div>
+
+      <!-- "Remove item" button -->
+      <a data-ajax-cart-request-button href="{{ line_item.url_to_remove }}">
         Remove
       </a>
 
-      <div data-ajax-cart-errors="{{ item.key }}"></div>
+      <hr/>
     {% endfor %}
   </div>
+
+  <form id="my-ajax-cart-form" action="{{ routes.cart_url }}" method="post">
+    <button type="submit" name="checkout">
+      Checkout — {{ cart.total_price | money_with_currency }}
+    </button> 
+  </form>
+</div>
+
+{% schema %} { "name": "My Ajax cart" } {% endschema %}
+{% endraw %}
+{%- endcapture -%}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+
+## Cart note, cart item property, cart attribute fields
+
+Add the [`data-ajax-cart-property-input`](/v2/docs/data-ajax-cart-property-input/) to a cart note field, 
+a cart item property field or a cart attribute field.
+
+When a user changes the field value, Liquid Ajax Cart will send a Shopify Cart API request to update the value
+and re-render the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers.
+
+The `data-ajax-cart-property-input` supports textual inputs, checkboxes, radio buttons, `select` and `textarea` tags.
+
+Check out examples for all the features on the [`data-ajax-cart-property-input`](/v2/docs/data-ajax-cart-property-input/) page.
+
+### Cart note example
+
+{%- capture highlight_code -%}
+{% raw %}
+<div class="my-cart" data-ajax-cart-section>
+  <h2>Cart ({{ cart.item_count }})</h2>
+
+  <div class="my-cart__items" data-ajax-cart-section-scroll>
+    <!-- Cart items code -->
+  </div>
+
+  <textarea data-ajax-cart-property-input
+    name="note"
+    form="my-ajax-cart-form">
+    {{ cart.note }}
+  </textarea>
 
   <form id="my-ajax-cart-form" action="{{ routes.cart_url }}" method="post">
     <button type="submit" name="checkout">
@@ -167,45 +242,6 @@ When Liquid Ajax Cart sends an Ajax request, it adds the [`js-ajax-cart-in-progr
 Use it to indicate that the cart is updating.
 
 {% include v2/content/cart-loading-state-css-example.html %}
-
-## Line item properties, cart note and attributes
-
-Add the [`data-ajax-cart-property-input`](/v2/docs/data-ajax-cart-property-input) to a line-item property field, a cart note field or a cart attribute field —
-Liquid Ajax Cart will listen to the `change` event, send an Ajax request to update the value when the event is triggered
-and update the content of the container with the `data-ajax-cart-section` attribute. The attribute also supports checkboxes, radio buttons, `select` and `textarea` tags.
-
-See more examples in the Reference section.
-
-{%- capture highlight_code -%}
-{% raw %}
-<div class="my-cart" data-ajax-cart-section>
-  <h2>Cart</h2>
-
-  <div class="my-cart__items">
-    {% for item in cart.items %}
-      {% assign item_index = forloop.index %}
-      <hr />  
-      <div><a href="{{ item.url }}">{{ item.title }}</a></div>
-      <div>Price: {{ item.final_price | money }}</div>
-
-      {% for property in item.properties %}
-        <div>
-          {{ property.first }}:
-          {% if property.first == 'Engraving' %}
-            <!-- data-ajax-cart-property-input ajaxifies the line item property input -->
-            <input type="text"
-              value="{{ property.last }}"
-              data-ajax-cart-property-input="{{ item_index }}[{{ property.first }}]"/>
-          {% else %}
-            {{ property.last }}
-          {% endif %}
-        </div>
-      {% endfor %}
-
-      <!-- ... -->
-{% endraw %}
-{%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
 
 ## Immutable containers for 3rd party apps and scripts
 

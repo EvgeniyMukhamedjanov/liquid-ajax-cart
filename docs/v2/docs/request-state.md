@@ -10,8 +10,6 @@ A JavaScript object that gets created for each Shopify Cart API Ajax request,
 where Liquid Ajax Cart keeps information about the request.
 </p>
 
-The object is usually passed as a parameter ..............
-
 ## Structure
 
 {%- capture highlight_code -%}
@@ -61,8 +59,7 @@ Along with that Liquid Ajax Cart will attach the input `HTMLElement` object to t
 
 ### `info.cancel`
 If the `info.cancel` is `true`, then the request won't be performed and the `responseData` property won't exist.
-This lets you cancel a request in the [`liquid-ajax-cart:request`](/v2/docs/request-event) event. 
-See example in the guide ...........
+This lets you [cancel a request](/v2/docs/request-event/#canceling-a-request) in the [`liquid-ajax-cart:request`](/v2/docs/request-event) event.
 
 ### `responseData`
 A response from Shopify to the request. 
@@ -96,3 +93,13 @@ If the request failed and the response wasn't received, for example because of i
 }
 {%- endcapture -%}
 {% include v2/codeblock.html language="json" code=highlight_code %}
+
+## Interaction
+
+You can access a Request state object in a [`liquid-ajax-cart:request`](/v2/docs/request-event/) event handler,
+adjust the request by mutating the `requestBody` object, 
+attach custom data or cancel the request by mutating the `info` object.
+
+While making a Shopify Cart API Ajax request by {% include v2/content/links-to-request-methods.html %},
+you can attach custom data by using the `info` option and get the access to the Request state object
+in the `firstComplete`, `lastComplete` callback functions.

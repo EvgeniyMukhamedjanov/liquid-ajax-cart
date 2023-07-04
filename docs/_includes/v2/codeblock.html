@@ -1,9 +1,9 @@
 
-<div class="codeblock">
+<div class="codeblock"><div class="codeblock__wrapper">
 
 {% if include.title %}
-<div class="codeblock__header">{{ include.title | escape }}</div>
+<div class="codeblock__header"><span class="codeblock__header-title">{{ include.title | escape }}</span></div>
 {% endif %}
 <pre class="codeblock__content"><code class="language-{{ include.language }}">{{ include.code | strip | escape }}</code></pre>
 
-</div>
+</div></div>

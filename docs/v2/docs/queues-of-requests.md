@@ -28,12 +28,7 @@ the second queue becomes first and the process repeats until there are no queues
 
 ## The `newQueue` property
 
-When you make a Shopify Cart API Ajax request using one of the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart/) object methods, such as
-[`get`](/v2/docs/liquid-ajax-cart-get),
-[`add`](/v2/docs/liquid-ajax-cart-add),
-[`change`](/v2/docs/liquid-ajax-cart-change),
-[`update`](/v2/docs/liquid-ajax-cart-update),
-[`clear`](/v2/docs/liquid-ajax-cart-clear),
+When you make a Shopify Cart API Ajax request using one {% include v2/content/links-to-request-methods.html %},
 you can set the `newQueue` option to `true` of `false` which will determine if the request will be performed in a separate queue,
 or it will be added to the end of the first queue.
 

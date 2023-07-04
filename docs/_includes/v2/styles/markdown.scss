@@ -40,7 +40,7 @@
   h3 {
     font-size: 1.125rem;
     font-weight: bold;
-    margin: 2.5rem 0 .6rem;
+    margin: 1.5rem 0 .6rem;
   }
 
   p {
@@ -57,5 +57,10 @@
     margin-bottom: .6rem;
     padding-left: 1rem;
     list-style-type: decimal;
+  }
+
+  a {
+    color: #474fbc;
+    text-decoration-thickness: from-font;
   }
 }

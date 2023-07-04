@@ -11,12 +11,7 @@ Cart state is a JavaScript object where Liquid Ajax Cart keeps the current user 
 
 Cart state gets updated after each Shopify Cart API Ajax request.
 
-Always use the methods from the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart/) object, such as 
-[`get`](/v2/docs/liquid-ajax-cart-get), 
-[`add`](/v2/docs/liquid-ajax-cart-add), 
-[`change`](/v2/docs/liquid-ajax-cart-change), 
-[`update`](/v2/docs/liquid-ajax-cart-update),
-[`clear`](/v2/docs/liquid-ajax-cart-clear),
+Always use {% include v2/content/links-to-request-methods.html %}
 to make Shopify Cart API Ajax requests rather than direct `fetch` calls. 
 In addition to sending Ajax requests, those `liquidAjaxCart` methods update the Cart state object and
 re-render [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section) elements after each request.

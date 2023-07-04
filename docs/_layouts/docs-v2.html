@@ -70,21 +70,23 @@ h_min: 2
     </div>
     <div class="docs-page__page-menu">
       <div class="docs-page__page-menu-wrapper">
-        <nav class="side-menu">
-          <div class="side-menu__section">
-            <div class="side-menu__section-title" style="color: #717171; margin-left: 1rem;">
-              On this page
-            </div>
-            <div class="side-menu__section-content">
-              <div class="side-menu__subsection">
-                {% include jekyll-docs-theme/toc.html
-                  class="side-menu__subsection-content"
-                  item_class="side-menu__link"
-                %}
+        {% unless page.disable_toc %}
+          <nav class="side-menu">
+            <div class="side-menu__section">
+              <div class="side-menu__section-title" style="color: #717171; margin-left: 1rem;">
+                On this page
+              </div>
+              <div class="side-menu__section-content">
+                <div class="side-menu__subsection">
+                  {% include jekyll-docs-theme/toc.html
+                    class="side-menu__subsection-content"
+                    item_class="side-menu__link"
+                  %}
+                </div>
               </div>
             </div>
-          </div>
-        </nav>
+          </nav>
+        {% endunless %}
       </div>
     </div>
   </div>
