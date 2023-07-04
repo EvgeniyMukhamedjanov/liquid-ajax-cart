@@ -32,8 +32,8 @@ links_v2:
               file: cart-section
             - title: Product forms
               file: product-forms
-            - title: Cart items counter
-              file: cart-items-counter
+            - title: Cart totals in header
+              file: cart-totals-in-header
 
         - title: Extension with JS
           links:
@@ -56,12 +56,12 @@ links_v2:
             - title: Queues of requests
               file: queues-of-requests
 
-        - title: Custom elements
-          eyebrow: Custom element
+        - title: Custom tags
+          eyebrow: Custom tag
           links:
-            - title: ajax-cart-product-form
+            - title: <ajax-cart-product-form>
               file: ajax-cart-product-form
-            - title: ajax-cart-quantity
+            - title: <ajax-cart-quantity>
               file: ajax-cart-quantity
 
         - title: Data attributes

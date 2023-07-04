@@ -1,5 +1,5 @@
 ---
-title: ajax-cart-product-form
+title: <ajax-cart-product-form>
 layout: docs-v2
 disable_anchors: true
 ---
@@ -7,7 +7,7 @@ disable_anchors: true
 # ajax-cart-product-form
 
 <p class="lead" markdown="1">
-A custom element that sends a Shopify Cart API Ajax request once a user submits an "Add to cart" form. 
+The custom tag sends a Shopify Cart API `/cart/add.js` Ajax request once a user submits a product form. 
 </p>
 
 ## How it works

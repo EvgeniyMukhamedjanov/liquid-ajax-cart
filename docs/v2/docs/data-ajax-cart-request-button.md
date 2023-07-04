@@ -65,8 +65,8 @@ For example if a user wants to increase a cart item quantity by three by clickin
 Liquid Ajax Cart will make the first Shopify Cart API Ajax request right after the first click and switches to the "loading" state.
 Thus, the user will have to wait for the first request to be finished before making the next click.
 
-To provide a better user experience, it is recommended to use the [`<ajax-cart-quantity>`](/v2/docs/ajax-cart-quantity) custom element 
-for the "Plus" and "Minus" buttons. This custom element waits for some time before sending a Shopify Cart API Ajax request,
+To provide a better user experience, it is recommended to use the [`<ajax-cart-quantity>`](/v2/docs/ajax-cart-quantity) custom tag 
+for the "Plus" and "Minus" buttons. This custom tag waits for some time before sending a Shopify Cart API Ajax request,
 letting a user click a button more than once without the "loading" state delay.
 
 If you still want to use the `data-ajax-cart-request-button` for the case, this is how to do it:
@@ -114,7 +114,7 @@ If you have an "Add to cart" link, you can ajaxify it by adding the `data-ajax-c
 But it is recommended to use the [Shopify product forms](https://shopify.dev/docs/themes/architecture/templates/product#the-product-form) 
 to make "Add to cart" buttons and ajaxify them as explained in the "[Product forms](/v2/docs/product-forms)" guide article. 
 There are a few advantages when using ajaxified product form rather than links:
-1. The [`<ajax-cart-product-form>`](/v2/docs/ajax-cart-product-form) custom element, that is intended to ajaxify product forms, has the `loading` attribute. This lets you show a dedicated loading indicator for the "Add to cart" button using CSS only.
+1. The [`<ajax-cart-product-form>`](/v2/docs/ajax-cart-product-form) custom tag, that is intended to ajaxify product forms, has the `loading` attribute. This lets you show a dedicated loading indicator for the "Add to cart" button using CSS only.
 2. You can use the [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors) attribute within the ajaxified product forms to show error messages without writing JavaScript.
 3. An ajaxified product form switches to the "loading" state only when there is a Shopify Ajax Cart Ajax request sent from the form itself. Meanwhile, the `data-ajax-cart-request-button` elements switch to the "loading" state when there is any Shopify Cart API Ajax request in progress.
 

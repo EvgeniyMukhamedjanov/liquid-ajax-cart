@@ -198,16 +198,16 @@ Liquid Ajax Cart looks for the cart item error messages element and puts the err
 ## Cart note, cart item property, cart attribute fields
 
 Add the [`data-ajax-cart-property-input`](/v2/docs/data-ajax-cart-property-input/) to a cart note field, 
-a cart item property field or a cart attribute field.
+a cart item property field or a cart attribute field to ajaxify them.
 
 When a user changes the field value, Liquid Ajax Cart will send a Shopify Cart API request to update the value
 and re-render the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers.
 
-The `data-ajax-cart-property-input` supports textual inputs, checkboxes, radio buttons, `select` and `textarea` tags.
+The `data-ajax-cart-property-input` attribute supports textual inputs, checkboxes, radio buttons, `select` and `textarea` tags.
 
 Check out examples for all the features on the [`data-ajax-cart-property-input`](/v2/docs/data-ajax-cart-property-input/) page.
 
-### Cart note example
+### Ajaxified cart note example
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -238,17 +238,17 @@ Check out examples for all the features on the [`data-ajax-cart-property-input`]
 
 ## Loading state
 
-When Liquid Ajax Cart sends an Ajax request, it adds the [`js-ajax-cart-in-progress`](/v2/docs/js-ajax-cart-in-progress) CSS class to the `html` tag.
+When Liquid Ajax Cart sends an Ajax request, it adds the [`js-ajax-cart-in-progress`](/v2/docs/js-ajax-cart-in-progress/) CSS class to the `html` tag.
 Use it to indicate that the cart is updating.
 
 {% include v2/content/cart-loading-state-css-example.html %}
 
 ## Immutable containers for 3rd party apps and scripts
 
-Liquid Ajax Cart replaces all the HTML that is inside the `data-ajax-cart-section` element with a new one after each user action.
-But if you have a 3-rd party script or an app that injects its HTML into the cart area on page load, you don't want to lose those changes.
+When re-rendering, Liquid Ajax Cart replaces all the HTML, that is inside the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) element, with a new one.
+If you have a 3-rd party script or an app that injects its HTML into the cart area, you don't want to lose those changes while re-rendering.
 
-In order to keep a specific area unchanged, add the [`data-ajax-cart-static-element`](/v2/docs/data-ajax-cart-static-element) attribute
+In order to keep a specific area unchanged, add the [`data-ajax-cart-static-element`](/v2/docs/data-ajax-cart-static-element/) attribute
 to the parent element of the area — Liquid Ajax Cart will keep this element's inner HTML unchanged when the surrounding HTML gets updated.
 
 {%- capture highlight_code -%}
@@ -276,12 +276,14 @@ to the parent element of the area — Liquid Ajax Cart will keep this element's 
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
 
-## JavaScript callback when section is re-rendered
+## JavaScript callback after re-render
 
-Listen to the [`liquid-ajax-cart:sections`](/v2/docs/sections-event) event 
-if you need to run JavaScript code when `data-ajax-cart-section` elements get updated.
+Listen to the [`liquid-ajax-cart:sections`](/v2/docs/sections-event/) event 
+if you want to run your JavaScript code when the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) element is re-rendered.
 
-For example, you might need to attach event listeners to the Ajax cart section each time when the section gets updates,
-because Liquid Ajax Cart replaces its HTML with a new one on each update. 
+For example, you might need to attach event listeners to elements 
+inside the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container
+each time when it is update,
+because Liquid Ajax Cart replaces its HTML with a new one on each re-render. 
 
 {% include v2/content/sections-event-code-example.html %}

@@ -19,9 +19,9 @@ Use the [`requestErrorText`](/v2/docs/request-error-text) configuration paramete
 
 ## Product forms
 
-Put a container with the `data-ajax-cart-errors="form"` attribute inside the [`<ajax-cart-product-form>`](/v2/docs/ajax-cart-product-form) custom element.
+Put a container with the `data-ajax-cart-errors="form"` attribute inside the [`<ajax-cart-product-form>`](/v2/docs/ajax-cart-product-form) custom tag.
 
-If Shopify responds with an error message to a Cart API Ajax request sent by a `<ajax-cart-product-form>` custom element, 
+If Shopify responds with an error message to a Cart API Ajax request sent by a `<ajax-cart-product-form>` custom tag, 
 Liquid Ajax Cart will put the error message into the `data-ajax-cart-errors="form"` container.
 
 {%- capture highlight_code -%}

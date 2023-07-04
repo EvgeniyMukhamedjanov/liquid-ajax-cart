@@ -57,7 +57,7 @@ npm install liquid-ajax-cart
 {%- capture highlight_code -%}
 import "liquid-ajax-cart";
 {%- endcapture -%}
-{% include v2/codeblock.html title="my-bundle.js" language="javascript" code=highlight_code %}
+{% include v2/codeblock.html title="src/index.js" language="javascript" code=highlight_code %}
 
 <p markdown="1">
 Provide the cart data in the JSON format within the `script` tag 
@@ -73,7 +73,7 @@ If Liquid Ajax Cart doesn't find the cart JSON, it will make a Shopify Cart API 
   {{ cart | json }}
 </script>
 
-<script src="{{ 'my-bundle.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'my-bundle.min.js' | asset_url }}" defer="defer"></script>
 {% endraw %}
 {%- endcapture -%}
 {% include v2/codeblock.html title="layout/theme.liquid" language="liquid" code=highlight_code %}
