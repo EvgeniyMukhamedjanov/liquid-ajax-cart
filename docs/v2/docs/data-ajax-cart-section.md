@@ -1,21 +1,22 @@
 ---
 title: The data-ajax-cart-section attribute
 layout: docs-v2
-disable_anchors: true
 ---
 
 # data-ajax-cart-section
 
 <p class="lead" markdown="1">
-Liquid Ajax Cart re-renders HTML code of containers with the `data-ajax-cart-section` attribute after each user action such as adding a product to the cart or changing cart item quantity. 
-It uses Shopify <a href="https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering">Bundled section rendering</a> under the hood, so the `data-ajax-cart-section` must be used in a Shopify section.
+Liquid Ajax Cart updates HTML code of elements with the `data-ajax-cart-section` attribute after each Shopify Cart API Ajax request. 
+It uses Shopify <a href="https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering">Bundled section rendering</a> under the hood, 
+so the `data-ajax-cart-section` must be used in a Shopify section.
 </p>
 
 ## Make a container of a section updatable
 
-Apply the `data-ajax-cart-section` to the container that you want to be updatable when the Shopify cart is changed.
+Apply the `data-ajax-cart-section` to the element that you want to be updatable when the Shopify cart is changed.
 
-In the following example only the `.my-cart__wrapper` container HTML will be replaced with a new one when the Shopify cart is changed:
+In the following example only the `.my-cart__wrapper` element's HTML will be replaced with a new one 
+when the cart is changed after a Shopify Cart API Ajax request:
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -33,7 +34,9 @@ In the following example only the `.my-cart__wrapper` container HTML will be rep
 
 ### Immutable elements inside
 
-If you want to have an immutable HTML element within a `data-ajax-cart-section` container — add the [`data-ajax-cart-static-element`](/v2/docs/data-ajax-cart-static-element/) attribute to this element. HTML code of an immutable container will *not* be replaced when its section gets updated.
+If you want to have an immutable HTML element within a `data-ajax-cart-section` container — 
+add the [`data-ajax-cart-static-element`](/v2/docs/data-ajax-cart-static-element/) attribute to this element. 
+HTML code of an immutable container will not be replaced when the parent `data-ajax-cart-section` gets updated.
 
 ## Make multiple containers of a section updatable
 

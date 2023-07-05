@@ -10,14 +10,18 @@ disable_anchors: true
 The attribute turns the user clicks on the [`routes.cart_add_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_add_url), [`routes.cart_change_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_change_url), [`routes.cart_clear_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_clear_url), [`routes.cart_update_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_update_url) and [`line_item.url_to_remove`](https://shopify.dev/api/liquid/objects/line_item#line_item-url_to_remove) links into Shopify Cart API Ajax requests.
 </p>
 
+## How it works
+
 Liquid Ajax Cart listens to the `click` event at the `data-ajax-cart-request-button` elements.
-When the event is fired, Liquid Ajax Cart checks if the element's `href` attribute value is a valid `routes.cart_add_url`, `routes.cart_change_url`, `routes.cart_clear_url`, `routes.cart_update_url` or `line_item.url_to_remove` URL.
+When the event is fired, Liquid Ajax Cart checks if the element's `href` attribute value is a valid 
+`routes.cart_add_url`, `routes.cart_change_url`, `routes.cart_clear_url`, `routes.cart_update_url` or `line_item.url_to_remove` URL.
 If the URL is valid, Liquid Ajax Cart turns the URL into a `FormData` object and sends it as a Shopify Cart API Ajax request.
 
 ## Use cases
 
-The most popular use cases are "Remove cart item" button and "Clear cart" button. 
-It might be used for "Plus" and "Minus" cart item quantity buttons and "Add to cart" button,
+The most popular use cases are "Remove cart item" and "Clear cart" buttons. 
+
+It might be used for an "Add to cart" button, "Plus" and "Minus" cart item quantity buttons,
 but it is recommended to use other approaches for these cases.
 
 ### "Remove cart item" button
@@ -60,10 +64,10 @@ but it is recommended to use other approaches for these cases.
 ### "Plus" and "Minus" cart item quantity buttons (not recommended)
 
 Liquid Ajax Cart sends a Shopify Cart API Ajax immediately when a user clicks on a `data-ajax-cart-request-button`.
-It might be a disadvantage in case "Plus" and "Minus" buttons. 
-For example if a user wants to increase a cart item quantity by three by clicking a "Plus" button two times,
+It might be a disadvantage in case of "Plus" and "Minus" buttons. 
+For example if a user wants to increase a cart item quantity by three by clicking a "Plus" button three times,
 Liquid Ajax Cart will make the first Shopify Cart API Ajax request right after the first click and switches to the "loading" state.
-Thus, the user will have to wait for the first request to be finished before making the next click.
+Thus, the user will have to wait for the previous request to be finished before making the next click.
 
 To provide a better user experience, it is recommended to use the [`<ajax-cart-quantity>`](/v2/docs/ajax-cart-quantity) custom tag 
 for the "Plus" and "Minus" buttons. This custom tag waits for some time before sending a Shopify Cart API Ajax request,
@@ -155,7 +159,7 @@ and provide a valid `routes.cart_add_url`, `routes.cart_change_url`, `routes.car
 
 ## Loading state
 
-The `data-ajax-cart-request-button` elements become inactive when there is a Shopify Cart API Ajax request in progress.
+The `data-ajax-cart-request-button` elements become inactive when there is any Shopify Cart API Ajax request in progress.
 
-If you want to make them visually disabled when they are inactive, use the [`js-ajax-cart-in-progress`](/v2/docs/js-ajax-cart-in-progress) CSS class 
+If you want to make them visually disabled when they are inactive, use the [`js-ajax-cart-in-progress`](/v2/docs/js-ajax-cart-in-progress/) CSS class 
 which gets added by Liquid Ajax Cart when there is a Shopify Cart API Ajax request in progress.

@@ -1,42 +1,46 @@
 ---
 title: data-ajax-cart-quantity-input
 layout: docs-v2
-disable_anchors: true
 ---
 
 # data-ajax-cart-quantity-input
 
 <p class="lead" markdown="1">
-The attribute to ajaxify cart line item quantity inputs.
+The attribute ajaxifies cart item quantity input fields.
 </p>
 
-Add the `data-ajax-cart-quantity-input` attribute with a cart item index or a cart item key as the value to an input element to ajaxify it: 
-once a user changes the input value, Liquid Ajax Cart will send a Shopify Cart API request to update the quantity.
+## How it works 
 
-The request will be sent on the input `change` event and on the `Enter` key `keydown` event.
+Add the `data-ajax-cart-quantity-input` attribute with a cart item index 
+or a cart item key as the value to an input element to ajaxify it.
+When a user changes the input value or presses the `Enter` key within the input, 
+Liquid Ajax Cart will send a Shopify Cart API `/cart/change.js` Ajax request to update the quantity.
 
-If a user presses the `Esc` key within the input, its value will be reset to the current item quantity according to the [Cart state](/v2/docs/cart-state/) object.
-
-The `data-ajax-cart-quantity-input` input fields become `readonly` when there is a Shopify Cart API request in progress (if the [Cart state](/v2/docs/cart-state/) `status.requestInProgress` property is `true`)
+If a user presses the `Esc` key within the input, its value will be reset to the current item quantity 
+according to the [Cart state](/v2/docs/cart-state/) object.
 
 ## Using a line item index
 
 {%- capture highlight_code -%}
 {% raw %}
 <div class="my-cart" data-ajax-cart-section>
-  <h2>Cart</h2>
+  <h2>Cart ({{ cart.item_count }})</h2>
 
   <div class="my-cart__items" data-ajax-cart-section-scroll>
-    {% for item in cart.items %}
-      <div><a href="{{ item.url }}">{{ item.title }}</a></div>
-      <div>Price: {{ item.final_price | money }}</div>
+    <!-- Loop through cart items -->
+    {% for line_item in cart.items %}
+      {% assign line_item_index = forloop.index %}
+
+      <div><a href="{{ line_item.url }}">{{ line_item.title | escape }}</a></div>
+      <div>Price: {{ line_item.final_price | money }}</div>
 
       <div>
         Quantity:
-        <!-- data-ajax-cart-quantity-input ajaxifies the line item quantity input -->
-        <input data-ajax-cart-quantity-input="{{ forloop.index }}"
+
+        <!-- Item quantity input ajaxified by the data-ajax-cart-quantity-input -->
+        <input data-ajax-cart-quantity-input="{{ line_item_index }}"
           name="updates[]" 
-          value="{{ item.quantity }}" 
+          value="{{ line_item.quantity }}" 
           type="number" 
           form="my-ajax-cart-form" />
 
@@ -52,27 +56,34 @@ The line item key is supported also, but there were found unexpected behaviour o
 {%- capture highlight_code -%}
 {% raw %}
 <div class="my-cart" data-ajax-cart-section>
-  <h2>Cart</h2>
+  <h2>Cart ({{ cart.item_count }})</h2>
 
   <div class="my-cart__items" data-ajax-cart-section-scroll>
-    {% for item in cart.items %}
-      <div><a href="{{ item.url }}">{{ item.title }}</a></div>
-      <div>Price: {{ item.final_price | money }}</div>
+    <!-- Loop through cart items -->
+    {% for line_item in cart.items %}
+      <div><a href="{{ line_item.url }}">{{ line_item.title | escape }}</a></div>
+      <div>Price: {{ line_item.final_price | money }}</div>
 
       <div>
         Quantity:
-        <!-- data-ajax-cart-quantity-input ajaxifies the line item quantity input -->
-        <input data-ajax-cart-quantity-input="{{ item.key }}"
+
+        <!-- Item quantity input ajaxified by the data-ajax-cart-quantity-input -->
+        <input data-ajax-cart-quantity-input="{{ line_item.key }}"
           name="updates[]" 
-          value="{{ item.quantity }}" 
+          value="{{ line_item.quantity }}" 
           type="number" 
           form="my-ajax-cart-form" />
 
-         <!-- ... -->
+        <!-- ... -->
 {% endraw %}
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
 
+## Loading state
+
+The `data-ajax-cart-quantity-input` input fields become `disabled` when there is any Shopify Cart API request in progress.
+
 ## Adding the "Plus" and "Minus buttons"
 
-In order to attach "Plus" and "Minus" buttons to the `data-ajax-cart-quantity-input` input, use the [`ajax-cart-quantity`](/v2/docs/ajax-cart-quantity/) tag.
+In order to attach "Plus" and "Minus" buttons to the `data-ajax-cart-quantity-input` input, 
+use the [`<ajax-cart-quantity>`](/v2/docs/ajax-cart-quantity/) custom tag.

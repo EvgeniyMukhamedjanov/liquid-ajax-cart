@@ -7,14 +7,18 @@ disable_anchors: true
 # data-ajax-cart-bind-state
 
 <p class="lead" markdown="1">
-The attribute displays a [Cart state](/v2/docs/cart-state) property, such as cart total quantity or cart total price, 
-outside of the cart sections. Liquid Ajax Cart will update the displayed value if the cart is changed.
+The attribute displays a [Cart state](/v2/docs/cart-state/) property, such as cart total quantity or cart total price, 
+outside of the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements. 
+Liquid Ajax Cart will update the displayed value if the cart is changed.
 </p>
 
-Add the `data-ajax-cart-bind-state` attribute to an HTML element
-with the [Cart state](/v2/docs/cart-state/) property you want to show —
+## How it works
+
+Add the `data-ajax-cart-bind-state` attribute with the [Cart state](/v2/docs/cart-state/) property you want to show 
+to any HTML element
+ —
 Liquid Ajax Cart will put the Cart state property value as the inner content of the HTML element
-and update it if the cart state property value is changed.
+and update it if the Cart state property value is changed.
 
 ## Use cases
 
