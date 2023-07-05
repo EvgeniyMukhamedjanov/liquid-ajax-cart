@@ -62,7 +62,7 @@ Then Liquid Ajax Cart will start executing the new first request in the Queue:
 
 The process will be repeated until the Queue is empty.
 
-## Out-of-queue `important` requests
+## The `important` requests
 
 When you make a Shopify Cart API Ajax request using {% include v2/content/links-to-request-methods.html %},
 it will also go to the end of the Queue by default, if the Queue isn't empty.
