@@ -105,7 +105,7 @@ function changeHandler(element: Element, e: Event) {
   formData.set(lineItemReqProperty, lineItem);
   formData.set('quantity', value.toString());
 
-  cartRequestChange(formData, {newQueue: true, info: {initiator: element}});
+  cartRequestChange(formData, {info: {initiator: element}});
 
   (element as HTMLInputElement).blur();
 }

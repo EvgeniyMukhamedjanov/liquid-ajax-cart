@@ -53,8 +53,8 @@ links_v2:
               file: cart-state
             - title: Request state
               file: request-state
-            - title: Queues of requests
-              file: queues-of-requests
+            - title: Queue of requests
+              file: queue-of-requests
 
         - title: Custom tags
           eyebrow: Custom tag

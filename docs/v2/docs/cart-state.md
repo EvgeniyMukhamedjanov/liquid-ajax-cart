@@ -39,7 +39,7 @@ The property is `true` if the `cart` property is loaded.
 
 ### `status.requestInProgress`
 
-The property is `true` if there are one or more Shopify Cart API Ajax requests in [Queues](/v2/docs/queues-of-requests/).
+The property is `true` if there are one or more Shopify Cart API Ajax requests in [Queues](/v2/docs/queue-of-requests/).
 
 ## Interaction
 

@@ -40,7 +40,7 @@ const EVENT_REQUEST = `${EVENT_PREFIX}:request`;
 const queues: QueueItemType[][] = [];
 
 function addToQueues(queueItem: QueueItemType) {
-  if (queueItem.options?.newQueue || queues.length === 0) {
+  if (!(queueItem.options?.important) || queues.length === 0) {
     const newLength = queues.push([queueItem]);
     if (newLength === 1) {
       notifyQueuesSubscribers(true);

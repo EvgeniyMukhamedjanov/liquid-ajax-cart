@@ -39,7 +39,7 @@ export type CartRequestOptionsType = {
   firstComplete?: (requestState: RequestStateType) => void,
   lastComplete?: (requestState: RequestStateType) => void,
   info?: RequestStateInfoType,
-  newQueue?: boolean
+  important?: boolean
 }
 
 export type RequestResultCallback = (requestState: RequestStateType) => void;

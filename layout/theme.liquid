@@ -162,6 +162,12 @@
     }
   });
 
+  // document.addEventListener('liquid-ajax-cart:request', event => {
+  //   liquidAjaxCart.update({});
+  //   liquidAjaxCart.get({important: true});
+  //   liquidAjaxCart.get({important: true});
+  // });
+
   // subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
   document.addEventListener('liquid-ajax-cart:request', event => {
     const {requestState, onResult} = event.detail;

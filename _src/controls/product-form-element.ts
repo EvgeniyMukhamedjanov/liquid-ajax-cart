@@ -39,7 +39,6 @@ class HTMLProductFormElement extends HTMLElement {
           lastComplete: () => {
             $element.removeAttribute(DATA_ATTR_LOADING)
           },
-          newQueue: true,
           info: {
             "initiator": $element
           }
