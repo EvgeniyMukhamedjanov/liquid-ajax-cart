@@ -1,7 +1,13 @@
-import {AppStateType, EventStateType, JSONValueType, RequestBodyType} from '../ts-types';
+import {JSONValueType, RequestBodyType} from '../ts-types';
 
-import {cartRequestChange, cartRequestUpdate} from '../ajax-api';
-import {EVENT_STATE, getCartState} from '../state';
+import {
+  cartRequestChange,
+  cartRequestUpdate, EVENT_QUEUE_END,
+  EVENT_QUEUE_START,
+  EVENT_REQUEST_END,
+  getProcessingStatus
+} from '../ajax-api';
+import {getCartState} from '../state';
 import {findLineItemByCode} from '../helpers';
 import {DATA_ATTR_PREFIX} from "../const";
 
@@ -97,69 +103,65 @@ function initEventListeners() {
   }, false);
 }
 
-function stateHandler(state: AppStateType) {
+function processingHandler() {
 
-  if (state.status.requestInProgress) {
-    document.querySelectorAll(`[${DATA_ATTR_PROPERTY_INPUT}]`).forEach(element => {
-      if (isValidElement(element)) {
-        (element as ValidElementType).disabled = true;
+  document.querySelectorAll(`[${DATA_ATTR_PROPERTY_INPUT}]`).forEach(element => {
+    if (!isValidElement(element)) {
+      return;
+    }
+
+    if (getProcessingStatus()) {
+      (element as ValidElementType).disabled = true;
+      return;
+    }
+
+    const {objectCode, propertyName, attributeValue} = getInputData(element);
+
+    if (!objectCode) {
+      return;
+    }
+
+    const state = getCartState();
+
+    let propertyValue: JSONValueType | undefined = undefined;
+    let doNotEnable = false;
+    if (objectCode === 'note') {
+      propertyValue = state.cart.note;
+    } else if (objectCode === 'attributes') {
+      propertyValue = state.cart.attributes[propertyName];
+    } else {
+      const [lineItem, objectCodeType] = findLineItemByCode(objectCode, state);
+      if (lineItem) {
+        propertyValue = lineItem.properties[propertyName];
       }
-    })
-  } else {
-    document.querySelectorAll(`[${DATA_ATTR_PROPERTY_INPUT}]`).forEach(element => {
-      if (!isValidElement(element)) {
-        return;
+      if (lineItem === null) {
+        console.error(`Liquid Ajax Cart: line item with ${objectCodeType}="${objectCode}" was not found when the [${DATA_ATTR_PROPERTY_INPUT}] element with "${attributeValue}" value tried to get updated from the State`);
+        doNotEnable = true;
       }
+    }
 
-      const {objectCode, propertyName, attributeValue} = getInputData(element);
-
-      if (!objectCode) {
-        return;
-      }
-
-      if (!(state.status.cartStateSet)) {
-        return;
-      }
-
-      let propertyValue: JSONValueType | undefined = undefined;
-      let doNotEnable = false;
-      if (objectCode === 'note') {
-        propertyValue = state.cart.note;
-      } else if (objectCode === 'attributes') {
-        propertyValue = state.cart.attributes[propertyName];
-      } else {
-        const [lineItem, objectCodeType] = findLineItemByCode(objectCode, state);
-        if (lineItem) {
-          propertyValue = lineItem.properties[propertyName];
+    if (element instanceof HTMLInputElement && (element.type === 'checkbox' || element.type === 'radio')) {
+      (element as HTMLInputElement).checked = (element as HTMLInputElement).value === propertyValue;
+    } else {
+      if (typeof propertyValue !== 'string'
+        && !(propertyValue instanceof String)
+        && typeof propertyValue !== 'number'
+        && !(propertyValue instanceof Number)) {
+        if (Array.isArray(propertyValue) || <JSONValueType>propertyValue instanceof Object) {
+          propertyValue = JSON.stringify(propertyValue);
+          console.warn(`Liquid Ajax Cart: the ${DATA_ATTR_PROPERTY_INPUT} with the "${attributeValue}" value is bound to the ${propertyName} ${objectCode === 'attributes' ? 'attribute' : 'property'} that is not string or number: ${propertyValue}`);
+        } else {
+          propertyValue = '';
         }
-        if (lineItem === null) {
-          console.error(`Liquid Ajax Cart: line item with ${objectCodeType}="${objectCode}" was not found when the [${DATA_ATTR_PROPERTY_INPUT}] element with "${attributeValue}" value tried to get updated from the State`);
-          doNotEnable = true;
-        }
       }
+      (element as ValidElementType).value = <string>propertyValue;
+    }
 
-      if (element instanceof HTMLInputElement && (element.type === 'checkbox' || element.type === 'radio')) {
-        (element as HTMLInputElement).checked = (element as HTMLInputElement).value === propertyValue;
-      } else {
-        if (typeof propertyValue !== 'string'
-          && !(propertyValue instanceof String)
-          && typeof propertyValue !== 'number'
-          && !(propertyValue instanceof Number)) {
-          if (Array.isArray(propertyValue) || <JSONValueType>propertyValue instanceof Object) {
-            propertyValue = JSON.stringify(propertyValue);
-            console.warn(`Liquid Ajax Cart: the ${DATA_ATTR_PROPERTY_INPUT} with the "${attributeValue}" value is bound to the ${propertyName} ${objectCode === 'attributes' ? 'attribute' : 'property'} that is not string or number: ${propertyValue}`);
-          } else {
-            propertyValue = '';
-          }
-        }
-        (element as ValidElementType).value = <string>propertyValue;
-      }
+    if (!doNotEnable) {
+      (element as ValidElementType).disabled = false;
+    }
 
-      if (!doNotEnable) {
-        (element as ValidElementType).disabled = false;
-      }
-    })
-  }
+  });
 }
 
 function changeHandler(element: Element, e: Event) {
@@ -174,10 +176,8 @@ function changeHandler(element: Element, e: Event) {
 
   (element as ValidElementType).blur();
   const state = getCartState();
-  if (!(state.status.cartStateSet)) {
-    return;
-  }
-  if (state.status.requestInProgress) {
+
+  if (getProcessingStatus()) {
     return;
   }
 
@@ -257,10 +257,6 @@ function escHandler(element: Element) {
   }
 
   const state = getCartState();
-  if (!(state.status.cartStateSet)) {
-    (element as ValidElementType).blur();
-    return;
-  }
 
   const {objectCode, propertyName} = getInputData(element);
   if (!objectCode) {
@@ -290,11 +286,11 @@ function escHandler(element: Element) {
 
 function cartPropertyInputInit() {
   initEventListeners();
-  // subscribeToCartStateUpdate( stateHandler );
-  document.addEventListener(EVENT_STATE, (event: EventStateType) => {
-    stateHandler(event.detail.state);
-  })
-  stateHandler(getCartState());
+
+  document.addEventListener(EVENT_QUEUE_START, processingHandler);
+  document.addEventListener(EVENT_REQUEST_END, processingHandler);
+  document.addEventListener(EVENT_QUEUE_END, processingHandler);
+  processingHandler();
 }
 
 export {cartPropertyInputInit}

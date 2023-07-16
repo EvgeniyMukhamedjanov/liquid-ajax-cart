@@ -10,6 +10,8 @@ disable_anchors: true
 The `liquid-ajax-cart:request` event is fired at the `document` a moment before a Shopify Cart API Ajax request is performed.
 </p>
 
+## Structure
+
 The event's `detail` property contains an object with two properties:
 * `requestState` — a [Request state](/v2/docs/request-state) object;
 * `onResult` — a function that lets you subscribe to the request's result.
@@ -41,7 +43,7 @@ Result:
 
 The `requestState.requestBody` and `requestState.info` are objects you can mutate to change the request.
 
-### Mutating a request
+### Mutate a request
 
 The `requestState.requestBody` and `requestState.info` properties are references to the objects that will be used in the request. 
 So you can mutate the objects if you want to change the request before it is performed.
@@ -82,7 +84,7 @@ document.addEventListener("liquid-ajax-cart:request", function(event) {
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}
 
-### Canceling a request
+### Cancel a request
 
 You can cancel the request by mutating the object from the `requestState.info` property and setting the `requestState.info.cancel` to `true`. 
 The request won't be performed but all the request result subscribers will be called anyway.

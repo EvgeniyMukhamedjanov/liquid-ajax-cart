@@ -142,71 +142,84 @@
 {% section 'my-cart' %}
 {{ 'liquid-ajax-cart.css' | asset_url | stylesheet_tag }}
 
-<script type="application/json" data-ajax-cart-initial-state>
-    {{ cart | json }}
-
-</script>
 
 <script type="module">
-  import liquidAjaxCart from '{{ 'liquid-ajax-cart.js' | asset_url }}';
+  import '{{ 'liquid-ajax-cart.js' | asset_url }}';
 
-  // Open cart on "add to cart"
-  document.addEventListener('liquid-ajax-cart:request', event => {
-    const {requestState, onResult} = event.detail;
-    if (requestState.requestType === 'add') {
-      onResult(requestState => {
-        if (requestState.responseData?.ok) {
-          document.querySelector('html').classList.add('js-ajax-cart-open');
-        }
-      });
+  function liquidAjaxCartInit() {
+    console.log(123);
+  }
+
+  document.addEventListener('liquid-ajax-cart:init', liquidAjaxCartInit);
+
+  liquidAjaxCart.conf('binderFormatters', {
+    'my_money_with_currency': value => {
+      // Don't change anything if the value is not a number
+      if (typeof value !== 'number' && !(value instanceof Number)) {
+        return value;
+      }
+
+      // Apply formatMoney function if it exists
+      if (window.Shopify?.formatMoney) {
+        return Shopify.formatMoney(value);
+      }
+
+      // Fallback to the "100 USD" format if there is no Shopify.formatMoney
+      return `${value.toFixed(2)} ${window.liquidAjaxCart.cart.currency}`;
     }
   });
 
-  // document.addEventListener('liquid-ajax-cart:request', event => {
+  // Open cart on "add to cart"
+  document.addEventListener('liquid-ajax-cart:request-end', event => {
+    const {requestState} = event.detail;
+    if (requestState.requestType === 'add' && requestState.responseData?.ok) {
+      document.querySelector('html').classList.add('js-ajax-cart-open');
+    }
+  });
+
+  // document.addEventListener('liquid-ajax-cart:request-start', event => {
   //   liquidAjaxCart.update({});
   //   liquidAjaxCart.get({important: true});
   //   liquidAjaxCart.get({important: true});
   // });
 
   // subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
-  document.addEventListener('liquid-ajax-cart:request', event => {
-    const {requestState, onResult} = event.detail;
+  document.addEventListener('liquid-ajax-cart:request-end', event => {
+    const {requestState} = event.detail;
 
     if (requestState.requestType === 'add') {
       const checkbox = document.getElementById('addToCartPopupCheckbox');
       if (checkbox && checkbox.checked) {
-        onResult(requestState => {
-          if (requestState.responseData?.ok) {
-            let productName = requestState.responseData.body.title;
-            if (requestState.responseData.body.items?.length === 1) {
-              productName = requestState.responseData.body.items[0].title;
-            }
-            alert(`${productName ? '«' + productName + '» is' : 'Products are'} successfully added`);
+        if (requestState.responseData?.ok) {
+          let productName = requestState.responseData.body.title;
+          if (requestState.responseData.body.items?.length === 1) {
+            productName = requestState.responseData.body.items[0].title;
           }
-        });
+          alert(`${productName ? '«' + productName + '» is' : 'Products are'} successfully added`);
+        }
       }
     }
   });
 
   // subscribeToCartStateUpdate( state => {
-  document.addEventListener('liquid-ajax-cart:state', event => {
-    const state = event.detail.state;
+  document.addEventListener('liquid-ajax-cart:queue-end', event => {
+    const cart = liquidAjaxCart.cart;
     const promoVariant = 40934235668668;
     const promoSubtotal = 10000;
 
-    if (state.status.cartStateSet && !state.status.requestInProgress) {
+    if (!(liquidAjaxCart.processing)) {
 
-      let currentSubtotal = state.cart.items_subtotal_price;
+      let currentSubtotal = cart.items_subtotal_price;
 
-      const autoAddedLineItem = state.cart.items.findIndex(lineItem => {
+      const autoAddedLineItem = cart.items.findIndex(lineItem => {
         return lineItem.properties?._autoadded === 'Yes';
       });
       if (autoAddedLineItem > -1) {
-        currentSubtotal -= state.cart.items[autoAddedLineItem].final_line_price;
+        currentSubtotal -= cart.items[autoAddedLineItem].final_line_price;
       }
 
       if (currentSubtotal >= promoSubtotal) {
-        const promoVariantLineItem = state.cart.items.findIndex(lineItem => {
+        const promoVariantLineItem = cart.items.findIndex(lineItem => {
           return lineItem.variant_id === promoVariant && lineItem.discounts.length > 0;
         });
         if (promoVariantLineItem === -1) {

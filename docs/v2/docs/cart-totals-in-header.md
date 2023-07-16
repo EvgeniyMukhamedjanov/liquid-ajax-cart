@@ -30,19 +30,19 @@ But those values are static and will be updated only if a user reloads the page.
 
 ## Ajaxify cart totals
 
-In order to make them updatable without page refresh, apply the [`data-ajax-cart-bind-state`](/v2/docs/data-ajax-cart-bind-state/)
-to the elements and provide a path to a [Cart state](/v2/docs/cart-state/) property, that you want to display.
-For the cart items number it will be `cart.item_count` value, for the cart price — `cart.total_price`.
+In order to make them updatable without page refresh, apply the [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) attribute
+to the elements and provide a property of the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object, that you want to display.
+For the cart items number it will be the `item_count` property, for the cart price — the `total_price` property.
 
 The attribute supports formatters. In order to display price values, use the `money_with_currency` formatter.
 
 Liquid Ajax Cart will replace the elements inner content with the actual values when the cart content is changed.
 {%- capture highlight_code -%}
 {% raw %}
-<span data-ajax-cart-bind-state="cart.item_count" class="header__cart-quantity">
+<span data-ajax-cart-bind="item_count" class="header__cart-quantity">
   {{ cart.item_count }}
 </span>
-<span data-ajax-cart-bind-state="cart.total_price | money_with_currency" class="header__cart-total">
+<span data-ajax-cart-bind="total_price | money_with_currency" class="header__cart-total">
   {{ cart.total_price | money_with_currency }}
 </span>
 {% endraw %}

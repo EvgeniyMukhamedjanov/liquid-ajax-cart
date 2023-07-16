@@ -1,6 +1,6 @@
 import {DATA_ATTR_QUANTITY_INPUT} from "./quantity-input";
 import {CUSTOM_ELEMENT_PREFIX, DATA_ATTR_PREFIX} from "../const";
-import {getCartState} from "../state";
+import {getProcessingStatus} from "../ajax-api";
 
 const ELEMENT_TAG = `${CUSTOM_ELEMENT_PREFIX}-quantity`;
 const DATA_ATTR_QUANTITY_PLUS = `${DATA_ATTR_PREFIX}-quantity-plus`;
@@ -37,8 +37,7 @@ function cartQuantityElementInit() {
       this.querySelectorAll(`[${DATA_ATTR_QUANTITY_PLUS}], [${DATA_ATTR_QUANTITY_MINUS}]`).forEach($button => {
         $button.addEventListener('click', event => {
 
-          const state = getCartState();
-          if (!state.status.requestInProgress && state.status.cartStateSet) {
+          if (!getProcessingStatus()) {
             const qtyValueCurrent = Number(this.#$input.value);
             if (isNaN(qtyValueCurrent)) {
               console.error(
@@ -86,8 +85,7 @@ function cartQuantityElementInit() {
         clearTimeout(this.#timer);
       }
       this.#timer = undefined;
-      const state = getCartState();
-      if (!state.status.requestInProgress && state.status.cartStateSet) {
+      if (!getProcessingStatus()) {
         this.#$input.dispatchEvent(new Event('change', {bubbles: true}));
       }
     }

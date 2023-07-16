@@ -1,13 +1,12 @@
 import {
-  RequestStateType,
   JSONValueType,
   UpdatedSectionType,
-  EventSectionsType,
-  EventRequestType
+  EventRequestStartType,
+  EventRequestEndType
 } from './ts-types';
 
-import {EVENT_REQUEST, REQUEST_ADD} from './ajax-api';
-import {DATA_ATTR_PREFIX, EVENT_PREFIX} from "./const";
+import {EVENT_REQUEST_END, EVENT_REQUEST_START, REQUEST_ADD} from './ajax-api';
+import {DATA_ATTR_PREFIX} from "./const";
 
 
 type StaticElementsListType = {
@@ -18,15 +17,14 @@ type ScrollAreasListType = {
   [scrollId: string]: Array<{ scroll: number, height: number }>
 }
 
-const EVENT_SECTIONS = `${EVENT_PREFIX}:sections`;
 const DATA_ATTR_SECTION = `${DATA_ATTR_PREFIX}-section`;
 const DATA_ATTR_STATIC_ELEMENT = `${DATA_ATTR_PREFIX}-static-element`;
 const DATA_ATTR_SCROLL_AREA = `${DATA_ATTR_PREFIX}-section-scroll`;
 const SHOPIFY_SECTION_PREFIX = 'shopify-section-';
 
 function cartSectionsInit() {
-  document.addEventListener(EVENT_REQUEST, (event: EventRequestType) => {
-    const {requestState, onResult} = event.detail;
+  document.addEventListener(EVENT_REQUEST_START, (event: EventRequestStartType) => {
+    const {requestState} = event.detail;
 
     if (requestState.requestBody !== undefined) {
       const sectionNames: string[] = [];
@@ -71,123 +69,123 @@ function cartSectionsInit() {
         }
       }
     }
+  });
 
-    onResult((requestState: RequestStateType) => {
-      const parser = new DOMParser();
-      const updatedSections: Array<UpdatedSectionType> = []; // for sections event
+  document.addEventListener(EVENT_REQUEST_END, (event: EventRequestEndType) => {
+    event.detail.sections = [];
+    const {requestState} = event.detail;
 
-      if (requestState.responseData?.ok && 'sections' in requestState.responseData.body) {
-        let sections = requestState.responseData.body.sections as ({ [key: string]: string });
-        if (requestState.extraResponseData?.body?.sections) {
-          sections = {...sections, ...(requestState.extraResponseData.body.sections as ({ [key: string]: string }))};
+    const parser = new DOMParser();
+    const updatedSections: Array<UpdatedSectionType> = []; // for sections event
+
+    if (requestState.responseData?.ok && 'sections' in requestState.responseData.body) {
+      let sections = requestState.responseData.body.sections as ({ [key: string]: string });
+      if (requestState.extraResponseData?.body?.sections) {
+        sections = {...sections, ...(requestState.extraResponseData.body.sections as ({ [key: string]: string }))};
+      }
+      for (let sectionId in sections) {
+        if (!sections[sectionId]) {
+          console.error(`Liquid Ajax Cart: the HTML for the "${sectionId}" section was requested but the response is ${sections[sectionId]}`)
+          continue;
         }
-        for (let sectionId in sections) {
-          if (!sections[sectionId]) {
-            console.error(`Liquid Ajax Cart: the HTML for the "${sectionId}" section was requested but the response is ${sections[sectionId]}`)
-            continue;
+
+        document.querySelectorAll(`#shopify-section-${sectionId}`).forEach(sectionNode => {
+
+          let newNodes: Array<Element> = []; // for sections event
+          const noId = "__noId__"; // for memorizing scroll positions and static elements
+
+          // Memorize scroll positions
+          const scrollAreasList: ScrollAreasListType = {};
+          sectionNode.querySelectorAll(` [${DATA_ATTR_SCROLL_AREA}] `).forEach(scrollAreaNode => {
+            let scrollId = scrollAreaNode.getAttribute(DATA_ATTR_SCROLL_AREA).toString().trim();
+            if (scrollId === '') {
+              scrollId = noId;
+            }
+            if (!(scrollId in scrollAreasList)) {
+              scrollAreasList[scrollId] = [];
+            }
+            scrollAreasList[scrollId].push({
+              scroll: scrollAreaNode.scrollTop,
+              height: scrollAreaNode.scrollHeight
+            });
+          });
+
+          // Memorize static elements
+          const staticElementsList: StaticElementsListType = {}
+          const staticElements = sectionNode.querySelectorAll(`[${DATA_ATTR_STATIC_ELEMENT}]`);
+          if (staticElements) {
+            staticElements.forEach(staticElement => {
+              let staticElementId = staticElement.getAttribute(DATA_ATTR_STATIC_ELEMENT).toString().trim();
+              if (staticElementId === '') {
+                staticElementId = noId;
+              }
+              if (!(staticElementId in staticElementsList)) {
+                staticElementsList[staticElementId] = [];
+              }
+              staticElementsList[staticElementId].push(staticElement);
+            })
           }
 
-          document.querySelectorAll(`#shopify-section-${sectionId}`).forEach(sectionNode => {
+          // Replace HTML and Restore static elements
+          const sectionParts = sectionNode.querySelectorAll(`[${DATA_ATTR_SECTION}]`);
+          if (sectionParts) {
+            const receivedDOM = parser.parseFromString(sections[sectionId], "text/html");
 
-            let newNodes: Array<Element> = []; // for sections event
-            const noId = "__noId__"; // for memorizing scroll positions and static elements
+            // Restore static elements
+            for (let staticElementId in staticElementsList) {
+              receivedDOM.querySelectorAll(` [${DATA_ATTR_STATIC_ELEMENT}="${staticElementId.replace(noId, '')}"] `).forEach((staticElement, staticElementIndex) => {
+                if (staticElementIndex + 1 <= staticElementsList[staticElementId].length) {
+                  staticElement.before(staticElementsList[staticElementId][staticElementIndex]);
+                  staticElement.parentElement.removeChild(staticElement);
+                }
+              })
+            }
 
-            // Memorize scroll positions
-            const scrollAreasList: ScrollAreasListType = {};
-            sectionNode.querySelectorAll(` [${DATA_ATTR_SCROLL_AREA}] `).forEach(scrollAreaNode => {
-              let scrollId = scrollAreaNode.getAttribute(DATA_ATTR_SCROLL_AREA).toString().trim();
-              if (scrollId === '') {
-                scrollId = noId;
+            // Replace old sections with new sections
+            const receivedParts = receivedDOM.querySelectorAll(`[${DATA_ATTR_SECTION}]`);
+            if (sectionParts.length !== receivedParts.length) {
+              console.error(`Liquid Ajax Cart: the received HTML for the "${sectionId}" section has a different quantity of the "${DATA_ATTR_SECTION}" containers. The section will be updated completely.`);
+              const receivedSection = receivedDOM.querySelector(`#${SHOPIFY_SECTION_PREFIX}${sectionId}`);
+              if (receivedSection) {
+                sectionNode.innerHTML = "";
+                while (receivedSection.childNodes.length) {
+                  sectionNode.appendChild(receivedSection.firstChild);
+                }
+                newNodes.push(sectionNode);
               }
-              if (!(scrollId in scrollAreasList)) {
-                scrollAreasList[scrollId] = [];
-              }
-              scrollAreasList[scrollId].push({
-                scroll: scrollAreaNode.scrollTop,
-                height: scrollAreaNode.scrollHeight
+            } else {
+              sectionParts.forEach((sectionPartsItem, sectionPartsItemIndex) => {
+                sectionPartsItem.before(receivedParts[sectionPartsItemIndex]);
+                sectionPartsItem.parentElement.removeChild(sectionPartsItem);
+                newNodes.push(receivedParts[sectionPartsItemIndex]);
               });
+            }
+          }
+
+          // Restore scroll positions
+          for (let scrollId in scrollAreasList) {
+            sectionNode.querySelectorAll(` [${DATA_ATTR_SCROLL_AREA}="${scrollId.replace(noId, '')}"] `).forEach((scrollAreaNode, scrollAreaIndex) => {
+              if (scrollAreaIndex + 1 <= scrollAreasList[scrollId].length) {
+                if (requestState.requestType !== REQUEST_ADD || scrollAreasList[scrollId][scrollAreaIndex]['height'] >= scrollAreaNode.scrollHeight) {
+                  scrollAreaNode.scrollTop = scrollAreasList[scrollId][scrollAreaIndex]['scroll'];
+                }
+              }
+            })
+          }
+
+          if (newNodes.length > 0) {
+            updatedSections.push({
+              id: sectionId,
+              elements: newNodes
             });
-
-            // Memorize static elements
-            const staticElementsList: StaticElementsListType = {}
-            const staticElements = sectionNode.querySelectorAll(`[${DATA_ATTR_STATIC_ELEMENT}]`);
-            if (staticElements) {
-              staticElements.forEach(staticElement => {
-                let staticElementId = staticElement.getAttribute(DATA_ATTR_STATIC_ELEMENT).toString().trim();
-                if (staticElementId === '') {
-                  staticElementId = noId;
-                }
-                if (!(staticElementId in staticElementsList)) {
-                  staticElementsList[staticElementId] = [];
-                }
-                staticElementsList[staticElementId].push(staticElement);
-              })
-            }
-
-            // Replace HTML and Restore static elements
-            const sectionParts = sectionNode.querySelectorAll(`[${DATA_ATTR_SECTION}]`);
-            if (sectionParts) {
-              const receivedDOM = parser.parseFromString(sections[sectionId], "text/html");
-
-              // Restore static elements
-              for (let staticElementId in staticElementsList) {
-                receivedDOM.querySelectorAll(` [${DATA_ATTR_STATIC_ELEMENT}="${staticElementId.replace(noId, '')}"] `).forEach((staticElement, staticElementIndex) => {
-                  if (staticElementIndex + 1 <= staticElementsList[staticElementId].length) {
-                    staticElement.before(staticElementsList[staticElementId][staticElementIndex]);
-                    staticElement.parentElement.removeChild(staticElement);
-                  }
-                })
-              }
-
-              // Replace old sections with new sections
-              const receivedParts = receivedDOM.querySelectorAll(`[${DATA_ATTR_SECTION}]`);
-              if (sectionParts.length !== receivedParts.length) {
-                console.error(`Liquid Ajax Cart: the received HTML for the "${sectionId}" section has a different quantity of the "${DATA_ATTR_SECTION}" containers. The section will be updated completely.`);
-                const receivedSection = receivedDOM.querySelector(`#${SHOPIFY_SECTION_PREFIX}${sectionId}`);
-                if (receivedSection) {
-                  sectionNode.innerHTML = "";
-                  while (receivedSection.childNodes.length) {
-                    sectionNode.appendChild(receivedSection.firstChild);
-                  }
-                  newNodes.push(sectionNode);
-                }
-              } else {
-                sectionParts.forEach((sectionPartsItem, sectionPartsItemIndex) => {
-                  sectionPartsItem.before(receivedParts[sectionPartsItemIndex]);
-                  sectionPartsItem.parentElement.removeChild(sectionPartsItem);
-                  newNodes.push(receivedParts[sectionPartsItemIndex]);
-                });
-              }
-            }
-
-            // Restore scroll positions
-            for (let scrollId in scrollAreasList) {
-              sectionNode.querySelectorAll(` [${DATA_ATTR_SCROLL_AREA}="${scrollId.replace(noId, '')}"] `).forEach((scrollAreaNode, scrollAreaIndex) => {
-                if (scrollAreaIndex + 1 <= scrollAreasList[scrollId].length) {
-                  if (requestState.requestType !== REQUEST_ADD || scrollAreasList[scrollId][scrollAreaIndex]['height'] >= scrollAreaNode.scrollHeight) {
-                    scrollAreaNode.scrollTop = scrollAreasList[scrollId][scrollAreaIndex]['scroll'];
-                  }
-                }
-              })
-            }
-
-            if (newNodes.length > 0) {
-              updatedSections.push({
-                id: sectionId, // TODO: add shopify-section- prefix
-                elements: newNodes
-              });
-            }
-          })
-        }
-      }
-
-      if (updatedSections.length > 0) {
-        const event: EventSectionsType = new CustomEvent(EVENT_SECTIONS, {
-          detail: updatedSections
+          }
         })
-        document.dispatchEvent(event);
       }
-    })
+    }
+
+    if (updatedSections.length > 0) {
+      event.detail.sections = updatedSections;
+    }
   })
 }
 

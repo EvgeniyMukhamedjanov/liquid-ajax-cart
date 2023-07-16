@@ -1,7 +1,7 @@
 ---
 title: js-ajax-cart-not-empty
 layout: docs-v2
-disable_anchors: true
+disable_toc: true
 ---
 
 # js-ajax-cart-not-empty
@@ -10,13 +10,15 @@ disable_anchors: true
 Liquid Ajax Cart adds the `js-ajax-cart-not-empty` CSS class to the `html` tag if the user cart is not empty.
 </p>
 
-Showing cart quantity number in the header:
+## Example
+
+Showing the cart quantity number in the header:
 
 {%- capture highlight_code -%}
 {% raw %}
 <span class="header__cart-quantity">
   (
-  <span data-ajax-cart-bind-state="cart.item_count">
+  <span data-ajax-cart-bind="item_count">
     {{ cart.item_count }}
   </span>
   ) 

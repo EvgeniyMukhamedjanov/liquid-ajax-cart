@@ -1,9 +1,9 @@
 import {
   RequestStateType,
-  EventRequestType
+  EventRequestStartType
 } from './ts-types';
 
-import {EVENT_REQUEST, REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
+import {EVENT_REQUEST_START, REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
 import {getCartState} from './state';
 import {settings} from './settings';
 import {DATA_ATTR_PREFIX} from "./const";
@@ -56,7 +56,7 @@ const changeRequestContainers = (requestState: RequestStateType): NodeListOf<Ele
 
   if (requestedLine) {
     const requestedLineNumber = Number(requestedLine);
-    if (requestedLineNumber > 0 && state.status.cartStateSet) {
+    if (requestedLineNumber > 0) {
       const lineItemIndex = requestedLineNumber - 1;
       requestedId = state.cart.items[lineItemIndex]?.key;
     }
@@ -65,7 +65,7 @@ const changeRequestContainers = (requestState: RequestStateType): NodeListOf<Ele
   if (requestedId) {
     if (requestedId.indexOf(':') > -1) {
       errorContainers = document.querySelectorAll(`[${DATA_ATTR_ERRORS}="${requestedId}"]`);
-    } else if (state.status.cartStateSet) {
+    } else {
       errorContainers = document.querySelectorAll(
         state.cart.items.reduce((acc, element) => {
           if (element.key === requestedId || element.id === Number(requestedId)) {
@@ -89,7 +89,7 @@ const addRequestContainers = (requestState: RequestStateType): NodeListOf<Elemen
 }
 
 const cartMessagesInit = () => {
-  document.addEventListener(EVENT_REQUEST, (event: EventRequestType) => {
+  document.addEventListener(EVENT_REQUEST_START, (event: EventRequestStartType) => {
     const {requestState, onResult} = event.detail;
 
     let errorContainers: NodeListOf<Element>;

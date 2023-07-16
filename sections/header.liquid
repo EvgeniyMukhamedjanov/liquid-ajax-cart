@@ -113,8 +113,8 @@
             <a href="{{ routes.cart_url }}" class="cart-page-link" onclick="document.querySelector('html').classList.toggle('js-ajax-cart-open'); return false;">
               {{ 'layout.cart.title' | t }}
               <span class="cart-count header-bar__cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}">
-                <span data-ajax-cart-bind-state="cart.item_count">{{ cart.item_count }}</span> | 
-                <span data-ajax-cart-bind-state="cart.total_price | money_with_currency">{{ cart.total_price | money_with_currency }}</span>
+                <span data-ajax-cart-bind="item_count">{{ cart.item_count }}</span> |
+                <span data-ajax-cart-bind="total_price | money_with_currency">{{ cart.total_price | money_with_currency }}</span>
             </span>
             </a>
           </div>
@@ -153,8 +153,8 @@
       <a href="{{ routes.cart_url }}" class="cart-page-link mobile-cart-page-link" onclick="document.querySelector('html').classList.toggle('js-ajax-cart-open'); return false;">
         <span class="icon icon-cart header-bar__cart-icon" aria-hidden="true"></span>
         {{ 'layout.cart.title' | t }} <span class="cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}">
-          <span data-ajax-cart-bind-state="cart.item_count">{{ cart.item_count }}</span> | 
-          <span data-ajax-cart-bind-state="cart.total_price | money_with_currency">{{ cart.total_price | money_with_currency }}</span>
+          <span data-ajax-cart-bind="item_count">{{ cart.item_count }}</span> |
+          <span data-ajax-cart-bind="total_price | money_with_currency">{{ cart.total_price | money_with_currency }}</span>
         </span>
       </a>
     </div>

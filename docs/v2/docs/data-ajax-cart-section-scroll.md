@@ -7,18 +7,18 @@ disable_anchors: true
 # data-ajax-cart-section-scroll
 
 <p class="lead" markdown="1">
-The attribute keeps the scroll position unchanged of a container when the parent [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) HTML gets updated.
+The attribute keeps the scroll position of an element when the parent [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container gets re-rendered.
 </p>
 
-If you have a scrollable area within a [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) section, 
-the scroll position will be reset to top every time when the cart is changed because the section’s HTML will be completely replaced with a new one.
+If you have a scrollable area inside a [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container, 
+the scroll position will be reset to top every time when the cart is changed because the container HTML will be completely replaced with a new one.
 
 In order to prevent the scroll reset, Liquid Ajax Cart remembers scroll positions of the `data-ajax-cart-section-scroll` elements 
-and restore them after the parent `data-ajax-cart-section` section HTML update.
+and restores them after the parent `data-ajax-cart-section` container HTML is updated.
 
 ## Single scrollable area
 
-Add the `data-ajax-cart-section-scroll` attribute to a scrollable area and Liquid Ajax Cart will keep the scroll position unchanged.
+Add the `data-ajax-cart-section-scroll` attribute to a scrollable elements and Liquid Ajax Cart will keep the scroll position unchanged.
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -42,7 +42,7 @@ Add the `data-ajax-cart-section-scroll` attribute to a scrollable area and Liqui
 
 ## Multiple scrollable areas
 
-Add the data-ajax-cart-section-scroll attribute with unique names to scrollable areas so Liquid Ajax Cart can distinguish them after HTML update.
+Add the `data-ajax-cart-section-scroll` attribute with unique names to scrollable elements so Liquid Ajax Cart can distinguish them after HTML update.
 
 {%- capture highlight_code -%}
 {% raw %}

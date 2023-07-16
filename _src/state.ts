@@ -1,149 +1,74 @@
 import {
   AppStateType,
   AppStateCartType,
-  AppStateStatusType,
-  RequestStateType,
-  JSONObjectType,
-  JSONValueType,
-  LineItemType,
-  EventQueuesType,
-  EventRequestType,
-  EventStateType
+  EventRequestEndType
 } from './ts-types';
 
 import {
-  cartRequestGet,
-  cartRequestUpdate,
-  REQUEST_ADD,
-  EVENT_QUEUES,
-  EVENT_REQUEST
+  EVENT_REQUEST_END,
 } from './ajax-api';
-import {DATA_ATTR_PREFIX, EVENT_PREFIX} from "./const";
+import {DATA_ATTR_PREFIX} from "./const";
 
-const EVENT_STATE = `${EVENT_PREFIX}:state`;
 const DATA_ATTR_INITIAL_STATE = `${DATA_ATTR_PREFIX}-initial-state`;
 
 let cart: AppStateCartType = null;
 let previousCart: AppStateCartType | undefined = undefined
-let status: AppStateStatusType = {
-  requestInProgress: false,
-  cartStateSet: false,
-};
 
-function cartStateInit() {
-  document.addEventListener(EVENT_QUEUES, (event: EventQueuesType) => {
-    status.requestInProgress = event.detail.inProgress;
-    notify(false);
-  });
+function cartStateInit(): Promise<void> {
 
-  document.addEventListener(EVENT_REQUEST, (event: EventRequestType) => {
-    const {onResult} = event.detail;
-    onResult((requestState: RequestStateType) => {
-      let newCart: AppStateCartType | undefined = undefined;
-      if (requestState.extraResponseData?.ok) {
-        newCart = cartStateFromObject(requestState.extraResponseData.body);
-      }
+  document.addEventListener(EVENT_REQUEST_END, (event: EventRequestEndType) => {
+    event.detail.cartUpdated = false;
+    const {requestState} = event.detail;
+    let newCart: AppStateCartType;
+    if (requestState.extraResponseData?.ok && requestState.extraResponseData.body.token) {
+      newCart = requestState.extraResponseData.body as AppStateCartType;
+    } else if (requestState.responseData?.ok && requestState.responseData.body.token) {
+      newCart = requestState.responseData.body as AppStateCartType;
+    }
 
-      if (!newCart && requestState.responseData?.ok) {
-        if (requestState.requestType === REQUEST_ADD) {
-          cartRequestUpdate();
-        } else {
-          newCart = cartStateFromObject(requestState.responseData.body);
-        }
-      }
-      if (newCart) {
-        previousCart = cart;
-        cart = newCart;
-        status.cartStateSet = true;
-        notify(true);
-      } else if (newCart === null) {
-        console.error(`Liquid Ajax Cart: expected to receive the updated cart state but the object is not recognized. The request state:`, requestState);
-      }
-    })
+    if (newCart) {
+      previousCart = cart;
+      cart = newCart;
+      event.detail.cartUpdated = true;
+    }
   });
 
   const initialStateContainer = document.querySelector(`[${DATA_ATTR_INITIAL_STATE}]`);
   if (initialStateContainer) {
     try {
-      const initialState = JSON.parse(initialStateContainer.textContent);
-      cart = cartStateFromObject(initialState);
-      if (cart === null) {
-        throw `JSON from ${DATA_ATTR_INITIAL_STATE} script is not correct cart object`;
-      } else {
-        status.cartStateSet = true;
-        notify(true);
-      }
+      cart = JSON.parse(initialStateContainer.textContent);
     } catch (e) {
-      console.error(`Liquid Ajax Cart: can't parse cart JSON from the "${DATA_ATTR_INITIAL_STATE}" script. A /cart.js request will be performed to receive the cart state`);
+      console.error(`Liquid Ajax Cart: can't parse cart JSON from the "${DATA_ATTR_INITIAL_STATE}" script`);
       console.error(e);
-      cartRequestGet();
     }
-  } else {
-    cartRequestGet();
-  }
-}
-
-function cartStateFromObject(data: JSONObjectType): AppStateCartType {
-  const {attributes, items, item_count} = data;
-  if (attributes === undefined || attributes === null || typeof attributes !== 'object') {
-    return null;
   }
 
-  if (typeof item_count !== 'number' && !(item_count instanceof Number)) {
-    return null;
-  }
-
-  if (!Array.isArray(items)) {
-    return null;
-  }
-  const newItems: LineItemType[] = [];
-  for (let i = 0; i < (items as JSONValueType[]).length; i++) {
-    const item = items[i] as ({ [key: string]: JSONValueType });
-    if (typeof item.id !== 'number' && !(item.id instanceof Number)) {
-      return null;
+  return new Promise((resolve, reject) => {
+    if (cart) {
+      resolve();
+      return;
     }
-    if (typeof item.key !== 'string' && !(item.key instanceof String)) {
-      return null;
-    }
-    if (typeof item.quantity !== 'number' && !(item.quantity instanceof Number)) {
-      return null;
-    }
-    if (!('properties' in item)) {
-      return null;
-    }
-    newItems.push({
-      ...item,
-      id: (item.id as number),
-      key: (item.key as string),
-      quantity: (item.quantity as number),
-      properties: (item.properties as ({ [key: string]: JSONValueType }))
-    });
-  }
-
-  return {
-    ...data,
-    attributes: (attributes as ({ [key: string]: JSONValueType })),
-    items: newItems,
-    item_count: (item_count as number)
-  }
+    fetch(`${window.Shopify?.routes?.root || '/'}cart.js`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => {
+      return response.json();
+    }).then(data => {
+      cart = data;
+      resolve();
+    }).catch(error => {
+      console.error(error);
+      reject('Can\'t load the cart state from the "/cart.js" endpoint');
+    })
+  })
 }
 
 function getCartState(): AppStateType {
   return {
     cart,
-    status,
     previousCart
   }
 }
 
-const notify = (isCartUpdated: boolean) => {
-  const event: EventStateType = new CustomEvent(EVENT_STATE, {
-    detail: {
-      state: getCartState(),
-      isCartUpdated
-    }
-  });
-  document.dispatchEvent(event)
-}
-
-export {cartStateInit, getCartState, EVENT_STATE};
+export {cartStateInit, getCartState};

@@ -10,13 +10,15 @@ disable_anchors: true
 The attribute to ajaxify cart line item property inputs, cart note textarea, cart attribute inputs.
 </p>
 
+## How it works
+
 Add the `data-ajax-cart-property-input` attribute to a cart line-item property input, a cart note input or a cart attribute input to ajaxify them. Once a user changes the input value, Liquid Ajax Cart will send a Shopify Cart API Ajax request to update the cart.
 
 The request will be sent on input's `change` event and if a user presses the `Enter` key within the input field or `Ctrl`+`Enter` for the `textarea` element.
 
-If a user presses the `Esc` key within the input, its value will be reset to the current item's quantity according to the [Cart state](/v2/docs/cart-state/) object.
+If a user presses the `Esc` key within the input, its value will be reset to the current item's quantity according to the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object.
 
-The `data-ajax-cart-property-input` input fields become `disabled` when there is a Shopify Cart API Ajax request in progress (if the [Cart state](/v2/docs/cart-state/) `status.requestInProgress` property is `true`);
+The `data-ajax-cart-property-input` input fields become `disabled` when there is a Shopify Cart API Ajax request in progress;
 
 The `data-ajax-cart-property-input` supports textual input fields, checkboxes, radio buttons, `select` and `textarea` elements.
 

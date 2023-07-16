@@ -161,5 +161,5 @@ and provide a valid `routes.cart_add_url`, `routes.cart_change_url`, `routes.car
 
 The `data-ajax-cart-request-button` elements become inactive when there is any Shopify Cart API Ajax request in progress.
 
-If you want to make them visually disabled when they are inactive, use the [`js-ajax-cart-in-progress`](/v2/docs/js-ajax-cart-in-progress/) CSS class 
+If you want to make them visually disabled when they are inactive, use the [`js-ajax-cart-processing`](/v2/docs/js-ajax-cart-processing/) CSS class 
 which gets added by Liquid Ajax Cart when there is a Shopify Cart API Ajax request in progress.

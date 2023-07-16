@@ -1,7 +1,7 @@
 ---
 title: requestErrorText
 layout: docs-v2
-disable_anchors: true
+disable_toc: true
 ---
 
 # requestErrorText

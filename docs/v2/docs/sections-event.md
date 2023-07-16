@@ -11,6 +11,8 @@ The `liquid-ajax-cart:sections` event is fired at the `document` when
 [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements are re-rendered.
 </p>
 
+## Structure
+
 The event's `detail` property contains an array with updated sections.
 
 {% include v2/content/sections-event-code-example.html %}

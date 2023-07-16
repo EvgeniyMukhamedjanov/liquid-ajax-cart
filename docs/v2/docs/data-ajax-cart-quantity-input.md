@@ -17,7 +17,7 @@ When a user changes the input value or presses the `Enter` key within the input,
 Liquid Ajax Cart will send a Shopify Cart API `/cart/change.js` Ajax request to update the quantity.
 
 If a user presses the `Esc` key within the input, its value will be reset to the current item quantity 
-according to the [Cart state](/v2/docs/cart-state/) object.
+according to the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object.
 
 ## Using a line item index
 

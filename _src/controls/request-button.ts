@@ -1,5 +1,4 @@
-import { cartRequestChange, cartRequestAdd, cartRequestClear, cartRequestUpdate } from '../ajax-api';
-import { getCartState } from '../state';
+import {cartRequestChange, cartRequestAdd, cartRequestClear, cartRequestUpdate, getProcessingStatus} from '../ajax-api';
 import {DATA_ATTR_PREFIX} from "../const";
 
 const CHANGE_URL = `${ window.Shopify?.routes?.root || '/' }cart/change`;
@@ -53,8 +52,7 @@ function clickHandler (element: Element, e: Event) {
 		e.preventDefault();
 	}
 
-	const state = getCartState();
-	if (state.status.requestInProgress) {
+	if (getProcessingStatus()) {
 		return;
 	}
 

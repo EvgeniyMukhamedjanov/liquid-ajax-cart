@@ -37,20 +37,16 @@ links_v2:
 
         - title: Extension with JS
           links:
-            - title: Altering Ajax requests
+            - title: Overview
               file: test
-            - title: Making Ajax requests
-              file: test
-            - title: Examples
-              file: test
+            - title: Ready snippets
+              file: js-snippets
 
     - title: Reference
       subsections:
         - title: Core concepts
           eyebrow: Core concept
           links:
-            - title: Cart state
-              file: cart-state
             - title: Request state
               file: request-state
             - title: Queue of requests
@@ -67,8 +63,8 @@ links_v2:
         - title: Data attributes
           eyebrow: Data attribute
           links:
-            - title: data-ajax-cart-bind-state
-              file: data-ajax-cart-bind-state
+            - title: data-ajax-cart-bind
+              file: data-ajax-cart-bind
             - title: data-ajax-cart-errors
               file: data-ajax-cart-errors
             - title: data-ajax-cart-initial-state
@@ -97,8 +93,8 @@ links_v2:
               file: js-ajax-cart-empty
             - title: js-ajax-cart-not-empty
               file: js-ajax-cart-not-empty
-            - title: js-ajax-cart-in-progress
-              file: js-ajax-cart-in-progress
+            - title: js-ajax-cart-processing
+              file: js-ajax-cart-processing
             - title: js-ajax-cart-set
               file: js-ajax-cart-set
 
@@ -111,11 +107,8 @@ links_v2:
               file: request-event
             - title: liquid-ajax-cart:sections
               file: sections-event
-            - title: liquid-ajax-cart:state
-              file: state-event
 
-        - title: JS API
-          id: js-api-subsection
+        - title: JavaScript API
           links:
             - title: liquidAjaxCart object
               file: liquid-ajax-cart
@@ -129,8 +122,10 @@ links_v2:
               file: liquid-ajax-cart-update
             - title: clear()
               file: liquid-ajax-cart-clear
-            - title: state
-              file: liquid-ajax-cart-state
+            - title: cart
+              file: liquid-ajax-cart-cart
+            - title: previousCart
+              file: liquid-ajax-cart-previous-cart
             - title: conf()
               file: liquid-ajax-cart-conf
 
@@ -140,8 +135,8 @@ links_v2:
           links:
             - title: requestErrorText
               file: request-error-text
-            - title: stateBinderFormatters
-              file: state-binder-formatters
+            - title: binderFormatters
+              file: binder-formatters
             - title: updateOnWindowFocus
               file: update-on-window-focus
 

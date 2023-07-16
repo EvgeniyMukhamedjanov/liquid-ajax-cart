@@ -42,16 +42,20 @@ export type CartRequestOptionsType = {
   important?: boolean
 }
 
+export type PostRequestFunctionType = (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void;
+
 export type RequestResultCallback = (requestState: RequestStateType) => void;
 export type RequestResultSubscriberType = (resultCallback: RequestResultCallback) => void;
 
-// export type RequestCallbackType = (requestState: RequestStateType, subscribeToResult: RequestResultSubscriberType) => void;
-// export type QueuesCallbackType = (inProgress: boolean) => void;
-
-export type EventQueuesType = CustomEvent<{inProgress: boolean}>;
-export type EventRequestType = CustomEvent<{
+export type EventQueueType = CustomEvent;
+export type EventRequestStartType = CustomEvent<{
   requestState: RequestStateType,
   onResult: RequestResultSubscriberType
+}>
+export type EventRequestEndType = CustomEvent<{
+  requestState: RequestStateType,
+  cartUpdated?: boolean,
+  sections?: Array<UpdatedSectionType>
 }>
 
 export type LineItemType = {
@@ -68,21 +72,14 @@ export type AppStateCartType = JSONObjectType & {
     [key: string]: JSONValueType
   },
   items: Array<LineItemType>,
-  item_count: number
+  item_count: number,
+  token?: string
 } | null;
-export type AppStateStatusType = {
-  requestInProgress: boolean,
-  cartStateSet: boolean
-}
+
 export type AppStateType = JSONObjectType & {
-  status: AppStateStatusType,
   cart: AppStateCartType,
   previousCart: AppStateCartType | undefined
 }
-export type EventStateType = CustomEvent<{
-  state: AppStateType,
-  isCartUpdated: boolean
-}>;
 
 export type ConfigurationValue =
   | string
@@ -96,7 +93,6 @@ export type UpdatedSectionType = {
   id: string,
   elements: Array<Element>
 }
-export type EventSectionsType = CustomEvent<Array<UpdatedSectionType>>;
 
 declare global {
   interface Window {
@@ -107,7 +103,10 @@ declare global {
       change: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
       update: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
       clear: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
-      state: AppStateType,
+      cart: AppStateCartType,
+      previousCart: AppStateCartType | undefined,
+      processing: boolean,
+      init: boolean
     }
     Shopify?: {
       locale?: String,

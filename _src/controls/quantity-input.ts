@@ -1,7 +1,11 @@
-import {AppStateType, EventStateType} from '../ts-types';
-
-import {cartRequestChange} from '../ajax-api';
-import {EVENT_STATE, getCartState/*, subscribeToCartStateUpdate*/} from '../state';
+import {
+  cartRequestChange,
+  EVENT_QUEUE_END,
+  EVENT_QUEUE_START,
+  EVENT_REQUEST_END,
+  getProcessingStatus
+} from '../ajax-api';
+import {getCartState} from '../state';
 import {findLineItemByCode} from '../helpers';
 import {DATA_ATTR_PREFIX} from "../const";
 
@@ -24,8 +28,6 @@ function initEventListeners() {
 }
 
 function isValidElement(element: Element): boolean {
-  // const {quantityInputAttribute} = settings.computed;
-
   if (!(element.hasAttribute(DATA_ATTR_QUANTITY_INPUT))) {
     return false;
   }
@@ -38,37 +40,33 @@ function isValidElement(element: Element): boolean {
   return true;
 }
 
-function stateHandler(state: AppStateType) {
-  // const {quantityInputAttribute} = settings.computed;
+function processingHandler() {
+  document.querySelectorAll(`input[${DATA_ATTR_QUANTITY_INPUT}]`).forEach((input: HTMLInputElement) => {
+    if (!isValidElement(input)) {
+      return;
+    }
 
-  if (state.status.requestInProgress) {
-    document.querySelectorAll(`input[${DATA_ATTR_QUANTITY_INPUT}]`).forEach((input: HTMLInputElement) => {
-      if (isValidElement(input)) {
-        input.disabled = true;
-      }
-    })
-  } else {
-    document.querySelectorAll(`input[${DATA_ATTR_QUANTITY_INPUT}]`).forEach((input: HTMLInputElement) => {
-      if (!isValidElement(input)) {
-        return;
-      }
+    if (getProcessingStatus()) {
+      input.disabled = true;
+      return;
+    }
 
-      const lineItemCode = input.getAttribute(DATA_ATTR_QUANTITY_INPUT).trim();
-      const [lineItem] = findLineItemByCode(lineItemCode, state);
-      if (lineItem) {
-        input.value = lineItem.quantity.toString();
-      } else if (lineItem === null) {
-        input.value = "0";
-      }
+    const state = getCartState();
 
-      input.disabled = false;
-    })
-  }
+    const lineItemCode = input.getAttribute(DATA_ATTR_QUANTITY_INPUT).trim();
+    const [lineItem] = findLineItemByCode(lineItemCode, state);
+    if (lineItem) {
+      input.value = lineItem.quantity.toString();
+    } else if (lineItem === null) {
+      input.value = "0";
+    }
+
+    input.disabled = false;
+
+  });
 }
 
 function changeHandler(element: Element, e: Event) {
-  // const {quantityInputAttribute} = settings.computed;
-
   if (!isValidElement(element)) {
     return;
   }
@@ -77,8 +75,7 @@ function changeHandler(element: Element, e: Event) {
     e.preventDefault(); // prevent form submission
   }
 
-  const state = getCartState();
-  if (state.status.requestInProgress) {
+  if (getProcessingStatus()) {
     return;
   }
 
@@ -111,8 +108,6 @@ function changeHandler(element: Element, e: Event) {
 }
 
 function escHandler(element: Element) {
-  // const {quantityInputAttribute} = settings.computed;
-
   if (!isValidElement(element)) {
     return;
   }
@@ -121,16 +116,14 @@ function escHandler(element: Element) {
   let relatedLineItem;
   const state = getCartState();
 
-  if (state.status.cartStateSet) {
-    if (attributeValue.length > 3) {
-      relatedLineItem = state.cart.items.find(lineItem => lineItem.key === attributeValue);
-    } else {
-      const lineItemIndex = Number(attributeValue) - 1;
-      relatedLineItem = state.cart.items[lineItemIndex];
-    }
-    if (relatedLineItem) {
-      (element as HTMLInputElement).value = relatedLineItem.quantity.toString();
-    }
+  if (attributeValue.length > 3) {
+    relatedLineItem = state.cart.items.find(lineItem => lineItem.key === attributeValue);
+  } else {
+    const lineItemIndex = Number(attributeValue) - 1;
+    relatedLineItem = state.cart.items[lineItemIndex];
+  }
+  if (relatedLineItem) {
+    (element as HTMLInputElement).value = relatedLineItem.quantity.toString();
   }
 
   (element as HTMLInputElement).blur();
@@ -138,11 +131,12 @@ function escHandler(element: Element) {
 
 function cartQuantityInputInit() {
   initEventListeners();
-  // subscribeToCartStateUpdate( stateHandler );
-  document.addEventListener(EVENT_STATE, (event: EventStateType) => {
-    stateHandler(event.detail.state);
-  })
-  stateHandler(getCartState());
+
+  document.addEventListener(EVENT_QUEUE_START, processingHandler);
+  document.addEventListener(EVENT_REQUEST_END, processingHandler);
+  document.addEventListener(EVENT_QUEUE_END, processingHandler);
+  processingHandler();
+
 }
 
 export {cartQuantityInputInit, DATA_ATTR_QUANTITY_INPUT}

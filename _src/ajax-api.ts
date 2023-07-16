@@ -1,13 +1,14 @@
 import {
-  EventQueuesType,
-  EventRequestType,
+  EventQueueType,
+  EventRequestStartType,
+  EventRequestEndType,
   RequestStateType,
   CartRequestOptionsType,
   JSONObjectType,
   RequestBodyType,
   RequestStateInfoType,
   RequestResultCallback,
-  JSONValueType
+  JSONValueType,
 } from './ts-types';
 
 import {
@@ -34,16 +35,20 @@ const REQUEST_UPDATE = 'update';
 const REQUEST_CLEAR = 'clear';
 const REQUEST_GET = 'get';
 
-const EVENT_QUEUES = `${EVENT_PREFIX}:queues`;
-const EVENT_REQUEST = `${EVENT_PREFIX}:request`;
+const EVENT_QUEUE_START = `${EVENT_PREFIX}:queue-start`;
+const EVENT_QUEUE_END = `${EVENT_PREFIX}:queue-end`;
+const EVENT_REQUEST_START = `${EVENT_PREFIX}:request-start`;
+const EVENT_REQUEST_END = `${EVENT_PREFIX}:request-end`;
 
 const queues: QueueItemType[][] = [];
+
+let processing = false;
 
 function addToQueues(queueItem: QueueItemType) {
   if (!(queueItem.options?.important) || queues.length === 0) {
     const newLength = queues.push([queueItem]);
     if (newLength === 1) {
-      notifyQueuesSubscribers(true);
+      setProcessingStatus(true);
       runQueues();
     }
     return;
@@ -55,7 +60,7 @@ function addToQueues(queueItem: QueueItemType) {
 function runQueues() {
 
   if (queues.length === 0) {
-    notifyQueuesSubscribers(false);
+    setProcessingStatus(false);
     return;
   }
 
@@ -73,10 +78,9 @@ function runQueues() {
   return;
 }
 
-function notifyQueuesSubscribers(inProgress: boolean) {
-  const event: EventQueuesType = new CustomEvent(EVENT_QUEUES, {
-    detail: {inProgress}
-  });
+function setProcessingStatus(value: boolean) {
+  processing = value
+  const event: EventQueueType = new CustomEvent(processing ? EVENT_QUEUE_START : EVENT_QUEUE_END);
   document.dispatchEvent(event);
 }
 
@@ -95,9 +99,9 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
     requestBody,
     info
   }
-  const redundandSections: string[] = [];
+  const redundantSections: string[] = [];
 
-  const event: EventRequestType = new CustomEvent(EVENT_REQUEST, {
+  const event: EventRequestStartType = new CustomEvent(EVENT_REQUEST_START, {
     detail: {
       requestState: {
         requestType,
@@ -138,7 +142,7 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
         allSections.push(...((sectionsParam as string).split(',')));
       }
       if (allSections.length > 5) {
-        redundandSections.push(...allSections.slice(5));
+        redundantSections.push(...allSections.slice(5));
         const newSectionsParam = allSections.slice(0, 5).join(',');
         if (requestBody instanceof FormData || requestBody instanceof URLSearchParams) {
           requestBody.set('sections', newSectionsParam);
@@ -183,11 +187,11 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
 
     requestState.responseData = data;
 
-    if ((REQUEST_ADD !== requestType && redundandSections.length === 0) || !(requestState.responseData.ok)) {
+    if (!(requestState.responseData.ok) || (requestState.responseData.body.token && redundantSections.length === 0)) {
       return requestState;
     }
 
-    return extraRequest(redundandSections).then(extraResponseData => {
+    return extraRequest(redundantSections).then(extraResponseData => {
       requestState.extraResponseData = extraResponseData;
       return requestState;
     })
@@ -206,6 +210,13 @@ function cartRequestFinally(
   finalCallback: () => void | undefined,
   requestState: RequestStateType
 ) {
+  const event: EventRequestEndType = new CustomEvent(EVENT_REQUEST_END, {
+    detail: {
+      requestState
+    }
+  });
+  document.dispatchEvent(event);
+
   resultSubscribers.forEach(callback => {
     try {
       callback(requestState);
@@ -301,14 +312,21 @@ function getEndpoint(requestType: string): string | undefined {
   }
 }
 
+function getProcessingStatus() {
+  return processing;
+}
+
 export {
   cartRequestAdd,
   cartRequestChange,
   cartRequestClear,
   cartRequestGet,
   cartRequestUpdate,
+  getProcessingStatus,
   REQUEST_ADD,
   REQUEST_CHANGE,
-  EVENT_QUEUES,
-  EVENT_REQUEST
+  EVENT_QUEUE_START,
+  EVENT_QUEUE_END,
+  EVENT_REQUEST_START,
+  EVENT_REQUEST_END
 }

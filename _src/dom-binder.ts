@@ -1,15 +1,17 @@
-import {AppStateType, JSONValueType, JSONObjectType, FormattersObjectType, EventStateType} from './ts-types';
+import {JSONValueType, JSONObjectType, FormattersObjectType} from './ts-types';
 
-import {EVENT_STATE, getCartState} from './state';
+import {getCartState} from './state';
 import {settings} from './settings';
 import {DATA_ATTR_PREFIX} from "./const";
+import {EVENT_REQUEST_END} from "./ajax-api";
 
 type StateValueType = JSONValueType | undefined;
 
-const DATA_ATTR_BIND_STATE = `${DATA_ATTR_PREFIX}-bind-state`
+const DATA_ATTR_BIND_STATE = `${DATA_ATTR_PREFIX}-bind`;
 
-function updateDOM(state: AppStateType) {
-  if (state.status.cartStateSet) {
+function updateDOM() {
+  const state = getCartState();
+  if (state.cart) {
     document.querySelectorAll(`[${DATA_ATTR_BIND_STATE}]`).forEach((element: Element) => {
       const path = element.getAttribute(DATA_ATTR_BIND_STATE);
       element.textContent = computeValue(path);
@@ -18,16 +20,16 @@ function updateDOM(state: AppStateType) {
 }
 
 function computeValue(str: string): string {
-  const {stateBinderFormatters} = settings;
+  const {binderFormatters} = settings;
 
   const [path, ...filters] = str.split('|');
-  const state = <JSONObjectType>getCartState();
+  const state = <JSONObjectType>getCartState().cart;
   let value = getStateValueByString(path, state);
   filters.forEach(element => {
     const formatterName = element.trim();
     if (formatterName !== '') {
-      if (typeof stateBinderFormatters === 'object' && formatterName in stateBinderFormatters) {
-        value = stateBinderFormatters[formatterName](value);
+      if (typeof binderFormatters === 'object' && formatterName in binderFormatters) {
+        value = binderFormatters[formatterName](value);
       } else if (formatterName in defaultFormatters) {
         value = defaultFormatters[formatterName](value);
       } else {
@@ -74,14 +76,12 @@ const defaultFormatters: FormattersObjectType = {
 }
 
 function cartDomBinderRerender() {
-  updateDOM(getCartState());
+  updateDOM();
 }
 
 function cartDomBinderInit() {
-  document.addEventListener(EVENT_STATE, (event: EventStateType) => {
-    updateDOM(event.detail.state);
-  })
-  updateDOM(getCartState());
+  document.addEventListener(EVENT_REQUEST_END, updateDOM);
+  updateDOM();
 }
 
 export {cartDomBinderInit, cartDomBinderRerender}

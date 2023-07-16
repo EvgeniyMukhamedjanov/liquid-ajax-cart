@@ -5,9 +5,9 @@ layout: docs-v2
 
 # Cart section
 
-<p class="lead">
+<p class="lead" markdown="1">
 Liquid Ajax Cart re-renders cart HTML after each user action such as adding a product to the cart or changing cart item quantity. 
-It uses Shopify <a href="https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering">Bundled section rendering</a> under the hood, so the cart content must be a Shopify section.
+It uses Shopify <a href="https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering">Bundled section rendering</a> under the hood, so the cart content **must** be a Shopify section.
 </p>
 
 ## Build a cart section
@@ -238,7 +238,7 @@ Check out examples for all the features on the [`data-ajax-cart-property-input`]
 
 ## Loading state
 
-When Liquid Ajax Cart sends an Ajax request, it adds the [`js-ajax-cart-in-progress`](/v2/docs/js-ajax-cart-in-progress/) CSS class to the `html` tag.
+When Liquid Ajax Cart sends an Ajax request, it adds the [`js-ajax-cart-processing`](/v2/docs/js-ajax-cart-processing/) CSS class to the `html` tag.
 Use it to indicate that the cart is updating.
 
 {% include v2/content/cart-loading-state-css-example.html %}

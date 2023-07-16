@@ -1,7 +1,7 @@
 ---
 title: liquidAjaxCart.conf() 
 layout: docs-v2
-disable_anchors: true
+disable_toc: true
 ---
 
 # liquidAjaxCart.conf()
@@ -27,8 +27,8 @@ liquidAjaxCart.conf("requestErrorText", "My request error message");
     {%- if docs_subsection.id == 'configuration-subsection' -%}
       {%- for docs_link in docs_subsection.links %}
 * [`{{ docs_link.title | escape }}`](/v2/docs/{{ docs_link.file }}/)
-      {% endfor -%}
-      {% break %}
+      {%- endfor -%}
+      {%- break -%}
     {%- endif -%}
   {%- endfor -%}
 {%- endfor -%}

@@ -1,7 +1,7 @@
 ---
 title: js-ajax-cart-set
 layout: docs-v2
-disable_anchors: true
+disable_toc: true
 ---
 
 # js-ajax-cart-set
@@ -9,6 +9,8 @@ disable_anchors: true
 <p class="lead" markdown="1">
 Liquid Ajax Cart adds the `js-ajax-cart-set` CSS class to the `html` tag when it is successfully loaded.
 </p>
+
+## Example
 
 Hiding the "Update" button on the cart page, as all the elements are ajaxified and no need to apply the changes manually:
 

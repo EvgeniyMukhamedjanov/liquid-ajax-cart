@@ -7,24 +7,27 @@ disable_anchors: true
 # data-ajax-cart-static-element
 
 <p class="lead" markdown="1">
-The `data-ajax-cart-static-element` attribute lets you have an immutable container inside a [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) section. HTML of the immutable containers *won't* be replaced when the parent section gets updated. 
+The `data-ajax-cart-static-element` attribute lets you have an immutable element inside a [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container. 
+HTML of the immutable elements **won't** be touched when the parent `data-ajax-cart-section` container gets re-rendered. 
 </p>
 
-It is useful if you have third-party apps or JavaScript libraries that generates its own HTML and put it within a container in your Shopify Ajax cart. Thus, you don't want to lose this changes during another `data-ajax-cart-section` container HTML update.
+It is useful when you have third-party apps or JavaScript libraries that generate its own HTML 
+and put it inside a [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container. 
+Thus, you don't want to lose this changes during a [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container re-render.
 
 ## How it works 
 
-Liquid Ajax Cart:
-1. remembers all `data-ajax-cart-static-element` DOM nodes before updating the parent `data-ajax-cart-section` container;
-2. updates the `data-ajax-cart-section` container HTML;
+While updating [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers Liquid Ajax Cart does the following:
+1. remembers all `data-ajax-cart-static-element` DOM nodes before updating the parent [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container;
+2. updates the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container HTML;
 3. puts the remembered `data-ajax-cart-static-element` nodes to their places back.
 
-If there are attached event listeners to elements within a `data-ajax-cart-static-element` container — they will be kept as well, 
-as Liquid Ajax Cart remembers `data-ajax-cart-static-element` containers as a DOM node object.
+If there are attached event listeners to elements inside a `data-ajax-cart-static-element` element — they will be kept as well, 
+as Liquid Ajax Cart remembers `data-ajax-cart-static-element` elements as DOM node objects.
 
-## Single immutable container
+## Single immutable element
 
-If you want to have an immutable element within a [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container — add the `data-ajax-cart-static-element` attribute to this element.
+If you want to have an immutable element inside a [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container — add the `data-ajax-cart-static-element` attribute to this element.
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -47,9 +50,10 @@ If you want to have an immutable element within a [`data-ajax-cart-section`](/v2
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
 
-## Multiple immutable containers
+## Multiple immutable elements
 
-If you have a few `data-ajax-cart-static-element` elements — give them different names:
+If you have a few `data-ajax-cart-static-element` elements — give them different names 
+so that Liquid Ajax Cart can distinguish them after HTML update:
 
 {%- capture highlight_code -%}
 {% raw %}

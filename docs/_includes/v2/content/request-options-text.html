@@ -6,9 +6,9 @@ The `options` parameter is an object, and it might have the following properties
 
 The `firstComplete` parameter is a callback function that **will be called first** after the request is performed
 and **before** any other callback functions, that are subscribed to the request, are called.
-Thus, this function will be called **before** Liquid Ajax Cart starts updating the [Cart state](/v2/docs/cart-state/) object,
+Thus, this function will be called **before** Liquid Ajax Cart starts updating the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object,
 the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements,
-the [`data-ajax-cart-bind-state`](/v2/docs/data-ajax-cart-bind-state/) elements,
+the [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) elements,
 the global CSS classes.
 
 The `firstComplete` function will be called with the only parameter — the [Request state](/v2/docs/request-state/) object.
@@ -17,13 +17,10 @@ The `firstComplete` function will be called with the only parameter — the [Req
 
 The `lastComplete` parameter is a callback function that **will be called last** after the request is performed
 and **after** any other callback functions, that are subscribed to the request, are called.
-Thus, this function will be called **after** Liquid Ajax Cart updates the [Cart state](/v2/docs/cart-state/) object,
+Thus, this function will be called **after** Liquid Ajax Cart updates the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object,
 the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements,
-the [`data-ajax-cart-bind-state`](/v2/docs/data-ajax-cart-bind-state/) elements,
+the [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) elements,
 the global CSS classes.
-
-You can use the [`state`](/v2/docs/liquid-ajax-cart-state/) property of the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart/) object
-to read the [Cart state](/v2/docs/cart-state/) and safely manipulate the DOM from this function.
 
 The `lastComplete` function will be called with the only parameter — the [Request state](/v2/docs/request-state/) object.
 
