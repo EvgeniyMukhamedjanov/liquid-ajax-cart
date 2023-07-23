@@ -37,8 +37,8 @@ links_v2:
 
         - title: Extension with JS
           links:
-            - title: Overview
-              file: test
+            - title: Lifecycle, events, API
+              file: lifecycle-events-api
             - title: Ready snippets
               file: js-snippets
 
@@ -89,24 +89,28 @@ links_v2:
         - title: CSS classes
           eyebrow: CSS class
           links:
+            - title: js-ajax-cart-init
+              file: js-ajax-cart-init
             - title: js-ajax-cart-empty
               file: js-ajax-cart-empty
             - title: js-ajax-cart-not-empty
               file: js-ajax-cart-not-empty
             - title: js-ajax-cart-processing
               file: js-ajax-cart-processing
-            - title: js-ajax-cart-set
-              file: js-ajax-cart-set
 
         - title: Events
           eyebrow: Event
           links:
             - title: liquid-ajax-cart:init
-              file: init-event
-            - title: liquid-ajax-cart:request
-              file: request-event
-            - title: liquid-ajax-cart:sections
-              file: sections-event
+              file: event-init
+            - title: liquid-ajax-cart:queue-start
+              file: event-queue-start
+            - title: liquid-ajax-cart:queue-end
+              file: event-queue-end
+            - title: liquid-ajax-cart:request-start
+              file: event-request-start
+            - title: liquid-ajax-cart:request-end
+              file: event-request-end
 
         - title: JavaScript API
           links:
@@ -122,10 +126,12 @@ links_v2:
               file: liquid-ajax-cart-update
             - title: clear()
               file: liquid-ajax-cart-clear
+            - title: init
+              file: liquid-ajax-cart-init
             - title: cart
               file: liquid-ajax-cart-cart
-            - title: previousCart
-              file: liquid-ajax-cart-previous-cart
+            - title: processing
+              file: liquid-ajax-cart-processing
             - title: conf()
               file: liquid-ajax-cart-conf
 

@@ -1,9 +1,9 @@
 import {
   RequestStateType,
-  EventRequestStartType
+  EventRequestStartType, EventRequestEndType
 } from './ts-types';
 
-import {EVENT_REQUEST_START, REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
+import {EVENT_REQUEST_END, EVENT_REQUEST_START, REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
 import {getCartState} from './state';
 import {settings} from './settings';
 import {DATA_ATTR_PREFIX} from "./const";
@@ -17,16 +17,9 @@ function getRequestError(requestState: RequestStateType): string {
 
   if (requestState.responseData?.ok) return '';
 
-  if ('responseData' in requestState) {
-    if ('description' in requestState.responseData.body && requestState.responseData.body.description) {
-      return <string>requestState.responseData.body.description
-    }
-    if ('message' in requestState.responseData.body && requestState.responseData.body.message) {
-      return <string>requestState.responseData.body.message
-    }
-  }
-
-  return requestErrorText;
+  return <string>requestState.responseData?.body?.description
+    || <string>requestState.responseData?.body?.message
+    || requestErrorText;
 }
 
 const changeRequestContainers = (requestState: RequestStateType): NodeListOf<Element> => {
@@ -89,10 +82,12 @@ const addRequestContainers = (requestState: RequestStateType): NodeListOf<Elemen
 }
 
 const cartMessagesInit = () => {
-  document.addEventListener(EVENT_REQUEST_START, (event: EventRequestStartType) => {
-    const {requestState, onResult} = event.detail;
+  let errorContainers: NodeListOf<Element> | undefined;
 
-    let errorContainers: NodeListOf<Element>;
+  document.addEventListener(EVENT_REQUEST_START, (event: EventRequestStartType) => {
+    const {requestState} = event.detail;
+
+    errorContainers = undefined;
 
     if (requestState.requestType === REQUEST_ADD)
       errorContainers = addRequestContainers(requestState);
@@ -103,18 +98,21 @@ const cartMessagesInit = () => {
       errorContainers.forEach((element) => {
         element.textContent = '';
       });
-
-      onResult((requestState) => {
-        if (requestState.info.cancel) return;
-
-        const errorMessage = getRequestError(requestState);
-        if (errorMessage) {
-          errorContainers.forEach((element: Element) => {
-            element.textContent = errorMessage;
-          });
-        }
-      });
     }
+  });
+
+  document.addEventListener(EVENT_REQUEST_END, (event: EventRequestEndType) => {
+    const {requestState} = event.detail;
+    if (requestState.info.cancel) return;
+
+    if (!errorContainers || errorContainers.length === 0) return;
+
+    const errorMessage = getRequestError(requestState);
+    if (!errorMessage) return;
+
+    errorContainers.forEach((element: Element) => {
+      element.textContent = errorMessage;
+    });
   });
 };
 

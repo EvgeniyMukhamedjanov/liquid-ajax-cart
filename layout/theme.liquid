@@ -142,15 +142,27 @@
 {% section 'my-cart' %}
 {{ 'liquid-ajax-cart.css' | asset_url | stylesheet_tag }}
 
+<script type="application/json" data-ajax-cart-initial-state>
+  {{ cart | json }}
+</script>
+
 
 <script type="module">
   import '{{ 'liquid-ajax-cart.js' | asset_url }}';
 
+  console.log("Is Liquid Ajax Cart initialized: ",  window.liquidAjaxCart.init);
+  window.liquidAjaxCart.conf('updateOnWindowFocus', false);
+
   function liquidAjaxCartInit() {
-    console.log(123);
+    // console.log(123);
   }
 
   document.addEventListener('liquid-ajax-cart:init', liquidAjaxCartInit);
+
+  setTimeout(() => {
+    // console.log(window.liquidAjaxCart.init);
+  }, 0)
+  // console.log(liquidAjaxCart.init);
 
   liquidAjaxCart.conf('binderFormatters', {
     'my_money_with_currency': value => {
@@ -183,9 +195,15 @@
   //   liquidAjaxCart.get({important: true});
   // });
 
+  document.addEventListener('liquid-ajax-cart:request-start', event => {
+    // event.detail.requestState.info.cancel = true;
+    // console.log(event.detail);
+  });
+
   // subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
   document.addEventListener('liquid-ajax-cart:request-end', event => {
-    const {requestState} = event.detail;
+    const {requestState, cart, previousCart} = event.detail;
+    console.log(cart, previousCart);
 
     if (requestState.requestType === 'add') {
       const checkbox = document.getElementById('addToCartPopupCheckbox');

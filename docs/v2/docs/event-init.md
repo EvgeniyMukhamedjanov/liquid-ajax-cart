@@ -12,6 +12,7 @@ The `liquid-ajax-cart:init` event is fired at the `document` when Liquid Ajax Ca
 
 ## Use case
 
-Use this event if you want to make sure that your JavaScript will be run after Liquid Ajax Cart is loaded.
+Use this event along with the [`liquidAjaxCart.init`](/v2/docs/liquid-ajax-cart-init/) property
+when you want to run your JavaScript once Liquid Ajax Cart is initialized.
 
 {% include v2/content/init-event-example.html %}

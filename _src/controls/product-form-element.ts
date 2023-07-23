@@ -2,7 +2,7 @@ import {cartRequestAdd} from "../ajax-api";
 import {CUSTOM_ELEMENT_PREFIX} from "../const";
 
 const ELEMENT_TAG = `${CUSTOM_ELEMENT_PREFIX}-product-form`;
-const DATA_ATTR_LOADING = 'in-progress';
+const DATA_ATTR_LOADING = 'processing';
 
 class HTMLProductFormElement extends HTMLElement {
   constructor() {

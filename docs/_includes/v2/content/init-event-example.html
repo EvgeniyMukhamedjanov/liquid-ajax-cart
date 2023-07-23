@@ -1,18 +1,17 @@
 {%- capture highlight_code -%}
 
-function runIfLiquidAjaxCartLoaded() {
-  // access cart state using "liquidAjaxCart" object:
-  // "liquidAjaxCart" object is available on "window"
-  // only after Liquid Ajax Cart is loaded
-  console.log(window.liquidAjaxCart.state);
+function runWhenLiquidAjaxCartInit() {
+  // access the "cart" property of the "liquidAjaxCart" object,
+  // which is available after Liquid Ajax Cart is initialized:
+  console.log(window.liquidAjaxCart.cart);
 }
 
-if ("liquidAjaxCart" in window) {
-  // if Liquid Ajax Cart is already loaded
-  runIfLiquidAjaxCartLoaded();
+if (window.liquidAjaxCart?.init) {
+  // if Liquid Ajax Cart is already initialized
+  runWhenLiquidAjaxCartInit();
 } else {
-  // wait Liquid Ajax Cart to be loaded
-  document.addEventListener("liquid-ajax-cart:init", runIfLiquidAjaxCartLoaded);
+  // wait for Liquid Ajax Cart to be initialized
+  document.addEventListener("liquid-ajax-cart:init", runWhenLiquidAjaxCartInit);
 }
 
 {%- endcapture -%}

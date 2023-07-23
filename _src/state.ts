@@ -17,7 +17,6 @@ let previousCart: AppStateCartType | undefined = undefined
 function cartStateInit(): Promise<void> {
 
   document.addEventListener(EVENT_REQUEST_END, (event: EventRequestEndType) => {
-    event.detail.cartUpdated = false;
     const {requestState} = event.detail;
     let newCart: AppStateCartType;
     if (requestState.extraResponseData?.ok && requestState.extraResponseData.body.token) {
@@ -29,7 +28,9 @@ function cartStateInit(): Promise<void> {
     if (newCart) {
       previousCart = cart;
       cart = newCart;
-      event.detail.cartUpdated = true;
+
+      event.detail.previousCart = previousCart;
+      event.detail.cart = cart;
     }
   });
 

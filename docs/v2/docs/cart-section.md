@@ -283,7 +283,7 @@ if you want to run your JavaScript code when the [`data-ajax-cart-section`](/v2/
 
 For example, you might need to attach event listeners to elements 
 inside the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container
-each time when it is update,
+each time when it is updated,
 because Liquid Ajax Cart replaces its HTML with a new one on each re-render. 
 
 {% include v2/content/sections-event-code-example.html %}

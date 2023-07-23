@@ -1,13 +1,13 @@
 ---
-title: js-ajax-cart-set
+title: js-ajax-cart-init
 layout: docs-v2
 disable_toc: true
 ---
 
-# js-ajax-cart-set
+# js-ajax-cart-init
 
 <p class="lead" markdown="1">
-Liquid Ajax Cart adds the `js-ajax-cart-set` CSS class to the `html` tag when it is successfully loaded.
+Liquid Ajax Cart adds the `js-ajax-cart-init` CSS class to the `html` tag when it is successfully loaded and initialized.
 </p>
 
 ## Example
@@ -39,7 +39,7 @@ Hiding the "Update" button on the cart page, as all the elements are ajaxified a
 {% include v2/codeblock.html title="sections/main-cart.liquid" language="liquid" code=highlight_code %}
 
 {%- capture highlight_code -%}
-html.js-ajax-cart-set .my-cart-page__update-button {
+html.js-ajax-cart-init .my-cart-page__update-button {
   display: none;
 }
 {%- endcapture -%}

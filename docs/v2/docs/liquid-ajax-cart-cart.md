@@ -6,20 +6,26 @@ layout: docs-v2
 # liquidAjaxCart.cart
 
 <p class="lead" markdown="1">
-A read-only property that keeps the cart JSON from the latest Shopify Cart API Ajax response. 
+A read-only property that keeps the current cart state data. 
 </p>
 
 ## How it works
 
-If a Shopify Cart API Ajax request is successful, Liquid Ajax Cart moves the current `liquidAjaxCart.cart` property value
-to the [`liquidAjaxCart.previousCart`](/v2/docs/liquid-ajax-cart-previous-cart/) property,
-pulls out the updated cart JSON from the request response and saves it in the `liquidAjaxCart.cart` property.
+After each successful Shopify Cart API Ajax request, Liquid Ajax Cart pulls the cart state data from the response and remembers the data.
+If a request is successful but the response doesn't have the cart state data (the `/cart/add.js` response is the case),
+Liquid Ajax Cart performs an additional `/cart/update.js` request to get the data.
+
+Use the `liquidAjaxCart.cart` property to read the latest cart state data.
+
+As the `liquidAjaxCart.cart` is updated after a Shopify Cart API Ajax request, 
+listen to the [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) event 
+if you need to run your JavaScript when the cart state is updated.  
 
 ## Structure
 
 {%- capture highlight_code -%}
 
-console.log(liquidAjaxCart.cart);
+console.log(window.liquidAjaxCart.cart);
 
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}

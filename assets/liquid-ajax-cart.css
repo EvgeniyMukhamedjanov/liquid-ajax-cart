@@ -187,11 +187,11 @@ form[action="/cart/add"] button:after {
     opacity: 0;
     transition: all .3s;
 }
-ajax-cart-product-form[in-progress] [type="submit"] {
+ajax-cart-product-form[processing] [type="submit"] {
 	opacity: .7;
 	background-color: gray;
 }
-ajax-cart-product-form[in-progress] [type="submit"]:after {
+ajax-cart-product-form[processing] [type="submit"]:after {
 	opacity: 1;
 }
 
@@ -218,7 +218,7 @@ ajax-cart-product-form[in-progress] [type="submit"]:after {
 	display: none;
 }
 
-.js-ajax-cart-set .cart-page-link .cart-count {
+.js-ajax-cart-not-empty .cart-page-link .cart-count {
 	display: inline;
 }
 .js-ajax-cart-empty .cart-page-link .cart-count {

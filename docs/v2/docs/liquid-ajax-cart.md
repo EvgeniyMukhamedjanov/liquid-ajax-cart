@@ -16,10 +16,11 @@ The object exposes the methods and properties of the Liquid Ajax Cart library.
 * [`add()`](/v2/docs/liquid-ajax-cart-add/) — makes a `POST /cart/add.js` request;
 * [`change()`](/v2/docs/liquid-ajax-cart-change/) — makes a `POST /cart/change.js` request;
 * [`update()`](/v2/docs/liquid-ajax-cart-update/) — makes a `POST /cart/update.js` request;
-* [`clear()`](/v2/docs/liquid-ajax-cart-get/) — makes a `POST /cart/clear.js` request;
-* [`cart`](/v2/docs/liquid-ajax-cart-cart/) — current cart state JSON;
-* [`previousCart`](/v2/docs/liquid-ajax-cart-previous-cart/) — previous cart state JSON;
-* [`conf()`](/v2/docs/liquid-ajax-cart-conf/) — sets configuration parameter values;
+* [`clear()`](/v2/docs/liquid-ajax-cart-clear/) — makes a `POST /cart/clear.js` request;
+* [`init`](/v2/docs/liquid-ajax-cart-init/) — initialization status;
+* [`cart`](/v2/docs/liquid-ajax-cart-cart/) — current cart state data;
+* [`processing`](/v2/docs/liquid-ajax-cart-processing/) — `true` if there is a request in progress now;
+* [`conf()`](/v2/docs/liquid-ajax-cart-conf/) — sets configuration parameter values.
 
 ## Access via `import`
 
@@ -60,7 +61,7 @@ import liquidAjaxCart from "liquid-ajax-cart";
 Once Liquid Ajax Cart is installed, the `liquidAjaxCart` object is available globally as a `window` property.
 
 Before accessing it from the `window` object, make sure that Liquid Ajax Cart is loaded.
-If it is not loaded yet, subscribe to the [`liquid-ajax-cart:init`](/v2/docs/init-event/) event 
+If it is not loaded yet, subscribe to the [`liquid-ajax-cart:init`](/v2/docs/event-init/) event 
 and use the `window.liquidAjaxCart` after the event is fired:
 
 {% include v2/content/init-event-example.html %}

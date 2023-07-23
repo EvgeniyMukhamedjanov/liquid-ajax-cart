@@ -108,9 +108,6 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
         endpoint,
         info,
         requestBody
-      },
-      onResult: (resultCallback: RequestResultCallback) => {
-        resultSubscribers.push(resultCallback)
       }
     }
   });
@@ -121,6 +118,7 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
   }
 
   if (info.cancel) {
+    requestState.responseData = null;
     cartRequestFinally(resultSubscribers, finalCallback, requestState);
     return;
   }
@@ -199,6 +197,7 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
   }).catch(error => {
     console.error('Liquid Ajax Cart: Error while performing cart Ajax request')
     console.error(error);
+    requestState.responseData = null;
     requestState.fetchError = error;
   }).finally(() => {
     cartRequestFinally(resultSubscribers, finalCallback, requestState);

@@ -26,7 +26,7 @@ export type RequestStateType = {
     ok: boolean,
     status: number,
     body: JSONObjectType
-  },
+  } | null,
   extraResponseData?: {
     ok: boolean,
     status: number,
@@ -42,19 +42,16 @@ export type CartRequestOptionsType = {
   important?: boolean
 }
 
-export type PostRequestFunctionType = (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void;
-
 export type RequestResultCallback = (requestState: RequestStateType) => void;
-export type RequestResultSubscriberType = (resultCallback: RequestResultCallback) => void;
 
 export type EventQueueType = CustomEvent;
 export type EventRequestStartType = CustomEvent<{
-  requestState: RequestStateType,
-  onResult: RequestResultSubscriberType
+  requestState: RequestStateType
 }>
 export type EventRequestEndType = CustomEvent<{
   requestState: RequestStateType,
-  cartUpdated?: boolean,
+  cart?: AppStateCartType | undefined,
+  previousCart?: AppStateCartType | undefined,
   sections?: Array<UpdatedSectionType>
 }>
 
@@ -98,15 +95,14 @@ declare global {
   interface Window {
     liquidAjaxCart: {
       conf: (property: string, value: ConfigurationValue) => void,
-      get: (options: CartRequestOptionsType | undefined) => void,
-      add: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
-      change: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
-      update: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
-      clear: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
-      cart: AppStateCartType,
-      previousCart: AppStateCartType | undefined,
-      processing: boolean,
-      init: boolean
+      get?: (options: CartRequestOptionsType | undefined) => void,
+      add?: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
+      change?: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
+      update?: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
+      clear?: (body: RequestBodyType, options: CartRequestOptionsType | undefined) => void,
+      cart?: AppStateCartType,
+      processing?: boolean,
+      init?: boolean
     }
     Shopify?: {
       locale?: String,
