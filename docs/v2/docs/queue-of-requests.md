@@ -106,9 +106,9 @@ button.addEventListener('click', () => {
       }
     ]  
   }, {
-    // The lastComplete callback function will be run 
+    // The lastCallback callback function will be run 
     // after the /cart/add.js request is finished
-    lastComplete: function(requestState) {
+    lastCallback: function(requestState) {
       if (/* condition based on the /cart/add.js requestState */) {
 
         // Run the /cart/change.js request with the "important" option,
@@ -131,7 +131,7 @@ Liquid Ajax Cart will add a `/cart/update.js` request to update the cart note. T
 {%- endcapture -%}
 {% include v2/codeblock.html language="plain" code=highlight_code %}
 
-When the `/cart/add.js` request is just finished, the `lastComplete` callback gets called,
+When the `/cart/add.js` request is just finished, the `lastCallback` callback gets called,
 and the `/cart/change.js` request gets added to the first position in the Queue rather than to the end,
 because the `important` option is set to `true` for that request:
 {%- capture highlight_code -%}

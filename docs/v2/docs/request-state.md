@@ -102,4 +102,4 @@ attach custom data or cancel the request by mutating the `info` object.
 
 While making a Shopify Cart API Ajax request by {% include v2/content/links-to-request-methods.html %},
 you can attach custom data by using the `info` option and get the access to the Request state object
-in the `firstComplete`, `lastComplete` callback functions.
+in the `firstCallback`, `lastCallback` callback functions.

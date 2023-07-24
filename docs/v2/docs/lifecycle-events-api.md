@@ -161,7 +161,7 @@ This is what happens when a user clicks the "Add to cart" button:
 7. The [`data-ajax-cart-quantity-input`](/v2/docs/data-ajax-cart-quantity-input/) and [`data-ajax-cart-property-input`](/v2/docs/data-ajax-cart-property-input/) input values get updated according to the cart state data;
 8. The [`js-ajax-cart-empty`](/v2/docs/js-ajax-cart-empty/), [`js-ajax-cart-not-empty`](/v2/docs/js-ajax-cart-not-empty/) CSS classes get updated according to the cart state data;
 9. **Liquid Ajax Cart triggers the [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) event**;
-10. The `lastComplete` request's callback is called, if defined;
+10. The `lastCallback` request's callback is called, if defined;
 11. The request gets removed from the [Queue of requests](/v2//docs/queue-of-requests/);
 
 ### 4. Finishing the Queue

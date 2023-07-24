@@ -36,7 +36,7 @@ class HTMLProductFormElement extends HTMLElement {
         $element.setAttribute(DATA_ATTR_LOADING, '');
 
         cartRequestAdd(formData, {
-          lastComplete: () => {
+          lastCallback: () => {
             $element.removeAttribute(DATA_ATTR_LOADING)
           },
           info: {

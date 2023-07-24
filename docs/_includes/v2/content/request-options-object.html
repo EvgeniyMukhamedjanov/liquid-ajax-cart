@@ -1,5 +1,5 @@
 const options = {
-  firstComplete: function(requestState) {
+  firstCallback: function(requestState) {
     /**
      * This callback function will be called first after the request is performed,
      * thus none of request subscribers knows the result of the request,
@@ -7,7 +7,7 @@ const options = {
      * everything is not updated yet.
      */
   },
-  lastComplete: function(requestState) {
+  lastCallback: function(requestState) {
     /**
      * This callback-function will be called the latest
      * among request subscribers,

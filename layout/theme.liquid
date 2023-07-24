@@ -184,6 +184,7 @@
   // Open cart on "add to cart"
   document.addEventListener('liquid-ajax-cart:request-end', event => {
     const {requestState} = event.detail;
+    console.log("request-end");
     if (requestState.requestType === 'add' && requestState.responseData?.ok) {
       document.querySelector('html').classList.add('js-ajax-cart-open');
     }
@@ -196,6 +197,7 @@
   // });
 
   document.addEventListener('liquid-ajax-cart:request-start', event => {
+    console.log("request-start");
     // event.detail.requestState.info.cancel = true;
     // console.log(event.detail);
   });
@@ -254,6 +256,9 @@
           liquidAjaxCart.change({
             "line": autoAddedLineItem + 1,
             "quantity": 0
+          }, {
+            firstCallback: () => {console.log("first complete")},
+            lastCallback: () => {console.log("last complete")}
           });
         }
       }

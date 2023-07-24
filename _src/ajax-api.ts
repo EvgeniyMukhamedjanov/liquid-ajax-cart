@@ -7,7 +7,6 @@ import {
   JSONObjectType,
   RequestBodyType,
   RequestStateInfoType,
-  RequestResultCallback,
   JSONValueType,
 } from './ts-types';
 
@@ -84,7 +83,7 @@ function setProcessingStatus(value: boolean) {
   document.dispatchEvent(event);
 }
 
-function cartRequest(requestType: string, body: RequestBodyType, options: CartRequestOptionsType, finalCallback: () => void | undefined = undefined) {
+function cartRequest(requestType: string, body: RequestBodyType, options: CartRequestOptionsType, finalCallback: () => void) {
   const endpoint = getEndpoint(requestType);
   let requestBody: RequestBodyType = undefined;
   if (requestType !== REQUEST_GET) {
@@ -92,7 +91,6 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
   }
   const method: string = requestType === REQUEST_GET ? 'GET' : 'POST';
   const info: RequestStateInfoType = options.info || {};
-  const resultSubscribers: RequestResultCallback[] = 'firstComplete' in options ? [options.firstComplete] : [];
   const requestState: RequestStateType = {
     requestType,
     endpoint,
@@ -113,13 +111,9 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
   });
   document.dispatchEvent(event);
 
-  if ('lastComplete' in options) {
-    resultSubscribers.push(options.lastComplete);
-  }
-
   if (info.cancel) {
     requestState.responseData = null;
-    cartRequestFinally(resultSubscribers, finalCallback, requestState);
+    cartRequestFinally(options, finalCallback, requestState);
     return;
   }
 
@@ -200,15 +194,24 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
     requestState.responseData = null;
     requestState.fetchError = error;
   }).finally(() => {
-    cartRequestFinally(resultSubscribers, finalCallback, requestState);
+    cartRequestFinally(options, finalCallback, requestState);
   });
 }
 
 function cartRequestFinally(
-  resultSubscribers: RequestResultCallback[],
+  options: CartRequestOptionsType,
   finalCallback: () => void | undefined,
   requestState: RequestStateType
 ) {
+  if ('firstCallback' in options) {
+    try {
+      options.firstCallback(requestState);
+    } catch (e) {
+      console.error('Liquid Ajax Cart: Error in request "firstCallback" function');
+      console.error(e);
+    }
+  }
+
   const event: EventRequestEndType = new CustomEvent(EVENT_REQUEST_END, {
     detail: {
       requestState
@@ -216,22 +219,16 @@ function cartRequestFinally(
   });
   document.dispatchEvent(event);
 
-  resultSubscribers.forEach(callback => {
+  if ('lastCallback' in options) {
     try {
-      callback(requestState);
+      options.lastCallback(requestState);
     } catch (e) {
-      console.error('Liquid Ajax Cart: Error during Ajax request result callback in ajax-api');
-      console.error(e);
-    }
-  });
-  if (finalCallback) {
-    try {
-      finalCallback();
-    } catch (e) {
-      console.error('Liquid Ajax Cart: Error during Ajax request final internal callback in ajax-api');
+      console.error('Liquid Ajax Cart: Error in request "lastCallback" function');
       console.error(e);
     }
   }
+
+  finalCallback();
 }
 
 function extraRequest(sections: string[] = []): Promise<{ ok: boolean, status: number, body: JSONObjectType }> {

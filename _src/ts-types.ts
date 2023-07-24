@@ -36,13 +36,11 @@ export type RequestStateType = {
 }
 
 export type CartRequestOptionsType = {
-  firstComplete?: (requestState: RequestStateType) => void,
-  lastComplete?: (requestState: RequestStateType) => void,
+  firstCallback?: (requestState: RequestStateType) => void,
+  lastCallback?: (requestState: RequestStateType) => void,
   info?: RequestStateInfoType,
   important?: boolean
 }
-
-export type RequestResultCallback = (requestState: RequestStateType) => void;
 
 export type EventQueueType = CustomEvent;
 export type EventRequestStartType = CustomEvent<{
