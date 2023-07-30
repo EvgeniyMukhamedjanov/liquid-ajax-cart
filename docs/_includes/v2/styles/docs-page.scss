@@ -1,7 +1,45 @@
+@keyframes appear-animation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes loading-animation {
+  0% {
+    opacity: 1;
+    width: 0;
+  }
+  100% {
+    opacity: 1;
+    width: 90%;
+  }
+}
+
 .docs-page {
   display: grid;
   grid-template-columns: 17rem 1fr 17rem;
   gap: 3rem;
+
+  &:before {
+    content: '';
+    position: fixed;
+    top: 0;
+    height: .25rem;
+    left: 0;
+    background-color: #0A7307;
+    z-index: 4;
+    width: 100%;
+    opacity: 0;
+    transition: 1s;
+
+    .js-docs-page-loading & {
+      opacity: 1;
+      animation: loading-animation 3s forwards;
+    }
+  }
 }
 
 .docs-page__breadcrumbs {
@@ -17,6 +55,7 @@
   top: var(--header-height);
   padding-top: .25rem;
   height: calc(99vh - .25rem - var(--header-height));
+  animation: appear-animation .3s;
 
   &:before {
     content: '';
@@ -77,4 +116,6 @@
 .docs-page__content {
   overflow: auto;
   padding: 1.85rem 0 0;
+
+  animation: appear-animation .3s;
 }

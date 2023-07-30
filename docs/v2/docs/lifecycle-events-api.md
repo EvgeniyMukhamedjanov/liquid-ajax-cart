@@ -415,12 +415,4 @@ When you directly call one of {% include v2/content/links-to-request-methods.htm
 you can define the <code>lastCallback</code> function.
 </div>
 </li>
-
-<li class="steps-list__step">
-<div class="steps-list__badge-list"></div>
-<div class="steps-list__title"></div>
-<div class="steps-list__content" markdown="1">
-The request gets removed from the [Queue of requests](/v2/docs/queue-of-requests/);
-</div>
-</li>
 </ul>
