@@ -6,8 +6,7 @@ layout: docs-v2
 # liquidAjaxCart.init
 
 <p class="lead" markdown="1">
-A boolean read-only property which is `false` once Liquid Ajax Cart is loaded.
-It becomes `true` when Liquid Ajax Cart is successfully initialized.
+A boolean read-only property which becomes `true` once Liquid Ajax Cart is initialized.
 </p>
 
 ## Use case
