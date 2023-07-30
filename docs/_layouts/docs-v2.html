@@ -5,10 +5,11 @@ h_min: 2
 
 <style>
   {% capture critical_css %}
-  {% include v2/styles/docs-page.scss %}
-  {% include v2/styles/tabs.scss %}
   {% include v2/styles/side-menu.scss %}
   {% include v2/styles/markdown.scss %}
+  {% include v2/styles/docs-page.scss %}
+  {% include v2/styles/tabs.scss %}
+  {% include v2/styles/steps-list.scss %}
   {% endcapture %}
   {{ critical_css | scssify }}
 </style>

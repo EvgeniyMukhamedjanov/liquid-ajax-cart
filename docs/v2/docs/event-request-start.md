@@ -6,7 +6,7 @@ layout: docs-v2
 # liquid-ajax-cart:request-start
 
 <p class="lead" markdown="1">
-The `liquid-ajax-cart:request-start` event is fired at the `document` when a moment before a Shopify Cart API Ajax request is performed.
+The `liquid-ajax-cart:request-start` event is fired at the `document` a moment before a Shopify Cart API Ajax request is performed.
 You can read, modify or cancel the request.
 </p>
 

@@ -144,13 +144,14 @@
 
 <script type="application/json" data-ajax-cart-initial-state>
   {{ cart | json }}
+
 </script>
 
 
 <script type="module">
   import '{{ 'liquid-ajax-cart.js' | asset_url }}';
 
-  console.log("Is Liquid Ajax Cart initialized: ",  window.liquidAjaxCart.init);
+  console.log("Is Liquid Ajax Cart initialized: ", window.liquidAjaxCart.init);
   window.liquidAjaxCart.conf('updateOnWindowFocus', false);
 
   function liquidAjaxCartInit() {
@@ -184,7 +185,6 @@
   // Open cart on "add to cart"
   document.addEventListener('liquid-ajax-cart:request-end', event => {
     const {requestState} = event.detail;
-    console.log("request-end");
     if (requestState.requestType === 'add' && requestState.responseData?.ok) {
       document.querySelector('html').classList.add('js-ajax-cart-open');
     }
@@ -221,46 +221,66 @@
     }
   });
 
+  // line item property to distinguish the line item
+  // that was automatically added by the script
+  const AUTOADDED_PROP = '_autoadded';
+
   // subscribeToCartStateUpdate( state => {
   document.addEventListener('liquid-ajax-cart:queue-end', event => {
+    // The current cart state
     const cart = liquidAjaxCart.cart;
-    const promoVariant = 40934235668668;
-    const promoSubtotal = 10000;
 
-    if (!(liquidAjaxCart.processing)) {
+    // The variant ID of the promo-product, that should be automatically added
+    const variant = 40934235668668;
 
-      let currentSubtotal = cart.items_subtotal_price;
+    // The product should be added when the cart total is $100 or higher
+    const threshold = 10000;
 
-      const autoAddedLineItem = cart.items.findIndex(lineItem => {
-        return lineItem.properties?._autoadded === 'Yes';
+    // The variable to keep the cart total price
+    // that will be compared with the threshold.
+    let total = cart.items_subtotal_price;
+    // If the promo-product is already automatically added to the cart,
+    // and it is not free, we should subtract its price from the cart total
+    // before comparing with the threshold
+    // in order to understand if the promo-product has to be removed.
+    const autoAddedLineItem = cart.items.findIndex(lineItem => {
+      return lineItem.properties?.[AUTOADDED_PROP] === 'Yes';
+    });
+    if (autoAddedLineItem > -1) {
+      total -= cart.items[autoAddedLineItem].final_line_price;
+    }
+
+    // Compare the cart total that doesn't include
+    // the possibly automatically added product
+    if (total >= threshold) {
+
+      // If the total price is equal or higher than the threshold,
+      // and the cart doesn't contain the promo-product —
+      // add the promo-product automatically.
+      const promoVariantLineItem = cart.items.findIndex(lineItem => {
+        return lineItem.variant_id === variant && lineItem.discounts.length > 0;
       });
-      if (autoAddedLineItem > -1) {
-        currentSubtotal -= cart.items[autoAddedLineItem].final_line_price;
-      }
-
-      if (currentSubtotal >= promoSubtotal) {
-        const promoVariantLineItem = cart.items.findIndex(lineItem => {
-          return lineItem.variant_id === promoVariant && lineItem.discounts.length > 0;
+      if (promoVariantLineItem === -1) {
+        liquidAjaxCart.add({
+          items: [{
+            id: variant,
+            quantity: 1,
+            properties: {[AUTOADDED_PROP]: "Yes"}
+          }]
         });
-        if (promoVariantLineItem === -1) {
-          liquidAjaxCart.add({
-            items: [{
-              id: promoVariant,
-              quantity: 1,
-              properties: {"_autoadded": "Yes"}
-            }]
-          });
-        }
-      } else {
-        if (autoAddedLineItem > -1) {
-          liquidAjaxCart.change({
-            "line": autoAddedLineItem + 1,
-            "quantity": 0
-          }, {
-            firstCallback: () => {console.log("first complete")},
-            lastCallback: () => {console.log("last complete")}
-          });
-        }
+      }
+    } else {
+
+      // If the total price is lower than the threshold,
+      // and the cart contains the automatically added promo-product —
+      // remove the promo-product from there.
+      // If the promo-product was added manually by the user —
+      // it won't be removed.
+      if (autoAddedLineItem > -1) {
+        liquidAjaxCart.change({
+          "line": autoAddedLineItem + 1,
+          "quantity": 0
+        });
       }
     }
   });

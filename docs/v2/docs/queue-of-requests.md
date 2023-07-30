@@ -23,7 +23,9 @@ If there are no other requests in the Queue, the `/cart/change.js` request will 
 {%- endcapture -%}
 {% include v2/codeblock.html language="plain" code=highlight_code %}
 
-Once the Queue gets not empty, Liquid Ajax Cart begins executing requests according to their order.
+Once the Queue isn't empty, Liquid Ajax Cart switches to the "processing requests" mode
+and executes requests according to their order.
+
 As the `/cart/change.js` is the first in the Queue, it will be executed right away.
 
 {%- capture highlight_code -%}
@@ -32,7 +34,7 @@ As the `/cart/change.js` is the first in the Queue, it will be executed right aw
 {% include v2/codeblock.html language="plain" code=highlight_code %}
 
 Imagine, while the `/cart/change.js` is executing, the user submits two product forms.
-Liquid Ajax Cart will have to send two Shopify Cart API `/cart/add.js` Ajax requests to add the products to the cart.
+Liquid Ajax Cart will need to perform two Shopify Cart API `/cart/add.js` Ajax requests to add the products to the cart.
 As the Queue is not empty, the requests will go to the end of the Queue:
 
 {%- capture highlight_code -%}
