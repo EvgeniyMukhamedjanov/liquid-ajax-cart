@@ -1,0 +1,9 @@
+{%- capture highlight_code -%}
+document.addEventListener("liquid-ajax-cart:request-start", function(event) {
+  const {requestState} = event.detail;
+
+  // Print the requestState before the request is performed
+  console.log(requestState);
+});
+{%- endcapture -%}
+{% include v2/codeblock.html language="javascript" code=highlight_code %}

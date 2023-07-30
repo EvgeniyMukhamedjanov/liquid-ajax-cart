@@ -1,0 +1,8 @@
+{%- capture highlight_code -%}
+document.addEventListener("liquid-ajax-cart:sections", function(event) {
+  // Print the updated sections
+  const updatedSections = event.detail;
+  console.log("Sections are re-rendered: ", updatedSections);
+})
+{%- endcapture -%}
+{% include v2/codeblock.html title="script.js" language="javascript" code=highlight_code %}

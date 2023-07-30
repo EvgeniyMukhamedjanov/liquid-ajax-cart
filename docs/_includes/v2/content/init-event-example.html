@@ -1,0 +1,18 @@
+{%- capture highlight_code -%}
+
+function runWhenLiquidAjaxCartInit() {
+  // access the "cart" property of the "liquidAjaxCart" object,
+  // which is available after Liquid Ajax Cart is initialized:
+  console.log(window.liquidAjaxCart.cart);
+}
+
+if (window.liquidAjaxCart?.init) {
+  // if Liquid Ajax Cart is already initialized
+  runWhenLiquidAjaxCartInit();
+} else {
+  // wait for Liquid Ajax Cart to be initialized
+  document.addEventListener("liquid-ajax-cart:init", runWhenLiquidAjaxCartInit);
+}
+
+{%- endcapture -%}
+{% include v2/codeblock.html title="assets/script.js" language="javascript" code=highlight_code %}

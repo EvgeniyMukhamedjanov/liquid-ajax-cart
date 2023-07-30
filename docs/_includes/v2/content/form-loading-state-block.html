@@ -1,0 +1,22 @@
+## Loading state
+
+When the `<ajax-cart-product-form>` element sends an Ajax request,
+it adds the `processing` attribute to itself and freezes the "Add to cart" button.
+Use the attribute to indicate that the product form is adding a product to the cart.
+
+{%- capture highlight_code -%}
+
+/* Show a loading indicator */
+ajax-cart-product-form[processing]:before {
+  content: 'Loading';
+  display: block;
+}
+
+/* Make the "Add to cart" button look visually disabled while loading */
+ajax-cart-product-form[processing] [type="submit"] {
+  opacity: .7;
+  pointer-events: none;
+}
+
+{%- endcapture -%}
+{% include v2/codeblock.html title="assets/style.css" language="css" code=highlight_code %}

@@ -11,6 +11,141 @@ license:
   docs: CC BY 3.0
   docs_url: https://creativecommons.org/licenses/by/3.0/
 
+links_v2:
+  main:
+    - title: Home
+      url: /
+    - title: Documentation
+      url: /v2/docs/
+    - title: Download
+      url: /v2/releases/
+
+  docs:
+    - title: Guides
+      eyebrow: Guide
+      subsections:
+        - title: Setup
+          links:
+            - title: Installation
+              file: index
+            - title: Cart section
+              file: cart-section
+            - title: Product forms
+              file: product-forms
+            - title: Cart totals in header
+              file: cart-totals-in-header
+
+        - title: Extension with JS
+          links:
+            - title: Lifecycle, events, API
+              file: lifecycle-events-api
+            - title: Ready snippets
+              file: js-snippets
+
+    - title: Reference
+      subsections:
+        - title: Core concepts
+          eyebrow: Core concept
+          links:
+            - title: Request state
+              file: request-state
+            - title: Queue of requests
+              file: queue-of-requests
+
+        - title: Custom tags
+          eyebrow: Custom tag
+          links:
+            - title: <ajax-cart-product-form>
+              file: ajax-cart-product-form
+            - title: <ajax-cart-quantity>
+              file: ajax-cart-quantity
+
+        - title: Data attributes
+          eyebrow: Data attribute
+          links:
+            - title: data-ajax-cart-bind
+              file: data-ajax-cart-bind
+            - title: data-ajax-cart-errors
+              file: data-ajax-cart-errors
+            - title: data-ajax-cart-initial-state
+              file: data-ajax-cart-initial-state
+            - title: data-ajax-cart-quantity-input
+              file: data-ajax-cart-quantity-input
+            - title: data-ajax-cart-quantity-minus
+              file: data-ajax-cart-quantity-minus
+            - title: data-ajax-cart-quantity-plus
+              file: data-ajax-cart-quantity-plus
+            - title: data-ajax-cart-request-button
+              file: data-ajax-cart-request-button
+            - title: data-ajax-cart-section
+              file: data-ajax-cart-section
+            - title: data-ajax-cart-section-scroll
+              file: data-ajax-cart-section-scroll
+            - title: data-ajax-cart-static-element
+              file: data-ajax-cart-static-element
+            - title: data-ajax-cart-property-input
+              file: data-ajax-cart-property-input
+
+        - title: CSS classes
+          eyebrow: CSS class
+          links:
+            - title: js-ajax-cart-init
+              file: js-ajax-cart-init
+            - title: js-ajax-cart-empty
+              file: js-ajax-cart-empty
+            - title: js-ajax-cart-not-empty
+              file: js-ajax-cart-not-empty
+            - title: js-ajax-cart-processing
+              file: js-ajax-cart-processing
+
+        - title: Events
+          eyebrow: Event
+          links:
+            - title: liquid-ajax-cart:init
+              file: event-init
+            - title: liquid-ajax-cart:queue-start
+              file: event-queue-start
+            - title: liquid-ajax-cart:queue-end
+              file: event-queue-end
+            - title: liquid-ajax-cart:request-start
+              file: event-request-start
+            - title: liquid-ajax-cart:request-end
+              file: event-request-end
+
+        - title: JavaScript API
+          links:
+            - title: liquidAjaxCart object
+              file: liquid-ajax-cart
+            - title: get()
+              file: liquid-ajax-cart-get
+            - title: add()
+              file: liquid-ajax-cart-add
+            - title: change()
+              file: liquid-ajax-cart-change
+            - title: update()
+              file: liquid-ajax-cart-update
+            - title: clear()
+              file: liquid-ajax-cart-clear
+            - title: init
+              file: liquid-ajax-cart-init
+            - title: cart
+              file: liquid-ajax-cart-cart
+            - title: processing
+              file: liquid-ajax-cart-processing
+            - title: conf()
+              file: liquid-ajax-cart-conf
+
+        - title: Configuration
+          eyebrow: Configuration parameter
+          id: configuration-subsection
+          links:
+            - title: requestErrorText
+              file: request-error-text
+            - title: binderFormatters
+              file: binder-formatters
+            - title: updateOnWindowFocus
+              file: update-on-window-focus
+
 links:
   main:
     - title: Home

@@ -1,0 +1,53 @@
+:root,
+::before,
+::after {
+  --header-height: 3rem;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  font-size: 1rem;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+  text-rendering: optimizespeed;
+  overflow-y: scroll;
+}
+
+strong {
+  font-weight: 600;
+}
+
+code {
+  font-family: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+:not(pre) > code {
+  font-size: .9375em !important;
+  color: inherit !important;
+  background-color: #f9f9f9;
+  //border: 1px solid #999999;
+  padding: 0 .25em;
+  border-radius: .125em;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1400px;
+  padding: 0 2rem;
+}
+
+.lead {
+  font-size: 1.125rem;
+  //font-size: 1.25rem;
+  //padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem !important;
+  //border-bottom: 1px solid #DBDBDB;
+  + p {
+    //padding-top: 1.5rem;
+    //margin-top: 1.5rem !important;
+    //border-top: 1px solid #DBDBDB;
+  }
+}

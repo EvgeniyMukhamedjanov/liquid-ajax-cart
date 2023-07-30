@@ -1,0 +1,66 @@
+@keyframes target-animation {
+  0% {
+    background: transparent;
+  }
+  5% {
+    background: #74c67280;
+  }
+  75% {
+    background: #74c67280;
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+.markdown {
+  h1, h2, h3 {
+    scroll-margin-top: calc(var(--header-height) + 1rem);
+    code {
+      background: transparent;
+    }
+
+    &:target {
+      animation: 2s target-animation;
+    }
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: .2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 2.5rem 0 1rem;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin: 1.5rem 0 .6rem;
+  }
+
+  p {
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+    list-style-type: disc;
+  }
+
+  ol {
+    margin-bottom: .6rem;
+    padding-left: 1rem;
+    list-style-type: decimal;
+  }
+
+  a {
+    color: #474fbc;
+    text-decoration-thickness: from-font;
+  }
+}

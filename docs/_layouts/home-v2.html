@@ -1,0 +1,438 @@
+{% assign version = blank %}
+{% assign last_release_slice = '/v1/releases/last/liquid-ajax-cart-v' %}
+{% for file in site.static_files %}
+{% assign file_slice = file.path | slice: 0, last_release_slice.size %}
+{% if last_release_slice == file_slice %}
+{% assign download_path = file.path %}
+{% assign file_name_split = file.basename | split: '-v' %}
+{% assign version = file_name_split[1] %}
+{% endif %}
+{% endfor %}
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<script>
+  try {
+    var html = document.querySelectorAll('html');
+    html.forEach(function(item){
+      item.classList.remove('no-js');
+      item.classList.add('js');
+    })
+  } catch(e){}
+</script>
+<head>
+  {% include head/full.html %}
+
+  <style type="text/css">
+    {% capture home_css %}
+    {% include styles/base.scss %}
+    {% include styles/containers.scss %}
+    {% include styles/navigation.scss %}
+    {% include home/hero.css %}
+    {% include home/example-layout.css %}
+    {% include home/vs-code.css %}
+    {% include home/youtube-link.css %}
+    {% include home/result-content.css %}
+    {% include home/built-with.css %}
+
+    body {
+      color:  black;
+    }
+
+    html:not(.js-animation) *,
+    html:not(.js-animation) *:before,
+    html:not(.js-animation) *:after {
+      transition-property: none !important;
+    }
+
+    code {
+      color: currentColor;
+      padding: 0 5px;
+      border: 1px solid #d2d5d8;
+      background-color: #fafbf4;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    {% endcapture %}
+    {{ home_css | scssify }}
+  </style>
+
+
+</head>
+
+
+<body>
+
+
+{% include v2/navigation.html %}
+
+<svg class="svg" width="0" height="0" style="position:absolute">
+  <clipPath id="hero-clip-path" clipPathUnits="objectBoundingBox"><path d="M0,0 H1 V0.976 C0.888,0.991,0.706,1,0.5,1 C0.294,1,0.112,0.991,0,0.976 V0"></path></clipPath>
+</svg>
+<div class="hero-heading">
+  <div class="wide-container">
+    <div class="hero-heading__wrapper">
+      <h1 class="hero-heading__title">Liquid Ajax Cart
+        {% if version != blank %}
+        <span class="hero-heading__title-badge">v{{ version }}</span>
+        {% endif %}
+      </h1>
+      <ul class="hero-heading__subtitle">
+        <li class="hero-heading__subtitle-part">A JavaScript asset for Shopify</li>
+        {% if version != blank %}
+        <li class="hero-heading__subtitle-part hero-heading__subtitle-part--small-screen">v{{ version }}</li>
+        {% endif %}
+        <li class="hero-heading__subtitle-part hero-heading__subtitle-part--not-small-screen">OS 2.0 compatible</li>
+        <li class="hero-heading__subtitle-part hero-heading__subtitle-part--not-small-screen">27 KB minified</li>
+      </ul>
+      <div class="hero-heading__description" >
+        Ajaxifies
+        <a href="#section-example" class="js-active" data-example-link ><span></span><span>cart sections</span></a>
+        <span style="white-space: nowrap;">
+                    and
+                    <a href="#product-forms-example" data-example-link ><span></span><span>product forms</span></a>,
+                </span>
+        <span style="white-space: nowrap;">
+                    provides
+                    <a href="#api-example" data-example-link ><span></span><span>JavaScript API</span></a>
+                </span>
+      </div>
+      <div class="hero-heading__note">
+        <a href="https://youtu.be/5Dl9Wsmq130" target="_blank" class="youtube-link">
+          <span class="youtube-link__title">Guide on <span class="youtube-link__youtube">YouTube</span></span>
+          <span class="youtube-link__timing"><span style="position: relative;">11:23</span></span>
+        </a>
+      </div>
+      <div class="hero-heading__boss" data-boss="0"></div>
+    </div>
+  </div>
+</div>
+
+<div class="main-page-content">
+  <div class="code-examples wide-container">
+    <div class="code-examples__wrapper">
+      <div class="code-examples__examples-container" data-example-canvas>
+        <div class="code-examples__example code-examples__example--active" data-example id="section-example">
+          <div class="code-examples__notes-block">
+            <div class="code-examples__title">Ajaxifing a cart section</div>
+            <div class="code-examples__note-wrapper">
+              <div class="code-examples__note" data-example-highlight="section" style="top: calc(2 * 21px - 21px)">
+                Add the <code>data-ajax-cart-section</code> attribute to the container that must be re-rendered when the user's cart gets changed
+              </div>
+            </div>
+            <div class="code-examples__note-wrapper">
+              <div class="code-examples__note" data-example-highlight="query-button" style="top: calc(12 * 21px - 21px)">
+                Use <code>routes.cart_change_url</code> and <code>data-ajax-cart-request-button</code> for "Plus", "Minus" and "Remove" buttons
+              </div>
+            </div>
+            <div class="code-examples__note-wrapper">
+              <div class="code-examples__note" data-example-highlight="quantity-input" style="top: calc(16 * 21px - 21px)">
+                Add the <code>data-ajax-cart-quantity-input</code> attribute to quantity input fields
+              </div>
+            </div>
+            <div class="code-examples__note-wrapper">
+              <div class="code-examples__note" data-example-highlight="section-error" style="top: calc(22 * 21px - 21px)">
+                Place a <code>data-ajax-cart-messages</code> container for error messages
+              </div>
+            </div>
+          </div>
+          <div class="code-examples__code-block">
+            <div class="vs-code">
+              <div class="vs-code__tab">sections/my-cart.liquid</div>
+              <div class="language-html highlighter-rouge">
+                <div class="highlight">
+                  {% raw %}
+                  <pre><code><span class="c vs-code__mobile-code">&lt;!-- To ajaxify your cart section
+add the <span class="vs-code__u">data-ajax-cart-section</span> attribute
+to a container that must be re-rendered
+when the user's cart gets changed --&gt;
+
+</span><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"{{ routes.cart_url }}"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+  <span data-example-highlight="section"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"my-cart"</span> <span class="na vs-code__u">data-ajax-cart-section</span><span class="nt">&gt;</span></span>
+    <span class="nt">&lt;h2&gt;</span><span class="vs-code__neutral">Cart</span><span class="nt">&lt;/h2&gt;</span>
+
+    <span class="vs-code__neutral">{% for item in cart.items %}</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"my-cart__item"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{{ item.url }}"</span><span class="nt">&gt;</span><span class="vs-code__neutral">{{ item.title }}</span><span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;div&gt;</span><span class="vs-code__neutral">Price: {{ item.final_price | money }}</span><span class="nt">&lt;/div&gt;</span>
+
+        <span class="nt">&lt;div&gt;</span>
+          <span class="vs-code__neutral">Quantity:</span><span class="c vs-code__mobile-code">
+          &lt;!-- Use <span class="vs-code__u">routes.cart_change_url</span> for "Plus", "Minus", "Remove" buttons,
+          add the <span class="vs-code__u">data-ajax-cart-request-button</span> attribute to ajaxify them --&gt;</span><span data-example-highlight="query-button">
+          <span class="nt">&lt;a</span> <span class="na">data-ajax-cart-request-button</span>
+            <span class="na">href=</span><span class="s">"{{ <span class="vs-code__u">routes.cart_change_url</span> }}?line={{ forloop.index }}&amp;quantity={{ item.quantity | minus: 1 }}"</span><span class="nt">&gt;</span></span>
+            <span class="nt">&lt;i</span> <span class="na">class=</span><span class="s">"minus-icon"</span><span class="nt">&gt;</span><span class="nt">&lt;/i&gt;</span>
+          <span class="nt">&lt;/a&gt;</span><span class="c vs-code__mobile-code">
+          &lt;!-- Add the <span class="vs-code__u">data-ajax-cart-quantity-input</span> attribute to quantity input fields --&gt;</span><span data-example-highlight="quantity-input">
+          <span class="nt">&lt;input</span> <span class="na"><span class="vs-code__u">data-ajax-cart-quantity-input</span>=</span><span class="s">"{{ forloop.index }}"</span> <span class="na">value=</span><span class="s">"{{ item.quantity }}"</span> <span class="na">name=</span><span class="s">"updates[]"</span> <span class="na">type=</span><span class="s">"number"</span><span class="nt">/&gt;</span></span><span data-example-highlight="query-button">
+          <span class="nt">&lt;a</span> <span class="na">data-ajax-cart-request-button</span>
+            <span class="na">href=</span><span class="s">"{{ <span class="vs-code__u">routes.cart_change_url</span> }}?line={{ forloop.index }}&amp;quantity={{ item.quantity | plus: 1 }}"</span><span class="nt">&gt;</span></span>
+            <span class="nt">&lt;i</span> <span class="na">class=</span><span class="s">"plus-icon"</span><span class="nt">&gt;</span><span class="nt">&lt;/i&gt;</span>
+          <span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;/div&gt;</span><span class="c vs-code__mobile-code">
+        &lt;!-- Place a <span class="vs-code__u">data-ajax-cart-messages</span> container for error messages --&gt;</span><span data-example-highlight="section-error">
+        <span class="nt">&lt;div</span> <span class="na"><span class="vs-code__u">data-ajax-cart-messages</span>=</span><span class="s">"{{ item.key }}"</span><span class="nt">&gt;&lt;/div&gt;</span></span>
+
+        <span class="nt">&lt;div&gt;</span><span class="vs-code__neutral">Total: </span><span class="nt">&lt;strong&gt;</span><span class="vs-code__neutral">{{ item.final_line_price | money }}</span><span class="nt">&lt;/strong&gt;&lt;/div&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="vs-code__neutral">{% endfor %}</span>
+
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">name=</span><span class="s">"checkout"</span><span class="nt">&gt;</span><span class="vs-code__neutral">Checkout — {{ cart.total_price | money_with_currency }}</span><span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+
+<span class="vs-code__neutral">{%</span> <span class="nt">schema</span> <span class="vs-code__neutral">%} { "name": "My Cart" } {%</span> <span class="nt">endschema</span> <span class="vs-code__neutral">%}</span>
+</code></pre>
+                  {% endraw %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="code-examples__result-block">
+            <div class="code-examples__result-block-wrapper">
+              <div class="cart-example" data-example-highlight="section">
+                <div class="cart-example__heading">Cart</div>
+                <div class="cart-example__item">
+                  <div class="cart-example__item-title">Balloon T-Shirt</div>
+                  <div>Price: $25.00</div>
+
+                  <div class="cart-example__quantity">
+                    Quantity:
+                    <span  data-example-highlight="query-button"><i class="cart-example__minus"></i></span>
+                    <span data-example-highlight="quantity-input" class="cart-example__qty-input">3</span>
+                    <span  data-example-highlight="query-button"><i class="cart-example__plus"></i></span>
+                  </div>
+                  <div data-example-highlight="section-error" class="cart-example__messages">You can't add more of this item to your cart</div>
+
+                  <div>Total: <strong>$75.00</strong></div>
+                  <!-- <a href="/cart/change?id=17285644550:70ff98a797ed385f6ef25e6e974708ca&quantity=0">
+                      Remove
+                  </a> -->
+                </div>
+                <div class="cart-example__checkout"> Checkout — $75.00 </div>
+              </div>
+            </div>
+          </div>
+          <div class="code-examples__cta-wrapper" data-example-cta>
+            <a href="/v1/guide/" class="code-examples__cta"><span>Installation guide</span></a>
+          </div>
+        </div>
+        <div class="code-examples__example" data-example id="product-forms-example">
+          <div class="code-examples__notes-block">
+            <div class="code-examples__title">Ajaxifying product forms</div>
+            <div class="code-examples__note-wrapper">
+              <div class="code-examples__note" data-example-highlight="form" style="top: calc(11 * 21px - 21px)">
+                Product forms will be ajaxified automatically
+              </div>
+            </div>
+            <div class="code-examples__note-wrapper" style="transition-delay: 1310ms">
+              <div class="code-examples__note" data-example-highlight="form-error" style="top: calc(14 * 21px - 21px)">
+                Place a <code>data-ajax-cart-messages</code> container for error messages
+              </div>
+            </div>
+          </div>
+          <div class="code-examples__code-block">
+            <div class="vs-code vs-code--scrolled">
+              <div class="vs-code__tab">sections/product-template.liquid</div>
+              <div class="language-html highlighter-rouge">
+                <div class="highlight">
+                  {% raw %}
+                  <pre><code><span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">"product__title"</span><span class="nt">&gt;</span>
+  <span class="vs-code__neutral">{{ product.title | escape }}</span>
+<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"product__price"</span><span class="nt">&gt;</span>
+  <span class="vs-code__neutral">{{ product.selected_or_first_available_variant.price | money }}</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"product__description"</span><span class="nt">&gt;</span>
+  <span class="vs-code__neutral">{{ product.description }}</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="c vs-code__mobile-code">&lt;!-- Product forms will be ajaxified automatically --&gt;
+</span><span data-example-highlight="form"><span class="vs-code__neutral">{% </span><span class="vs-code__u">form 'product'</span><span class="vs-code__neutral">, product %}</span></span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">name=</span><span class="s">"id"</span> <span class="na">value=</span><span class="s">"{{ product.selected_or_first_available_variant.id }}"</span><span class="nt">&gt;</span>
+
+<span class="c vs-code__mobile-code">  &lt;!-- Place a <span class="vs-code__u">data-ajax-cart-messages</span> container for error messages --&gt;
+</span><span data-example-highlight="form-error">  <span class="nt">&lt;div</span> <span class="na"><span class="vs-code__u">data-ajax-cart-messages</span>=</span><span class="s">"form"</span><span class="nt">&gt;&lt;/div&gt;</span></span>
+
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">name=</span><span class="s">"add"</span><span class="nt">&gt;</span>
+    <span class="vs-code__neutral">Add to cart</span>
+  <span class="nt">&lt;/button&gt;</span>
+<span class="vs-code__neutral">{% endform %}</span>
+
+</code></pre>
+                  {% endraw %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="code-examples__result-block">
+            <div class="code-examples__result-block-wrapper">
+              <div class="product-example">
+                <div class="product-example__title">Balloon T-Shirt</div>
+                <div class="product-example__price">$25.00</div>
+                <div>Upgrade your style with the brand-new funny print on our famous cotton Tshirt.</div>
+                <div class="product-example__form" data-example-highlight="form">
+                  <div data-example-highlight="form-error" class="product-example__messages">All 3 Balloon T-Shirt are in your cart.</div>
+                  <div class="product-example__button">Add to cart</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="code-examples__cta-wrapper" data-example-cta>
+            <a href="/v1/guide/" class="code-examples__cta"><span>Installation guide</span></a>
+          </div>
+        </div>
+        <div class="code-examples__example" data-example id="api-example">
+          <div class="code-examples__notes-block">
+            <div class="code-examples__title">Using JavaScript API</div>
+            <div class="code-examples__note-wrapper">
+              <div class="code-examples__note" style="top: calc(5 * 21px - 21px)" data-example-highlight="subscribeToCartAjaxRequests">
+                Run your code before and after a Cart Ajax API request gets performed
+              </div>
+            </div>
+            <div class="code-examples__note-wrapper" style="transition-delay: 1310ms">
+              <div class="code-examples__note" style="top: calc(20 * 21px - 21px)" data-example-highlight="subscribeToCartStateUpdate">
+                Run your code when the cart state is updated
+              </div>
+            </div>
+          </div>
+          <div class="code-examples__code-block">
+            <div class="vs-code vs-code--scrolled">
+              <div class="vs-code__tab">layout/theme.liquid</div>
+              <div class="language-html highlighter-rouge">
+                <div class="highlight">
+                  {% raw %}
+                  <pre><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"module"</span><span class="nt">&gt;</span>
+  <span class="k">import</span> <span class="p">{</span> <span class="nx">subscribeToCartAjaxRequests</span><span class="p">,</span> <span class="nx">subscribeToCartStateUpdate</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">{{ "liquid-ajax-cart.js" | asset_url }}</span><span class="dl">'</span><span class="p">;</span>
+
+  <span class="c1 vs-code__mobile-code">// Run your code before and after a Cart Ajax API request gets performed:
+  </span><span class="c1">// Show a pop-up message after adding to cart</span><span data-example-highlight="subscribeToCartAjaxRequests">
+  <span class="vs-code__fn vs-code__u">subscribeToCartAjaxRequests</span><span class="p">((</span> <span class="nx">requestState</span><span class="p">,</span> <span class="nx">subscribeToResult</span> <span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span></span>
+    <span class="k">if</span> <span class="p">(</span> <span class="nx">requestState</span><span class="p">.</span><span class="nx">requestType</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">add</span><span class="dl">'</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="vs-code__fn">subscribeToResult</span><span class="p">(</span> <span class="nx">requestState</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">requestState</span><span class="p">.</span><span class="nx">responseData</span><span class="p">?.</span><span class="nx">ok</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="kd">let</span> <span class="nx">productName</span> <span class="o">=</span> <span class="nx">requestState</span><span class="p">.</span><span class="nx">responseData</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="nx">requestState</span><span class="p">.</span><span class="nx">responseData</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">items</span><span class="p">?.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">productName</span> <span class="o">=</span> <span class="nx">requestState</span><span class="p">.</span><span class="nx">responseData</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">title</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="vs-code__fn">alert</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span> <span class="nx">productName</span> <span class="p">?</span> <span class="dl">'</span><span class="s1">«</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">productName</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">» is</span><span class="dl">'</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">Products are</span><span class="dl">'</span> <span class="p">}</span><span class="s2"> successfully added`</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="c1 vs-code__mobile-code">// Run your code when the cart state is updated:
+  </span><span class="c1">// Highlight a promo block when the cart total is $100 or more</span><span  data-example-highlight="subscribeToCartStateUpdate">
+  <span class="vs-code__fn vs-code__u">subscribeToCartStateUpdate</span><span class="p">(</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="p">{</span></span>
+    <span class="kd">const</span> <span class="nx">triggerAmount</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span> <span class="c1">// $100</span>
+    <span class="kd">const</span> <span class="nx">promoBlock</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="vs-code__fn">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">.promo-block</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span> <span class="nx">state</span><span class="p">.</span><span class="nx">status</span><span class="p">.</span><span class="nx">cartStateSet</span> <span class="o">&amp;&amp;</span> <span class="nx">promoBlock</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">state</span><span class="p">.</span><span class="nx">cart</span><span class="p">.</span><span class="nx">total_price</span> <span class="o">&gt;=</span> <span class="nx">triggerAmount</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">promoBlock</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="vs-code__fn">add</span><span class="p">(</span><span class="dl">'</span><span class="s1">promo-block--highlighted</span><span class="dl">'</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">promoBlock</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="vs-code__fn">remove</span><span class="p">(</span><span class="dl">'</span><span class="s1">promo-block--highlighted</span><span class="dl">'</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span></code>
+<span class="nt">&lt;/script&gt;</span>
+                    </code></pre>
+                  {% endraw %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--  <div class="code-examples__result-block">
+                  <div class="cart-example">
+                      API
+                      <br/><br/><br/>
+                  </div>
+              </div> -->
+          <div class="code-examples__cta-wrapper" data-example-cta>
+            <a href="/v1/guide/" class="code-examples__cta"><span>Installation guide</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="code-examples__ps">
+        <figure>
+          <blockquote cite="http://www.codeshopify.com/blog_posts/liquid-ajax-cart-library">
+            “My favourite thing about this library is that there is absolutely no styles so you can do whatever you like with it.”
+          </blockquote>
+          <figcaption><cite>— <a href="http://www.codeshopify.com/blog_posts/liquid-ajax-cart-library" target="_blank">codeshopify.com</a></cite></figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+  {{ content }}
+</div>
+
+<div class="built-with">
+  <div class="built-with__title">
+    <marquee behavior="alternate"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></marquee>
+  </div>
+  <div class="wide-container">
+    <div class="built-with__list {% if site.links.portfolio.size == 2 %}built-with__list--qty-2{% endif %}">
+      {% for p in site.links.portfolio %}
+      <div class="built-with__item-wrapper">
+        <div class="built-with__item">
+          <div class="built-with__item-image-placeholder">
+            <img class="built-with__item-image" src="/assets/screens/{{ p.image }}" alt="{{ p.title }} screenshot" loading="lazy" />
+          </div>
+          <div class="built-with__item-copy">
+            <a href="{{ p.url }}" class="built-with__item-title" target="_blank">{{ p.title }}</a> <span class="built-with__item-meta">{{ p.meta }}</span>
+          </div>
+        </div>
+      </div>
+      {% if forloop.index == 2 %}
+      <div class="built-with__item-wrapper">
+        <div class="built-with__item">
+          <div class="built-with__item-image-placeholder built-with__item-image-placeholder--fake">
+            <div class="built-with__submit">
+              <div>
+                If a website uses Liquid Ajax Cart,
+                <br/>
+                you'll find <code>window.liquidAjaxCart</code> object
+                <br/>
+                in the browser console.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+      <div class="built-with__item-wrapper">
+        <div class="built-with__item">
+          <div class="built-with__item-image-placeholder built-with__item-image-placeholder--fake">
+            <div class="built-with__submit">
+              <div>
+                <span>Submit your project</span>
+                <br/>
+                <span>and support us on GitHub</span>
+              </div>
+            </div>
+          </div>
+          <div class="built-with__item-copy">
+            <a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions/new?title=New%20website:%20https://&body=*%20Select%20the%20%22Show%20and%20Tell%22%20category,%20provide%20your%20website%20address,%20submit%20the%20form%20and%20give%20us%20a%20star%20to%20support!" class="built-with__item-title" target="_blank">Your project</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include footer/full.html %}
+
+
+
+<script type="text/javascript">
+  {% include home/script.js %}
+</script>
+
+
+
+
+</body>
+</html>
