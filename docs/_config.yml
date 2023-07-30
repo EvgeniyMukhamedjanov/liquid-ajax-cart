@@ -169,6 +169,18 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   portfolio:
+    - title: Middlehurst station
+      url: https://middlehurst.co.nz/
+      image: middlehurst.jpg
+      meta: Made by <a href="https://github.com/subject-matter" target="_blank">Subject Matter</a>
+    - title: Good Counsel
+      url: https://goodcounsel.com/
+      image: goodcounsel.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    - title: Lyttelton Lights
+      url: https://lytteltonlights.com/
+      image: lytteltonlights.jpg
+      meta: Integrated by <a href="https://github.com/subject-matter" target="_blank">Subject Matter</a>
     - title: Two islands
       url: https://twoislandsco.com/
       image: twoislands.jpg
