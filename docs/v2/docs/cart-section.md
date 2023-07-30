@@ -278,7 +278,7 @@ to the parent element of the area — Liquid Ajax Cart will keep this element's 
 
 ## JavaScript callback after re-render
 
-Listen to the [`liquid-ajax-cart:sections`](/v2/docs/sections-event/) event 
+Listen to the [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) event 
 if you want to run your JavaScript code when the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) element is re-rendered.
 
 For example, you might need to attach event listeners to elements 

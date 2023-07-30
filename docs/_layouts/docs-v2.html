@@ -16,6 +16,61 @@ h_min: 2
 
 {%- assign docs_eyebrow = '' -%}
 
+<script type="module">
+  let abortController;
+  let currentUrl;
+  document.addEventListener('click', event => {
+    const $docsLinkWrapper = event.target.closest("[data-docs-page='link-wrapper']");
+    if (!$docsLinkWrapper) return;
+
+    document.body.classList.add('js-docs-page-loading');
+
+    if (abortController) {
+      abortController.abort();
+    }
+    abortController = new AbortController();
+
+    document.querySelectorAll("[data-docs-page='link-wrapper']").forEach($item => {
+      $item.classList.remove("side-menu__link--active");
+    })
+    $docsLinkWrapper.classList.add("side-menu__link--active");
+    const $docsLink = $docsLinkWrapper.querySelector("a");
+    const requestUrl = $docsLink.href;
+    currentUrl = requestUrl;
+    fetch(requestUrl, {
+      signal: abortController.signal
+    }).then(response => {
+      return response.text();
+    }).then(html => {
+      if (currentUrl === requestUrl) {
+        const $newDoc = new DOMParser().parseFromString(html, 'text/html');
+        const $newContent = $newDoc.querySelector("[data-docs-page='content']");
+        const $newPageMenu = $newDoc.querySelector("[data-docs-page='page-menu']");
+        const $curContent = document.querySelector("[data-docs-page='content']");
+        const $curPageMenu = document.querySelector("[data-docs-page='page-menu']");
+        $curPageMenu.insertAdjacentElement('afterend', $newPageMenu);
+        $curContent.insertAdjacentElement('afterend', $newContent);
+        $curPageMenu.remove();
+        $curContent.remove();
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "instant"
+        });
+        Prism.highlightAll();
+        document.body.classList.remove('js-docs-page-loading');
+      }
+    }).catch(error => {
+      if (error.name === "AbortError") return;
+      if (currentUrl === requestUrl) {
+        window.location.href = requestUrl;
+      }
+    });
+
+    event.preventDefault();
+  })
+</script>
+
 <div class="container">
   <div class="docs-page">
     <div class="docs-page__section-nav">
@@ -45,7 +100,7 @@ h_min: 2
                             | default: docs_section.eyebrow
                             | default: docs_subsection.title -%}
                         {%- endif -%}
-                        <li class="side-menu__link {% if is_docs_link_active %}side-menu__link--active{% endif %}">
+                        <li class="side-menu__link {% if is_docs_link_active %}side-menu__link--active{% endif %}" data-docs-page="link-wrapper">
                           <a href="/v2/docs/{{ docs_link.file | append: '/' | replace: 'index/', '' }}"
                           >
                             {{- docs_link.title | escape -}}
@@ -61,7 +116,7 @@ h_min: 2
         </ul>
       </nav>
     </div>
-    <div class="docs-page__content">
+    <div class="docs-page__content" data-docs-page="content">
       <div class="docs-page__breadcrumbs">
         {{- docs_eyebrow | escape -}}
       </div>
@@ -69,7 +124,7 @@ h_min: 2
         {% include jekyll-docs-theme/anchor_headings.html %}
       </div>
     </div>
-    <div class="docs-page__page-menu">
+    <div class="docs-page__page-menu" data-docs-page="page-menu">
       <div class="docs-page__page-menu-wrapper">
         {% unless page.disable_toc %}
           <nav class="side-menu">
