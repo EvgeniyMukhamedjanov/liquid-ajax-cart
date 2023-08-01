@@ -19,9 +19,20 @@ h_min: 2
 <script type="module">
   let abortController;
   let currentUrl;
+  const docsPageUrlPrefix = "/v2/docs/";
   document.addEventListener('click', event => {
-    const $docsLinkWrapper = event.target.closest("[data-docs-page='link-wrapper']");
-    if (!$docsLinkWrapper) return;
+    const $pressedLink = event.target.closest(`a[href*="${docsPageUrlPrefix}"]`);
+    console.log($pressedLink);
+    if (!$pressedLink) return;
+
+    const requestUrl = $pressedLink.href;
+
+    document.querySelectorAll("[data-docs-page='link-wrapper']").forEach($item => {
+      $item.classList.remove("side-menu__link--active");
+    })
+    const $navLink = document.querySelector(`[data-docs-page='link-wrapper'] a[href*="${$pressedLink.href.split(docsPageUrlPrefix).at(-1).trim().replaceAll("/", "")}"]`);
+    const $navLinkWrapper = $navLink.closest("[data-docs-page='link-wrapper']");
+    $navLinkWrapper.classList.add("side-menu__link--active");
 
     document.body.classList.add('js-docs-page-loading');
 
@@ -30,12 +41,6 @@ h_min: 2
     }
     abortController = new AbortController();
 
-    document.querySelectorAll("[data-docs-page='link-wrapper']").forEach($item => {
-      $item.classList.remove("side-menu__link--active");
-    })
-    $docsLinkWrapper.classList.add("side-menu__link--active");
-    const $docsLink = $docsLinkWrapper.querySelector("a");
-    const requestUrl = $docsLink.href;
     currentUrl = requestUrl;
     fetch(requestUrl, {
       signal: abortController.signal
