@@ -148,25 +148,26 @@ Liquid Ajax Cart looks for the cart item error messages element and puts the err
 
       <div>
         Quantity:
-
-        <!-- "Minus one" button -->
-        <a data-ajax-cart-quantity-minus
-          href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ line_item.quantity | minus: 1 }}" > 
-          Minus one 
-        </a>
+        <ajax-cart-quantity>
+          <!-- "Minus one" button -->
+          <a data-ajax-cart-quantity-minus
+            href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ line_item.quantity | minus: 1 }}" > 
+            Minus one 
+          </a>
+    
+          <!-- Item quantity input -->
+          <input data-ajax-cart-quantity-input="{{ line_item_index }}"
+            name="updates[]" 
+            value="{{ line_item.quantity }}" 
+            type="number" 
+            form="my-ajax-cart-form" />
   
-        <!-- Item quantity input -->
-        <input data-ajax-cart-quantity-input="{{ line_item_index }}"
-          name="updates[]" 
-          value="{{ line_item.quantity }}" 
-          type="number" 
-          form="my-ajax-cart-form" />
-
-        <!-- "Plus one" button -->
-        <a data-ajax-cart-quantity-plus
-          href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ line_item.quantity | plus: 1 }}"> 
-          Plus one 
-        </a>
+          <!-- "Plus one" button -->
+          <a data-ajax-cart-quantity-plus
+            href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ line_item.quantity | plus: 1 }}"> 
+            Plus one 
+          </a>
+        </ajax-cart-quantity>
       </div>
 
       <!-- Item error messages -->
