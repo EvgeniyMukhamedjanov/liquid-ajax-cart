@@ -15,7 +15,7 @@ links_v2:
   main:
     - title: Home
       url: /
-    - title: Documentation
+    - title: Docs
       url: /v2/docs/
     - title: Download
       url: /v2/releases/

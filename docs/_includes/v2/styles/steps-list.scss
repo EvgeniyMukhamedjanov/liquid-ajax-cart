@@ -37,6 +37,9 @@
     font-size: inherit;
     margin: 0;
     scroll-margin-top: calc(var(--header-height) + 2rem);
+    @media (min-width: 800px) {
+      scroll-margin-top: calc(var(--header-height) + 2rem);
+    }
   }
 
   :where(.steps-list__step:first-child) &:before {

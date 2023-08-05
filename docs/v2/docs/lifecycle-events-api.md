@@ -160,7 +160,7 @@ As the [Queue](/v2/docs/queue-of-requests/) has been empty, the new request will
 <div class="steps-list__title">Sets <code>liquidAjaxCart.processing</code> to <code>true</code></div>
 <div class="steps-list__content" markdown="1">
 Since Liquid Ajax Cart was in the "idle" mode,
-the [`liquidAjaxCart.processing`](/v2/docs/liquid-ajax-cart-processing) property was `false`.
+the [`liquidAjaxCart.processing`](/v2/docs/liquid-ajax-cart-processing/) property was `false`.
 Now the [Queue of requests](/v2/docs/queue-of-requests/) has a request to execute, 
 and the [`liquidAjaxCart.processing`](/v2/docs/liquid-ajax-cart-processing/) property becomes `true`.
 </div>
@@ -212,7 +212,7 @@ Each request is executed according to the [Request lifecycle](#request-lifecycle
 <div class="steps-list__content" markdown="1">
 Once all requests are executed and the [Queue](/v2/docs/queue-of-requests/) is empty,
 Liquid Ajax Cart is switching back to the "idle" mode,
-thus it sets [`liquidAjaxCart.processing`](/v2/docs/liquid-ajax-cart-processing) property was `false`.
+thus it sets [`liquidAjaxCart.processing`](/v2/docs/liquid-ajax-cart-processing/) property was `false`.
 </div>
 </li>
 

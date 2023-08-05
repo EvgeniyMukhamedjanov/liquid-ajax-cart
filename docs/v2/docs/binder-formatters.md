@@ -12,7 +12,7 @@ The configuration parameter lets you define custom formatters to use with the [`
 
 For example, if you use the `option_selection.js` Shopify asset and its `Shopify.formatMoney` function, 
 you can specify your own formatter for money related values.
-Use the [`conf`](/v2/docs/liquid-ajax-cart-conf) method of the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart) object to do this:
+Use the [`conf`](/v2/docs/liquid-ajax-cart-conf/) method of the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart) object to do this:
 
 {%- capture highlight_code -%}
 liquidAjaxCart.conf('binderFormatters', {

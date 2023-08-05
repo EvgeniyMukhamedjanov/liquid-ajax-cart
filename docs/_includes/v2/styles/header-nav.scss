@@ -7,11 +7,11 @@
   border-bottom: 1px solid #DBDBDB;
 }
 
-@media (max-width: 759px) {
-  .header-nav .container {
-    max-width: none;
-  }
-}
+//@media (max-width: 759px) {
+//  .header-nav .container {
+//    max-width: none;
+//  }
+//}
 
 @media (max-width: 759px) {
   .header-bar__old-version {
@@ -32,43 +32,40 @@
 }
 
 .header-nav__lists-wrapper {
-  display: none;
-
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: white;
-  padding: 0 10px 15px;
-  box-shadow: 0 9px 5px -5px rgba(0, 0, 0, .3);
-}
-.header-nav__toggle-checkbox:checked ~ .header-nav__lists-wrapper {
-  display: block;
+  padding: 0;
+  display: flex !important;
+  justify-content: space-between;
+  flex-grow: 1;
+  position: static;
+  margin-left: -.625rem;
+  box-shadow: none;
+  background-color: transparent;
+  align-items: center;
 }
 
 .header-nav__toggle-button {
   background: #333;
   display: block;
   height: 1px;
-  width: 32px;
+  width: 1rem;
   position: relative;
   cursor: pointer;
   margin-bottom: 0;
 }
 .header-nav__toggle-button span {
-  padding: 15px 0;
+  padding: 1rem 0;
   width: 100%;
   display: block;
   position: absolute;
-  top: -15px;
+  top: -1rem;
   left: 0;
   height: 1px;
 }
 .header-nav__toggle-button:before {
-  top: 7px;
+  top: .25rem;
 }
 .header-nav__toggle-button:after {
-  top: -7px;
+  top: -.25rem;
 }
 .header-nav__toggle-button:before,
 .header-nav__toggle-button:after {
@@ -79,20 +76,6 @@
   content: "";
   position: absolute;
   transition: all 0.2s ease-out;
-}
-
-.header-nav__toggle-checkbox:checked ~ .header-nav__toggle-button {
-  background: transparent;
-}
-.header-nav__toggle-checkbox:checked ~ .header-nav__toggle-button:before {
-  transform: rotate(-45deg);
-}
-.header-nav__toggle-checkbox:checked ~ .header-nav__toggle-button:after {
-  transform: rotate(45deg);
-}
-.header-nav__toggle-checkbox:checked ~ .header-nav__toggle-button:before,
-.header-nav__toggle-checkbox:checked ~ .header-nav__toggle-button:after {
-  top: 0;
 }
 
 .header-nav__wrapper {
@@ -108,8 +91,17 @@
 }
 
 .header-nav__item {
+  margin: 0;
   padding: 0;
   display: block;
+
+  &--github {
+    display: none;
+    @media (min-width: 400px) {
+      display: block;
+      margin-left: 1rem;
+    }
+  }
 }
 
 .header-nav__link {
@@ -157,35 +149,24 @@
   position: relative;
 }
 
-@media (min-width: 760px) {
-
-  .header-nav__lists-wrapper {
-    padding: 0;
-    display: flex !important;
-    justify-content: space-between;
-    flex-grow: 1;
-    position: static;
-    margin: 0 -10px;
-    box-shadow: none;
-    background-color: transparent;
-    align-items: center;
+@media (min-width: 480px) {
+  .header-nav__item {
+    margin-right: 10px;
   }
 
-  .header-nav__toggle-button {
-    display: none;
+  .header-nav__item:last-child {
+    margin-right: 0;
   }
+}
+
+@media (min-width: 200px) {
 
   .header-nav__list {
     display: flex;
     align-items: center;
   }
 
-  .header-nav__item {
-    margin-right: 10px;
-  }
-  .header-nav__item:last-child {
-    margin-right: 0;
-  }
+
 
   .header-nav__link {
     font-size: 14px;
@@ -193,7 +174,6 @@
 }
 
 .header-nav__version {
-  margin: 0 1rem;
   position: relative;
 
   &[open] summary {
