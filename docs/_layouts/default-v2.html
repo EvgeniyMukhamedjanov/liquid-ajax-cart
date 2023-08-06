@@ -17,11 +17,6 @@
 
   <link rel="canonical" href="{{ page.url | replace: 'index.html', '' | absolute_url }}">
 
-  {% comment %}<link{% endcomment %}
-    {% comment %}rel="stylesheet"{% endcomment %}
-    {% comment %}href="{{ '/assets/css/styles.css' | relative_url }}?v=1"{% endcomment %}
-  {% comment %}/>{% endcomment %}
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono&family=Roboto+Mono&display=swap"
@@ -37,21 +32,8 @@
     {% include v2/styles/reset.scss %}
     {% include v2/styles/critical.scss %}
     {% include v2/styles/header-nav.scss %}
-    {% comment %}{% include styles/base.scss %}{% endcomment %}
-    {% comment %}{% include styles/containers.scss %}{% endcomment %}
-    {% comment %}{% include styles/navigation.scss %}{% endcomment %}
-    {% comment %}{% include styles/masthead.scss %}{% endcomment %}
     {% include v2/styles/highlight.scss %}
     {% include v2/styles/codeblock.scss %}
-    {% comment %}if is_reference_subpage or is_examples %}{% endcomment %}
-    {% comment %}{% include styles/sidebar.scss %}{% endcomment %}
-    {% comment %}endif %}{% endcomment %}
-    {% comment %}if is_guide %}{% endcomment %}
-    {% comment %}{% include styles/guide.scss %}{% endcomment %}
-    {% comment %}endif %}{% endcomment %}
-    {% comment %}if is_releases %}{% endcomment %}
-    {% comment %}{% include styles/releases.scss %}{% endcomment %}
-    {% comment %}endif %}{% endcomment %}
     {% endcapture %}
     {{ critical_css | scssify }}
   </style>

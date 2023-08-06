@@ -15,7 +15,10 @@
 
 .markdown {
   h1, h2, h3 {
-    scroll-margin-top: calc(var(--header-height) + 1rem);
+    scroll-margin-top: calc(var(--header-height) * 2 + 1rem);
+    @media (min-width: 800px) {
+      scroll-margin-top: calc(var(--header-height) + 1rem);
+    }
     code {
       background: transparent;
     }

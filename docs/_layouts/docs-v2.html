@@ -18,136 +18,215 @@ h_min: 2
 
 <script type="module">
   let abortController;
-  let currentUrl;
-  const docsPageUrlPrefix = "/v2/docs/";
+  let currentHash = '';
+  const prefix = "/v2/docs/";
+  let currentPage = getPage(window.location.href);
+
+  function getPage(url) {
+    if (!url || url.indexOf(prefix) === -1) {
+      return undefined;
+    }
+    return url.split(prefix).at(-1).split('/').at(0).split('#').at(0).trim() || 'index';
+  }
+
+  window.addEventListener("popstate", () => {
+    const newPage = getPage(window.location.href);
+    if (!newPage || !currentPage) {
+      window.location.reload();
+    }
+    if (newPage !== currentPage) {
+      currentPage = newPage;
+      pageUpdate(window.location.href);
+    }
+  });
+
   document.addEventListener('click', event => {
-    const $pressedLink = event.target.closest(`a[href*="${docsPageUrlPrefix}"]`);
-    console.log($pressedLink);
+    const $pressedLink = event.target.closest(`a[href*="${prefix}"]`);
     if (!$pressedLink) return;
 
-    const requestUrl = $pressedLink.href;
-
-    document.querySelectorAll("[data-docs-page='link-wrapper']").forEach($item => {
-      $item.classList.remove("side-menu__link--active");
-    })
-    const $navLink = document.querySelector(`[data-docs-page='link-wrapper'] a[href*="${$pressedLink.href.split(docsPageUrlPrefix).at(-1).trim().replaceAll("/", "")}"]`);
-    const $navLinkWrapper = $navLink.closest("[data-docs-page='link-wrapper']");
-    $navLinkWrapper.classList.add("side-menu__link--active");
-
-    document.body.classList.add('js-docs-page-loading');
-
-    if (abortController) {
-      abortController.abort();
+    const newUrl = $pressedLink.href
+    const newPage = getPage(newUrl);
+    if (newPage && currentPage && newPage !== currentPage) {
+      history.pushState({}, "", newUrl);
+      currentPage = newPage;
+      pageUpdate();
+      event.preventDefault();
     }
-    abortController = new AbortController();
+  });
 
-    currentUrl = requestUrl;
-    fetch(requestUrl, {
-      signal: abortController.signal
-    }).then(response => {
-      return response.text();
-    }).then(html => {
-      if (currentUrl === requestUrl) {
-        const $newDoc = new DOMParser().parseFromString(html, 'text/html');
-        const $newContent = $newDoc.querySelector("[data-docs-page='content']");
-        const $newPageMenu = $newDoc.querySelector("[data-docs-page='page-menu']");
-        const $curContent = document.querySelector("[data-docs-page='content']");
-        const $curPageMenu = document.querySelector("[data-docs-page='page-menu']");
-        $curPageMenu.insertAdjacentElement('afterend', $newPageMenu);
-        $curContent.insertAdjacentElement('afterend', $newContent);
-        $curPageMenu.remove();
-        $curContent.remove();
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "instant"
-        });
-        Prism.highlightAll();
-        document.body.classList.remove('js-docs-page-loading');
+  async function pageUpdate() {
+    const url = window.location.href;
+    const page = getPage(url);
+    try {
+      const requestUrl = prefix + (page === 'index' ? '' : `${page}/`);
+
+      document.querySelectorAll("[data-docs-page='link-wrapper']").forEach($item => {
+        $item.classList.remove("side-menu__link--active");
+      });
+      const $navLink = document.querySelector(`[data-docs-page='link-wrapper'] a[href="${requestUrl}"]`);
+      const $navLinkWrapper = $navLink.closest("[data-docs-page='link-wrapper']");
+      $navLinkWrapper.classList.add("side-menu__link--active");
+
+      document.body.classList.add('js-docs-page-loading');
+
+      if (abortController) {
+        abortController.abort();
       }
-    }).catch(error => {
+      abortController = new AbortController();
+
+      const response = await fetch(requestUrl, {
+        signal: abortController.signal
+      });
+      const html = await response.text();
+      if (page !== currentPage) {
+        return;
+      }
+
+      const $newDoc = new DOMParser().parseFromString(html, 'text/html');
+      const $newContent = $newDoc.querySelector("[data-docs-page='content']");
+      const $newPageMenu = $newDoc.querySelector("[data-docs-page='page-menu']");
+      const $curContent = document.querySelector("[data-docs-page='content']");
+      const $curPageMenu = document.querySelector("[data-docs-page='page-menu']");
+      $curPageMenu.insertAdjacentElement('afterend', $newPageMenu);
+      $curContent.insertAdjacentElement('afterend', $newContent);
+      $curPageMenu.remove();
+      $curContent.remove();
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant"
+      });
+      Prism.highlightAll();
+      document.body.classList.remove('js-docs-page-loading');
+
+      navPosUpdate();
+      currentHash = new URL(window.location.href).hash;
+      if (currentHash) {
+        const $pageMenuLink = document.querySelector(`[data-docs-page="page-menu"] a[href="${currentHash}"]`);
+        if ($pageMenuLink) {
+          $pageMenuLink.click();
+        }
+      }
+    } catch(error) {
       if (error.name === "AbortError") return;
-      if (currentUrl === requestUrl) {
-        window.location.href = requestUrl;
+      if (currentPage === page) {
+        window.location.reload();
       }
-    });
+    }
+  }
 
-    event.preventDefault();
-  })
+  function navPosUpdate() {
+    const $navLink = document.querySelector(".side-menu__link--active");
+    if (!$navLink) return;
+
+    const navLinkOffsetTop = $navLink.offsetTop;
+    const navLinkHeight = $navLink.clientHeight;
+    const subsectionOffsetTop = $navLink.closest(".side-menu__subsection").offsetTop;
+    const offsetTop = navLinkOffsetTop + navLinkHeight + subsectionOffsetTop;
+
+    const $wrapper = document.querySelector(".docs-page__section-nav-wrapper")
+    const scrollTop = $wrapper.scrollTop;
+    const clientHeight = $wrapper.clientHeight;
+    const position = offsetTop + navLinkHeight - scrollTop;
+    if (position > clientHeight - 20 || position < 20) {
+      $wrapper.scrollTo({
+        top: offsetTop + navLinkHeight - (clientHeight / 2),
+        left: 0,
+        behavior: "smooth"
+      })
+    }
+  }
+  window.navPosUpdate = navPosUpdate;
 </script>
 
-<div class="container">
-  <div class="docs-page">
-    <div class="docs-page__section-nav">
-      <nav class="docs-page__section-nav-wrapper">
-        <ul class="side-menu">
-          {%- for docs_section in site.links_v2.docs -%}
-            <li class="side-menu__section">
-              <div class="side-menu__section-title">
-                {{- docs_section.title | escape -}}
-              </div>
-              <ul class="side-menu__section-content">
-                {%- for docs_subsection in docs_section.subsections -%}
-                  <li class="side-menu__subsection">
-                    {%- if docs_subsection.title and docs_subsection.title != '' -%}
-                      <div class="side-menu__subsection-title">
-                        {{- docs_subsection.title | escape -}}
-                      </div>
-                    {%- endif -%}
-                    <ul class="side-menu__subsection-content">
-                      {%- for docs_link in docs_subsection.links -%}
-                        {%- assign is_docs_link_active = false -%}
-                        {%- assign docs_link_md_file = docs_link.file | append: '.md' -%}
-                        {%- if page.name == docs_link_md_file -%}
-                          {%- assign is_docs_link_active = true -%}
-                          {%- assign docs_eyebrow = docs_link.eyebrow
-                            | default: docs_subsection.eyebrow
-                            | default: docs_section.eyebrow
-                            | default: docs_subsection.title -%}
-                        {%- endif -%}
-                        <li class="side-menu__link {% if is_docs_link_active %}side-menu__link--active{% endif %}" data-docs-page="link-wrapper">
-                          <a href="/v2/docs/{{ docs_link.file | append: '/' | replace: 'index/', '' }}"
-                          >
-                            {{- docs_link.title | escape -}}
-                          </a>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  </li>
-                {%- endfor -%}
-              </ul>
-            </li>
-          {%- endfor -%}
-        </ul>
-      </nav>
-    </div>
-    <div class="docs-page__content" data-docs-page="content">
-      <div class="docs-page__breadcrumbs">
-        {{- docs_eyebrow | escape -}}
+<div class="docs-page">
+  <input type="checkbox" class="docs-page__nav-toggle-input" id="section-nav-toggle">
+  <label for="section-nav-toggle" class="docs-page__nav-toggle-line header-nav">
+    <span class="container">
+      <span class="header-nav__wrapper">
+        <span style="display: flex; align-items: center; gap: .5rem;">
+          <span class="header-nav__toggle-button"><span></span></span>
+          Docs menu
+        </span>
+      </span>
+    </span>
+  </label>
+  <label for="section-nav-toggle" class="docs-page__section-nav-overlay"></label>
+  <div class="container">
+    <div class="docs-page__main-wrapper">
+      <div class="docs-page__section-nav">
+        <label for="section-nav-toggle" class="docs-page__section-nav-close">Close</label>
+        <nav class="docs-page__section-nav-wrapper">
+          <ul class="side-menu">
+            {%- for docs_section in site.links_v2.docs -%}
+              <li class="side-menu__section">
+                <div class="side-menu__section-title">
+                  {{- docs_section.title | escape -}}
+                </div>
+                <ul class="side-menu__section-content">
+                  {%- for docs_subsection in docs_section.subsections -%}
+                    <li class="side-menu__subsection">
+                      {%- if docs_subsection.title and docs_subsection.title != '' -%}
+                        <div class="side-menu__subsection-title">
+                          {{- docs_subsection.title | escape -}}
+                        </div>
+                      {%- endif -%}
+                      <ul class="side-menu__subsection-content">
+                        {%- for docs_link in docs_subsection.links -%}
+                          {%- assign is_docs_link_active = false -%}
+                          {%- assign docs_link_md_file = docs_link.file | append: '.md' -%}
+                          {%- if page.name == docs_link_md_file -%}
+                            {%- assign is_docs_link_active = true -%}
+                            {%- assign docs_eyebrow = docs_link.eyebrow
+                              | default: docs_subsection.eyebrow
+                              | default: docs_section.eyebrow
+                              | default: docs_subsection.title -%}
+                          {%- endif -%}
+                          <li class="side-menu__link {% if is_docs_link_active %}side-menu__link--active{% endif %}"
+                              data-docs-page="link-wrapper">
+                            <a href="/v2/docs/{{ docs_link.file | append: '/' | replace: 'index/', '' }}"
+                            >
+                              {{- docs_link.title | escape -}}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
       </div>
-      <div class="markdown">
-        {% include jekyll-docs-theme/anchor_headings.html %}
+      <div class="docs-page__content" data-docs-page="content">
+        <div class="docs-page__breadcrumbs">
+          {{- docs_eyebrow | escape -}}
+        </div>
+        <div class="markdown">
+          {% include jekyll-docs-theme/anchor_headings.html %}
+        </div>
       </div>
-    </div>
-    <div class="docs-page__page-menu" data-docs-page="page-menu">
-      <div class="docs-page__page-menu-wrapper">
-        {% unless page.disable_toc %}
-          <nav class="side-menu">
-            <div class="side-menu__section">
-              <div class="side-menu__section-title" style="color: #717171; margin-left: 1rem;">
-                On this page
-              </div>
-              <div class="side-menu__section-content">
-                <div class="side-menu__subsection">
-                  {% include jekyll-docs-theme/toc.html
-                    class="side-menu__subsection-content"
-                    item_class="side-menu__link"
-                  %}
+      <div class="docs-page__page-menu" data-docs-page="page-menu">
+        <div class="docs-page__page-menu-wrapper">
+          {% unless page.disable_toc %}
+            <nav class="side-menu">
+              <div class="side-menu__section">
+                <div class="side-menu__section-title" style="color: #717171; margin-left: 1rem;">
+                  On this page
+                </div>
+                <div class="side-menu__section-content">
+                  <div class="side-menu__subsection">
+                    {% include jekyll-docs-theme/toc.html
+                      class="side-menu__subsection-content"
+                      item_class="side-menu__link"
+                    %}
+                  </div>
                 </div>
               </div>
-            </div>
-          </nav>
-        {% endunless %}
+            </nav>
+          {% endunless %}
+        </div>
       </div>
     </div>
   </div>

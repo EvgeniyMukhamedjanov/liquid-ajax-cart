@@ -17,11 +17,11 @@ For example — the "All 2 White Shirt are in your cart" message if a user tries
 
 If a Shopify Cart API Ajax request is failed and doesn't have any error description or failed because of the Internet connection,
 then Liquid Ajax Cart will populate the error message containers with the generic message: "There was an error while updating your cart. Please try again.".
-Use the [`requestErrorText`](/v2/docs/request-error-text) configuration parameter to change the message.
+Use the [`requestErrorText`](/v2/docs/request-error-text/) configuration parameter to change the message.
 
 ## Product forms
 
-Put a container with the `data-ajax-cart-errors="form"` attribute inside a product form ajaxified with the [`<ajax-cart-product-form>`](/v2/docs/ajax-cart-product-form) custom tag.
+Put a container with the `data-ajax-cart-errors="form"` attribute inside a product form ajaxified with the [`<ajax-cart-product-form>`](/v2/docs/ajax-cart-product-form/) custom tag.
 
 If Shopify responds with an error message to a Cart API Ajax request sent by the `<ajax-cart-product-form>` custom tag,
 or if the request fails,

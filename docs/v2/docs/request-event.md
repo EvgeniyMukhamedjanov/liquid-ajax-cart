@@ -13,11 +13,11 @@ The `liquid-ajax-cart:request` event is fired at the `document` a moment before 
 ## Structure
 
 The event's `detail` property contains an object with two properties:
-* `requestState` — a [Request state](/v2/docs/request-state) object;
+* `requestState` — a [Request state](/v2/docs/request-state/) object;
 * `onResult` — a function that lets you subscribe to the request's result.
 
 ## The `requestState` property
-The `requestState` property is a [Request state](/v2/docs/request-state) object. 
+The `requestState` property is a [Request state](/v2/docs/request-state/) object. 
 Since the event is fired before the request is performed, the Request state object won't have properties related to the response:
 {%- capture highlight_code -%}
 document.addEventListener("liquid-ajax-cart:request", function(event) {
@@ -105,7 +105,7 @@ The `onResult` property is a function that adds your callback function to the li
 that will be called after the current request is performed.
 
 Your callback function will be called with the only parameter — 
-a [Request state](/v2/docs/request-state) object with the updated information about the request,
+a [Request state](/v2/docs/request-state/) object with the updated information about the request,
 that will include Shopify response or an error message, if the request wasn't cancelled.
 
 {%- capture highlight_code -%}
