@@ -205,7 +205,7 @@
 .docs-page__page-menu-wrapper {
   height: 100%;
   overflow: auto;
-  padding: 1.5rem 0 1rem;
+  //padding: 1.5rem 0 1rem;
   box-sizing: border-box;
 
   scrollbar-width: thin;
@@ -222,6 +222,17 @@
     background: transparent;
     border-radius: .375rem;
     transition: background .15s;
+  }
+
+  &:before {
+    content: '';
+    display: block;
+    padding-top: 1.5rem;
+  }
+  &:after {
+    content: '';
+    display: block;
+    padding-bottom: 1rem;
   }
 
   &:hover {

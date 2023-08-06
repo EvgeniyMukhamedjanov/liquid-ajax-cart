@@ -99,6 +99,7 @@ h_min: 2
       Prism.highlightAll();
       document.body.classList.remove('js-docs-page-loading');
 
+      navPosUpdate();
       currentHash = new URL(window.location.href).hash;
       if (currentHash) {
         const $pageMenuLink = document.querySelector(`[data-docs-page="page-menu"] a[href="${currentHash}"]`);
@@ -113,6 +114,29 @@ h_min: 2
       }
     }
   }
+
+  function navPosUpdate() {
+    const $navLink = document.querySelector(".side-menu__link--active");
+    if (!$navLink) return;
+
+    const navLinkOffsetTop = $navLink.offsetTop;
+    const navLinkHeight = $navLink.clientHeight;
+    const subsectionOffsetTop = $navLink.closest(".side-menu__subsection").offsetTop;
+    const offsetTop = navLinkOffsetTop + navLinkHeight + subsectionOffsetTop;
+
+    const $wrapper = document.querySelector(".docs-page__section-nav-wrapper")
+    const scrollTop = $wrapper.scrollTop;
+    const clientHeight = $wrapper.clientHeight;
+    const position = offsetTop + navLinkHeight - scrollTop;
+    if (position > clientHeight - 20 || position < 20) {
+      $wrapper.scrollTo({
+        top: offsetTop + navLinkHeight - (clientHeight / 2),
+        left: 0,
+        behavior: "smooth"
+      })
+    }
+  }
+  window.navPosUpdate = navPosUpdate;
 </script>
 
 <div class="docs-page">
