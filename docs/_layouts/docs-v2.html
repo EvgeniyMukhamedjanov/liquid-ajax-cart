@@ -18,46 +18,51 @@ h_min: 2
 
 <script type="module">
   let abortController;
-  let currentUrl;
   let currentHash = '';
-  const docsPageUrlPrefix = "/v2/docs/";
+  const prefix = "/v2/docs/";
+  let currentPage = getPage(window.location.href);
 
-  window.addEventListener("popstate", (event) => {
-    const url = event.state?.url;
-    if (!url) return;
-    pageRequest(url);
+  function getPage(url) {
+    if (!url || url.indexOf(prefix) === -1) {
+      return undefined;
+    }
+    return url.split(prefix).at(-1).split('/').at(0).split('#').at(0).trim() || 'index';
+  }
+
+  window.addEventListener("popstate", () => {
+    const newPage = getPage(window.location.href);
+    if (!newPage || !currentPage) {
+      window.location.reload();
+    }
+    if (newPage !== currentPage) {
+      currentPage = newPage;
+      pageUpdate(window.location.href);
+    }
   });
 
   document.addEventListener('click', event => {
-    const $pressedLink = event.target.closest(`a[href*="${docsPageUrlPrefix}"]`);
+    const $pressedLink = event.target.closest(`a[href*="${prefix}"]`);
     if (!$pressedLink) return;
 
-    const requestUrl = $pressedLink.href;
-    if (pageRequest(requestUrl)) {
-      history.pushState(
-        { url: requestUrl },
-        "",
-        `${requestUrl}`);
-
+    const newUrl = $pressedLink.href
+    const newPage = getPage(newUrl);
+    if (newPage && currentPage && newPage !== currentPage) {
+      history.pushState({}, "", newUrl);
+      currentPage = newPage;
+      pageUpdate();
       event.preventDefault();
     }
-
-
-    event.preventDefault();
   });
 
-  function pageRequest(url = '') {
-    if (url.indexOf(docsPageUrlPrefix) === -1) {
-      window.location.href = url;
-      return false;
-    }
-
+  async function pageUpdate() {
+    const url = window.location.href;
+    const page = getPage(url);
     try {
+      const requestUrl = prefix + (page === 'index' ? '' : `${page}/`);
+
       document.querySelectorAll("[data-docs-page='link-wrapper']").forEach($item => {
         $item.classList.remove("side-menu__link--active");
       });
-      const pageHandle = url.split(docsPageUrlPrefix).at(-1).split('/').at(0).trim();
-      const requestUrl = `${docsPageUrlPrefix}${pageHandle}${pageHandle && '/'}`;
       const $navLink = document.querySelector(`[data-docs-page='link-wrapper'] a[href="${requestUrl}"]`);
       const $navLinkWrapper = $navLink.closest("[data-docs-page='link-wrapper']");
       $navLinkWrapper.classList.add("side-menu__link--active");
@@ -69,48 +74,43 @@ h_min: 2
       }
       abortController = new AbortController();
 
-      currentUrl = requestUrl;
-      currentHash = new URL(requestUrl).hash;
-      fetch(requestUrl, {
+      const response = await fetch(requestUrl, {
         signal: abortController.signal
-      }).then(response => {
-        return response.text();
-      }).then(html => {
-        if (currentUrl === requestUrl) {
-          const $newDoc = new DOMParser().parseFromString(html, 'text/html');
-          const $newContent = $newDoc.querySelector("[data-docs-page='content']");
-          const $newPageMenu = $newDoc.querySelector("[data-docs-page='page-menu']");
-          const $curContent = document.querySelector("[data-docs-page='content']");
-          const $curPageMenu = document.querySelector("[data-docs-page='page-menu']");
-          $curPageMenu.insertAdjacentElement('afterend', $newPageMenu);
-          $curContent.insertAdjacentElement('afterend', $newContent);
-          $curPageMenu.remove();
-          $curContent.remove();
-          window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "instant"
-          });
-          Prism.highlightAll();
-          document.body.classList.remove('js-docs-page-loading');
-          if (currentHash) {
-            const $pageMenuLink = document.querySelector(`[data-docs-page="page-menu"] a[href="${currentHash}"]`);
-            if ($pageMenuLink) {
-              $pageMenuLink.click();
-            }
-          }
-        }
-      }).catch(error => {
-        if (error.name === "AbortError") return;
-        if (currentUrl === requestUrl) {
-          window.location.href = requestUrl;
-        }
       });
+      const html = await response.text();
+      if (page !== currentPage) {
+        return;
+      }
 
-      return true;
-    } catch (e) {
-      window.location.href = url;
-      return false;
+      const $newDoc = new DOMParser().parseFromString(html, 'text/html');
+      const $newContent = $newDoc.querySelector("[data-docs-page='content']");
+      const $newPageMenu = $newDoc.querySelector("[data-docs-page='page-menu']");
+      const $curContent = document.querySelector("[data-docs-page='content']");
+      const $curPageMenu = document.querySelector("[data-docs-page='page-menu']");
+      $curPageMenu.insertAdjacentElement('afterend', $newPageMenu);
+      $curContent.insertAdjacentElement('afterend', $newContent);
+      $curPageMenu.remove();
+      $curContent.remove();
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant"
+      });
+      Prism.highlightAll();
+      document.body.classList.remove('js-docs-page-loading');
+
+      currentHash = new URL(window.location.href).hash;
+      if (currentHash) {
+        const $pageMenuLink = document.querySelector(`[data-docs-page="page-menu"] a[href="${currentHash}"]`);
+        if ($pageMenuLink) {
+          $pageMenuLink.click();
+        }
+      }
+    } catch(error) {
+      if (error.name === "AbortError") return;
+      if (currentPage === page) {
+        window.location.reload();
+      }
     }
   }
 </script>
