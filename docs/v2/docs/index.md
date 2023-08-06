@@ -8,7 +8,7 @@ disable_toc: true
 
 <p class="lead">
 Include Liquid Ajax Cart to the Shopify theme code or import the package from npm.
-In both cases it will be available globally on the website.
+In both cases it will be globally available on the website.
 </p>
 
 <div class="tabs">
@@ -91,3 +91,5 @@ If you want to run your JavaScript once Liquid Ajax Cart is initialized,
 check the [`liquidAjaxCart.init`](/v2/docs/liquid-ajax-cart-init/) property 
 and listen to the [`liquid-ajax-cart:init`](/v2/docs/event-init/) event:
 {% include v2/content/init-event-example.html %}
+
+{% include v2/content/lifecycle-reference.html %}

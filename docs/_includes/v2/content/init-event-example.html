@@ -1,8 +1,7 @@
 {%- capture highlight_code -%}
 
 function runWhenLiquidAjaxCartInit() {
-  // access the "cart" property of the "liquidAjaxCart" object,
-  // which is available after Liquid Ajax Cart is initialized:
+  // The "cart" property is available only after initialization
   console.log(window.liquidAjaxCart.cart);
 }
 

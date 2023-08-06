@@ -20,9 +20,7 @@ code[class*="language-"] {
 }
 
 pre[class*="language-"]::selection,
-code[class*="language-"]::selection,
-pre[class*="language-"] *::selection,
-code[class*="language-"] *::selection {
+pre[class*="language-"] *::selection {
   text-shadow: none;
   background: #264F78;
 }

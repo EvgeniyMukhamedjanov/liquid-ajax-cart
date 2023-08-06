@@ -279,12 +279,11 @@ to the parent element of the area — Liquid Ajax Cart will keep this element's 
 
 ## JavaScript callback after re-render
 
-Listen to the [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) event 
-if you want to run your JavaScript code when the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) element is re-rendered.
-
-For example, you might need to attach event listeners to elements 
-inside the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container
-each time when it is updated,
-because Liquid Ajax Cart replaces its HTML with a new one on each re-render. 
+Liquid Ajax Cart replaces the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) 
+containers HTML after a successful Shopify Cart API Ajax request.
+Listen to the [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) event
+in order to run your JavaScript after the replacement happens:
 
 {% include v2/content/sections-event-code-example.html %}
+
+{% include v2/content/lifecycle-reference.html %}
