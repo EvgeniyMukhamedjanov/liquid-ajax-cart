@@ -82,7 +82,7 @@ If Liquid Ajax Cart doesn't find the cart JSON, it will make a Shopify Cart API 
 
 </div>
 
-## After initialization
+## Initialization
 
 Once Liquid Ajax Cart is loaded and initialized, 
 the [`js-ajax-cart-init`](/v2/docs/js-ajax-cart-init/) CSS class will be added to the `html` tag.

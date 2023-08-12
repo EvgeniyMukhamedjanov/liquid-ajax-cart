@@ -7,7 +7,7 @@ layout: docs-v2
 
 ## Open the Ajax-cart when a user adds a product to the cart
 
-Usually the Ajax-cart isn't visible and opens when a user clicks on the cart icon in the header.
+Usually the Ajax-cart isn't visible and opens when a user clicks the cart icon in the header.
 The click on the icon triggers a special CSS class to be added that makes the Ajax-cart show up.
 The simplified code looks like this:
 
@@ -33,21 +33,7 @@ body.js-show-ajax-cart .my-ajax-cart {
 {% include v2/codeblock.html title="assets/style.css" language="css" code=highlight_code %}
 
 Our goal is to add the same CSS class to the `body` tag when a new product has been just added to the cart:
-{%- capture highlight_code -%}
-// Listen to the "liquid-ajax-cart:request-end" event which is fired 
-// after a Shopify Cart API Ajax request is performed
-document.addEventListener('liquid-ajax-cart:request-end', event => {
-  const {requestState} = event.detail;
-
-  // If the "add to cart" request is successful 
-  if (requestState.requestType === 'add' && requestState.responseData?.ok) {
-
-    // Add the CSS class to the "body" tag
-    document.body.classList.add('js-show-ajax-cart');
-  }
-});
-{%- endcapture -%}
-{% include v2/codeblock.html title="assets/script.js" language="javascript" code=highlight_code %}
+{% include v2/content/add-to-cart-class-example.html %}
 
 ## Add a gift to the cart if the total price is $100 or higher
 

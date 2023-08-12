@@ -7,13 +7,14 @@ disable_anchors: true
 # Cart totals in the header
 
 <p class="lead" markdown="1">
-Liquid Ajax Cart lets you display user cart data, such as total cart items number or total cart price, 
-outside the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements as well. Usually this information is located in the header. 
+Liquid Ajax Cart lets you display user cart data, such as the number of cart items or the total cart price, 
+outside the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements as well. 
+Usually this information is located in the header of a webpage. 
 </p>
 
 ## Display cart totals
 
-The following Liquid code might be used to show the total cart items number and total price:
+The following Liquid code might be used to show the number of cart items and the total cart price:
 {%- capture highlight_code -%}
 {% raw %}
 <span class="header__cart-quantity">
@@ -26,17 +27,20 @@ The following Liquid code might be used to show the total cart items number and 
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code %}
 
-But those values are static and will be updated only if a user reloads the page.
+However, those values are static and will update only after a page refresh.
 
 ## Ajaxify cart totals
 
-In order to make them updatable without page refresh, apply the [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) attribute
-to the elements and provide a property of the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object, that you want to display.
-For the cart items number it will be the `item_count` property, for the cart price — the `total_price` property.
+To enable updates without requiring a page refresh, apply the [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) attribute
+to the elements and provide a property from the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object, that you want to display.
+For displaying the number of cart items, use the `item_count` property, 
+while for showing the cart total price, employ the `total_price` property.
 
 The attribute supports formatters. In order to display price values, use the `money_with_currency` formatter.
 
-Liquid Ajax Cart will replace the elements inner content with the actual values when the cart content is changed.
+Liquid Ajax Cart updates the content of the [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) elements 
+when the Shopify cart state is changed.
+
 {%- capture highlight_code -%}
 {% raw %}
 <span data-ajax-cart-bind="item_count" class="header__cart-quantity">

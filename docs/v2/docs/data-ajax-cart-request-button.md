@@ -7,7 +7,13 @@ disable_anchors: true
 # data-ajax-cart-request-button
 
 <p class="lead" markdown="1">
-The attribute turns the user clicks on the [`routes.cart_add_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_add_url), [`routes.cart_change_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_change_url), [`routes.cart_clear_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_clear_url), [`routes.cart_update_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_update_url) and [`line_item.url_to_remove`](https://shopify.dev/api/liquid/objects/line_item#line_item-url_to_remove) links into Shopify Cart API Ajax requests.
+The attribute transforms the user's clicks on the 
+[`routes.cart_add_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_add_url), 
+[`routes.cart_change_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_change_url), 
+[`routes.cart_clear_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_clear_url), 
+[`routes.cart_update_url`](https://shopify.dev/api/liquid/objects/routes#routes-cart_update_url) 
+and [`line_item.url_to_remove`](https://shopify.dev/api/liquid/objects/line_item#line_item-url_to_remove) links 
+into Shopify Cart API Ajax requests.
 </p>
 
 ## How it works
@@ -63,7 +69,7 @@ but it is recommended to use other approaches for these cases.
 
 ### "Plus" and "Minus" cart item quantity buttons (not recommended)
 
-Liquid Ajax Cart sends a Shopify Cart API Ajax immediately when a user clicks on a `data-ajax-cart-request-button`.
+Liquid Ajax Cart sends a Shopify Cart API Ajax immediately when a user clicks a `data-ajax-cart-request-button` button.
 It might be a disadvantage in case of "Plus" and "Minus" buttons. 
 For example if a user wants to increase a cart item quantity by three by clicking a "Plus" button three times,
 Liquid Ajax Cart will make the first Shopify Cart API Ajax request right after the first click and switches to the "loading" state.
