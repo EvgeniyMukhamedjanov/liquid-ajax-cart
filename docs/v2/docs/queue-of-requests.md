@@ -7,67 +7,64 @@ disable_anchors: true
 # Queue of requests
 
 <p class="lead">
-Liquid Ajax Cart doesn't perform Shopify Cart API Ajax requests immediately, it adds them to the Queue.
+Liquid Ajax Cart doesn't perform Shopify Cart API Ajax requests immediately; instead, it enqueues them for processing.
 </p>
 
 ## How it works 
 
-Let's say a user changes a cart item quantity input value. 
-Liquid Ajax Cart will have to send a Shopify Cart API `/cart/change.js` Ajax request to update the quantity.
+Let's say a user changes the value of a cart item quantity input, thus 
+Liquid Ajax Cart has to perform a Shopify Cart API `/cart/change.js` Ajax request to update the quantity.
 
-Rather than sending the request immediately, Liquid Ajax Cart will add the request to the Queue of requests.
-If there are no other requests in the Queue, the `/cart/change.js` request will be the first in the Queue:
+Rather than executing the request immediately, Liquid Ajax Cart adds the request to the Queue of requests.
+If there are no other requests in the Queue, the `/cart/change.js` request becomes the first in the Queue:
 
 {%- capture highlight_code -%}
 #1: [/cart/change.js]
 {%- endcapture -%}
 {% include v2/codeblock.html language="plain" code=highlight_code %}
 
-Once the Queue isn't empty, Liquid Ajax Cart switches to the "processing requests" mode
+As the Queue isn't empty anymore, Liquid Ajax Cart switches to the "processing requests" mode
 and executes requests according to their order.
 
-As the `/cart/change.js` is the first in the Queue, it will be executed right away.
+As the `/cart/change.js` is the first in the Queue, it is going to be executed right away.
 
 {%- capture highlight_code -%}
 #1: [/cart/change.js — executing]
 {%- endcapture -%}
 {% include v2/codeblock.html language="plain" code=highlight_code %}
 
-Imagine, while the `/cart/change.js` is executing, the user submits two product forms.
-Liquid Ajax Cart will need to perform two Shopify Cart API `/cart/add.js` Ajax requests to add the products to the cart.
-As the Queue is not empty, the requests will go to the end of the Queue:
+Imagine, while the `/cart/change.js` is executing, the user submits a product form.
+Thus, Liquid Ajax Cart needs to perform a Shopify Cart API `/cart/add.js` Ajax requests to add the product to the cart.
+As the Queue is not empty, the request goes to the end of the Queue:
 
 {%- capture highlight_code -%}
 #1: [/cart/change.js — executing]
 #2: [/cart/add.js]
-#3: [/cart/add.js]
 {%- endcapture -%}
 {% include v2/codeblock.html language="plain" code=highlight_code %}
 
-Once the `/cart/change.js` is completed, it will be removed from the Queue, 
-so the upper `/cart/add.js` request will become the first in the Queue:
+Once the `/cart/change.js` is completed, it gets removed from the Queue, 
+then the `/cart/add.js` request becomes the first in the Queue:
 
 {%- capture highlight_code -%}
 DEL [/cart/change.js — completed]
 ---------------------------------
 #1: [/cart/add.js]
-#2: [/cart/add.js]
 {%- endcapture -%}
 {% include v2/codeblock.html language="plain" code=highlight_code %}
 
-Then Liquid Ajax Cart will start executing the new first request in the Queue:
+Then Liquid Ajax Cart starts executing the current first request in the Queue:
 {%- capture highlight_code -%}
 #1: [/cart/add.js — executing]
-#2: [/cart/add.js]
 {%- endcapture -%}
 {% include v2/codeblock.html language="plain" code=highlight_code %}
 
-The process will be repeated until the Queue is empty.
+The process is being repeated until the Queue is empty.
 
 ## The `important` requests
 
 When you make a Shopify Cart API Ajax request using {% include v2/content/links-to-request-methods.html %},
-it will also go to the end of the Queue by default, if the Queue isn't empty.
+it also goes to the end of the Queue by default, if the Queue isn't empty.
 
 {%- capture highlight_code -%}
 const button = document.querySelector('#custom-add-to-cart-button');
@@ -87,7 +84,7 @@ button.addEventListener('click', () => {
 
 But sometimes you need to perform your requests right now, out of queue, before any other request in the Queue.
 You can do that by setting the `important` option to `true` in {% include v2/content/links-to-request-methods.html %}.
-If a request is "important", Liquid Ajax Cart will always put it at the beginning of the Queue.
+If a request is "important", Liquid Ajax Cart always puts it at the beginning of the Queue.
 
 ### Use case
 
