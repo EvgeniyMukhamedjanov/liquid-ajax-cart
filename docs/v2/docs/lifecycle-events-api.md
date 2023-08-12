@@ -328,7 +328,7 @@ Liquid Ajax Cart performs an additional `/cart/update.js` request to get the dat
 <div class="steps-list__title">Updates the Request state object</div>
 <div class="steps-list__content" markdown="1">
 Liquid Ajax Cart populates the [Request state](/v2/docs/request-state/) object according to the request result 
-— the `responseData`/`extraResponseData`/`fetchError` properties:
+— the `responseData` / `extraResponseData` / `fetchError` properties:
 
 {%- capture highlight_code -%}
 {
