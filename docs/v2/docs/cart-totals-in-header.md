@@ -1,7 +1,6 @@
 ---
 title: Cart totals in the header
 layout: docs-v2
-disable_anchors: true
 ---
 
 # Cart totals in the header

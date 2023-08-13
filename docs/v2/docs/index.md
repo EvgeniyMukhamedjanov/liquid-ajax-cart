@@ -1,7 +1,6 @@
 ---
 title: Installation
 layout: docs-v2
-disable_toc: true
 ---
 
 # Installation

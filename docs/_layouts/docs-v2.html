@@ -16,6 +16,19 @@ h_min: 2
 
 {%- assign docs_eyebrow = '' -%}
 
+{% capture toc %}
+  {% include jekyll-docs-theme/toc.html
+    class="side-menu__subsection-content"
+    item_class="side-menu__link"
+  %}
+{% endcapture %}
+{% assign toc_parts_size = toc | split: '</a>' | size %}
+{% assign show_toc = false %}
+{% if toc_parts_size > 2 %}
+  {% assign show_toc = true %}
+{% endif %}
+
+
 <script type="module">
   let abortController;
   let currentHash = '';
@@ -213,7 +226,7 @@ h_min: 2
       </div>
       <div class="docs-page__page-menu" data-docs-page="page-menu">
         <div class="docs-page__page-menu-wrapper">
-          <nav class="side-menu" {% if page.disable_toc %}style="display: none;"{% endif %}>
+          <nav class="side-menu" {% unless show_toc %}style="display: none"{% endunless %}>
             <div class="side-menu__section">
               <div class="side-menu__section-title" style="color: #717171; margin-left: 1rem;">
                 On this page

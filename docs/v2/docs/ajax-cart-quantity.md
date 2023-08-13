@@ -1,7 +1,6 @@
 ---
 title: ajax-cart-quantity
 layout: docs-v2
-disable_anchors: true
 ---
 
 # ajax-cart-quantity

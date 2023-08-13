@@ -224,12 +224,12 @@ The [`js-ajax-cart-processing`](/v2/docs/js-ajax-cart-processing/) CSS class is 
 <div class="steps-list__badge-list"><span class="steps-list__badge steps-list__badge--event">Event</span></div>
 <div class="steps-list__title"><h3 id="liquid-ajax-cart-queue-end">Triggers the <code>liquid-ajax-cart:queue-end</code> event</h3></div>
 <div class="steps-list__content" markdown="1">
-Since Liquid Ajax Cart executed all the requests from the [Queue](/v2/docs/queue-of-requests/) 
+As Liquid Ajax Cart has executed all the requests from the [Queue](/v2/docs/queue-of-requests/) 
 and it is switching back to the "idle" mode,
 the [`liquid-ajax-cart:queue-end`](/v2/docs/event-queue-end/) event is fired.
 
-Examples:
-* [Add a gift to the cart if the total price is $100 or higher](/v2/docs/js-snippets/#add-a-gift-to-the-cart-if-the-total-price-is-100-or-higher);
+{% include v2/content/queue-end-use-cases.html %}
+
 </div>
 </li>
 </ul>
@@ -401,10 +401,11 @@ get updated according to the cart state data.
 <div class="steps-list__badge-list"><span class="steps-list__badge steps-list__badge--event">Event</span></div>
 <div class="steps-list__title"><h3 id="liquid-ajax-cart-request-end">Triggers the <code>liquid-ajax-cart:request-end</code> event</h3></div>
 <div class="steps-list__content" markdown="1">
-Liquid Ajax Cart triggers the [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) event.
+The [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) is the only event that is fired right after a request is executed, 
+the cart state ([`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/)) is updated
+and the cart-related content is re-rendered.
 
-Examples:
-* [Open the Ajax-cart when a user adds a product to the cart](/v2/docs/js-snippets/#open-the-ajax-cart-when-a-user-adds-a-product-to-the-cart);
+{% include v2/content/request-end-use-cases.html %}
 </div>
 </li>
 

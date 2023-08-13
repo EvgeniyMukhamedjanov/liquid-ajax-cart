@@ -1,7 +1,6 @@
 ---
 title: Request state
 layout: docs-v2
-disable_anchors: true
 ---
 
 # Request state
@@ -60,7 +59,7 @@ Along with that, Liquid Ajax Cart attaches the input `HTMLElement` object to the
 ### `info.cancel`
 If the `info.cancel` is `true`, then the request won't be executed and the `responseData` property won't exist.
 This lets you [cancel a request](/v2/docs/event-request-start/#cancel-a-request) 
-in the [`liquid-ajax-cart:request-start`](/v2/docs/event-request-start/) event listener.
+in a [`liquid-ajax-cart:request-start`](/v2/docs/event-request-start/) event listener.
 
 ### `responseData`
 A Shopify response to the request. 

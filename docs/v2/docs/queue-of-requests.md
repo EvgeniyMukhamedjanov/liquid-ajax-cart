@@ -1,7 +1,6 @@
 ---
 title: Queue of requests
 layout: docs-v2
-disable_anchors: true
 ---
 
 # Queue of requests

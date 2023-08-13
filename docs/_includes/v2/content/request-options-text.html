@@ -13,6 +13,9 @@ the global CSS classes.
 
 The `firstCallback` function will be called with the only parameter — the [Request state](/v2/docs/request-state/) object.
 
+The detailed explanation on when the `firstCallback` function is called,
+and what exactly happens before and after the call, is in the “[Lifecycle, events, API](/v2/docs/lifecycle-events-api/)” guide.
+
 ### lastCallback
 
 The `lastCallback` parameter is a callback function that **will be called last** after the request is performed
@@ -24,21 +27,19 @@ the global CSS classes.
 
 The `lastCallback` function will be called with the only parameter — the [Request state](/v2/docs/request-state/) object.
 
+The detailed explanation on when the `lastCallback` function is called,
+and what exactly happens before and after the call, is in the “[Lifecycle, events, API](/v2/docs/lifecycle-events-api/)” guide.
+
 ### info
 
-The `info` parameter is a simple Javascript object that will be attached to the [Request state](/v2/docs/request-state/) object of the request.
-You can attach your custom data to the Request state using the `info` parameter.
+The `info` parameter is a JavaScript object that will be attached to the [Request state](/v2/docs/request-state/) object of the request.
+You can add your custom properties to the Request state using the `info` parameter.
 
 Don't use the `initiator` and the `cancel` keys as they are reserved properties.
 
-### newQueue
+### important
 
-If you make a request from a `firstCallback` or `lastCallback` callback
-or from a callback that you pass to the `onResult` function,
-most likely you want your request to be performed right now even if there might be other requests in the queue.
-Set `newQueue` to `false` in this case.
+If you want a request to go to the beginning of the [Queues or Requests](/v2/docs/queue-of-requests/)
+rather than to the end in order to execute it as soon as possible, set the `important` property to `true`.
 
-In any other cases you want your request to be performed in a regular order.
-Set `newQueue` to `false` in this case.
-
-Read more about [Queues or Requests](/v2/docs/queue-of-requests/) to make the right choice.
+Explore the feature and the use cases on the [Queues or Requests](/v2/docs/queue-of-requests/) page.

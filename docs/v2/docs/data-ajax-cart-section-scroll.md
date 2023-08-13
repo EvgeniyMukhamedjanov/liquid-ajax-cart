@@ -1,24 +1,27 @@
 ---
 title: data-ajax-cart-section-scroll
 layout: docs-v2
-disable_anchors: true
 ---
 
 # data-ajax-cart-section-scroll
 
 <p class="lead" markdown="1">
-The attribute keeps the scroll position of an element when the parent [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container gets re-rendered.
+An attribute which keeps the scroll position of an element unchanged
+when the parent [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container is re-rendered.
 </p>
 
-If you have a scrollable area inside a [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container, 
-the scroll position will be reset to top every time when the cart is changed because the container HTML will be completely replaced with a new one.
+## How it works
+
+When you have a scrollable area inside a [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container, 
+the scroll position of them will be reset to top every time when the `data-ajax-cart-section` container is re-rendered.
+It happens because the HTML of a `data-ajax-cart-section` container is completely replaced with a new one during re-rendering.
 
 In order to prevent the scroll reset, Liquid Ajax Cart remembers scroll positions of the `data-ajax-cart-section-scroll` elements 
-and restores them after the parent `data-ajax-cart-section` container HTML is updated.
+and restores them after the HTML of the parent `data-ajax-cart-section` container is replaced.
 
 ## Single scrollable area
 
-Add the `data-ajax-cart-section-scroll` attribute to a scrollable elements and Liquid Ajax Cart will keep the scroll position unchanged.
+Add the `data-ajax-cart-section-scroll` attribute to a scrollable element so that Liquid Ajax Cart keeps the scroll position unchanged.
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -42,7 +45,7 @@ Add the `data-ajax-cart-section-scroll` attribute to a scrollable elements and L
 
 ## Multiple scrollable areas
 
-Add the `data-ajax-cart-section-scroll` attribute with unique names to scrollable elements so Liquid Ajax Cart can distinguish them after HTML update.
+Add the `data-ajax-cart-section-scroll` attribute with unique names to scrollable elements so that Liquid Ajax Cart can distinguish them after re-rendering.
 
 {%- capture highlight_code -%}
 {% raw %}

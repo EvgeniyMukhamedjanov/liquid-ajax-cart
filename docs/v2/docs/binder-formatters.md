@@ -1,14 +1,16 @@
 ---
 title: binderFormatters
 layout: docs-v2
-disable_toc: true
 ---
 
 # binderFormatters
 
 <p class="lead" markdown="1">
-The configuration parameter lets you define custom formatters to use with the [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) attribute.
+A configuration parameter which lets you define custom formatters 
+to use with the [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) attribute.
 </p>
+
+## Code example
 
 For example, if you use the `option_selection.js` Shopify asset and its `Shopify.formatMoney` function, 
 you can specify your own formatter for money related values.

@@ -1,16 +1,17 @@
 ---
 title: liquidAjaxCart.conf() 
 layout: docs-v2
-disable_toc: true
 ---
 
 # liquidAjaxCart.conf()
 
 <p class="lead" markdown="1">
-The method sets configuration parameter values.
+A method of the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart/) object, which sets configuration parameter values.
 </p>
 
-The `conf` method takes a configuration parameter name and its new value as parameters:
+## Code example
+
+The `conf` method takes a configuration parameter name and its new value:
 
 {%- capture highlight_code -%}
 

@@ -1,13 +1,12 @@
 ---
 title: js-ajax-cart-not-empty
 layout: docs-v2
-disable_toc: true
 ---
 
 # js-ajax-cart-not-empty
 
 <p class="lead" markdown="1">
-Liquid Ajax Cart adds the `js-ajax-cart-not-empty` CSS class to the `html` tag if the user cart is not empty.
+A CSS class which is appended to the `html` tag when the user cart is not empty.
 </p>
 
 ## Example

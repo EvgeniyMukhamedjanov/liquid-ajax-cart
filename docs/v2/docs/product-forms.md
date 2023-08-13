@@ -1,7 +1,6 @@
 ---
 title: Product forms
 layout: docs-v2
-disable_anchors: true
 ---
 
 # Product forms

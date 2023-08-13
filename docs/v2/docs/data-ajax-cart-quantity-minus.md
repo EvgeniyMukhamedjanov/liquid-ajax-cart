@@ -1,13 +1,12 @@
 ---
 title: data-ajax-cart-quantity-minus
 layout: docs-v2
-disable_toc: true
 ---
 
 # data-ajax-cart-quantity-minus
 
 <p class="lead" markdown="1">
-The attribute identifies a "Minus" button inside the [`<ajax-cart-quantity>`](/v2/docs/ajax-cart-quantity/) custom tag.
+An attribute which identifies a "Minus" button inside a [`<ajax-cart-quantity>`](/v2/docs/ajax-cart-quantity/) custom tag.
 </p>
 
 {%- capture highlight_code -%}

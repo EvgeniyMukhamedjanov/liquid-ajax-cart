@@ -6,15 +6,15 @@ layout: docs-v2
 # data-ajax-cart-quantity-input
 
 <p class="lead" markdown="1">
-The attribute ajaxifies cart item quantity input fields.
+An attribute which ajaxifies cart item quantity input fields.
 </p>
 
 ## How it works 
 
 Add the `data-ajax-cart-quantity-input` attribute with a cart item index 
-or a cart item key as the value to an input element to ajaxify it.
+or a cart item key as the value to an input element.
 When a user changes the input value or presses the `Enter` key within the input, 
-Liquid Ajax Cart will send a Shopify Cart API `/cart/change.js` Ajax request to update the quantity.
+Liquid Ajax Cart performs a Shopify Cart API `/cart/change.js` Ajax request to update the quantity.
 
 If a user presses the `Esc` key within the input, its value will be reset to the current item quantity 
 according to the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object.
@@ -81,9 +81,9 @@ The line item key is supported also, but there were found unexpected behaviour o
 
 ## Loading state
 
-The `data-ajax-cart-quantity-input` input fields become `disabled` when there is any Shopify Cart API request in progress.
+The `data-ajax-cart-quantity-input` input fields become `disabled` when there is a Shopify Cart API Ajax request in progress.
 
-## Adding the "Plus" and "Minus buttons"
+## "Plus" and "Minus buttons"
 
-In order to attach "Plus" and "Minus" buttons to the `data-ajax-cart-quantity-input` input, 
+To attach "Plus" and "Minus" buttons to the `data-ajax-cart-quantity-input` input, 
 use the [`<ajax-cart-quantity>`](/v2/docs/ajax-cart-quantity/) custom tag.

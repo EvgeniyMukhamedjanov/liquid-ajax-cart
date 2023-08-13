@@ -1,16 +1,18 @@
 ---
 title: liquidAjaxCart.get() 
 layout: docs-v2
-disable_anchors: true
 ---
 
 # liquidAjaxCart.get()
 
 <p class="lead" markdown="1">
-The method performs an Ajax request to the Shopify Cart API `GET /cart.js` endpoint.
+A method of the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart/) object, 
+which initiates an Ajax request to the Shopify Cart API `GET /cart.js` endpoint.
 </p>
 
-The method takes request options object as the first parameter:
+## Structure
+
+The method takes an object with the request options as the first parameter:
 
 {%- capture highlight_code -%}
 {% include v2/content/request-options-object.html %}

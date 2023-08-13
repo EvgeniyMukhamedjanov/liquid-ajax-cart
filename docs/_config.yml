@@ -114,7 +114,7 @@ links_v2:
 
         - title: JavaScript API
           links:
-            - title: liquidAjaxCart object
+            - title: liquidAjaxCart {}
               file: liquid-ajax-cart
             - title: get()
               file: liquid-ajax-cart-get

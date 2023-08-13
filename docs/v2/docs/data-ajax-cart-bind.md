@@ -1,33 +1,32 @@
 ---
 title: data-ajax-cart-bind
 layout: docs-v2
-disable_anchors: true
 ---
 
 # data-ajax-cart-bind
 
 <p class="lead" markdown="1">
-The attribute displays a [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object's property, 
-such as cart total quantity or cart total price, 
-outside the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements. 
-Liquid Ajax Cart will update the displayed value if the cart is changed.
+An attribute which displays the value of a [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object's property, 
+such as the number of cart items, or the cart total price, 
+outside of the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements. 
+Liquid Ajax Cart updates the displayed value when the cart is changed.
 </p>
 
 ## How it works
 
-Add the `data-ajax-cart-bind` attribute with the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object's property, 
-that you want to show, to any HTML element
+Add the `data-ajax-cart-bind` attribute with the name of the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object's property, 
+whose value you want to show, to any HTML element
  —
-Liquid Ajax Cart will put the property value as the inner content of the HTML element
-and update it if the property value is changed.
+Liquid Ajax Cart inserts the value of the property into the HTML element as the inner content
+and updates it when the value is changed.
 
 ## Use cases
 
-The most popular use cases are showing cart items number and cart total price in the site header.
+The most popular use cases are displaying the number of cart items and the cart total price in the header of a webpage.
 
-### Cart total quantity
+### Number of cart items
 
-The cart total quantity is kept in the `item_count` property of the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object.
+The number of cart items is stored in the `item_count` property of the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object.
 Pass the `item_count` as the value for the `data-ajax-cart-bind` attribute.
 
 {%- capture highlight_code -%}
@@ -44,8 +43,8 @@ Pass the `item_count` as the value for the `data-ajax-cart-bind` attribute.
 {% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code %}
 
 The best practice is to use the `data-ajax-cart-bind` on top of Liquid expressions.
-The liquid expression `{% raw %}{{ cart.item_count }}{% endraw %}` displays the amount
-until Liquid Ajax Cart is loaded or if JavaScript is disabled.
+The liquid expression `{% raw %}{{ cart.item_count }}{% endraw %}` lets you show the number of cart items
+until Liquid Ajax Cart is initialized and if JavaScript is disabled.
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -63,7 +62,7 @@ until Liquid Ajax Cart is loaded or if JavaScript is disabled.
 
 ### Cart total price
 
-The cart total price is kept in the `total_price` property of the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object.
+The cart total price is stored in the `total_price` property of the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object.
 Pass the `total_price` as the value for the `data-ajax-cart-bind` attribute.
 Use the `money_with_currency` formatter with money related properties.
 
@@ -81,8 +80,8 @@ Use the `money_with_currency` formatter with money related properties.
 {% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code %}
 
 The best practice is to use the `data-ajax-cart-bind` on top of Liquid expressions.
-The liquid expression `{% raw %}{{ cart.total_price | money_with_currency }}{% endraw %}` displays the amount
-until Liquid Ajax Cart is loaded or if JavaScript is disabled.
+The liquid expression `{% raw %}{{ cart.total_price | money_with_currency }}{% endraw %}` lets you show the cart total price
+until Liquid Ajax Cart is initialized and if JavaScript is disabled.
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -111,7 +110,7 @@ return Intl.NumberFormat(window.Shopify.locale, {
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}
 
-If the `Shopify.locale` or the `Intl` are not available, the formatter will return the following:
+If the `Shopify.locale` or the `Intl` are not available, the formatter returns the following:
 
 {%- capture highlight_code -%}
 // 100.00 USD
