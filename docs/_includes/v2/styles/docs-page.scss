@@ -65,7 +65,7 @@
   top: var(--header-height);
   padding-top: .25rem;
   height: calc(99vh - .25rem - var(--header-height));
-  animation: appear-animation .3s;
+  animation: appear-animation .15s;
 
   &:before {
     content: '';

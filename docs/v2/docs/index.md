@@ -1,14 +1,13 @@
 ---
 title: Installation
 layout: docs-v2
-disable_toc: true
 ---
 
 # Installation
 
 <p class="lead">
 Include Liquid Ajax Cart to the Shopify theme code or import the package from npm.
-In both cases it will be available globally on the website.
+In both cases it will be globally available on the website.
 </p>
 
 <div class="tabs">
@@ -82,7 +81,7 @@ If Liquid Ajax Cart doesn't find the cart JSON, it will make a Shopify Cart API 
 
 </div>
 
-## After initialization
+## Initialization
 
 Once Liquid Ajax Cart is loaded and initialized, 
 the [`js-ajax-cart-init`](/v2/docs/js-ajax-cart-init/) CSS class will be added to the `html` tag.
@@ -91,3 +90,5 @@ If you want to run your JavaScript once Liquid Ajax Cart is initialized,
 check the [`liquidAjaxCart.init`](/v2/docs/liquid-ajax-cart-init/) property 
 and listen to the [`liquid-ajax-cart:init`](/v2/docs/event-init/) event:
 {% include v2/content/init-event-example.html %}
+
+{% include v2/content/lifecycle-reference.html %}

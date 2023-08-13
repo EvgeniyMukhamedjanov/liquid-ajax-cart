@@ -1,31 +1,32 @@
 ---
 title: data-ajax-cart-errors
 layout: docs-v2
-disable_anchors: true
 ---
 
 # data-ajax-cart-errors
 
 <p class="lead" markdown="1">
-Liquid Ajax Cart puts the product form and cart item error messages to the containers with the `data-ajax-cart-errors` attribute.  
+Liquid Ajax Cart inserts the product form and cart item error messages into the containers with the `data-ajax-cart-errors` attribute.  
 </p>
 
 ## How it works
 
-Shopify might respond with an error message to a Cart API Ajax request sent by Liquid Ajax Cart.
-For example — the "All 2 White Shirt are in your cart" message if a user tries to add to cart more items than in stock.
+Shopify might return an error message in response to a Cart API Ajax request.
+For example, it returns the message "All 2 White Shirt are in your cart" 
+when a user attempts to add to cart more items than are available in stock.
 
-If a Shopify Cart API Ajax request is failed and doesn't have any error description or failed because of the Internet connection,
-then Liquid Ajax Cart will populate the error message containers with the generic message: "There was an error while updating your cart. Please try again.".
-Use the [`requestErrorText`](/v2/docs/request-error-text/) configuration parameter to change the message.
+If a Shopify Cart API Ajax request is failed and doesn't have any error description or is failed because of the Internet connection,
+Liquid Ajax Cart populates the error message containers with the generic message "There was an error while updating your cart. Please try again.".
+Use the [`requestErrorText`](/v2/docs/request-error-text/) configuration parameter to change the generic message.
 
 ## Product forms
 
-Put a container with the `data-ajax-cart-errors="form"` attribute inside a product form ajaxified with the [`<ajax-cart-product-form>`](/v2/docs/ajax-cart-product-form/) custom tag.
+Add a container with the `data-ajax-cart-errors="form"` attribute inside a product form 
+ajaxified with the [`<ajax-cart-product-form>`](/v2/docs/ajax-cart-product-form/) custom tag.
 
-If Shopify responds with an error message to a Cart API Ajax request sent by the `<ajax-cart-product-form>` custom tag,
+If Shopify returns an error message in response to a Cart API Ajax request sent by the `<ajax-cart-product-form>` custom tag,
 or if the request fails,
-Liquid Ajax Cart will put the error message into the `data-ajax-cart-errors="form"` container.
+Liquid Ajax Cart puts the error message into the `data-ajax-cart-errors="form"` container.
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -48,10 +49,11 @@ Liquid Ajax Cart will put the error message into the `data-ajax-cart-errors="for
 
 ## Line items
 
-Add a container with the `data-ajax-cart-errors` attribute and the cart item key as the value —
-If Shopify responds with an error message to a Cart API `/cart/change.js` Ajax request related to a specific cart item,
+Add a container with the `data-ajax-cart-errors` attribute and set its value to the key of a cart item.
+If Shopify returns an error message in response to a Cart API `/cart/change.js` Ajax request related to a specific cart item,
 or if the request fails,
-Liquid Ajax Cart will put the error message into a `data-ajax-cart-errors` container with the corresponding cart item key.
+Liquid Ajax Cart searches for the `data-ajax-cart-errors="cart_item_key"` element
+and inserts the error message into that element.
 
 {%- capture highlight_code -%}
 {% raw %}

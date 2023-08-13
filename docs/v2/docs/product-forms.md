@@ -1,14 +1,13 @@
 ---
 title: Product forms
 layout: docs-v2
-disable_anchors: true
 ---
 
 # Product forms
 
 <p class="lead" markdown="1">
-Liquid Ajax Cart sends a Shopify "add to cart" Ajax request once a user submits a product form, 
-lets you show a loading indicator, re-renders [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements if the request is successful, 
+Liquid Ajax Cart initiates a Shopify "add to cart" Ajax request when a user submits a product form, 
+lets you display a loading indicator, re-renders [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements if the request is successful, 
 shows an error message if something went wrong.
 </p>
 
@@ -16,7 +15,7 @@ shows an error message if something went wrong.
 
 Liquid Ajax Cart works with valid [Shopify product forms](https://shopify.dev/docs/themes/architecture/templates/product#the-product-form).
 
-Build or find a product form that you want to ajaxify. In general, it will look like this:
+Build or find a product form that you want to ajaxify. Typically, it has a structure similar to this:
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -33,9 +32,9 @@ Build or find a product form that you want to ajaxify. In general, it will look 
 
 Once you click the "Add to cart" button, it should redirect you to the cart page and add the product to the cart.
 
-In order to ajaxify the form, wrap it with the [`<ajax-cart-product-form>`](/v2/docs/ajax-cart-product-form/) custom tag —
-it will send an "Add to cart" Ajax request once a user submits the form. 
-If the request is successful, Liquid Ajax Cart will re-render cart sections.
+To ajaxify the form, wrap it in the [`<ajax-cart-product-form>`](/v2/docs/ajax-cart-product-form/) custom tag —
+it initiates an "add to cart" Ajax request when a user submits the form. 
+If the request is successful, Liquid Ajax Cart re-renders [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements as well.
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -54,12 +53,12 @@ If the request is successful, Liquid Ajax Cart will re-render cart sections.
 
 ## Error messages
 
-Shopify may respond with an error message to an "add to cart" request when, for example,
-a user tries to add more items to the cart than exist in stock.
+Shopify may return an error message in response to an "add to cart" request
+when a user attempts to add more items to the cart than are available in stock.
 
-In order to show the error messages, add an element with the [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors/) attribute
-and the `form` string as the value inside an ajaxified product form.
-if Shopify responds with an error message, Liquid Ajax Cart will put the message text to the element.
+To display the error message, add an element with the [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors/) attribute 
+within the ajaxified product form. Set the value of the attribute to the string `form`.
+if Shopify responds with an error message, Liquid Ajax Cart will insert the error message into the element.
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -77,6 +76,14 @@ if Shopify responds with an error message, Liquid Ajax Cart will put the message
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/main-product.liquid" language="liquid" code=highlight_code %}
 
-Once Shopify responds to the request, Liquid Ajax Cart will re-render cart section HTML.
-
 {% include v2/content/form-loading-state-block.html %}
+
+## JavaScript event
+
+To execute your JavaScript code after a product is added to the cart,
+you should subscribe to the [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) event.
+
+This is how you can add a CSS class to the `body` element to open your Ajax-cart when a product is added to the cart:
+{% include v2/content/add-to-cart-class-example.html %}
+
+{% include v2/content/lifecycle-reference.html %}

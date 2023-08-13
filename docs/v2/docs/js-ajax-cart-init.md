@@ -1,13 +1,12 @@
 ---
 title: js-ajax-cart-init
 layout: docs-v2
-disable_toc: true
 ---
 
 # js-ajax-cart-init
 
 <p class="lead" markdown="1">
-Liquid Ajax Cart adds the `js-ajax-cart-init` CSS class to the `html` tag when it is successfully loaded and initialized.
+A CSS class which is appended to the `html` tag when Liquid Ajax Cart is initialized.
 </p>
 
 ## Example

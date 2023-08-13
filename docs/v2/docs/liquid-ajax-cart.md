@@ -1,68 +1,35 @@
 ---
 title: The liquidAjaxCart object
 layout: docs-v2
-disable_anchors: true
 ---
 
-# The `liquidAjaxCart` object
+# The liquidAjaxCart object
 
 <p class="lead" markdown="1">
-The object exposes the methods and properties of the Liquid Ajax Cart library.
+An object which exposes the methods and properties of the Liquid Ajax Cart library.
+The `liquidAjaxCart` object is defined as a property of the `window` object to be accessible from everywhere.
 </p>
 
 ## Methods and properties
+
+A few of them are available as soon as the library code is loaded:
+* [`conf()`](/v2/docs/liquid-ajax-cart-conf/) — sets configuration parameter values;
+* [`init`](/v2/docs/liquid-ajax-cart-init/) — initialization status (boolean).
+
+The rest of them are available only after the [initialization](/v2/docs/lifecycle-events-api/#initialization):
 
 * [`get()`](/v2/docs/liquid-ajax-cart-get/) — makes a Shopify Cart API `GET /cart.js` Ajax request;
 * [`add()`](/v2/docs/liquid-ajax-cart-add/) — makes a `POST /cart/add.js` request;
 * [`change()`](/v2/docs/liquid-ajax-cart-change/) — makes a `POST /cart/change.js` request;
 * [`update()`](/v2/docs/liquid-ajax-cart-update/) — makes a `POST /cart/update.js` request;
 * [`clear()`](/v2/docs/liquid-ajax-cart-clear/) — makes a `POST /cart/clear.js` request;
-* [`init`](/v2/docs/liquid-ajax-cart-init/) — initialization status;
-* [`cart`](/v2/docs/liquid-ajax-cart-cart/) — current cart state data;
-* [`processing`](/v2/docs/liquid-ajax-cart-processing/) — `true` if there is a request in progress now;
-* [`conf()`](/v2/docs/liquid-ajax-cart-conf/) — sets configuration parameter values.
+* [`cart`](/v2/docs/liquid-ajax-cart-cart/) — current cart state (JSON);
+* [`processing`](/v2/docs/liquid-ajax-cart-processing/) — `true` if there is a request in progress now (boolean).
 
-## Access via `import`
+## Access after initialization
 
-To get the `liquidAjaxCart` object you can import it from the library during installation:
-
-<div class="tabs">
-
-<input type="radio" name="import_types" id="import_type_asset" checked />
-<label for="import_type_asset">From theme asset</label>
-<div>
-
-{%- capture highlight_code -%}
-{% raw %}
-<script type="module">
-  import liquidAjaxCart from {% endraw %}{% include v2/last-release-file-name.html asset_url=true %}{% raw %};
-</script>
-{% endraw %}
-{%- endcapture -%}
-{% include v2/codeblock.html title="layout/theme.liquid" language="liquid" code=highlight_code %}
-
-</div>
-
-<input type="radio" name="import_types" id="import_type_npm" />
-<label for="import_type_npm">From npm-package</label> 
-<div>
-
-{%- capture highlight_code -%}
-import liquidAjaxCart from "liquid-ajax-cart";
-{%- endcapture -%}
-{% include v2/codeblock.html title="src/index.js" language="javascript" code=highlight_code %}
-
-</div>
-
-</div>
-
-## Access via `window`
-
-Once Liquid Ajax Cart is installed, the `liquidAjaxCart` object is available globally as a `window` property.
-
-Before accessing it from the `window` object, make sure that Liquid Ajax Cart is loaded.
-If it is not loaded yet, subscribe to the [`liquid-ajax-cart:init`](/v2/docs/event-init/) event 
-and use the `window.liquidAjaxCart` after the event is fired:
-
+Since most of the `liquidAjaxCart` methods and properties are available only after the initialization,
+use the [`liquid-ajax-cart:init`](/v2/docs/event-init/) event
+along with the [`liquidAjaxCart.init`](/v2/docs/liquid-ajax-cart-init/) property
+when your code depends on Liquid Ajax Cart and should be executed as soon as the library is fully available:
 {% include v2/content/init-event-example.html %}
-

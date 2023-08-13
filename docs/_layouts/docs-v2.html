@@ -16,6 +16,19 @@ h_min: 2
 
 {%- assign docs_eyebrow = '' -%}
 
+{% capture toc %}
+  {% include jekyll-docs-theme/toc.html
+    class="side-menu__subsection-content"
+    item_class="side-menu__link"
+  %}
+{% endcapture %}
+{% assign toc_parts_size = toc | split: '</a>' | size %}
+{% assign show_toc = false %}
+{% if toc_parts_size > 2 %}
+  {% assign show_toc = true %}
+{% endif %}
+
+
 <script type="module">
   let abortController;
   let currentHash = '';
@@ -36,7 +49,7 @@ h_min: 2
     }
     if (newPage !== currentPage) {
       currentPage = newPage;
-      pageUpdate(window.location.href);
+      pageUpdate();
     }
   });
 
@@ -107,7 +120,7 @@ h_min: 2
           $pageMenuLink.click();
         }
       }
-    } catch(error) {
+    } catch (error) {
       if (error.name === "AbortError") return;
       if (currentPage === page) {
         window.location.reload();
@@ -116,6 +129,9 @@ h_min: 2
   }
 
   function navPosUpdate() {
+    const $wrapper = document.querySelector(".docs-page__section-nav-wrapper");
+    if (!$wrapper) return;
+
     const $navLink = document.querySelector(".side-menu__link--active");
     if (!$navLink) return;
 
@@ -124,7 +140,6 @@ h_min: 2
     const subsectionOffsetTop = $navLink.closest(".side-menu__subsection").offsetTop;
     const offsetTop = navLinkOffsetTop + navLinkHeight + subsectionOffsetTop;
 
-    const $wrapper = document.querySelector(".docs-page__section-nav-wrapper")
     const scrollTop = $wrapper.scrollTop;
     const clientHeight = $wrapper.clientHeight;
     const position = offsetTop + navLinkHeight - scrollTop;
@@ -136,7 +151,9 @@ h_min: 2
       })
     }
   }
-  window.navPosUpdate = navPosUpdate;
+
+  document.addEventListener('DOMContentLoaded', navPosUpdate);
+
 </script>
 
 <div class="docs-page">
@@ -209,23 +226,21 @@ h_min: 2
       </div>
       <div class="docs-page__page-menu" data-docs-page="page-menu">
         <div class="docs-page__page-menu-wrapper">
-          {% unless page.disable_toc %}
-            <nav class="side-menu">
-              <div class="side-menu__section">
-                <div class="side-menu__section-title" style="color: #717171; margin-left: 1rem;">
-                  On this page
-                </div>
-                <div class="side-menu__section-content">
-                  <div class="side-menu__subsection">
-                    {% include jekyll-docs-theme/toc.html
-                      class="side-menu__subsection-content"
-                      item_class="side-menu__link"
-                    %}
-                  </div>
+          <nav class="side-menu" {% unless show_toc %}style="display: none"{% endunless %}>
+            <div class="side-menu__section">
+              <div class="side-menu__section-title" style="color: #717171; margin-left: 1rem;">
+                On this page
+              </div>
+              <div class="side-menu__section-content">
+                <div class="side-menu__subsection">
+                  {% include jekyll-docs-theme/toc.html
+                    class="side-menu__subsection-content"
+                    item_class="side-menu__link"
+                  %}
                 </div>
               </div>
-            </nav>
-          {% endunless %}
+            </div>
+          </nav>
         </div>
       </div>
     </div>

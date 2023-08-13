@@ -1,19 +1,21 @@
 ---
 title: liquidAjaxCart.add() 
 layout: docs-v2
-disable_anchors: true
 ---
 
 # liquidAjaxCart.add()
 
 <p class="lead" markdown="1">
-The method performs an Ajax request to the Shopify Cart API `POST /cart/add.js` endpoint.
+A method of the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart/) object, 
+which initiates an Ajax request to the Shopify Cart API `POST /cart/add.js` endpoint.
 </p>
 
-The method takes a request body object as the first parameter, request options object as the second parameter.
+## Structure
 
-The request body object will be passed to the Shopify Cart API endpoint,
-so read what Shopify expects in the [`/cart/add.js`](https://shopify.dev/docs/api/ajax/reference/cart#post-locale-cart-add-js) documentation.
+The method takes a request body object as the first parameter, and an object with the request options as the second parameter.
+
+The request body object is passed to the Shopify Cart API endpoint as is,
+so read what data Shopify expects in the [`/cart/add.js`](https://shopify.dev/docs/api/ajax/reference/cart#post-locale-cart-add-js) documentation.
 
 {%- capture highlight_code -%}
 

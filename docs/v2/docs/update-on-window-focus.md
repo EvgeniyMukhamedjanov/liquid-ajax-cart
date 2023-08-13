@@ -1,14 +1,16 @@
 ---
 title: updateOnWindowFocus
 layout: docs-v2
-disable_toc: true
 ---
 
 # updateOnWindowFocus
 
 <p class="lead" markdown="1">
-  The configuration parameter toggles the functionality that updates everything related to Liquid Ajax Cart when the browser tab loses focus and gets focus back.
+A configuration parameter which toggles the functionality that updates everything 
+related to Liquid Ajax Cart when the browser tab loses focus and gets focus back.
 </p>
+
+## How it works
 
 Liquid Ajax Cart makes a Shopify Cart API Ajax request each time when the browser tab loses focus and gets focus back 
 to keep [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers and the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object up to date.

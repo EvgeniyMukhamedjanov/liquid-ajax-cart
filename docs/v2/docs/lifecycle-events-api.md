@@ -6,16 +6,13 @@ layout: docs-v2
 # Lifecycle, events, API
 
 <p class="lead" markdown="1">
-Liquid Ajax Cart provides methods to perform Shopify Cart API Ajax requests, 
-properties and events to extend its functionality. 
+Liquid Ajax Cart provides methods for executing Shopify Cart API Ajax requests, 
+as well as properties and events to extend functionality. 
 </p>
 
 ## Initialization
 
-In order to install Liquid Ajax Cart, you should include the library code to the page, 
-as it was explained in the "[Installation](/v2/docs/)" guide.
-
-Once the library is included, Liquid Ajax Cart does the following:
+Once Liquid Ajax Cart is loaded, it does the following:
 
 <ul class="steps-list">
 <li class="steps-list__step">
@@ -23,8 +20,8 @@ Once the library is included, Liquid Ajax Cart does the following:
 <div class="steps-list__title">Creates the <code>liquidAjaxCart</code> object</div>
 <div class="steps-list__content" markdown="1">
 The [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart/) object is defined
-as a `window` object's property to be accessible from everywhere.
-At this point it has:
+as a property of the `window` object to be accessible from everywhere.
+Once created, it has:
 * the [`init`](/v2/docs/liquid-ajax-cart-init/) property — reflects the initialization status of the library, which is `false` at the moment.
 * the [`conf()`](/v2/docs/liquid-ajax-cart-conf/) method — lets you set configuration parameters.
 {%- capture highlight_code -%}
@@ -47,10 +44,10 @@ At this point it has:
 <div class="steps-list__badge-list"></div>
 <div class="steps-list__title">Gets the cart state</div>
 <div class="steps-list__content" markdown="1">
-Firstly, Liquid Ajax Cart tries to pull the cart data from the first found 
+Firstly, Liquid Ajax Cart attempts to retrieve the cart state data from the first found 
 `script` element with the [`data-ajax-cart-initial-state`](/v2/docs/data-ajax-cart-initial-state/) attribute, 
-which is supposed to contain the cart data in the JSON format, as it was shown in the "[Installation](/v2/docs/)" guide.
-If there is no such element found, Liquid Ajax Cart performs a Shopify Cart API Ajax request to pull the cart state data.
+which is supposed to contain the cart data in the JSON format, as shown in the "[Installation](/v2/docs/)" guide.
+If there is no such element found, Liquid Ajax Cart performs a Shopify Cart API Ajax request to retrieve the cart state data.
 </div>
 </li>
 
@@ -83,10 +80,10 @@ The [`js-ajax-cart-init`](/v2/docs/js-ajax-cart-init/) CSS class is added to the
 <div class="steps-list__badge-list"><span class="steps-list__badge steps-list__badge--event">Event</span></div>
 <div class="steps-list__title"><h3 id="liquid-ajax-cart-init">Triggers the <code>liquid-ajax-cart:init</code> event</h3></div>
 <div class="steps-list__content" markdown="1">
-Since most of the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart/) methods and properties are available after the initialization, 
+Since most of the [`liquidAjaxCart`](/v2/docs/liquid-ajax-cart/) methods and properties are available only after the initialization, 
 use the [`liquid-ajax-cart:init`](/v2/docs/event-init/) event 
 along with the [`liquidAjaxCart.init`](/v2/docs/liquid-ajax-cart-init/) property
-when your code depends on Liquid Ajax Cart and should be run as soon as the library is available:
+when your code depends on Liquid Ajax Cart and should be executed as soon as the library is fully available:
 {% include v2/content/init-event-example.html %}
 </div>
 </li>
@@ -94,16 +91,16 @@ when your code depends on Liquid Ajax Cart and should be run as soon as the libr
 
 ## Shopify Cart API requests
 
-Liquid Ajax Cart uses {% include v2/content/links-to-request-methods.html %} to perform Shopify Cart API Ajax requests.
+Liquid Ajax Cart provides {% include v2/content/links-to-request-methods.html %} to perform Shopify Cart API Ajax requests.
+Use these methods rather than `fetch` or any other way of sending requests.
+Otherwise, Liquid Ajax Cart won't update the cart-related content on the page.
+
+Liquid Ajax Cart uses these methods as well when performing Shopify Cart API Ajax requests.
 
 For example, when a user clicks an "Add to cart" button in a product form, 
 wrapped with the [`<ajax-cart-product-form>`](/v2/docs/ajax-cart-product-form/) custom tag,
 Liquid Ajax Cart calls the [`liquidAjaxCart.add()`](/v2/docs/liquid-ajax-cart-add/) method 
 in order to performs a Shopify Cart API `/cart/add.js` Ajax request.
-
-When you need to send a Shopify Cart API Ajax request in your JavaScript code, 
-use {% include v2/content/links-to-request-methods.html %} rather than `fetch` or any other way of sending requests.
-Otherwise, Liquid Ajax Cart won't update the cart-related content on the page.
 
 ### Queue of requests
 
@@ -115,7 +112,7 @@ and executes requests according to their order until the [Queue](/v2/docs/queue-
 
 When Liquid Ajax Cart is in the "processing requests" mode, 
 the [`liquidAjaxCart.processing`](/v2/docs/liquid-ajax-cart-processing/) property is `true`
-and the [`js-ajax-cart-processing`](/v2/docs/js-ajax-cart-processing/) CSS class is added to the `html` tag.
+and the [`js-ajax-cart-processing`](/v2/docs/js-ajax-cart-processing/) CSS class is added to the `html` tag so that you can show a loading indicator.
 
 ## Queue lifecycle
 
@@ -138,9 +135,8 @@ Each request is executed according to the [Request lifecycle](#request-lifecycle
 ### Switching from the "idle" to the "processing requests" mode
 
 If the [Queue](/v2/docs/queue-of-requests/) **is empty** when a new request is getting added,
-that means Liquid Ajax Cart is in the "idle" mode and has to switch to the "request processing" mode.
-
-Liquid Ajax Cart will do the following:
+that means Liquid Ajax Cart is in the "idle" mode and has to switch to the "request processing" mode. 
+Liquid Ajax Cart does the following:
 
 <ul class="steps-list">
 <li class="steps-list__step">
@@ -178,7 +174,7 @@ The [`js-ajax-cart-processing`](/v2/docs/js-ajax-cart-processing/) CSS class is 
 <div class="steps-list__badge-list"><span class="steps-list__badge steps-list__badge--event">Event</span></div>
 <div class="steps-list__title"><h3 id="liquid-ajax-cart-queue-start">Triggers the <code>liquid-ajax-cart:queue-start</code> event</h3></div>
 <div class="steps-list__content" markdown="1">
-Since Liquid Ajax Cart is switching to the "processing requests" mode,
+As Liquid Ajax Cart is about to start executing requests from the [Queue](/v2/docs/queue-of-requests/),
 the [`liquid-ajax-cart:queue-start`](/v2/docs/event-queue-start/) event is fired.
 </div>
 </li>
@@ -228,16 +224,19 @@ The [`js-ajax-cart-processing`](/v2/docs/js-ajax-cart-processing/) CSS class is 
 <div class="steps-list__badge-list"><span class="steps-list__badge steps-list__badge--event">Event</span></div>
 <div class="steps-list__title"><h3 id="liquid-ajax-cart-queue-end">Triggers the <code>liquid-ajax-cart:queue-end</code> event</h3></div>
 <div class="steps-list__content" markdown="1">
-Since Liquid Ajax Cart is switching back to the "idle" mode,
+As Liquid Ajax Cart has executed all the requests from the [Queue](/v2/docs/queue-of-requests/) 
+and it is switching back to the "idle" mode,
 the [`liquid-ajax-cart:queue-end`](/v2/docs/event-queue-end/) event is fired.
 
-Examples:
-* [Add a gift to the cart if the total price is $100 or higher](/v2/docs/js-snippets/#add-a-gift-to-the-cart-if-the-total-price-is-100-or-higher);
+{% include v2/content/queue-end-use-cases.html %}
+
 </div>
 </li>
 </ul>
 
 ## Request lifecycle
+
+Liquid Ajax Cart does the folowing when performs a Shopify Cart API Ajax request:
 
 <ul class="steps-list">
 <li class="steps-list__step">
@@ -266,8 +265,9 @@ When created, the object has the following properties:
 <div class="steps-list__content" markdown="1">
 Liquid Ajax Cart adds the `sections` parameter to the request body
 with the IDs of the Shopify sections that contain [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements.
-Shopify will re-render the sections HTML and attach it to the request response 
+Shopify will return the re-rendered HTML of the sections in response to the request.
 ([Bundled section rendering](https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering)).
+
 The modified `requestBody` property of the [Request state](/v2/docs/request-state/) object:
 
 {%- capture highlight_code -%}
@@ -318,7 +318,7 @@ Liquid Ajax Cart performs the request if it isn't cancelled
 Otherwise, this step is skipped.
 
 If the request is successful but the response doesn't have the cart state object (the `/cart/add.js` endpoint is the case),
-or if the response doesn't have HTML of each Shopify section needed,
+or if the response doesn't have HTML of all Shopify sections needed,
 Liquid Ajax Cart performs an additional `/cart/update.js` request to get the data.
 </div>
 </li>
@@ -328,7 +328,7 @@ Liquid Ajax Cart performs an additional `/cart/update.js` request to get the dat
 <div class="steps-list__title">Updates the Request state object</div>
 <div class="steps-list__content" markdown="1">
 Liquid Ajax Cart populates the [Request state](/v2/docs/request-state/) object according to the request result 
-— the `responseData`/`extraResponseData`/`fetchError` properties:
+— the `responseData` / `extraResponseData` / `fetchError` properties:
 
 {%- capture highlight_code -%}
 {
@@ -361,9 +361,9 @@ you can define the <code>firstCallback</code> function.
 <div class="steps-list__badge-list"><span class="steps-list__badge">If request is successful</span></div>
 <div class="steps-list__title">Replaces the <code>data-ajax-cart-section</code> elements</div>
 <div class="steps-list__content" markdown="1">
-If the request is successful, Liquid Ajax Cart pulls the Shopify sections HTML from the request response, 
-that contains re-rendered [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements HTML, 
-and replaces the current [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements outer HTML
+If the request is successful, Liquid Ajax Cart retrieves the re-rendered HTML 
+of the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements from the response. 
+It then replaces the current [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements' outer HTML
 with the new one.
 </div>
 </li>
@@ -372,7 +372,7 @@ with the new one.
 <div class="steps-list__badge-list"><span class="steps-list__badge">If request is failed</span></div>
 <div class="steps-list__title">Shows errors in the <code>data-ajax-cart-errors</code> elements</div>
 <div class="steps-list__content" markdown="1">
-If the request is failed, Liquid Ajax Cart puts an error message to the related [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors/) element;
+If the request is failed, Liquid Ajax Cart inserts the error message to the related [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors/) element.
 </div>
 </li>
 
@@ -380,7 +380,8 @@ If the request is failed, Liquid Ajax Cart puts an error message to the related 
 <div class="steps-list__badge-list"><span class="steps-list__badge">If request is successful</span></div>
 <div class="steps-list__title">Saves the cart state in <code>liquidAjaxCart.cart</code> property</div>
 <div class="steps-list__content" markdown="1">
-If the request is successful, Liquid Ajax Cart pulls the cart state data from the response and saves it in the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) property;
+If the request is successful, Liquid Ajax Cart extracts the cart state data from the response 
+and stores it within the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) property.
 </div>
 </li>
 
@@ -388,11 +389,11 @@ If the request is successful, Liquid Ajax Cart pulls the cart state data from th
 <div class="steps-list__badge-list"></div>
 <div class="steps-list__title">Syncs DOM with the cart state</div>
 <div class="steps-list__content" markdown="1">
-The [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) elements HTML gets updated according to the cart state data;
-
-The [`data-ajax-cart-quantity-input`](/v2/docs/data-ajax-cart-quantity-input/) and [`data-ajax-cart-property-input`](/v2/docs/data-ajax-cart-property-input/) input values get updated according to the cart state data;
-
-The [`js-ajax-cart-empty`](/v2/docs/js-ajax-cart-empty/), [`js-ajax-cart-not-empty`](/v2/docs/js-ajax-cart-not-empty/) CSS classes get updated according to the cart state data;
+The [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) elements HTML,
+the [`data-ajax-cart-quantity-input`](/v2/docs/data-ajax-cart-quantity-input/) 
+and [`data-ajax-cart-property-input`](/v2/docs/data-ajax-cart-property-input/) input values,
+as well as the [`js-ajax-cart-empty`](/v2/docs/js-ajax-cart-empty/) and [`js-ajax-cart-not-empty`](/v2/docs/js-ajax-cart-not-empty/) CSS classes, 
+get updated according to the cart state data.
 </div>
 </li>
 
@@ -400,10 +401,11 @@ The [`js-ajax-cart-empty`](/v2/docs/js-ajax-cart-empty/), [`js-ajax-cart-not-emp
 <div class="steps-list__badge-list"><span class="steps-list__badge steps-list__badge--event">Event</span></div>
 <div class="steps-list__title"><h3 id="liquid-ajax-cart-request-end">Triggers the <code>liquid-ajax-cart:request-end</code> event</h3></div>
 <div class="steps-list__content" markdown="1">
-Liquid Ajax Cart triggers the [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) event**;
+The [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) is the only event that is fired right after a request is executed, 
+the cart state ([`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/)) is updated
+and the cart-related content is re-rendered.
 
-Examples:
-* [Open the Ajax-cart when a user adds a product to the cart](/v2/docs/js-snippets/#open-the-ajax-cart-when-a-user-adds-a-product-to-the-cart);
+{% include v2/content/request-end-use-cases.html %}
 </div>
 </li>
 

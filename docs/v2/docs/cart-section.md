@@ -6,11 +6,11 @@ layout: docs-v2
 # Cart section
 
 <p class="lead" markdown="1">
-Liquid Ajax Cart re-renders cart HTML after each user action such as adding a product to the cart or changing cart item quantity. 
+Liquid Ajax Cart re-renders cart HTML after each user action, such as adding a product to the cart or changing cart item quantity. 
 It uses Shopify <a href="https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering">Bundled section rendering</a> under the hood, so the cart content **must** be a Shopify section.
 </p>
 
-## Build a cart section
+## Build a Shopify section for the cart
 
 Create a new Shopify section that works without Ajax. Use any Liquid objects, tags and filters. Styling is up to you as well.
 
@@ -59,11 +59,11 @@ Create a new Shopify section that works without Ajax. Use any Liquid objects, ta
     {% endfor %}
   </div>
   
-  <form id="my-ajax-cart-form" action="{{ routes.cart_url }}" method="post">
+  {% form 'cart', cart, id: 'my-ajax-cart-form' %}
     <button type="submit" name="checkout">
       Checkout — {{ cart.total_price | money_with_currency }}
     </button> 
-  </form>
+  {% endform %}
 </div>
 
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
@@ -91,7 +91,7 @@ Use HTML attributes and custom tags to mark elements that should be ajaxified.
 Add the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) attribute to an element 
 whose content should be re-rendered after each user action, such as adding a product to the cart or changing cart item quantity. 
 
-In our case we want the whole section content to be updatable, so add the attribute to the root element — 
+In our case we want to enable re-rendering for the whole section content, so add the attribute to the root element — 
 the one with the `my-cart` CSS class.
 
 ### Scrollable area
@@ -101,35 +101,35 @@ Liquid Ajax Cart will keep the scroll position unchanged while re-rendering.
 ### Quantity input
 Add the [`data-ajax-cart-quantity-input`](/v2/docs/data-ajax-cart-quantity-input/) attribute to the cart item quantity input.
 
-When a user changes the input value, Liquid Ajax Cart will send a Shopify Cart API "change quantity" request 
+When a user changes the input value, Liquid Ajax Cart initiates a Shopify Cart API "change quantity" request 
 and re-render the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers.
 
 ### "Plus" and "Minus" buttons 
-In order to bind "Plus" and "Minus" buttons to the cart item quantity input, 
-wrap them all with the [`<ajax-cart-quantity>`](/v2/docs/ajax-cart-quantity/) tag
-and add the `data-ajax-cart-quantity-plus` and `data-ajax-cart-quantity-minus` attributes to the buttons.
+To bind the "Plus" and "Minus" buttons to the cart item quantity input, 
+wrap them all in the [`<ajax-cart-quantity>`](/v2/docs/ajax-cart-quantity/) tag
+and add the attributes `data-ajax-cart-quantity-plus` and `data-ajax-cart-quantity-minus` to the buttons.
 
-When a user clicks on the button, Liquid Ajax Cart will update the input value,
-send a Shopify Cart API "change quantity" request
-and re-render the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers.
+When a user clicks the button, Liquid Ajax Cart updates the input value,
+initiates a Shopify Cart API "change quantity" request
+and re-renders the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers.
 
 ### "Remove item" button
 Add the [`data-ajax-cart-request-button`](/v2/docs/data-ajax-cart-request-button/) attribute to the "Remove item" button —
 the one with the `href="{% raw %}{{ line_item.url_to_remove }}{% endraw %}"` attribute.
 
-When a user clicks on a link with the `data-ajax-cart-request-button` attribute,
-Liquid Ajax Cart sends a Shopify Cart API Ajax request based on the URL from the `href` parameter
+When a user clicks a link with the `data-ajax-cart-request-button` attribute,
+Liquid Ajax Cart initiates a Shopify Cart API Ajax request based on the URL from the `href` parameter
 and re-renders the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers 
 if the request is successful.
 
 Check out all the supported URLs on the [`data-ajax-cart-request-button`](/v2/docs/data-ajax-cart-request-button/) page.
 
 ### Error messages
-In order to show error messages, for example when a user tries to add more items to the cart than exist in stock, 
-add an element with the [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors/) attribute and a cart item key as the value.
+To display error messages, such as when a user attempts to add more items to the cart than are available in stock, 
+add an element with the [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors/) attribute and set the value to the corresponding cart item key.
 
-When Shopify responds with an error message to an Ajax request related to a cart item, 
-Liquid Ajax Cart looks for the cart item error messages element and puts the error text in there.
+When Shopify returns an error message in response to an Ajax request related to a cart item, 
+Liquid Ajax Cart searches for the element designated for the cart item error messages and inserts the error message into that element.
 
 ### Result code
 
@@ -184,11 +184,11 @@ Liquid Ajax Cart looks for the cart item error messages element and puts the err
     {% endfor %}
   </div>
 
-  <form id="my-ajax-cart-form" action="{{ routes.cart_url }}" method="post">
+  {% form 'cart', cart, id: 'my-ajax-cart-form' %}
     <button type="submit" name="checkout">
       Checkout — {{ cart.total_price | money_with_currency }}
     </button> 
-  </form>
+  {% endform %}
 </div>
 
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
@@ -199,14 +199,14 @@ Liquid Ajax Cart looks for the cart item error messages element and puts the err
 ## Cart note, cart item property, cart attribute fields
 
 Add the [`data-ajax-cart-property-input`](/v2/docs/data-ajax-cart-property-input/) to a cart note field, 
-a cart item property field or a cart attribute field to ajaxify them.
+a cart item property field, or a cart attribute field to ajaxify them.
 
-When a user changes the field value, Liquid Ajax Cart will send a Shopify Cart API request to update the value
-and re-render the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers.
+When a user changes the field value, Liquid Ajax Cart sends a Shopify Cart API request to update the value
+and re-renders the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) containers.
 
-The `data-ajax-cart-property-input` attribute supports textual inputs, checkboxes, radio buttons, `select` and `textarea` tags.
+The `data-ajax-cart-property-input` attribute supports text inputs, checkboxes, radio buttons, the tags `select` and `textarea`.
 
-Check out examples for all the features on the [`data-ajax-cart-property-input`](/v2/docs/data-ajax-cart-property-input/) page.
+Explore examples for all the features on the [`data-ajax-cart-property-input`](/v2/docs/data-ajax-cart-property-input/) page.
 
 ### Ajaxified cart note example
 
@@ -225,11 +225,11 @@ Check out examples for all the features on the [`data-ajax-cart-property-input`]
     {{ cart.note }}
   </textarea>
 
-  <form id="my-ajax-cart-form" action="{{ routes.cart_url }}" method="post">
+  {% form 'cart', cart, id: 'my-ajax-cart-form' %}
     <button type="submit" name="checkout">
       Checkout — {{ cart.total_price | money_with_currency }}
     </button> 
-  </form>
+  {% endform %}
 </div>
 
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
@@ -239,18 +239,18 @@ Check out examples for all the features on the [`data-ajax-cart-property-input`]
 
 ## Loading state
 
-When Liquid Ajax Cart sends an Ajax request, it adds the [`js-ajax-cart-processing`](/v2/docs/js-ajax-cart-processing/) CSS class to the `html` tag.
-Use it to indicate that the cart is updating.
+When Liquid Ajax Cart initiates an Ajax request, it appends the [`js-ajax-cart-processing`](/v2/docs/js-ajax-cart-processing/) CSS class to the `html` tag.
+Use this class to signify that the cart is being updated.
 
 {% include v2/content/cart-loading-state-css-example.html %}
 
 ## Immutable containers for 3rd party apps and scripts
 
-When re-rendering, Liquid Ajax Cart replaces all the HTML, that is inside the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) element, with a new one.
-If you have a 3-rd party script or an app that injects its HTML into the cart area, you don't want to lose those changes while re-rendering.
+During the re-rendering process, Liquid Ajax Cart replaces all the HTML within the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) element with new content.
+If you have third-party scripts or applications injecting their HTML into the cart section, preserving these modifications during re-rendering is crucial.
 
-In order to keep a specific area unchanged, add the [`data-ajax-cart-static-element`](/v2/docs/data-ajax-cart-static-element/) attribute
-to the parent element of the area — Liquid Ajax Cart will keep this element's inner HTML unchanged when the surrounding HTML gets updated.
+To keep a specific area within the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) element unchanged, add the [`data-ajax-cart-static-element`](/v2/docs/data-ajax-cart-static-element/) attribute
+to the parent element of the area. Liquid Ajax Cart will maintain the inner HTML of this area unchanged while updating the surrounding HTML.
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -265,11 +265,11 @@ to the parent element of the area — Liquid Ajax Cart will keep this element's 
     <!-- Liquid Ajax Cart will never change the HTML within data-ajax-cart-static-element -->
   </div>
 
-  <form id="my-ajax-cart-form" action="{{ routes.cart_url }}" method="post">
+  {% form 'cart', cart, id: 'my-ajax-cart-form' %}
     <button type="submit" name="checkout">
       Checkout — {{ cart.total_price | money_with_currency }}
     </button> 
-  </form>
+  {% endform %}
 </div>
 
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
@@ -277,14 +277,13 @@ to the parent element of the area — Liquid Ajax Cart will keep this element's 
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
 
-## JavaScript callback after re-render
+## JavaScript event after re-rendering
 
-Listen to the [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) event 
-if you want to run your JavaScript code when the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) element is re-rendered.
-
-For example, you might need to attach event listeners to elements 
-inside the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) container
-each time when it is updated,
-because Liquid Ajax Cart replaces its HTML with a new one on each re-render. 
+Liquid Ajax Cart replaces the HTML content of [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) 
+containers after a successful Shopify Cart API Ajax request.
+To execute your JavaScript code after this replacement occurs,
+you should subscribe to the [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) event:
 
 {% include v2/content/sections-event-code-example.html %}
+
+{% include v2/content/lifecycle-reference.html %}

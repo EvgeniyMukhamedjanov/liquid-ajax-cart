@@ -18,7 +18,7 @@ Before sending a Shopify Ajax Cart API Ajax request, which are initiated by user
 {% include v2/content/links-to-request-methods.html %}), Liquid Ajax Cart does the following:
 * finds all the Shopify sections on the page that contain the `data-ajax-cart-section` elements;
 * collects the IDs of the Shopify sections found;
-* modifies the original request by adding the `section` property to the request body to ask Shopify to respond with the updated HTML of the Shopify sections found ([Bundled section rendering](https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering)).
+* modifies the original request by adding the `sections` property to the body of the request so that Shopify returns the re-rendered HTML of the Shopify sections found ([Bundled section rendering](https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering)).
 
 {%- capture highlight_code -%}
 POST /cart/add.js
@@ -51,20 +51,16 @@ POST /cart/add.js
 {%- endcapture -%}
 {% include v2/codeblock.html title="Modified final request" language="plain" code=highlight_code %}
 
-If the request is successful, Shopify will add the re-rendered HTML for the requested sections to the response,
-then Liquid Ajax Cart will pull the HTML for the `data-ajax-cart-section` elements from the response 
-and update the `data-ajax-cart-section` elements on the page.
-
-If the request is successful, Liquid Ajax Cart pulls the updated HTML of the `data-ajax-cart-section` elements 
-from the re-rendered Shopify sections HTML that came along with response to the request,
-and replaces the `data-ajax-cart-section` elements HTML with the new one.
+If the request is successful, Shopify retrieves the re-rendered HTML for the `data-ajax-cart-section` elements from the response.
+It then replaces the current data-ajax-cart-section elements' outer HTML
+with the new one.
 
 ## Single container to re-render
 
 Apply the `data-ajax-cart-section` to the element whose content should be re-rendered
 when the cart is changed after a Shopify Cart API Ajax request.
 
-In the following example only the `.my-cart__wrapper` element's HTML will be updatable:
+In the following example the re-rendering is only enabled for the `.my-cart__wrapper` element:
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -84,13 +80,13 @@ In the following example only the `.my-cart__wrapper` element's HTML will be upd
 
 If you want to have an immutable HTML element inside a `data-ajax-cart-section` container — 
 add the [`data-ajax-cart-static-element`](/v2/docs/data-ajax-cart-static-element/) attribute to this element. 
-HTML code of an immutable container will not be replaced when the parent `data-ajax-cart-section` element gets updated.
+HTML code of an immutable container will not be replaced when the parent `data-ajax-cart-section` element is updated.
 
 ## Multiple containers to re-render
 
 If you want multiple containers whose content should be re-rendered inside a Shopify section — apply the `data-ajax-cart-section` to them.
 
-In the following example the `.my-cart__wrapper` and `.my-cart__footer` containers HTML will be updatable:
+In the following example the re-rendering is enabled for the `.my-cart__wrapper` and `.my-cart__footer` elements:
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -115,9 +111,15 @@ In the following example the `.my-cart__wrapper` and `.my-cart__footer` containe
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
 
-It is useful when you have HTML nodes that must be immutable and they are placed between updatable containers. If you want to have an immutable node right within a `data-ajax-cart-section` element — use the [`data-ajax-cart-static-element`](/v2/docs/data-ajax-cart-static-element/) attribute with it.
+It is useful when you have HTML elements (like the `.my-cart__another-content` in the example above) 
+that must be immutable and when they are placed between containers requiring re-rendering. 
+If you want to have an immutable element **within** a `data-ajax-cart-section` element — use the [`data-ajax-cart-static-element`](/v2/docs/data-ajax-cart-static-element/) attribute with it.
 
-If you have multiple `data-ajax-cart-section` containers, make sure that your section always renders the constant number of the `data-ajax-cart-section` containers in the same order. If the amount varies, it is considered as an exception situation and the section's HTML will be replaced completely with the new HTML to try to resolve it.
+When you have multiple `data-ajax-cart-section` containers, 
+make sure that your Shopify section always returns 
+the constant number of the `data-ajax-cart-section` containers in the same order. 
+If the amount varies, it is considered as an exception
+and the whole HTML of the section will be replaced completely with the new HTML.
 
 ### Wrong example
 

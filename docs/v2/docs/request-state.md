@@ -1,7 +1,6 @@
 ---
 title: Request state
 layout: docs-v2
-disable_anchors: true
 ---
 
 # Request state
@@ -36,34 +35,34 @@ where Liquid Ajax Cart keeps information about the request.
 {% include v2/codeblock.html language="json" code=highlight_code %}
 
 ### `endpoint`
-A Shopify Cart API endpoint URL for the request.
+A Shopify Cart API endpoint URL of the request.
 
 ### `requestBody`
-* In case of a `POST` request, the `requestBody` is a JSON or a `FormData` object to send to the Shopify Cart API endpoint.
-* In case of a `GET` request, the `requestBody` is `undefined`.
+* For a `POST` request, the `requestBody` is either a JSON or a `FormData` object to send to the Shopify Cart API endpoint.
+* For a `GET` request, the `requestBody` is `undefined`.
 
 ### `info`
-An object to keep any additional data that set be a request caller. 
+An object to keep any additional data, that is set by the caller of a request. 
 When you make your request, you can add any properties you want.
-There are only two reserved properties that you shouldn't use for keeping custom data.
-They are `initiator` and `cancel`.
+There are only two reserved properties, `initiator` and `cancel`, 
+that you shouldn't use for storing custom data.
 
 ### `info.initiator`
 When Liquid Ajax Cart makes a Shopify Cart API Ajax request that is initiated by a user action, 
-such as a form submission or cart item quantity input change or a "remove cart item" button click,
-Liquid Ajax Cart saves the `HTMLElement` object, that triggered the event, in the `info.initiator` property.
+such as a submitting a product form, modifying cart item quantity input value, or clicking a "remove cart item" button,
+Liquid Ajax Cart stores the `HTMLElement` object, that triggered the event, in the `info.initiator` property.
 
-For example, if a user changes a cart item quantity input with the [`data-ajax-cart-quantity-input`](/v2/docs/data-ajax-cart-quantity-input/) attribute,
-Liquid Ajax Cart will intercept the event and send a `/cart/change.js` Shopify Cart API Ajax request. 
-Along with that Liquid Ajax Cart will attach the input `HTMLElement` object to the `info.initiator` property.
+For example, if a user changes a cart item quantity input value with the [`data-ajax-cart-quantity-input`](/v2/docs/data-ajax-cart-quantity-input/) attribute,
+Liquid Ajax Cart intercepts the event and executes a `/cart/change.js` Shopify Cart API Ajax request. 
+Along with that, Liquid Ajax Cart attaches the input `HTMLElement` object to the `info.initiator` property.
 
 ### `info.cancel`
-If the `info.cancel` is `true`, then the request won't be performed and the `responseData` property won't exist.
+If the `info.cancel` is `true`, then the request won't be executed and the `responseData` property won't exist.
 This lets you [cancel a request](/v2/docs/event-request-start/#cancel-a-request) 
-in the [`liquid-ajax-cart:request-start`](/v2/docs/event-request-start/) event listener.
+in a [`liquid-ajax-cart:request-start`](/v2/docs/event-request-start/) event listener.
 
 ### `responseData`
-A response from Shopify to the request. 
+A Shopify response to the request. 
 
 If the `responseData.ok` is `true`, it means the request was successful (status is in range 200—299).
 
@@ -74,8 +73,8 @@ The `responseData` is `null` if:
 ### `extraResponseData`
 Sometimes Liquid Ajax Cart performs an additional Shopify `POST /cart/update.js` request and puts the response to the `extraResponseData` property. 
 The additional request happens if:
-* there was a `/cart/add.js` request that doesn't return the cart JSON-data — the additional `/cart/update.js` request will bring the updated cart state,
-* there was a request with more than 5 sections — the additional `/cart/update.js` request will bring the rest sections HTML.
+* there was a `/cart/add.js` request that doesn't return the cart state data — the additional `/cart/update.js` request will bring the updated cart state,
+* there was a request with more than 5 sections to render, that exceeds the Shopify limit — the additional `/cart/update.js` request will bring the rest sections HTML.
 
 ### `fetchError`
 If the request failed and the response wasn't received, for example because of internet connection, you'll find the `fetchError` property:
@@ -96,10 +95,12 @@ If the request failed and the response wasn't received, for example because of i
 
 ## Interaction
 
-You can access a Request state object in a [`liquid-ajax-cart:request`](/v2/docs/request-event/) event handler,
-adjust the request by mutating the `requestBody` object, 
-attach custom data or cancel the request by mutating the `info` object.
+You can access a Request state object in [`liquid-ajax-cart:request-start`](/v2/docs/event-request-start/) 
+and [`liquid-ajax-cart:request-end`](/v2/docs/event-request-end/) event handlers.
+In a [`liquid-ajax-cart:request-start`](/v2/docs/event-request-start/) event handler you can 
+modify the request by mutating the `requestBody` object, 
+append custom data or [cancel a request](/v2/docs/event-request-start/#cancel-a-request) by mutating the `info` object.
 
-While making a Shopify Cart API Ajax request by {% include v2/content/links-to-request-methods.html %},
-you can attach custom data by using the `info` option and get the access to the Request state object
+When initiating a Shopify Cart API Ajax request through {% include v2/content/links-to-request-methods.html %},
+you can attach custom data by using the `info` option and get the Request state object
 in the `firstCallback`, `lastCallback` callback functions.

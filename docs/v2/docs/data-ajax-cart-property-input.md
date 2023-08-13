@@ -1,30 +1,32 @@
 ---
 title: data-ajax-cart-property-input
 layout: docs-v2
-disable_anchors: true
 ---
 
 # data-ajax-cart-property-input
 
 <p class="lead" markdown="1">
-The attribute to ajaxify cart line item property inputs, cart note textarea, cart attribute inputs.
+An attribute which ajaxifies cart item property inputs, cart note textarea, cart attribute inputs.
 </p>
 
 ## How it works
 
-Add the `data-ajax-cart-property-input` attribute to a cart line-item property input, a cart note input or a cart attribute input to ajaxify them. Once a user changes the input value, Liquid Ajax Cart will send a Shopify Cart API Ajax request to update the cart.
+Add the `data-ajax-cart-property-input` attribute to a cart item property input, 
+a cart note input or a cart attribute input to ajaxify them. 
+Once a user changes the value of the input field, 
+Liquid Ajax Cart performs a Shopify Cart API Ajax request to update the cart.
 
-The request will be sent on input's `change` event and if a user presses the `Enter` key within the input field or `Ctrl`+`Enter` for the `textarea` element.
+The request will be sent on input's `change` event and when a user presses the `Enter` key within the input field or `Ctrl`+`Enter` for the `textarea` element.
 
-If a user presses the `Esc` key within the input, its value will be reset to the current item's quantity according to the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object.
+When a user presses the `Esc` key within the input, its value is reset to the current item's quantity according to the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object.
 
-The `data-ajax-cart-property-input` input fields become `disabled` when there is a Shopify Cart API Ajax request in progress;
+The `data-ajax-cart-property-input` input fields become `disabled` when there is a Shopify Cart API Ajax request in progress.
 
-The `data-ajax-cart-property-input` supports textual input fields, checkboxes, radio buttons, `select` and `textarea` elements.
+The `data-ajax-cart-property-input` supports text input fields, checkboxes, radio buttons, `select` and `textarea` elements.
 
-## Cart line-item property
+## Cart item property
 
-The `data-ajax-cart-property-input` attribute value should be `line_item_index[property_name]` or `line_item_key[property_name]` for a line-item property input:
+The value of the `data-ajax-cart-property-input` attribute should be `line_item_index[property_name]` or `line_item_key[property_name]` for a line-item property input:
 
 {%- capture highlight_code -%}
 {% raw %}
@@ -105,7 +107,7 @@ The `data-ajax-cart-property-input` attribute value should be `line_item_index[p
 
 ## Cart attribute
 
-The `data-ajax-cart-property-input` attribute's value should be `attributes[attribute_name]`. 
+The value of the `data-ajax-cart-property-input` attribute should be `attributes[attribute_name]`. 
 If you apply the `data-ajax-cart-property-input` attribute to a form control with a correct `name` attribute 
 then you can leave the `data-ajax-cart-property-input` value empty:
 
@@ -212,7 +214,8 @@ then you can leave the `data-ajax-cart-property-input` value empty:
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
 
-If the form controls in the above example didn't have correct `name` attributes then `data-ajax-cart-property-input` attributes should have values:
+If the form controls in the above example didn't have the correct `name` attributes, 
+then `data-ajax-cart-property-input` attributes should have values:
 
 {%- capture highlight_code -%}
 <!-- Ajaxified cart attribute text input -->
@@ -261,7 +264,7 @@ If the form controls in the above example didn't have correct `name` attributes 
 
 ## Cart note
 
-The `data-ajax-cart-property-input` attribute's value should be `note`. 
+The value of the `data-ajax-cart-property-input` attribute should be `note`. 
 If you apply the `data-ajax-cart-property-input` attribute to a form control with the `name="note"` attribute 
 then you can leave the `data-ajax-cart-property-input` value empty:
 
@@ -299,8 +302,8 @@ then you can leave the `data-ajax-cart-property-input` value empty:
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
 
-If the form controls in the above example didn't have correct `name` attribute 
-then the `data-ajax-cart-property-input` attribute should have `note` value:
+If the form controls in the above example didn't have the correct `name` attribute ,
+then the `data-ajax-cart-property-input` attribute should have the `note` value:
 
 {%- capture highlight_code -%}
 {% raw %}

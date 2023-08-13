@@ -1,7 +1,6 @@
 ---
 title: liquid-ajax-cart:request
 layout: docs-v2
-disable_anchors: true
 ---
 
 # liquid-ajax-cart:request

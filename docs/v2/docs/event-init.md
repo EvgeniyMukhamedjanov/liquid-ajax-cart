@@ -1,13 +1,12 @@
 ---
 title: liquid-ajax-cart:init
 layout: docs-v2
-disable_toc: true
 ---
 
 # liquid-ajax-cart:init
 
 <p class="lead" markdown="1">
-The `liquid-ajax-cart:init` event is fired at the `document` when Liquid Ajax Cart is successfully loaded.
+An event which is fired at the `document` when Liquid Ajax Cart is initialized.
 </p>
 
 ## Use case

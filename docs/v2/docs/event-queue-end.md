@@ -6,27 +6,29 @@ layout: docs-v2
 # liquid-ajax-cart:queue-end
 
 <p class="lead" markdown="1">
-The `liquid-ajax-cart:queue-end` event is fired at the `document` when a Shopify Cart API Ajax request 
-is finished and removed from the [Queue of requests](/v2/docs/queue-of-requests/) and there is no other
-request in the [Queue](/v2/docs/queue-of-requests/) to perform.
+An event which is fired at the `document` when a Liquid Ajax Cart has executed 
+all the Shopify Cart API Ajax requests from the [Queue](/v2/docs/queue-of-requests/) and 
+it is switching back to the "idle" mode.
 </p>
 
 ## How it works
 
 Liquid Ajax Cart doesn't perform Shopify Cart API Ajax requests immediately, it adds them to the [Queue](/v2/docs/queue-of-requests/).
-After a request is finished, it gets removed from the [Queue](/v2/docs/queue-of-requests/).
-If there is no other request to perform, Liquid Ajax Cart will fire the `liquid-ajax-cart:queue-end` event.
+When a request is executed, it is removed from the [Queue](/v2/docs/queue-of-requests/).
+If there is no other request to perform, Liquid Ajax Cart triggers the `liquid-ajax-cart:queue-end` event.
+
+{% include v2/content/lifecycle-events-reference.html %}
 
 {%- capture highlight_code -%}
-document.addEventListener("liquid-ajax-cart:queue-start", function() {
-  console.log("A queue of requests is started");
+document.addEventListener("liquid-ajax-cart:queue-end", function() {
+  console.log("A queue of requests is finished");
+  console.log("The current cart state is: ", window.liquidAjaxCart.cart);
 });
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}
 
-## Use case
+## Use cases
 
-If you need to adjust the cart content based on your custom rules 
-(for example adding a free product depending on the updated cart total
-or removing the product B if the product A is removed), 
-this is the right place to do it.
+{% include v2/content/queue-end-use-cases.html %}
+
+

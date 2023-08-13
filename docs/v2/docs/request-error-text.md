@@ -1,14 +1,18 @@
 ---
 title: requestErrorText
 layout: docs-v2
-disable_toc: true
 ---
 
 # requestErrorText
 
 <p class="lead" markdown="1">
-  The configuration parameter sets the error message text that will appear in [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors/) containers when a Shopify Cart API Ajax request is failed and doesn't have any error description, or if the request is not performed at all due to the Internet connection.
+A configuration parameter which sets the error message text 
+that appears in [`data-ajax-cart-errors`](/v2/docs/data-ajax-cart-errors/) containers 
+when a Shopify Cart API Ajax request is failed and doesn't have any error description, 
+or when the request is not performed at all due to the Internet connection.
 </p>
+
+## Code example
 
 By default, the text is "There was an error while updating your cart. Please try again.".
 

@@ -1,0 +1,15 @@
+{%- capture highlight_code -%}
+// Listen to the "liquid-ajax-cart:request-end" event which is fired
+// after a Shopify Cart API Ajax request is performed
+document.addEventListener('liquid-ajax-cart:request-end', event => {
+  const {requestState} = event.detail;
+
+  // If the "add to cart" request is successful
+  if (requestState.requestType === 'add' && requestState.responseData?.ok) {
+
+    // Add the CSS class to the "body" tag
+    document.body.classList.add('js-show-ajax-cart');
+  }
+});
+{%- endcapture -%}
+{% include v2/codeblock.html title="assets/script.js" language="javascript" code=highlight_code %}
