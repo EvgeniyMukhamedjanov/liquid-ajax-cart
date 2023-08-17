@@ -5,7 +5,7 @@ import {
 } from './ts-types';
 
 import {
-  EVENT_REQUEST_END,
+  EVENT_REQUEST_END_INTERNAL,
 } from './ajax-api';
 import {DATA_ATTR_PREFIX} from "./const";
 
@@ -16,7 +16,7 @@ let previousCart: AppStateCartType | undefined = undefined
 
 function cartStateInit(): Promise<void> {
 
-  document.addEventListener(EVENT_REQUEST_END, (event: EventRequestEndType) => {
+  document.addEventListener(EVENT_REQUEST_END_INTERNAL, (event: EventRequestEndType) => {
     const {requestState} = event.detail;
     let newCart: AppStateCartType;
     if (requestState.extraResponseData?.ok && requestState.extraResponseData.body.token) {

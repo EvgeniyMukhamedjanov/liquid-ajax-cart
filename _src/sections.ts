@@ -5,7 +5,7 @@ import {
   EventRequestEndType
 } from './ts-types';
 
-import {EVENT_REQUEST_END, EVENT_REQUEST_START, REQUEST_ADD} from './ajax-api';
+import {EVENT_REQUEST_END_INTERNAL, EVENT_REQUEST_START_INTERNAL, REQUEST_ADD} from './ajax-api';
 import {DATA_ATTR_PREFIX} from "./const";
 
 
@@ -23,7 +23,7 @@ const DATA_ATTR_SCROLL_AREA = `${DATA_ATTR_PREFIX}-section-scroll`;
 const SHOPIFY_SECTION_PREFIX = 'shopify-section-';
 
 function cartSectionsInit() {
-  document.addEventListener(EVENT_REQUEST_START, (event: EventRequestStartType) => {
+  document.addEventListener(EVENT_REQUEST_START_INTERNAL, (event: EventRequestStartType) => {
     const {requestState} = event.detail;
 
     if (requestState.requestBody !== undefined) {
@@ -71,7 +71,7 @@ function cartSectionsInit() {
     }
   });
 
-  document.addEventListener(EVENT_REQUEST_END, (event: EventRequestEndType) => {
+  document.addEventListener(EVENT_REQUEST_END_INTERNAL, (event: EventRequestEndType) => {
     event.detail.sections = [];
     const {requestState} = event.detail;
 

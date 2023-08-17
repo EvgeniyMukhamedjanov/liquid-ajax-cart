@@ -3,7 +3,7 @@ import {
   EventRequestStartType, EventRequestEndType
 } from './ts-types';
 
-import {EVENT_REQUEST_END, EVENT_REQUEST_START, REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
+import {EVENT_REQUEST_END_INTERNAL, EVENT_REQUEST_START_INTERNAL, REQUEST_ADD, REQUEST_CHANGE} from './ajax-api';
 import {getCartState} from './state';
 import {settings} from './settings';
 import {DATA_ATTR_PREFIX} from "./const";
@@ -84,7 +84,7 @@ const addRequestContainers = (requestState: RequestStateType): NodeListOf<Elemen
 const cartMessagesInit = () => {
   let errorContainers: NodeListOf<Element> | undefined;
 
-  document.addEventListener(EVENT_REQUEST_START, (event: EventRequestStartType) => {
+  document.addEventListener(EVENT_REQUEST_START_INTERNAL, (event: EventRequestStartType) => {
     const {requestState} = event.detail;
 
     errorContainers = undefined;
@@ -101,7 +101,7 @@ const cartMessagesInit = () => {
     }
   });
 
-  document.addEventListener(EVENT_REQUEST_END, (event: EventRequestEndType) => {
+  document.addEventListener(EVENT_REQUEST_END_INTERNAL, (event: EventRequestEndType) => {
     const {requestState} = event.detail;
     if (requestState.info.cancel) return;
 

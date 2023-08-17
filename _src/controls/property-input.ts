@@ -2,9 +2,10 @@ import {JSONValueType, RequestBodyType} from '../ts-types';
 
 import {
   cartRequestChange,
-  cartRequestUpdate, EVENT_QUEUE_END,
-  EVENT_QUEUE_START,
-  EVENT_REQUEST_END,
+  cartRequestUpdate,
+  EVENT_QUEUE_END_INTERNAL,
+  EVENT_QUEUE_START_INTERNAL,
+  EVENT_REQUEST_END_INTERNAL,
   getProcessingStatus
 } from '../ajax-api';
 import {getCartState} from '../state';
@@ -287,9 +288,9 @@ function escHandler(element: Element) {
 function cartPropertyInputInit() {
   initEventListeners();
 
-  document.addEventListener(EVENT_QUEUE_START, processingHandler);
-  document.addEventListener(EVENT_REQUEST_END, processingHandler);
-  document.addEventListener(EVENT_QUEUE_END, processingHandler);
+  document.addEventListener(EVENT_QUEUE_START_INTERNAL, processingHandler);
+  document.addEventListener(EVENT_REQUEST_END_INTERNAL, processingHandler);
+  document.addEventListener(EVENT_QUEUE_END_INTERNAL, processingHandler);
   processingHandler();
 }
 

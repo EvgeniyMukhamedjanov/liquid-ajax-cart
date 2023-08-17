@@ -35,8 +35,15 @@ const REQUEST_CLEAR = 'clear';
 const REQUEST_GET = 'get';
 
 const EVENT_QUEUE_START = `${EVENT_PREFIX}:queue-start`;
+const EVENT_QUEUE_START_INTERNAL = `${EVENT_PREFIX}:queue-start-internal`;
+
+const EVENT_QUEUE_END_INTERNAL = `${EVENT_PREFIX}:queue-end-internal`;
 const EVENT_QUEUE_END = `${EVENT_PREFIX}:queue-end`;
+
+const EVENT_REQUEST_START_INTERNAL = `${EVENT_PREFIX}:request-start-internal`;
 const EVENT_REQUEST_START = `${EVENT_PREFIX}:request-start`;
+
+const EVENT_REQUEST_END_INTERNAL = `${EVENT_PREFIX}:request-end-internal`;
 const EVENT_REQUEST_END = `${EVENT_PREFIX}:request-end`;
 
 const queues: QueueItemType[][] = [];
@@ -79,8 +86,11 @@ function runQueues() {
 
 function setProcessingStatus(value: boolean) {
   processing = value
-  const event: EventQueueType = new CustomEvent(processing ? EVENT_QUEUE_START : EVENT_QUEUE_END);
-  document.dispatchEvent(event);
+  const eventInternal: EventQueueType = new CustomEvent(processing ? EVENT_QUEUE_START_INTERNAL : EVENT_QUEUE_END_INTERNAL);
+  document.dispatchEvent(eventInternal);
+
+  const eventPublic: EventQueueType = new CustomEvent(processing ? EVENT_QUEUE_START : EVENT_QUEUE_END);
+  document.dispatchEvent(eventPublic);
 }
 
 function cartRequest(requestType: string, body: RequestBodyType, options: CartRequestOptionsType, finalCallback: () => void) {
@@ -99,7 +109,7 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
   }
   const redundantSections: string[] = [];
 
-  const event: EventRequestStartType = new CustomEvent(EVENT_REQUEST_START, {
+  const eventInternal: EventRequestStartType = new CustomEvent(EVENT_REQUEST_START_INTERNAL, {
     detail: {
       requestState: {
         requestType,
@@ -109,7 +119,19 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
       }
     }
   });
-  document.dispatchEvent(event);
+  document.dispatchEvent(eventInternal);
+
+  const eventPublic: EventRequestStartType = new CustomEvent(EVENT_REQUEST_START, {
+    detail: {
+      requestState: {
+        requestType,
+        endpoint,
+        info,
+        requestBody
+      }
+    }
+  });
+  document.dispatchEvent(eventPublic);
 
   if (info.cancel) {
     requestState.responseData = null;
@@ -212,12 +234,19 @@ function cartRequestFinally(
     }
   }
 
-  const event: EventRequestEndType = new CustomEvent(EVENT_REQUEST_END, {
-    detail: {
-      requestState
-    }
+  const detail = {
+    requestState
+  }
+
+  const eventInternal: EventRequestEndType = new CustomEvent(EVENT_REQUEST_END_INTERNAL, {
+    detail
   });
-  document.dispatchEvent(event);
+  document.dispatchEvent(eventInternal);
+
+  const eventPublic: EventRequestEndType = new CustomEvent(EVENT_REQUEST_END, {
+    detail
+  });
+  document.dispatchEvent(eventPublic);
 
   if ('lastCallback' in options) {
     try {
@@ -321,8 +350,8 @@ export {
   getProcessingStatus,
   REQUEST_ADD,
   REQUEST_CHANGE,
-  EVENT_QUEUE_START,
-  EVENT_QUEUE_END,
-  EVENT_REQUEST_START,
-  EVENT_REQUEST_END
+  EVENT_QUEUE_START_INTERNAL,
+  EVENT_QUEUE_END_INTERNAL,
+  EVENT_REQUEST_START_INTERNAL,
+  EVENT_REQUEST_END_INTERNAL
 }

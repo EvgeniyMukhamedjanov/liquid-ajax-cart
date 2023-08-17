@@ -3,7 +3,7 @@ import {JSONValueType, JSONObjectType, FormattersObjectType} from './ts-types';
 import {getCartState} from './state';
 import {settings} from './settings';
 import {DATA_ATTR_PREFIX} from "./const";
-import {EVENT_REQUEST_END} from "./ajax-api";
+import {EVENT_REQUEST_END_INTERNAL} from "./ajax-api";
 
 type StateValueType = JSONValueType | undefined;
 
@@ -80,7 +80,7 @@ function cartDomBinderRerender() {
 }
 
 function cartDomBinderInit() {
-  document.addEventListener(EVENT_REQUEST_END, updateDOM);
+  document.addEventListener(EVENT_REQUEST_END_INTERNAL, updateDOM);
   updateDOM();
 }
 

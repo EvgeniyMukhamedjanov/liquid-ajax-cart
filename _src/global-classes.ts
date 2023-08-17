@@ -1,5 +1,5 @@
 import {getCartState} from './state';
-import {EVENT_QUEUE_END, EVENT_QUEUE_START, EVENT_REQUEST_END, getProcessingStatus} from "./ajax-api";
+import {EVENT_QUEUE_END_INTERNAL, EVENT_QUEUE_START_INTERNAL, EVENT_REQUEST_END_INTERNAL, getProcessingStatus} from "./ajax-api";
 import {CSS_CLASS_PREFIX} from "./const";
 
 const CSS_CLASS_INIT = `${CSS_CLASS_PREFIX}-init`;
@@ -17,9 +17,9 @@ function updateClasses(): void {
 }
 
 const cartGlobalClassesInit = () => {
-  document.addEventListener(EVENT_QUEUE_START, updateClasses);
-  document.addEventListener(EVENT_REQUEST_END, updateClasses);
-  document.addEventListener(EVENT_QUEUE_END, updateClasses);
+  document.addEventListener(EVENT_QUEUE_START_INTERNAL, updateClasses);
+  document.addEventListener(EVENT_REQUEST_END_INTERNAL, updateClasses);
+  document.addEventListener(EVENT_QUEUE_END_INTERNAL, updateClasses);
   updateClasses();
 }
 
