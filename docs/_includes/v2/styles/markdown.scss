@@ -67,3 +67,24 @@
     text-decoration-thickness: from-font;
   }
 }
+
+.markdown__badge {
+  &:after {
+    font-size: 0.625rem;
+    letter-spacing: .1em;
+    padding: .15rem .5rem;
+    text-transform: uppercase;
+    border-radius: 1000rem;
+    font-weight: 500;
+    display: inline-block;
+    border: 1px solid #d9d9d9;
+    vertical-align: super;
+    margin-left: .5rem;
+  }
+
+  &--new:after {
+    content: 'New feature';
+    background-color: #d4fac3;
+    border-color: #d4fac3;
+  }
+}

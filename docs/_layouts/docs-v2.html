@@ -217,11 +217,16 @@ h_min: 2
         </nav>
       </div>
       <div class="docs-page__content" data-docs-page="content">
-        <div class="docs-page__breadcrumbs">
-          {{- docs_eyebrow | escape -}}
+        <div>
+          <div class="docs-page__breadcrumbs">
+            {{- docs_eyebrow | escape -}}
+          </div>
+          <div class="markdown">
+            {% include jekyll-docs-theme/anchor_headings.html %}
+          </div>
         </div>
-        <div class="markdown">
-          {% include jekyll-docs-theme/anchor_headings.html %}
+        <div>
+          {% include v2/footer.html %}
         </div>
       </div>
       <div class="docs-page__page-menu" data-docs-page="page-menu">

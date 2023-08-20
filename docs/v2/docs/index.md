@@ -88,7 +88,7 @@ the [`js-ajax-cart-init`](/v2/docs/js-ajax-cart-init/) CSS class will be added t
 
 If you want to run your JavaScript once Liquid Ajax Cart is initialized, 
 check the [`liquidAjaxCart.init`](/v2/docs/liquid-ajax-cart-init/) property 
-and listen to the [`liquid-ajax-cart:init`](/v2/docs/event-init/) event:
+and listen for the [`liquid-ajax-cart:init`](/v2/docs/event-init/) event:
 {% include v2/content/init-event-example.html %}
 
 {% include v2/content/lifecycle-reference.html %}

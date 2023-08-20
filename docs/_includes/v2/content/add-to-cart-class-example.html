@@ -1,5 +1,5 @@
 {%- capture highlight_code -%}
-// Listen to the "liquid-ajax-cart:request-end" event which is fired
+// Listen for the "liquid-ajax-cart:request-end" event which is fired
 // after a Shopify Cart API Ajax request is performed
 document.addEventListener('liquid-ajax-cart:request-end', event => {
   const {requestState} = event.detail;

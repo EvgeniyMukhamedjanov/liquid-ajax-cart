@@ -47,7 +47,7 @@
   }
 
   @media (min-width: 1200px) {
-    grid-template-columns: 16rem 1fr 16rem;
+    grid-template-columns: 16.5rem 1fr 16.5rem;
     gap: 3rem;
   }
 }
@@ -246,6 +246,15 @@
 .docs-page__content {
   overflow: auto;
   padding: 1.85rem 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  min-height: calc(100vh - var(--header-height) * 2 - 1rem);
 
   animation: appear-animation .3s;
+
+  @media (min-width: 800px) {
+    min-height: calc(100vh - var(--header-height) - 1rem);
+  }
 }

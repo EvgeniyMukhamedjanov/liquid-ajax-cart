@@ -14,7 +14,7 @@
 
 .steps-list {
   display: block;
-  padding-left: 0;
+  padding-left: 0 !important;
 }
 
 .steps-list__step {
@@ -32,6 +32,10 @@
   @include steps-list-item-element;
   font-weight: bold;
   padding-bottom: .5rem;
+
+  &--hero {
+    font-size: 1.8rem;
+  }
 
   h3 {
     font-size: inherit;
@@ -115,5 +119,22 @@
   &--callback {
     border-color: #cae6ff;
     background-color: #cae6ff;
+  }
+}
+
+.steps-list__cta {
+  font-weight: 700;
+  text-decoration: none;
+  color: #090909 !important;
+  padding: 0.3rem 1.2rem;
+  border-radius: 0.3rem;
+  border: 1px solid #090909;
+  margin-top: 0.6rem;
+  display: inline-block;
+  transition: all .3s;
+
+  &:hover {
+    background-color: #090909;
+    color: white !important;
   }
 }

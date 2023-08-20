@@ -1,7 +1,4 @@
 ---
 layout: default-v2
-disable_anchors: true
-title: Releases
+redirect_url: /v2/docs/releases/
 ---
-
-# Releases v2

@@ -52,3 +52,33 @@ code {
     //border-top: 1px solid #DBDBDB;
   }
 }
+
+.redirect-message {
+  position: fixed;
+  top: 50%;
+  text-align: center;
+  background: black;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-width: 300px;
+  color: white;
+  border-radius: 0.3rem;
+  padding: 0.8rem;
+  z-index: 100;
+
+  a {
+    color: white;
+  }
+
+  &:before {
+    content: '';
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .4);
+    z-index: -1;
+  }
+}

@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  {% assign canonical_url = page.url %}
+  {% if page.redirect_url %}
+    {% assign canonical_url = page.redirect_url %}
+    <script>
+      window.location.replace("{{ page.redirect_url }}");
+    </script>
+  {% endif %}
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +22,7 @@
   <meta name="description"
         content="{{ page_description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
 
-  <link rel="canonical" href="{{ page.url | replace: 'index.html', '' | absolute_url }}">
+  <link rel="canonical" href="{{ canonical_url | replace: 'index.html', '' | absolute_url }}">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,6 +41,7 @@
     {% include v2/styles/header-nav.scss %}
     {% include v2/styles/highlight.scss %}
     {% include v2/styles/codeblock.scss %}
+    {% include v2/styles/footer.scss %}
     {% endcapture %}
     {{ critical_css | scssify }}
   </style>
@@ -42,6 +50,12 @@
 
 <body class="layout-{{ page.layout }}">
 {% include v2/navigation.html %}
+
+{% if page.redirect_url %}
+  <div class="redirect-message">
+    This page is moved to <a href="{{ page.redirect_url }}">here</a>
+  </div>
+{% endif %}
 
 <div>{{ content }}</div>
 

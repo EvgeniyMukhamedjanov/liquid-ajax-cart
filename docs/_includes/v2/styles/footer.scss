@@ -1,0 +1,22 @@
+.footer {
+  padding: 2rem 0;
+  border-top: 1px solid #bababa;
+  margin-top: 4rem;
+  color: #717171;
+  font-size: .875rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  a {
+    color: inherit;
+  }
+}
+
+@media (max-width: 400px) {
+  .footer {
+    text-align: center;
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
+}

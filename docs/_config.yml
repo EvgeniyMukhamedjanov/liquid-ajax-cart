@@ -42,6 +42,15 @@ links_v2:
             - title: Ready snippets
               file: js-snippets
 
+    - title: Versions
+      subsections:
+        - eyebrow: Versions
+          links:
+            - title: Releases v2.x.x
+              file: releases
+            - title: Differences from v1.x.x
+              file: differences-from-v1
+
     - title: Reference
       subsections:
         - title: Core concepts
