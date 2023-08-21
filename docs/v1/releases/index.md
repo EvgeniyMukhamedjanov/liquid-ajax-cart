@@ -36,7 +36,8 @@ title: Releases
 	<div class="release__heading">
 		<h2 class="release__version">v{{ file_version }}</h2>
 		<div class="release__date">
-            {%- if file_version == '1.11.0' -%}Released on 2023, Apr 11{%- endif -%}
+      {%- if file_version == '1.11.1' -%}Released on 2023, Aug 21{%- endif -%}
+      {%- if file_version == '1.11.0' -%}Released on 2023, Apr 11{%- endif -%}
 			{%- if file_version == '1.10.3' -%}Released on 2022, Jul 5{%- endif -%}
 			{%- if file_version == '1.10.2' -%}Released on 2022, Jun 15{%- endif -%}
 			{%- if file_version == '1.10.1' -%}Released on 2022, Apr 8{%- endif -%}
@@ -65,6 +66,10 @@ title: Releases
 ##### Changes:
 
 {% endif %}
+
+{%- if file_version == '1.11.1' -%}
+* Fixed bug when Shopify returns not fully updated section HTML in the `/cart/add.js` response.
+{%- endif -%}
 
 {%- if file_version == '1.11.0' -%}
 * The `lineItemQuantityErrorText` configuration parameter is removed, as Shopify started returning error in the `/cart/change.js` response.
@@ -118,7 +123,7 @@ title: Releases
 {%- if file_version == '1.6.0' -%}
 * The `data-ajax-cart-quantity-input` supports line item's index now.
 * The `data-ajax-cart-messages` attribute with an `item.key` parameter shows messages even if the request resulted with a message was called with the `line` parameter, not `id`.
-* Liquid Ajax Cart update cart sections and the State when a window gets focus. 
+* Liquid Ajax Cart update cart sections and the State when a window gets focus.
 * The `configure` function is removed.
 * The `configureCart` function is added.
 * The `data-ajax-cart-configuration` attribute is added.
@@ -187,7 +192,7 @@ Public release.
 
 </div>
 
-	
+
 </div>
 
 {% endfor %}
