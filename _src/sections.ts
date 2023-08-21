@@ -131,6 +131,11 @@ function cartSectionsInit() {
           if (sectionParts) {
             const receivedDOM = parser.parseFromString(sections[sectionId], "text/html");
 
+            // Remove all the loading="lazy" image attributes to avoid flickering on Safari
+            receivedDOM.querySelectorAll('img[loading="lazy"]').forEach(image => {
+              image.removeAttribute('loading');
+            })
+
             // Restore static elements
             for (let staticElementId in staticElementsList) {
               receivedDOM.querySelectorAll(` [${DATA_ATTR_STATIC_ELEMENT}="${staticElementId.replace(noId, '')}"] `).forEach((staticElement, staticElementIndex) => {

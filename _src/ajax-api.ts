@@ -155,6 +155,11 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
       } else {
         allSections.push(...((sectionsParam as string).split(',')));
       }
+      if (REQUEST_ADD === requestType) {
+        // if it is an "add.js" request, it is better to get all sections html from a separate request
+        // https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/issues/72
+        redundantSections.push(...allSections.slice(0, 5));
+      }
       if (allSections.length > 5) {
         redundantSections.push(...allSections.slice(5));
         const newSectionsParam = allSections.slice(0, 5).join(',');
