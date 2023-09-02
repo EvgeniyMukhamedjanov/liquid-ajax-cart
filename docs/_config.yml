@@ -16,7 +16,7 @@ links_v2:
     - title: Home
       url: /
     - title: Docs
-      url: /v2/docs/
+      url: /v2/
     - title: Download
       url: /v2/releases/
 
@@ -27,7 +27,7 @@ links_v2:
         - title: Setup
           links:
             - title: Installation
-              file: index
+              file: installation
             - title: Cart section
               file: cart-section
             - title: Product forms

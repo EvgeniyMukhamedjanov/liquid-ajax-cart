@@ -32,40 +32,15 @@ h_min: 2
 <script type="module">
   let abortController;
   let currentHash = '';
-  const prefix = "/v2/docs/";
+  const prefix = "/v2/";
   let currentPage = getPage(window.location.href);
 
   function getPage(url) {
     if (!url || url.indexOf(prefix) === -1) {
       return undefined;
     }
-    return url.split(prefix).at(-1).split('/').at(0).split('#').at(0).trim() || 'index';
+    return url.split(prefix).at(-1).split('/').at(0).split('#').at(0).trim();
   }
-
-  window.addEventListener("popstate", () => {
-    const newPage = getPage(window.location.href);
-    if (!newPage || !currentPage) {
-      window.location.reload();
-    }
-    if (newPage !== currentPage) {
-      currentPage = newPage;
-      pageUpdate();
-    }
-  });
-
-  document.addEventListener('click', event => {
-    const $pressedLink = event.target.closest(`a[href*="${prefix}"]`);
-    if (!$pressedLink) return;
-
-    const newUrl = $pressedLink.href
-    const newPage = getPage(newUrl);
-    if (newPage && currentPage && newPage !== currentPage) {
-      history.pushState({}, "", newUrl);
-      currentPage = newPage;
-      pageUpdate();
-      event.preventDefault();
-    }
-  });
 
   async function pageUpdate() {
     const url = window.location.href;
@@ -152,7 +127,34 @@ h_min: 2
     }
   }
 
-  document.addEventListener('DOMContentLoaded', navPosUpdate);
+  if (currentPage) {
+    window.addEventListener("popstate", () => {
+      const newPage = getPage(window.location.href);
+      if (!newPage || !currentPage) {
+        window.location.reload();
+      }
+      if (newPage !== currentPage) {
+        currentPage = newPage;
+        pageUpdate();
+      }
+    });
+
+    document.addEventListener('click', event => {
+      const $pressedLink = event.target.closest(`a[href*="${prefix}"]`);
+      if (!$pressedLink) return;
+
+      const newUrl = $pressedLink.href
+      const newPage = getPage(newUrl);
+      if (newPage && currentPage && newPage !== currentPage) {
+        history.pushState({}, "", newUrl);
+        currentPage = newPage;
+        pageUpdate();
+        event.preventDefault();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', navPosUpdate);
+  }
 
 </script>
 
@@ -201,7 +203,7 @@ h_min: 2
                           {%- endif -%}
                           <li class="side-menu__link {% if is_docs_link_active %}side-menu__link--active{% endif %}"
                               data-docs-page="link-wrapper">
-                            <a href="/v2/docs/{{ docs_link.file | append: '/' | replace: 'index/', '' }}"
+                            <a href="/v2/{{ docs_link.file | append: '/' | replace: 'index/', '' }}"
                             >
                               {{- docs_link.title | escape -}}
                             </a>

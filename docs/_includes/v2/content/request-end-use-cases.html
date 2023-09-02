@@ -1,19 +1,19 @@
-{% assign queue_end_url = '/v2/docs/event-queue-end/' %}
+{% assign queue_end_url = '/v2/event-queue-end/' %}
 {% if page.url contains 'lifecycle' %}
   {% assign queue_end_url = '#liquid-ajax-cart-queue-end' %}
 {% endif %}
 
 Use this event when you want to:
-* modify the page content depending on the request's result or when the cart state (which is stored in the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) property) is updated;
-* modify the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements content or add event listeners to them when the elements are re-rendered;
+* modify the page content depending on the request's result or when the cart state (which is stored in the [`liquidAjaxCart.cart`](/v2/liquid-ajax-cart-cart/) property) is updated;
+* modify the [`data-ajax-cart-section`](/v2/data-ajax-cart-section/) elements content or add event listeners to them when the elements are re-rendered;
 * track each successful cart-related user's action, such as adding a product to the cart, removing a product from the cart, etc.
 
 Code examples with this event:
-* [Open the Ajax-cart when a user adds a product to the cart](/v2/docs/js-snippets/#open-the-ajax-cart-when-a-user-adds-a-product-to-the-cart);
+* [Open the Ajax-cart when a user adds a product to the cart](/v2/js-snippets/#open-the-ajax-cart-when-a-user-adds-a-product-to-the-cart);
 
 **Don't use** the event when you want to modify the cart state by performing an additional Shopify Cart API Ajax request
 based on a particular rule.
-There might be a few requests in the [Queue](/v2/docs/queue-of-requests/),
+There might be a few requests in the [Queue](/v2/queue-of-requests/),
 thus it is better to check the condition and initiate the additional request
 in a [`liquid-ajax-cart:queue-end`]({{ queue_end_url }}) event listener,
 when all the current requests are executed.

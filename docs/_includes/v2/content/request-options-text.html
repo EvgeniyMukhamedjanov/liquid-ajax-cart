@@ -6,40 +6,40 @@ The `options` parameter is an object, and it might have the following properties
 
 The `firstCallback` parameter is a callback function that **will be called first** after the request is performed
 and **before** any other callback functions, that are subscribed to the request, are called.
-Thus, this function will be called **before** Liquid Ajax Cart starts updating the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object,
-the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements,
-the [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) elements,
+Thus, this function will be called **before** Liquid Ajax Cart starts updating the [`liquidAjaxCart.cart`](/v2/liquid-ajax-cart-cart/) object,
+the [`data-ajax-cart-section`](/v2/data-ajax-cart-section/) elements,
+the [`data-ajax-cart-bind`](/v2/data-ajax-cart-bind/) elements,
 the global CSS classes.
 
-The `firstCallback` function will be called with the only parameter — the [Request state](/v2/docs/request-state/) object.
+The `firstCallback` function will be called with the only parameter — the [Request state](/v2/request-state/) object.
 
 The detailed explanation on when the `firstCallback` function is called,
-and what exactly happens before and after the call, is in the “[Lifecycle, events, API](/v2/docs/lifecycle-events-api/)” guide.
+and what exactly happens before and after the call, is in the “[Lifecycle, events, API](/v2/lifecycle-events-api/)” guide.
 
 ### lastCallback
 
 The `lastCallback` parameter is a callback function that **will be called last** after the request is performed
 and **after** any other callback functions, that are subscribed to the request, are called.
-Thus, this function will be called **after** Liquid Ajax Cart updates the [`liquidAjaxCart.cart`](/v2/docs/liquid-ajax-cart-cart/) object,
-the [`data-ajax-cart-section`](/v2/docs/data-ajax-cart-section/) elements,
-the [`data-ajax-cart-bind`](/v2/docs/data-ajax-cart-bind/) elements,
+Thus, this function will be called **after** Liquid Ajax Cart updates the [`liquidAjaxCart.cart`](/v2/liquid-ajax-cart-cart/) object,
+the [`data-ajax-cart-section`](/v2/data-ajax-cart-section/) elements,
+the [`data-ajax-cart-bind`](/v2/data-ajax-cart-bind/) elements,
 the global CSS classes.
 
-The `lastCallback` function will be called with the only parameter — the [Request state](/v2/docs/request-state/) object.
+The `lastCallback` function will be called with the only parameter — the [Request state](/v2/request-state/) object.
 
 The detailed explanation on when the `lastCallback` function is called,
-and what exactly happens before and after the call, is in the “[Lifecycle, events, API](/v2/docs/lifecycle-events-api/)” guide.
+and what exactly happens before and after the call, is in the “[Lifecycle, events, API](/v2/lifecycle-events-api/)” guide.
 
 ### info
 
-The `info` parameter is a JavaScript object that will be attached to the [Request state](/v2/docs/request-state/) object of the request.
+The `info` parameter is a JavaScript object that will be attached to the [Request state](/v2/request-state/) object of the request.
 You can add your custom properties to the Request state using the `info` parameter.
 
 Don't use the `initiator` and the `cancel` keys as they are reserved properties.
 
 ### important
 
-If you want a request to go to the beginning of the [Queues or Requests](/v2/docs/queue-of-requests/)
+If you want a request to go to the beginning of the [Queues or Requests](/v2/queue-of-requests/)
 rather than to the end in order to execute it as soon as possible, set the `important` property to `true`.
 
-Explore the feature and the use cases on the [Queues or Requests](/v2/docs/queue-of-requests/) page.
+Explore the feature and the use cases on the [Queues or Requests](/v2/queue-of-requests/) page.
