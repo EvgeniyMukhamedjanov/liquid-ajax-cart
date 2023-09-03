@@ -16,9 +16,9 @@ links_v2:
     - title: Home
       url: /
     - title: Docs
-      url: /v2/
-    - title: Download
-      url: /v2/releases/
+      url: /v2/installation/
+    - title: Demo store
+      url: https://liquid-ajax-cart.myshopify.com
 
   docs:
     - title: Guides

@@ -49,7 +49,7 @@
 </head>
 
 <body class="layout-{{ page.layout }}">
-{% include v2/navigation.html %}
+{% include v2/navigation.html is_dark=page.homepage %}
 
 {% if page.redirect_url %}
   <div class="redirect-message">

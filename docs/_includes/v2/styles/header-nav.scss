@@ -2,9 +2,14 @@
   position: sticky;
   z-index: 4;
   top: 0;
-  background-color: rgba(255, 255, 255, .9);
+  background-color: rgba(255, 255, 255, .7);
   backdrop-filter: blur(.5rem);
   border-bottom: 1px solid #DBDBDB;
+
+  &--dark {
+    background-color: rgba(4, 17, 32, .7);
+    border-bottom: 1px solid #20344C;
+  }
 }
 
 //@media (max-width: 759px) {
@@ -114,6 +119,11 @@
   font-weight: 600;
 
   border-bottom: none !important;
+
+  .header-nav--dark & {
+    color: #ced1de !important;
+    opacity: .7;
+  }
 }
 .header-nav__link:before {
   opacity: 0;
@@ -133,13 +143,26 @@
   //text-decoration: underline;
   //text-decoration-color: rgba(0, 0, 0, .5);
   //text-decoration-thickness: 1px;
+  .header-nav--dark & {
+    color: #ced1de !important;
+    opacity: 1;
+  }
 }
 .header-nav__link--active:before {
   opacity: 1;
+
+  .header-nav--dark & {
+    background-color: #06490c;
+  }
 }
 
 .header-nav__link:not(.header-nav__link--active):hover {
   color:  black !important;
+
+  .header-nav--dark & {
+    color: #ced1de !important;
+    opacity: 1;
+  }
 }
 .header-nav__link:not(.header-nav__link--active):hover:before {
   //opacity: .4;
@@ -256,6 +279,27 @@
       }
     }
   }
+
+  .header-nav--dark & {
+    summary {
+      color: #ced1de;
+      opacity: .7;
+      background: transparent;
+      border: 1px solid #ced1de;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &:after {
+        filter: invert(1);
+      }
+    }
+
+    &[open] summary {
+      opacity: 1;
+    }
+  }
 }
 
 .header-nav__github {
@@ -271,5 +315,9 @@
     width: 1.4rem;
     height: auto;
     display: block;
+  }
+
+  .header-nav--dark & {
+    filter: invert(1);
   }
 }
