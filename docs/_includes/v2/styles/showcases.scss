@@ -1,0 +1,116 @@
+.showcases {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.showcases__item-wrapper {
+  min-width: 0;
+}
+
+.showcases__item {
+  position: relative;
+
+  a {
+    text-decoration-color: rgba(255, 255, 255, .6);
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+}
+
+.showcases__item-image-placeholder {
+  position: relative;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.showcases__item-image-placeholder:after {
+  content: '';
+  display: block;
+  background-color: #252526;
+}
+.showcases__item-image-placeholder--fake:after {
+  background-color: transparent;
+}
+
+.showcases__item-image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  object-fit: cover;
+}
+
+.showcases__item-copy {
+  font-size: 12px;
+}
+
+.showcases__item-title {
+  //font-size: 17px;
+  font-weight: bold;
+}
+
+.showcases__item-title:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.showcases__item-image-placeholder:after,
+.showcases__item-title:before {
+  padding-top: 50%;
+}
+
+.showcases__item-meta {
+  opacity: .8;
+  display: block;
+}
+
+.showcases__item-meta:empty {
+  display: none;
+}
+
+.showcases__submit {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed;
+  border-radius: inherit;
+  opacity: .6;
+  transition: opacity .3s;
+}
+.showcases__submit span:first-child {
+  font-size: 24px;
+}
+.showcases__item:hover .showcases__submit {
+  opacity: 1;
+}
+//
+//@media (min-width: 410px) {
+//  .showcases__item-meta {
+//    display: inline;
+//  }
+//
+//  .showcases__item-meta:before {
+//    content: '';
+//    margin: 0 12px;
+//    display: inline-block;
+//    vertical-align: middle;
+//    width: 1px;
+//    height: 1em;
+//    background-color: rgba(255, 255, 255, .2);
+//  }
+//}

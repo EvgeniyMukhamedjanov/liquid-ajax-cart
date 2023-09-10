@@ -15,6 +15,71 @@ h_min: 2
 {% endraw %}
 {%- endcapture -%}
 
+{%- capture example_section -%}
+{% raw %}
+<div class="my-ajax-cart" data-ajax-cart-section>
+  <h2>Cart ({{ cart.item_count }})</h2>
+
+  <div class="my-ajax-cart__content">
+    <!-- Ajax cart content -->
+  </div>
+</div>
+{% endraw %}
+{%- endcapture -%}
+
+{%- capture example_quantity -%}
+{% raw %}
+<ajax-cart-quantity>
+  <button data-ajax-cart-quantity-minus>Minus one</button>
+  <input data-ajax-cart-quantity-input="{{ line_item_index }}" value="{{ line_item.quantity }}" type="number" />
+  <button data-ajax-cart-quantity-plus>Plus one</button>
+</ajax-cart-quantity>
+{% endraw %}
+{%- endcapture -%}
+
+{%- capture example_errors -%}
+{% raw %}
+<div data-ajax-cart-errors="{{ line_item.key }}">
+  <!--
+    Errors from the request responses
+    related to the line item with the specified key
+    will appear here
+  -->
+</div>
+{% endraw %}
+{%- endcapture -%}
+
+{%- capture example_css -%}
+/* When the cart is empty */
+.js-ajax-cart-empty .my-cart-items-counter {
+  display: none;
+}
+
+/* When an Ajax request is in progress */
+.js-ajax-cart-processing .my-loading-indicator {
+  display: block;
+}
+{%- endcapture -%}
+
+{% capture example_heart language="console-text" %}
+._           _ _ _
+| |__  _   _(_) | |_
+| '_ \| | | | | | __|
+| |_) | |_| | | | |_
+|_.__/ \__,_|_|_|\__|
+  __
+ / _| ___  _ __
+| |_ / _ \| '__|
+|  _| (_) | |
+|_|  \___/|_|
+     _
+  __| | _____   _____
+ / _` |/ _ \ \ / / __|
+| (_| |  __/\ V /\__ \
+ \__,_|\___| \_/ |___/
+
+{% endcapture %}
+
 <style>
   {% capture critical_css %}
   .layout-home-v2 {
@@ -24,6 +89,7 @@ h_min: 2
 
   {% include v2/styles/homepage.scss %}
   {% include v2/styles/cards.scss %}
+  {% include v2/styles/showcases.scss %}
   {% endcapture %}
   {{ critical_css | scssify }}
 </style>
@@ -60,22 +126,26 @@ h_min: 2
 
     <div class="cards">
       <div class="cards__card">
-        <h2 class="cards__card-title">Ajax “add to cart”</h2>
+        <h2 class="cards__card-title">Ajax “Add to cart”</h2>
         <div class="cards__card-description">
           <p>
-            Wrap a Shopify product form in the <a href="/v2/ajax-cart-product-form/">&lt;ajax-cart-product-form&gt;</a>
-            custom tag — Liquid Ajax Cart will intercept the form submission and send Ajax cart request.
+            Wrap a product form in the <a href="/v2/ajax-cart-product-form/"><code>&lt;ajax-cart-product-form&gt;</code></a>
+            custom tag — Liquid Ajax Cart will perform a Shopify Cart API Ajax request once a user submits the product form.
           </p>
         </div>
         {% include v2/codeblock.html language="liquid" code=example_product_form %}
       </div>
 
       <div class="cards__card">
-        <h2 class="cards__card-title">Ajax “add to cart”</h2>
+        <h2 class="cards__card-title">Re-rendering Ajax cart content</h2>
         <div class="cards__card-description">
-          <p>Wrap a Shopify product form in the &lt;ajax-cart-product-form&gt; custom tag — Liquid Ajax Cart will intercept the form submission and send Ajax cart request.</p>
+          <p>
+            Apply the <a href="/v2/data-ajax-cart-section/"><code>data-ajax-cart-section</code></a> attribute
+            to a Shopify cart section —
+            Liquid Ajax Cart will re-render the section after each Shopify Cart API Ajax request.
+          </p>
         </div>
-        {% include v2/codeblock.html language="liquid" code=example_product_form %}
+        {% include v2/codeblock.html language="liquid" code=example_section %}
 
         <div
           class="homepage__light"
@@ -84,12 +154,16 @@ h_min: 2
           bottom: 3rem"></div>
       </div>
 
-      <div class="cards__card cards__card--feat">
-        <h2 class="cards__card-title">Ajax “add to cart”</h2>
+      <div class="cards__card" style="grid-column: span 6">
+        <h2 class="cards__card-title">Cart item quantity input</h2>
         <div class="cards__card-description">
-          <p>Wrap a Shopify product form in the &lt;ajax-cart-product-form&gt; custom tag — Liquid Ajax Cart will intercept the form submission and send Ajax cart request.</p>
+          <p>
+            Apply the attributes <a href="/v2/data-ajax-cart-quantity-input/"><code>data-ajax-cart-quantity-input</code></a>, <code>data-ajax-cart-quantity-plus</code>, <code>data-ajax-cart-quantity-minus</code>
+            to a cart item quantity input, the "Plus" and "Minus" buttons, wrap them all in the <a href="/v2/ajax-cart-quantity/"><code>ajax-cart-quantity</code></a> custom tag —
+            Liquid Ajax Cart will perform a Shopify Cart API Ajax request once a user changes the input value or clicks the buttons.
+          </p>
         </div>
-        {% include v2/codeblock.html language="liquid" code=example_product_form %}
+        {% include v2/codeblock.html language="liquid" code=example_quantity %}
       </div>
 
       <div class="cards__card">
@@ -101,31 +175,98 @@ h_min: 2
             --homepage-light-strength: 20rem;
             --homepage-light-opacity: .25;
           "></div>
-        <h2 class="cards__card-title">Ajax “add to cart”</h2>
+        <h2 class="cards__card-title">Error messages</h2>
         <div class="cards__card-description">
           <p>
-            Wrap a Shopify product form in the <a href="/v2/ajax-cart-product-form/">&lt;ajax-cart-product-form&gt;</a>
-            custom tag — Liquid Ajax Cart will intercept the form submission and send Ajax cart request.
+            Add an element with the <a href="/v2/data-ajax-cart-errors/"><code>data-ajax-cart-errors</code></a> attribute —
+            Liquid Ajax Cart will insert Shopify Cart API error responses to the element.
           </p>
         </div>
-        {% include v2/codeblock.html language="liquid" code=example_product_form %}
+        {% include v2/codeblock.html language="liquid" code=example_errors %}
       </div>
 
       <div class="cards__card">
-        <h2 class="cards__card-title">Ajax “add to cart”</h2>
+        <h2 class="cards__card-title">CSS classes</h2>
         <div class="cards__card-description">
-          <p>Wrap a Shopify product form in the &lt;ajax-cart-product-form&gt; custom tag — Liquid Ajax Cart will intercept the form submission and send Ajax cart request.</p>
+          <p>
+            Liquid Ajax Cart adds the cart related classes to the <code>html</code> tag
+            so that you can style the page based on the cart state.
+          </p>
         </div>
-        {% include v2/codeblock.html language="liquid" code=example_product_form %}
+        {% include v2/codeblock.html language="css" code=example_css %}
       </div>
+
+      <div class="cards__card" style="grid-column: span 4">
+        <h2 class="cards__card-title">JavaScript API</h2>
+        <div class="cards__card-description">
+          <p>
+            Liquid Ajax Cart provides methods for executing Shopify Cart API Ajax requests, as well as properties and events to extend functionality.
+          </p>
+        </div>
+        {% include v2/content/add-to-cart-class-example.html no_title=true %}
+      </div>
+
+      <div class="cards__card" style="grid-column: span 2">
+        <h2 class="cards__card-title">No styles</h2>
+        <div class="cards__card-description">
+          <p>
+            Liquid Ajax Cart doesn't provide a layout for Ajax carts and doesn't apply any CSS styles,
+            so the appearance is up to you.
+          </p>
+        </div>
+        {% include v2/codeblock.html code=example_heart language="console-text" %}
+      </div>
+
     </div>
 
     <div class="homepage__title-block">
-      <h2 class="homepage__title">On production since 2021, Jan</h2>
-      <p class="homepage__lead">
-        Create a Shopify section for your cart, and Liquid Ajax Cart will re-render it after each user action, such as
-        product form submit or cart item quantity change.
-      </p>
+      <h2 class="homepage__title">Reliable for production</h2>
+      <div class="homepage__two-cols-text">
+        <div>
+          <p class="homepage__lead">
+            Liquid Ajax Cart has been in&nbsp;use on&nbsp;a&nbsp;production Shopify stores since the beginning of&nbsp;2022.
+            The library is&nbsp;actively maintained by&nbsp;the&nbsp;developer.
+          </p>
+        </div>
+        <div>
+          <a href="https://avexdesigns.com" target="_blank" style="margin-bottom: .5rem; display: inline-block;">
+            <svg width="102" height="22" viewBox="0 0 102 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_1631_128)">
+                <path
+                  d="M60.56 22C59.7107 22.0743 58.8576 21.9091 58.0948 21.5226C57.3851 20.9594 57.4068 19.7351 57.423 18.8419C57.423 18.7176 57.423 18.5999 57.423 18.491V3.58268C57.423 0.183676 57.7806 0.0868755 61.6425 0.0868755H69.9407C71.7167 0.0868755 72.5793 0.159476 72.9997 0.587376C73.5989 1.16488 73.5589 2.70048 73.535 3.61788C73.535 3.78288 73.5274 3.92478 73.5274 4.04688H62.1388V8.86048H68.9655C70.6917 8.86048 71.5336 8.93308 71.954 9.36098C72.5544 9.93848 72.5143 11.451 72.4893 12.3552C72.4893 12.5202 72.4807 12.6632 72.4807 12.7842H62.1432V17.9916H69.7034C71.6799 17.9916 72.5045 18.117 72.9737 18.491C73.6055 19.1015 73.5686 20.581 73.5437 21.5556C73.5437 21.7129 73.5361 21.8614 73.5361 21.9857H61.6469C61.5201 21.9857 61.3695 21.9857 61.2134 21.9923C61.0141 22 60.7898 22 60.56 22ZM102 21.9879H101.892C99.952 21.9879 99.226 21.9879 98.6268 21.9505C96.6405 21.8185 96.1713 21.12 95.2373 19.7285L95.1484 19.5965L95.0043 19.3831L91.2767 13.8908L87.4462 19.6317C85.9747 21.8537 85.8869 21.9868 82.0282 21.9868H80.5502L88.5298 10.4654L81.1126 0.0153755H81.2372H81.4539H81.8039C82.0987 0.0153755 82.3891 0.00987554 82.7012 0.00987554C83.9384 -0.056889 85.1788 0.0542098 86.3854 0.339876C87.192 0.771607 87.8466 1.44693 88.2589 2.27258C88.3044 2.34628 88.3478 2.41448 88.3911 2.48048L91.2735 6.83208L94.1569 2.48048L94.1851 2.43648C95.739 0.0164753 95.739 0.0164755 101.435 0.0164755L94.0172 10.4665L101.999 21.9846L102 21.9879ZM22.9614 21.9879C21.2482 21.9879 20.4691 21.9879 19.9393 21.9516C17.8934 21.8108 17.6171 21.0936 17.0135 19.5228L16.9875 19.4546L16.3894 17.9223H6.5395L6.01288 19.4546C5.06256 21.9846 5.06256 21.9846 0 21.9846L7.48982 2.72688C8.4358 0.168276 8.65902 0.0153755 11.4634 0.0153755H14.2807L22.9614 21.9835V21.9879ZM11.4634 4.18878L7.87666 14.2813H15.0847L11.4634 4.18878ZM37.9616 21.9846H35.2526L26.5329 0.0153755H26.6207C26.7432 0.0153755 26.8645 0.0153755 27.013 0.0153755H27.1506C27.4215 0.0153755 27.6924 0.00767554 27.9709 0.00767554C29.0571 -0.0627704 30.1463 0.0867976 31.1751 0.447676C31.8718 0.894276 32.2673 1.76768 32.7929 3.33628L37.9616 17.5263L43.2019 3.33628L43.2257 3.26918C44.3613 0.0153754 44.3614 0.0153755 49.4597 0.0153755L41.7596 18.9893C41.6946 19.1356 41.6242 19.3083 41.5624 19.459V19.4678V19.4744V19.481C41.3192 20.2363 40.9219 20.9312 40.3965 21.5204C39.6589 21.9474 38.8016 22.1109 37.9616 21.9846Z"
+                  fill="white"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_1631_128">
+                  <rect width="102" height="22" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+          </a>
+          <p>
+            New York based Shopify agency
+            “<a href="https://avexdesigns.com" target="_blank" style="white-space: nowrap;">Avex Designs</a>”
+            uses Liquid Ajax Cart in all new projects.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="homepage__container homepage__container--wide">
+    <div class="showcases">
+      {% for p in site.links.portfolio %}
+        <div class="showcases__item-wrapper">
+          <div class="showcases__item">
+            <div class="showcases__item-image-placeholder">
+              <img class="showcases__item-image" src="/assets/screens/{{ p.image }}" alt="{{ p.title }} screenshot" loading="lazy" />
+            </div>
+            <div class="showcases__item-copy">
+              <a href="{{ p.url }}" class="showcases__item-title" target="_blank">{{ p.title }}</a> <span class="showcases__item-meta">{{ p.meta }}</span>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
     </div>
   </div>
 </div>

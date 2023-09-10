@@ -12,4 +12,5 @@ document.addEventListener('liquid-ajax-cart:request-end', event => {
   }
 });
 {%- endcapture -%}
-{% include v2/codeblock.html title="assets/script.js" language="javascript" code=highlight_code %}
+{% unless include.no_title %}{% assign code_title = "assets/script.js" %}{% endunless %}
+{% include v2/codeblock.html title=code_title language="javascript" code=highlight_code %}

@@ -7,6 +7,16 @@
 .homepage {
   overflow: hidden;
   width: 100%;
+
+  :not(pre) > code {
+    background-color: transparent;
+    border: 1px solid #20344C;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-thickness: from-font;
+  }
 }
 
 .homepage__light {
@@ -22,6 +32,9 @@
   max-width: 66rem;
   margin: 0 auto;
   padding: 0 1rem;
+}
+.homepage__container--wide {
+  max-width: none;
 }
 
 .homepage__hero {
@@ -93,7 +106,7 @@
 
 .homepage__title-block {
   margin-top: 8rem;
-  max-width: 53rem;
+  //max-width: 53rem;
 }
 
 .homepage__title {
@@ -101,4 +114,15 @@
   font-weight: 900;
   line-height: 1.2;
   margin-bottom: 1rem;
+}
+
+.homepage__two-cols-text {
+  display: flex;
+}
+
+.homepage__two-cols-text > *:last-child {
+  font-size: .875rem;
+  width: 16rem;
+  flex: 0 0 16rem;
+  margin-left: 6rem;
 }
