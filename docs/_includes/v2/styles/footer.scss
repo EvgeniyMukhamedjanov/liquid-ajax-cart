@@ -11,6 +11,15 @@
   a {
     color: inherit;
   }
+
+  .homepage & {
+    border-top-color: #20344C;
+    color: #b5bedd;
+
+    svg * {
+      fill: #b5bedd;
+    }
+  }
 }
 
 @media (max-width: 400px) {

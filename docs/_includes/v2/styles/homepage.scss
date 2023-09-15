@@ -126,3 +126,28 @@
   flex: 0 0 16rem;
   margin-left: 6rem;
 }
+
+.homepage__github-cta {
+  display: inline-flex;
+  border: 1px solid #20344C;
+  border-radius: 0.5rem;
+  font-size: .875rem;
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  background: rgba(26, 37, 63, 0.3);
+  color: #b5bedd;
+  align-items: flex-start;
+
+  svg {
+    width: 1.3rem;
+    height: auto;
+    display: inline-block;
+    flex: 0 0 1.3rem
+  }
+}
+
+.homepage__subtitle {
+  font-size: 1.7rem;
+  margin: 3rem 0 .6rem;
+  font-weight: bold;
+}
