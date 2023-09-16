@@ -16,6 +16,10 @@
   a {
     color: inherit;
     text-decoration-thickness: from-font;
+    text-decoration-color: rgba(255, 255, 255, .65);
+    &:hover {
+      text-decoration-color: currentColor;
+    }
   }
 }
 
@@ -38,7 +42,7 @@
 }
 
 .homepage__hero {
-  max-width: 53rem;
+  max-width: 54rem;
   margin-top: 8rem;
   margin-bottom: 5rem;
   position: relative;
@@ -116,15 +120,27 @@
   margin-bottom: 1rem;
 }
 
-.homepage__two-cols-text {
-  display: flex;
+.homepage__two-cols-text > *:first-child {
+  max-width: 44rem;
 }
 
 .homepage__two-cols-text > *:last-child {
   font-size: .875rem;
   width: 16rem;
   flex: 0 0 16rem;
-  margin-left: 6rem;
+  margin: 2rem 0;
+}
+
+@media (min-width: 960px) {
+  .homepage__two-cols-text {
+    display: flex;
+  }
+  .homepage__two-cols-text > *:first-child {
+    max-width: none;
+  }
+  .homepage__two-cols-text > *:last-child {
+    margin: 0 0 0 6rem;
+  }
 }
 
 .homepage__github-cta {

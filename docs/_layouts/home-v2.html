@@ -114,8 +114,10 @@ h_min: 2
       </a>
       <h1 class="homepage__hero-title">Build a Shopify Ajax-cart without JavaScript coding</h1>
       <p class="homepage__lead">
-        Create a Shopify section for your cart, and Liquid Ajax Cart will re-render it after each user action, such as
-        product form submit or cart item quantity change.
+        A JavaScript library that ajaxifies your Shopify theme using
+        <a href="https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering" target="_blank">Bundled section rendering</a>
+        once you apply the <code>data-ajax-cart-section</code> attribute to the Ajax-cart content
+        and wrap product forms in the <code>&lt;ajax-cart-product-form&gt;</code> custom tag.
       </p>
       <p>
         <a href="/v2/installation/" class="homepage__button">
@@ -125,9 +127,29 @@ h_min: 2
       <div class="homepage__light" style="left: 0rem; bottom: 2rem"></div>
     </div>
 
+    <h2 class="homepage__subtitle">What's inside</h2>
+    <div class="homepage__two-cols-text">
+      <div>
+        <p style="margin-bottom: 1rem;">
+          Liquid Ajax Cart is a well-tested JavaScript code that covers most of the scenarios for building Ajax-cart
+          functionality.
+          In order to apply a specific Ajax functionality to an element, add a corresponding data-attribute or wrap in a
+          custom tag, provided by the library.
+        </p>
+        <p>
+          So you don't need to write Ajax functionality from scratch, test it, or copy-paste from a previous projects.
+        </p>
+      </div>
+      <div>
+        <span style="font-size: 3rem; font-weight: bold; line-height: 1.2">23 KB</span>
+        <br>
+        Size of the minified version
+      </div>
+    </div>
+
     <div class="cards">
-      <div class="cards__card">
-        <h2 class="cards__card-title">Ajax “Add to cart”</h2>
+      <div class="cards__card cards__card--3-6">
+        <h3 class="cards__card-title">Ajax “Add to cart”</h3>
         <div class="cards__card-description">
           <p>
             Wrap a product form in the <a href="/v2/ajax-cart-product-form/"><code>&lt;ajax-cart-product-form&gt;</code></a>
@@ -137,8 +159,8 @@ h_min: 2
         {% include v2/codeblock.html language="liquid" code=example_product_form %}
       </div>
 
-      <div class="cards__card">
-        <h2 class="cards__card-title">Re-rendering Ajax cart content</h2>
+      <div class="cards__card cards__card--3-6">
+        <h3 class="cards__card-title">Re-rendering Ajax cart content</h3>
         <div class="cards__card-description">
           <p>
             Apply the <a href="/v2/data-ajax-cart-section/"><code>data-ajax-cart-section</code></a> attribute
@@ -156,18 +178,18 @@ h_min: 2
       </div>
 
       <div class="cards__card" style="grid-column: span 6">
-        <h2 class="cards__card-title">Cart item quantity input</h2>
+        <h3 class="cards__card-title">Cart item quantity input</h3>
         <div class="cards__card-description">
           <p>
-            Apply the attributes <a href="/v2/data-ajax-cart-quantity-input/"><code>data-ajax-cart-quantity-input</code></a>, <code>data-ajax-cart-quantity-plus</code>, <code>data-ajax-cart-quantity-minus</code>
-            to a cart item quantity input, the "Plus" and "Minus" buttons, wrap them all in the <a href="/v2/ajax-cart-quantity/"><code>ajax-cart-quantity</code></a> custom tag —
+            Wrap a cart item quantity input, the “Plus” and “Minus” buttons in the <a href="/v2/ajax-cart-quantity/"><code>ajax-cart-quantity</code></a> custom tag
+            and apply the corresponding data-attributes —
             Liquid Ajax Cart will perform a Shopify Cart API Ajax request once a user changes the input value or clicks the buttons.
           </p>
         </div>
         {% include v2/codeblock.html language="liquid" code=example_quantity %}
       </div>
 
-      <div class="cards__card">
+      <div class="cards__card cards__card--3-6">
         <div
           class="homepage__light"
           style="
@@ -176,7 +198,7 @@ h_min: 2
             --homepage-light-strength: 20rem;
             --homepage-light-opacity: .25;
           "></div>
-        <h2 class="cards__card-title">Error messages</h2>
+        <h3 class="cards__card-title">Error messages</h3>
         <div class="cards__card-description">
           <p>
             Add an element with the <a href="/v2/data-ajax-cart-errors/"><code>data-ajax-cart-errors</code></a> attribute —
@@ -186,8 +208,8 @@ h_min: 2
         {% include v2/codeblock.html language="liquid" code=example_errors %}
       </div>
 
-      <div class="cards__card">
-        <h2 class="cards__card-title">CSS classes</h2>
+      <div class="cards__card cards__card--3-6">
+        <h3 class="cards__card-title">CSS classes</h3>
         <div class="cards__card-description">
           <p>
             Liquid Ajax Cart adds the cart related classes to the <code>html</code> tag
@@ -197,8 +219,8 @@ h_min: 2
         {% include v2/codeblock.html language="css" code=example_css %}
       </div>
 
-      <div class="cards__card" style="grid-column: span 4">
-        <h2 class="cards__card-title">JavaScript API</h2>
+      <div class="cards__card cards__card--4-6">
+        <h3 class="cards__card-title">JavaScript API</h3>
         <div class="cards__card-description">
           <p>
             Liquid Ajax Cart provides methods for executing Shopify Cart API Ajax requests, as well as properties and events to extend functionality.
@@ -207,8 +229,8 @@ h_min: 2
         {% include v2/content/add-to-cart-class-example.html no_title=true %}
       </div>
 
-      <div class="cards__card" style="grid-column: span 2">
-        <h2 class="cards__card-title">No styles</h2>
+      <div class="cards__card cards__card--2-6">
+        <h3 class="cards__card-title">No styles</h3>
         <div class="cards__card-description">
           <p>
             Liquid Ajax Cart doesn't provide a layout for Ajax carts and doesn't apply any CSS styles,
@@ -228,15 +250,15 @@ h_min: 2
           right: 50%;
           top: 50%"></div>
       <div class="quote__reference">
-        “<a href="https://ionlyspeakliquid.beehiiv.com/p/speak-liquid-2-cart-drawer-line-item-properties" target="_blank">i only speak liquid</a>” online magazine:
+        From a <a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions/62" target="_blank">GitHub discussion</a>:
       </div>
-      <div class="quote__text">It’s a fantastic library cart using Bundled Rendering. So easy to use!</div>
+      <div class="quote__text">I managed to make the 98% of my lateral cart in about 15% of the estimated time</div>
       <div class="quote__person">
         <div class="quote__person-image">
-          <img src="https://github.com/aresena.png?size=96" loading="lazy" alt="Roberto Aresena"/>
+          <img src="https://github.com/sofiaborovskaia.png?size=96" loading="lazy" alt="Sofia Borovskaia"/>
         </div>
-        <div class="quote__person-name">Roberto Aresena</div>
-        <div class="quote__person-title">Shopify expert</div>
+        <div class="quote__person-name">Sofia Borovskaia</div>
+        <div class="quote__person-title">Frontend developer</div>
       </div>
     </div>
 
@@ -328,7 +350,7 @@ h_min: 2
                 </div>
               </div>
               <div class="showcases__item-copy">
-                <a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions/new?title=New%20website:%20https://&body=*%20Select%20the%20%22Show%20and%20Tell%22%20category,%20provide%20your%20website%20address,%20submit%20the%20form%20and%20give%20us%20a%20star%20to%20support!" class="showcases__item-title" target="_blank">Your project</a>
+                <a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions/new?category=show-and-tell&title=New%20website:%20https://&body=Provide%20your%20website%20address,%20submit%20the%20form%20and%20give%20us%20a%20star%20to%20support!" class="showcases__item-title" target="_blank">Your project</a>
               </div>
             </div>
           </div>
@@ -346,15 +368,15 @@ h_min: 2
           right: 50%;
           top: 50%"></div>
       <div class="quote__reference">
-        From a <a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions/62" target="_blank">GitHub discussion</a>:
+        “<a href="https://ionlyspeakliquid.beehiiv.com/p/speak-liquid-2-cart-drawer-line-item-properties" target="_blank">i only speak liquid</a>” online magazine:
       </div>
-      <div class="quote__text">I managed to make the 98% of my lateral cart in about 15% of the estimated time</div>
+      <div class="quote__text">It’s a fantastic library cart using Bundled Rendering. So easy to use!</div>
       <div class="quote__person">
         <div class="quote__person-image">
-          <img src="https://github.com/sofiaborovskaia.png?size=96" loading="lazy" alt="Sofia Borovskaia"/>
+          <img src="https://github.com/aresena.png?size=96" loading="lazy" alt="Roberto Aresena"/>
         </div>
-        <div class="quote__person-name">Sofia Borovskaia</div>
-        <div class="quote__person-title">Frontend developer</div>
+        <div class="quote__person-name">Roberto Aresena</div>
+        <div class="quote__person-title">Shopify expert</div>
       </div>
     </div>
   </div>

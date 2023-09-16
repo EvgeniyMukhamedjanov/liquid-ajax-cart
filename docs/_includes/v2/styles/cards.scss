@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 2.25rem;
+  margin-top: 2rem;
 }
 
 .cards__card {
@@ -16,7 +17,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  grid-column: span 3;
+  grid-column: span 6;
 
   &:hover {
     transform: scale(1.02);
@@ -34,10 +35,34 @@
     border-bottom: 0;
     border-radius: .75rem .75rem 0 0;
   }
+
+  &--3-6 {
+    @media (min-width: 768px) {
+      grid-column: span 3;
+    }
+  }
+
+  &--4-6 {
+    @media (min-width: 768px) {
+      grid-column: span 3;
+    }
+    @media (min-width: 992px) {
+      grid-column: span 4;
+    }
+  }
+
+  &--2-6 {
+    @media (min-width: 768px) {
+      grid-column: span 3;
+    }
+    @media (min-width: 992px) {
+      grid-column: span 2;
+    }
+  }
 }
 
 .cards__card-title {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   margin-bottom: 1.25rem;
   font-weight: 700;
 }
