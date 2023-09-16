@@ -90,6 +90,7 @@ h_min: 2
   {% include v2/styles/homepage.scss %}
   {% include v2/styles/cards.scss %}
   {% include v2/styles/showcases.scss %}
+  {% include v2/styles/quote.scss %}
   {% endcapture %}
   {{ critical_css | scssify }}
 </style>
@@ -219,7 +220,27 @@ h_min: 2
 
     </div>
 
-    <div class="homepage__title-block">
+    <div class="quote">
+      <div
+        class="homepage__light"
+        style="
+          --homepage-light-strength: 20rem;
+          right: 50%;
+          top: 50%"></div>
+      <div class="quote__reference">
+        “<a href="https://ionlyspeakliquid.beehiiv.com/p/speak-liquid-2-cart-drawer-line-item-properties" target="_blank">i only speak liquid</a>” online magazine:
+      </div>
+      <div class="quote__text">It’s a fantastic library cart using Bundled Rendering. So easy to use!</div>
+      <div class="quote__person">
+        <div class="quote__person-image">
+          <img src="https://github.com/aresena.png?size=96" loading="lazy" alt="Roberto Aresena"/>
+        </div>
+        <div class="quote__person-name">Roberto Aresena</div>
+        <div class="quote__person-title">Shopify expert</div>
+      </div>
+    </div>
+
+    <div class="homepage__title-block" style="position:relative;border-top: 1px solid #20344C;padding-top: 4rem;">
       <h2 class="homepage__title">Reliable for production</h2>
       <div class="homepage__two-cols-text">
         <div>
@@ -228,7 +249,14 @@ h_min: 2
             The library is&nbsp;actively maintained by&nbsp;the&nbsp;developer.
           </p>
         </div>
-        <div>
+        <div style="position: relative">
+          <div
+            class="homepage__light"
+            style="
+            left: 4rem;
+            top: 2rem;
+            --homepage-light-strength: 7rem;
+          "></div>
           <a href="https://avexdesigns.com" target="_blank" style="margin-bottom: .5rem; display: inline-block;">
             <svg width="102" height="22" viewBox="0 0 102 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_1631_128)">
@@ -306,6 +334,28 @@ h_min: 2
           </div>
         {% endif %}
       {% endfor %}
+    </div>
+  </div>
+
+  <div class="homepage__container">
+    <div class="quote">
+      <div
+        class="homepage__light"
+        style="
+          --homepage-light-strength: 20rem;
+          right: 50%;
+          top: 50%"></div>
+      <div class="quote__reference">
+        From a <a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions/62" target="_blank">GitHub discussion</a>:
+      </div>
+      <div class="quote__text">I managed to make the 98% of my lateral cart in about 15% of the estimated time</div>
+      <div class="quote__person">
+        <div class="quote__person-image">
+          <img src="https://github.com/sofiaborovskaia.png?size=96" loading="lazy" alt="Sofia Borovskaia"/>
+        </div>
+        <div class="quote__person-name">Sofia Borovskaia</div>
+        <div class="quote__person-title">Frontend developer</div>
+      </div>
     </div>
   </div>
 

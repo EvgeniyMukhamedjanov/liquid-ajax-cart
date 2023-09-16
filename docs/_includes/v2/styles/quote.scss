@@ -1,0 +1,59 @@
+.quote {
+  text-align: center;
+  max-width: 33rem;
+  margin: 8rem auto;
+  position: relative;
+}
+
+.quote__reference {
+  color: #b5bedd;
+  margin-bottom: 1rem;
+
+  a {
+    font-weight: bold;
+  }
+}
+
+.quote__text {
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 1.3;
+
+  &:before {
+    content: "“";
+    display: inline;
+    color: #8699af;
+  }
+
+  &:after {
+    content: "”";
+    display: inline;
+    color: #8699af;
+  }
+}
+
+.quote__person {
+  margin-top: 2rem;
+}
+
+.quote__person-image {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto;
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    object-fit: cover;
+  }
+}
+
+.quote__person-name {
+  margin-top: 1rem;
+}
+
+.quote__person-title {
+  font-size: .875rem;
+  color: #8699af;
+}
