@@ -15,7 +15,7 @@
 }
 
 .quote__text {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: bold;
   line-height: 1.3;
 
@@ -29,6 +29,10 @@
     content: "”";
     display: inline;
     color: #8699af;
+  }
+
+  @media (min-width: 600px) {
+    font-size: 2.5rem;
   }
 }
 

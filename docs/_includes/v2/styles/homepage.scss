@@ -43,9 +43,13 @@
 
 .homepage__hero {
   max-width: 54rem;
-  margin-top: 8rem;
+  margin-top: 6rem;
   margin-bottom: 5rem;
   position: relative;
+
+  @media (min-width: 600px) {
+    margin-top: 8rem;
+  }
 }
 
 .homepage__hero-version {
@@ -68,6 +72,7 @@
     background-color: #06490c;
     margin-right: .5rem;
     color: white;
+    margin-bottom: .5rem;
   }
 
   em {
@@ -75,16 +80,26 @@
     text-decoration-thickness: from-font;
     transition: color .15s;
   }
+
+  @media (min-width: 650px) {
+    br {
+      display: none;
+    }
+  }
 }
 .homepage__hero-version:hover em {
   color: white;
 }
 
 .homepage__hero-title {
-  font-size: 3.5rem;
+  font-size: 2rem;
   font-weight: 900;
   line-height: 1.2;
   margin-bottom: 1rem;
+
+  @media (min-width: 600px) {
+    font-size: 3.5rem;
+  }
 }
 
 .homepage__lead {
@@ -114,10 +129,14 @@
 }
 
 .homepage__title {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 900;
   line-height: 1.2;
   margin-bottom: 1rem;
+
+  @media (min-width: 600px) {
+    font-size: 3rem;
+  }
 }
 
 .homepage__two-cols-text > *:first-child {
