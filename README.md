@@ -1,4 +1,4 @@
-# Liquid Ajax Cart — a JavaScript asset for Shopify :fire:
+# Build a Shopify Ajax-cart without JavaScript coding :fire:
 [![npm](https://img.shields.io/npm/v/liquid-ajax-cart)](https://www.npmjs.com/package/liquid-ajax-cart) ![Shopify OS 2.0](https://img.shields.io/badge/Shopify-OS%202.0-brightgreen) ![Price — GitHub star](https://img.shields.io/badge/Price-GitHub%20star-brightgreen)
 
 Ajaxifies Shopify cart sections and product forms.
@@ -9,7 +9,7 @@ No JavaScript code needed — just plain Liquid.
 
 ![Liquid Ajax Cart Video](https://liquid-ajax-cart.js.org/assets/images/readme.gif)
 
-## 2-Step installation
+## 3-Step installation
 
 ##### 1. Create a theme section for the cart with a `data-ajax-cart-section` container
 
@@ -33,25 +33,28 @@ No JavaScript code needed — just plain Liquid.
 
         <div>
           Quantity:
-          
-          <!-- Use routes.cart_change_url for "Plus", "Minus", "Remove" buttons,
-          add the data-ajax-cart-request-button attribute to ajaxify them -->
-          <a data-ajax-cart-request-button
-            href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
-            Minus one 
-          </a>
-          
-          <!-- Add the data-ajax-cart-quantity-input attribute to quantity input fields -->
-          <input data-ajax-cart-quantity-input="{{ item_index }}" name="updates[]" value="{{ item.quantity }}" type="number" />
 
-          <a data-ajax-cart-request-button 
-            href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | plus: 1 }}"> 
-            Plus one 
-          </a>
+          <!-- Wrap the quantity control in the <ajax-cart-quantity> custom tag -->
+          <ajax-cart-quantity>
+            <!-- Add the data-ajax-cart-quantity-minus attribute to the "Minus" button -->
+            <a data-ajax-cart-quantity-minus
+              href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
+              Minus one 
+            </a>
+          
+            <!-- Add the data-ajax-cart-quantity-input attribute to quantity input fields -->
+            <input data-ajax-cart-quantity-input="{{ item_index }}" name="updates[]" value="{{ item.quantity }}" type="number" />
+
+            <!-- Add the data-ajax-cart-quantity-plus attribute to the "Plus" button -->
+            <a data-ajax-cart-quantity-plus
+              href="{{ routes.cart_change_url }}?line={{ item_index }}&quantity={{ item.quantity | plus: 1 }}"> 
+              Plus one 
+            </a>
+          </ajax-cart-quantity>
         </div>
         
-        <!-- Place a data-ajax-cart-messages container for error messages -->
-        <div data-ajax-cart-messages="{{ item.key }}"></div>
+        <!-- Place a data-ajax-cart-errors container for error messages -->
+        <div data-ajax-cart-errors="{{ item.key }}"></div>
 
         <div>Total: <strong>{{ item.final_line_price | money }}</strong></div>
       {% endfor %}
@@ -81,7 +84,18 @@ No JavaScript code needed — just plain Liquid.
 </script>
 ```
 
-:tada: That's it! Product forms will be ajaxified automatically.
+##### 3. Wrap Shopify product forms in the <ajax-cart-product-form> custom tag
+```html
+<ajax-cart-product-form>
+  {% form 'product', product %}
+    <!-- form content -->
+
+    <div data-ajax-cart-errors="form"></div>
+  {% endform %}
+</ajax-cart-product-form>
+```
+
+:tada: That's it!
 
 Download the latest version of the `liquid-ajax-cart.js` from the [documentation](https://liquid-ajax-cart.js.org) website.
 
