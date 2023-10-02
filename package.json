@@ -40,7 +40,6 @@
     "fs": "^0.0.1-security",
     "js-yaml": "^4.1.0",
     "puppeteer": "^21.3.5",
-    "resize-img": "^2.0.0",
-    "sharp": "^0.32.6"
+    "resize-img": "^2.0.0"
   }
 }
