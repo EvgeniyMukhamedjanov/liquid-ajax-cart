@@ -25,7 +25,7 @@ async function captureScreenshots() {
                         await element.click();
                         console.log(`✅ Clicked to '${item}' selector to hide it (${url})`);
                     }
-                    else console.log(`❌ Selector '${item}' didn't find (${url})`);
+                    else console.log(`❌ Selector '${item}' isn't found (${url})`);
                 }
                 await new Promise(r => setTimeout(r, 1000)); //waiting for the popup to close completely
             }
