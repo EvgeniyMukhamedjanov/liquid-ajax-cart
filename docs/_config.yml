@@ -178,6 +178,32 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   portfolio:
+    - title: Deadly Ponies
+      url: https://deadlyponies.com/
+      image: deadlyponies.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
+    - title: NakedCashmere
+      autoscreenshot: "no"
+      url: https://www.nakedcashmere.com/
+      image: nakedcashmere.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    - title: BLUNT
+      url: https://bluntumbrellas.com/
+      image: bluntumbrellas.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
+    - title: Alastin Skincare
+      url: https://alastin.com/
+      selector: .ltkpopup-close,.banner-close-button
+      image: alastin.jpg
+      meta: Integrated by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    - title: RUBY
+      url: https://rubynz.com/
+      image: rubynz.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
+    - title: NIGHTWORKS
+      url: https://www.nightworksstudio.com/
+      image: nightworksstudio.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: Middlehurst station
       url: https://middlehurst.co.nz/
       image: middlehurst.jpg
@@ -188,7 +214,7 @@ links:
       meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: Lyttelton Lights
       url: https://lytteltonlights.com/
-      selector: .lyttelton-cookie .close_btn
+      selector: .klaviyo-close-form,.lyttelton-cookie .close_btn
       image: lytteltonlights.jpg
       meta: Integrated by <a href="https://github.com/subject-matter" target="_blank">Subject Matter</a>
     - title: Two islands
@@ -279,6 +305,7 @@ links:
       selector: .popup-modal__toggle
       image: seatosummit.jpg
       meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+
   footer:
     - title: GitHub
       icon: github

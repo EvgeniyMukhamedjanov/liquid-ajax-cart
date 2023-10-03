@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const fs = require('fs');
+const fs = require('node:fs');
 const yaml = require('js-yaml');
 const resizeImg = require('resize-img');
 
@@ -14,8 +14,12 @@ async function captureScreenshots() {
             height: 771,
         });
 
-        for (const { image, url, selector } of parsedData.links.portfolio) {
-            await page.goto(url, { timeout: 0 });
+        for (const { image, url, selector, autoscreenshot } of parsedData.links.portfolio) {
+            if(autoscreenshot === 'no') continue;
+            await page.goto(url, {
+                timeout: 0
+            });
+           
             await new Promise(r => setTimeout(r, 2000)); //waiting for the page to load completely
             if (selector) {
                 const selectorArr = await selector.split(',');
@@ -42,7 +46,6 @@ async function captureScreenshots() {
         }
 
         await browser.close();
-        console.log(`\n${parsedData.links.portfolio.length} screenshots captured and resized successfully`);
     } catch (err) {
         console.log("❌ Error: ", err.message);
     }

@@ -37,7 +37,6 @@
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
-    "fs": "^0.0.1-security",
     "js-yaml": "^4.1.0",
     "puppeteer": "^21.3.5",
     "resize-img": "^2.0.0"
