@@ -23,8 +23,8 @@
 
 .showcases__item-image-placeholder {
   position: relative;
-  margin-bottom: 8px;
-  border-radius: 5px;
+  margin-bottom: .5rem;
+  border-radius: .3125rem;
   overflow: hidden;
 
   &--fake {
@@ -46,7 +46,7 @@
 }
 
 .showcases__item-copy {
-  font-size: 12px;
+  font-size: .75rem;
 }
 
 .showcases__item-title {

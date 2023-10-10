@@ -11,6 +11,9 @@
 html {
   scroll-behavior: smooth;
   font-family: 'Inter', sans-serif;
+  @media (min-width: 1920px) {
+    font-size: 0.83vw;
+  }
 }
 
 body {
@@ -39,7 +42,7 @@ code {
 
 .container {
   margin: 0 auto;
-  max-width: 1400px;
+  max-width: 90rem;
   padding: 0 2rem;
   display: block;
 }
@@ -65,7 +68,7 @@ code {
   left: 0;
   right: 0;
   margin: 0 auto;
-  max-width: 300px;
+  max-width: 18.75rem;
   color: white;
   border-radius: 0.3rem;
   padding: 0.8rem;
