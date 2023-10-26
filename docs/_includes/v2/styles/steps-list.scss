@@ -25,6 +25,10 @@
   &--feat {
     background-color: beige;
     padding-right: 2.25rem;
+
+    :not(pre) > code {
+      background-color: rgba(254, 255, 242, .84);
+    }
   }
 }
 

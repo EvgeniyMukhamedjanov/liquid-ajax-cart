@@ -46,3 +46,7 @@ An attribute which identifies a "Minus" button inside a [`<ajax-cart-quantity>`]
 {% endraw %}
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+
+The minimum value that a user can reach by clicking the `data-ajax-cart-quantity-minus` element is "1",
+thus they can't remove an item from the cart by this way. In order to allow them to reach the "0" value,
+use the [`quantityTagAllowZero`](/v2/quantity-tag-allow-zero/) configuration parameter.

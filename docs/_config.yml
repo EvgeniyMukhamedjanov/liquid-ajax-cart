@@ -152,6 +152,10 @@ links_v2:
               file: request-error-text
             - title: binderFormatters
               file: binder-formatters
+            - title: quantityTagAllowZero
+              file: quantity-tag-allow-zero
+            - title: quantityTagDebounce
+              file: quantity-tag-debounce
             - title: updateOnWindowFocus
               file: update-on-window-focus
 

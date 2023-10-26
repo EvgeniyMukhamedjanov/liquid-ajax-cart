@@ -88,6 +88,10 @@ When the event is fired, the `<ajax-cart-quantity>` adjusts the [`data-ajax-cart
 and triggers the `change` event on the input, which in turn makes Liquid Ajax Cart perform a Shopify Cart API Ajax request to update the quantity
 and re-render the [`data-ajax-cart-section`](/v2/data-ajax-cart-section/) elements.
 
+The minimum value that a user can reach by clicking the `data-ajax-cart-quantity-minus` element is "1", 
+thus they can't remove an item from the cart by this way. In order to allow them to reach the "0" value,
+use the [`quantityTagAllowZero`](/v2/quantity-tag-allow-zero/) configuration parameter.
+
 The `href` attribute isn't necessary for the buttons. It is there to make the buttons work without JavaScript.
 
 ## Debounce — 300ms
@@ -102,3 +106,6 @@ Otherwise, if the user clicks the same button within these 300 ms, the timer get
 
 This approach lets the user change the quantity by more than one
 before sending a Shopify Cart API Ajax request and before the cart goes to the "processing requests" mode.
+
+In order to change the debounce time or remove it completely, 
+use the [`quantityTagDebounce`](/v2/quantity-tag-debounce/) configuration parameter.
