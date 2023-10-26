@@ -3,22 +3,21 @@
     <div class="header-nav__wrapper">
       <div class="header-nav__lists-wrapper">
         <ul class="header-nav__list">
-          {% for p in site.links_v2.main %}
-            {% assign p_active = false %}
-            {% if page.url == p.url %}
-              {% assign p_active = true %}
-            {% elsif p.url != '/' and page.url.size > p.url.size %}
-              {% assign page_url_slice = page.url | slice: 0, p.url.size %}
-              {% if page_url_slice == p.url %}
-                {% assign p_active = true %}
-              {% endif %}
-            {% endif %}
-            <li class="header-nav__item">
-              <a href="{{ p.url }}" class="header-nav__link {% if p_active %}header-nav__link--active{% endif %}">
-                <span>{{ p.title }}</span>
-              </a>
-            </li>
-          {% endfor %}
+          <li class="header-nav__item">
+            <a href="/" class="header-nav__link {% if page.url == '/' or page.url == '/v2/' %}header-nav__link--active{% endif %}">
+              <span>Home</span>
+            </a>
+          </li>
+          <li class="header-nav__item">
+            <a href="/v2/installation/" class="header-nav__link {% if page.url != '/' and page.url != '/v2/' %}header-nav__link--active{% endif %}">
+              <span>Docs</span>
+            </a>
+          </li>
+          <li class="header-nav__item">
+            <a href="https://liquid-ajax-cart.myshopify.com" class="header-nav__link">
+              <span>Demo store</span>
+            </a>
+          </li>
         </ul>
         <ul class="header-nav__list">
           {% for p in site.links_v2.header %}
