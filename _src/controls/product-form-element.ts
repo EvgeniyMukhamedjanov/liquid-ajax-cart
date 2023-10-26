@@ -5,8 +5,7 @@ const ELEMENT_TAG = `${CUSTOM_ELEMENT_PREFIX}-product-form`;
 const DATA_ATTR_LOADING = 'processing';
 
 class HTMLProductFormElement extends HTMLElement {
-  constructor() {
-    super();
+  connectedCallback() {
     const $element = this;
 
     const $innerForms = this.querySelectorAll('form')
