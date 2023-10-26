@@ -1,20 +1,18 @@
 import {DATA_ATTR_QUANTITY_INPUT} from "./quantity-input";
 import {CUSTOM_ELEMENT_PREFIX, DATA_ATTR_PREFIX} from "../const";
 import {getProcessingStatus} from "../ajax-api";
+import {settings} from "../settings";
 
 const ELEMENT_TAG = `${CUSTOM_ELEMENT_PREFIX}-quantity`;
 const DATA_ATTR_QUANTITY_PLUS = `${DATA_ATTR_PREFIX}-quantity-plus`;
 const DATA_ATTR_QUANTITY_MINUS = `${DATA_ATTR_PREFIX}-quantity-minus`;
-const AWAITING_TIME = 300;
 
 function cartQuantityElementInit() {
   customElements.define(ELEMENT_TAG, class extends HTMLElement {
-    #timer: ReturnType<typeof setTimeout> | undefined = undefined;
-    #$input: HTMLInputElement;
+    _timer: ReturnType<typeof setTimeout> | undefined = undefined;
+    _$input: HTMLInputElement;
 
-    constructor() {
-      super();
-
+    connectedCallback() {
       const $innerInputs = this.querySelectorAll('input')
       if ($innerInputs.length !== 1) {
         console.error(
@@ -24,11 +22,11 @@ function cartQuantityElementInit() {
         return;
       }
 
-      this.#$input = $innerInputs[0];
-      if (!this.#$input.hasAttribute(DATA_ATTR_QUANTITY_INPUT)) {
+      this._$input = $innerInputs[0];
+      if (!this._$input.hasAttribute(DATA_ATTR_QUANTITY_INPUT)) {
         console.error(
           `Liquid Ajax Cart: "${ELEMENT_TAG}" element's input must have the "${DATA_ATTR_QUANTITY_INPUT}" attribute`,
-          this.#$input,
+          this._$input,
           this
         );
         return;
@@ -36,13 +34,15 @@ function cartQuantityElementInit() {
 
       this.querySelectorAll(`[${DATA_ATTR_QUANTITY_PLUS}], [${DATA_ATTR_QUANTITY_MINUS}]`).forEach($button => {
         $button.addEventListener('click', event => {
+          const {quantityTagAllowZero} = settings;
+          const minValue = quantityTagAllowZero === true ? 0 : 1;
 
           if (!getProcessingStatus()) {
-            const qtyValueCurrent = Number(this.#$input.value);
+            const qtyValueCurrent = Number(this._$input.value);
             if (isNaN(qtyValueCurrent)) {
               console.error(
                 `Liquid Ajax Cart: "${ELEMENT_TAG}" element's input value isn't a number`,
-                this.#$input,
+                this._$input,
                 this
               );
               return;
@@ -50,10 +50,10 @@ function cartQuantityElementInit() {
 
             let qtyValueNew = qtyValueCurrent;
             qtyValueNew = $button.hasAttribute(DATA_ATTR_QUANTITY_PLUS) ? qtyValueNew + 1 : qtyValueNew - 1;
-            if (qtyValueNew < 1) qtyValueNew = 1;
+            if (qtyValueNew < minValue) qtyValueNew = minValue;
             if (qtyValueNew !== qtyValueCurrent) {
-              this.#$input.value = qtyValueNew.toString();
-              this.#runAwaiting();
+              this._$input.value = qtyValueNew.toString();
+              this._runAwaiting();
             }
           }
 
@@ -64,29 +64,36 @@ function cartQuantityElementInit() {
           if (event.relatedTarget && $button.contains(event.relatedTarget as Node))
             return;
 
-          if (this.#timer !== undefined) {
-            this.#runRequest();
+          if (this._timer !== undefined) {
+            this._runRequest();
           }
         });
       })
     }
 
-    #runAwaiting() {
-      if (this.#timer !== undefined) {
-        clearTimeout(this.#timer);
+    _runAwaiting() {
+      const {quantityTagDebounce} = settings;
+      if (this._timer !== undefined) {
+        clearTimeout(this._timer);
       }
-      this.#timer = setTimeout(() => {
-        this.#runRequest();
-      }, AWAITING_TIME)
+
+      if (quantityTagDebounce > 0) {
+        this._timer = setTimeout(() => {
+          this._runRequest();
+        }, Number(quantityTagDebounce));
+        return;
+      }
+
+      this._runRequest();
     }
 
-    #runRequest() {
-      if (this.#timer !== undefined) {
-        clearTimeout(this.#timer);
+    _runRequest() {
+      if (this._timer !== undefined) {
+        clearTimeout(this._timer);
       }
-      this.#timer = undefined;
+      this._timer = undefined;
       if (!getProcessingStatus()) {
-        this.#$input.dispatchEvent(new Event('change', {bubbles: true}));
+        this._$input.dispatchEvent(new Event('change', {bubbles: true}));
       }
     }
   });

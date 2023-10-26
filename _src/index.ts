@@ -54,6 +54,12 @@ if (!('liquidAjaxCart' in window)) {
       }
     });
 
+    (window as Window).addEventListener('pageshow', event => {
+      if (event.persisted || (performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming).type === 'back_forward') {
+        (window as Window).liquidAjaxCart.update({}, undefined);
+      }
+    });
+
     isInit = true;
 
     const event = new CustomEvent(`${EVENT_PREFIX}:init`);

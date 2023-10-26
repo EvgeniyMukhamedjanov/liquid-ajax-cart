@@ -25,7 +25,6 @@ function getRequestError(requestState: RequestStateType): string {
 const changeRequestContainers = (requestState: RequestStateType): NodeListOf<Element> => {
   let errorContainers: NodeListOf<Element>;
 
-  // const {messagesAttribute} = settings.computed;
   const state = getCartState();
 
   let requestedId: string,
