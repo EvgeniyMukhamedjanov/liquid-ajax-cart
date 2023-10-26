@@ -188,7 +188,7 @@ links:
       meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: Alastin Skincare
       url: https://alastin.com/
-      selector: .ltkpopup-close,.banner-close-button
+      selector: ".ltkpopup-close,.banner-close-button,.onetrust-accept-btn-handler"
       image: alastin.jpg
       meta: Integrated by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: RUBY
@@ -228,17 +228,17 @@ links:
       meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: Kit and Ace
       url: https://www.kitandace.com/
-      selector: .klaviyo-close-form
+      selector: '.klaviyo-close-form'
       image: kitandace.jpg
       meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: Aleph Beauty
       url: https://alephbeauty.com/
-      selector: .klaviyo-close-form
+      selector: '.klaviyo-close-form'
       image: alephbeauty.jpg
       meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: Brandon Blackwood
       url: https://brandonblackwood.com/
-      selector: '.cookieconsent-wrapper .isense-close-icon,#closeIconContainer'
+      selector: '.cc-btn.cc-allow.isense-cc-submit-consent,#closeIconContainer'
       image: brandonblackwood.jpg
       meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: Pulse
