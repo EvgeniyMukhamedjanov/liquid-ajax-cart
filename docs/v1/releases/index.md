@@ -36,6 +36,7 @@ title: Releases
 	<div class="release__heading">
 		<h2 class="release__version">v{{ file_version }}</h2>
 		<div class="release__date">
+			{%- if file_version == '1.11.2' -%}Released on 2023, Oct 27{%- endif -%}
       {%- if file_version == '1.11.1' -%}Released on 2023, Aug 21{%- endif -%}
       {%- if file_version == '1.11.0' -%}Released on 2023, Apr 11{%- endif -%}
 			{%- if file_version == '1.10.3' -%}Released on 2022, Jul 5{%- endif -%}
@@ -66,6 +67,10 @@ title: Releases
 ##### Changes:
 
 {% endif %}
+
+{%- if file_version == '1.11.2' -%}
+* The issue is fixed when the cart state and the cart content was wrong when a user clicks the "Back" button in the browser.
+{%- endif -%}
 
 {%- if file_version == '1.11.1' -%}
 * Fixed bug when Shopify returns not fully updated section HTML in the `/cart/add.js` response.
