@@ -90,6 +90,11 @@ if (!('liquidAjaxCart' in window)) {
         cartRequestUpdate({}, {});
       }
     });
+    (window as Window).addEventListener('pageshow', event => {
+      if (event.persisted || (performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming).type === 'back_forward') {
+        cartRequestUpdate({}, {});
+      }
+    });
   } else {
     console.warn('Liquid Ajax Cart is not supported by this browser');
     document.body.className += ' js-ajax-cart-not-compatible';
