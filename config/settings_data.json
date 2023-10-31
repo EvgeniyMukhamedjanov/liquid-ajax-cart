@@ -175,16 +175,10 @@
           "center_grid_link": false
         }
       },
-      "1632428792c98f42b1": {
-        "type": "custom-html",
-        "settings": {
-          "custom_html": "<h2>Show\/hide the cart<\/h2>\n<p>The following buttons use the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-toggle-class-button\">data-ajax-cart-toggle-class-button<\/a> attribute to add or remove body CSS classes.<\/p>\n<p>\n<a href=\"\/cart\" class=\"btn btn--secondary\" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open | add\">Open<\/a> <button class=\"btn btn--secondary\" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open | remove\">Close<\/button>\n<button class=\"btn \" data-ajax-cart-toggle-class-button=\"js-ajax-cart-open\">Toggle<\/button> \n<\/p>"
-        }
-      },
       "16324720968dae6a91": {
         "type": "custom-html",
         "settings": {
-          "custom_html": "<h2>JavaScript API examples<\/h2>\n<h3>1. Popup message after adding to cart<\/h3>\n<p><label><input type=\"checkbox\" id=\"addToCartPopupCheckbox\"> Display the «Add to Cart» message.<br><small>Tick the checkbox above and try to add a product to the cart.<\/small><\/label><\/p>\n\n<p>The <a href=\"https:\/\/liquid-ajax-cart.js.org\/examples\/#show-a-pop-up-message-after-adding-to-the-cart\">code of the example<\/a> shows the «alert» message after each «Add to cart» request is performed<\/p>\n\n<h3>2. Add a product to the cart if the total price is $100 or higher<\/h3>\n\n<p>The <a href=\"\/products\/single-product\">Single product<\/a> has an automatic discount: if the total price of all products in the cart is $100 or higher then one Single product is free. <\/p>\n<p>The <a href=\"https:\/\/liquid-ajax-cart.js.org\/examples\/#add-a-product-to-the-cart-automatically-if-the-total-price-is-100-or-higher\">code of the example<\/a> automatically adds a Single product to the cart if the cart total price is $100 or higher.<\/p>"
+          "custom_html": "<h2>JavaScript API examples<\/h2>\n<h3>1. Show the cart after adding to cart<\/h3>\n\n<p>The <a href=\"https:\/\/liquid-ajax-cart.js.org\/v2\/js-snippets\/#open-the-ajax-cart-when-a-user-adds-a-product-to-the-cart\">code of the example<\/a> shows how to open the cart after a user is added a product to the cart<\/p>\n\n<h3>2. Add a product to the cart if the total price is $100 or higher<\/h3>\n\n<p>The <a href=\"\/products\/single-product\">Single product<\/a> has an automatic discount: if the total price of all products in the cart is $100 or higher then one Single product is free. <\/p>\n<p>The <a href=\"https:\/\/liquid-ajax-cart.js.org\/v2\/js-snippets\/#add-a-gift-to-the-cart-if-the-total-price-is-100-or-higher\">code of the example<\/a> automatically adds a Single product to the cart if the cart total price is $100 or higher.<\/p>"
         }
       },
       "my-cart": {
@@ -196,7 +190,7 @@
         "type": "rich-text",
         "settings": {
           "section_title": "Product forms",
-          "text": "<p><a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/product-forms\/\" target=\"_blank\">Product forms<\/a> are ajaxified automatically by Liquid Ajax Cart.<\/p><p>Errors messages get put in a container that has the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-messages\/\" target=\"_blank\" title=\"https:\/\/liquid-ajax-cart.js.org\/reference\/data-ajax-cart-messages\/\">data-ajax-cart-messages<\/a> attribute with the \"<em>form<\/em>\" value.<\/p><p>The submit button's loading indicator is set using the <a href=\"https:\/\/liquid-ajax-cart.js.org\/reference\/js-ajax-cart-form-in-progress\/\" target=\"_blank\" title=\"https:\/\/liquid-ajax-cart.js.org\/reference\/js-ajax-cart-form-in-progress\/\">js-ajax-cart-form-in-progress<\/a> CSS class.<\/p>",
+          "text": "<p>Product forms are ajaxified by the Liquid Ajax Cart custom tag <a href=\"https:\/\/liquid-ajax-cart.js.org\/v2\/ajax-cart-product-form\/\" target=\"_blank\" title=\"<ajax-cart-product-form>\">&lt;ajax-cart-product-form&gt;<\/a>.<\/p><p>Errors messages are inserted into a container that has the <a href=\"https:\/\/liquid-ajax-cart.js.org\/v2\/data-ajax-cart-errors\/\" target=\"_blank\" title=\"data-ajax-cart-errors\">data-ajax-cart-errors<\/a> attribute with the \"<em>form<\/em>\" value.<\/p><p>The submit button's loading indicator is set using the \"<em>loading<\/em>\" attribute of the <a href=\"https:\/\/liquid-ajax-cart.js.org\/v2\/ajax-cart-product-form\/\" target=\"_blank\" title=\"<ajax-cart-product-form>\">&lt;ajax-cart-product-form&gt;<\/a> custom tag.<\/p>",
           "text_size": "medium"
         }
       },
@@ -302,7 +296,6 @@
       "163511092542400c8a",
       "featured-product",
       "164149653986a90fa3",
-      "1632428792c98f42b1",
       "16324720968dae6a91"
     ]
   },
