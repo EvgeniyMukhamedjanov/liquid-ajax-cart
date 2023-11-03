@@ -1,6 +1,6 @@
 {
   "name": "liquid-ajax-cart",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Build a Shopify Ajax-cart without JavaScript coding",
   "private": false,
   "browser": "./liquid-ajax-cart.js",
@@ -29,16 +29,14 @@
   "license": "ISC",
   "homepage": "https://liquid-ajax-cart.js.org",
   "devDependencies": {
+    "js-yaml": "^4.1.0",
     "npm-run-all": "^4.1.5",
+    "puppeteer": "^21.5.0",
+    "resize-img": "^2.0.0",
     "rimraf": "^3.0.2",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.4",
     "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0"
-  },
-  "dependencies": {
-    "js-yaml": "^4.1.0",
-    "puppeteer": "^21.3.5",
-    "resize-img": "^2.0.0"
   }
 }
