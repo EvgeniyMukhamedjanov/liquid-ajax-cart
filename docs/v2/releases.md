@@ -11,6 +11,18 @@ Liquid Ajax Cart is also available on [npmjs.com](https://www.npmjs.com/package/
 
 <ul class="steps-list">
 <li class="steps-list__step steps-list__step--feat">
+<div class="steps-list__badge-list"><span class="steps-list__badge">2023, Nov 04</span></div>
+<div class="steps-list__title steps-list__title--hero">v2.0.2</div>
+<div class="steps-list__content" markdown="1">
+The <code>data-ajax-cart-quantity-minus</code> and <code>data-ajax-cart-quantity-plus</code> buttons 
+of the <code><a href="/v2/ajax-cart-quantity/">&lt;ajax-cart-quantity&gt;</a></code> custom tag 
+get the `aria-disabled` and `disabled` attributes when inactive.
+
+<a href="/v2/releases/liquid-ajax-cart-v2.0.2.js" download class="steps-list__cta">Download</a>
+</div>
+</li>
+
+<li class="steps-list__step">
 <div class="steps-list__badge-list"><span class="steps-list__badge">2023, Oct 27</span></div>
 <div class="steps-list__title steps-list__title--hero">v2.0.1</div>
 <div class="steps-list__content" markdown="1">

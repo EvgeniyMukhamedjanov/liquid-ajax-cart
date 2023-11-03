@@ -46,3 +46,5 @@ An attribute which identifies a "Plus" button inside a [`<ajax-cart-quantity>`](
 {% endraw %}
 {%- endcapture -%}
 {% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+
+Find more details on the [`<ajax-cart-quantity>`](/v2/ajax-cart-quantity/) page.

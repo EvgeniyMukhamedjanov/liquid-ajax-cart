@@ -88,11 +88,35 @@ When the event is fired, the `<ajax-cart-quantity>` adjusts the [`data-ajax-cart
 and triggers the `change` event on the input, which in turn makes Liquid Ajax Cart perform a Shopify Cart API Ajax request to update the quantity
 and re-render the [`data-ajax-cart-section`](/v2/data-ajax-cart-section/) elements.
 
-The minimum value that a user can reach by clicking the `data-ajax-cart-quantity-minus` element is "1", 
-thus they can't remove an item from the cart by this way. In order to allow them to reach the "0" value,
-use the [`quantityTagAllowZero`](/v2/quantity-tag-allow-zero/) configuration parameter.
-
 The `href` attribute isn't necessary for the buttons. It is there to make the buttons work without JavaScript.
+
+## "Minus" button's minimum value
+
+The minimum value that a user can reach by clicking the `data-ajax-cart-quantity-minus` element is "1",
+thus they can't accidentally remove an item from the cart by reaching "0". In order to allow them to reach the "0" value,
+set the [`quantityTagAllowZero`](/v2/quantity-tag-allow-zero/) configuration parameter to `true`.
+
+## Buttons' disabled state
+
+The `data-ajax-cart-quantity-minus` and `data-ajax-cart-quantity-plus` elements become inactive 
+when there is a Shopify Cart API Ajax request in progress.
+
+Also, the `data-ajax-cart-quantity-minus` element becomes inactive when a user reaches the 
+[minimum value for the "Minus" button](#minus-buttons-minimum-value).
+
+When the element is disabled, it gets the `aria-disabled` attribute. If the element is a `button` HTML element,
+then it will get the `disabled` attribute as well. Use the attributes to signify that the element is inactive:
+
+{%- capture highlight_code -%}
+
+[data-ajax-cart-quantity-plus][aria-disabled="true"],
+[data-ajax-cart-quantity-minus][aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: .7;
+}
+
+{%- endcapture -%}
+{% include v2/codeblock.html language="css" code=highlight_code %}
 
 ## Debounce — 300ms
 
