@@ -1,6 +1,11 @@
 import {DATA_ATTR_QUANTITY_INPUT} from "./quantity-input";
 import {CUSTOM_ELEMENT_PREFIX, DATA_ATTR_PREFIX} from "../const";
-import {getProcessingStatus} from "../ajax-api";
+import {
+  EVENT_QUEUE_END_INTERNAL,
+  EVENT_QUEUE_START_INTERNAL,
+  EVENT_REQUEST_END_INTERNAL,
+  getProcessingStatus
+} from "../ajax-api";
 import {settings} from "../settings";
 
 const ELEMENT_TAG = `${CUSTOM_ELEMENT_PREFIX}-quantity`;
@@ -11,6 +16,7 @@ function cartQuantityElementInit() {
   customElements.define(ELEMENT_TAG, class extends HTMLElement {
     _timer: ReturnType<typeof setTimeout> | undefined = undefined;
     _$input: HTMLInputElement;
+    _$buttons: HTMLElement[];
 
     connectedCallback() {
       const $innerInputs = this.querySelectorAll('input')
@@ -32,7 +38,15 @@ function cartQuantityElementInit() {
         return;
       }
 
-      this.querySelectorAll(`[${DATA_ATTR_QUANTITY_PLUS}], [${DATA_ATTR_QUANTITY_MINUS}]`).forEach($button => {
+      this._$buttons = Array.from(this.querySelectorAll(`[${DATA_ATTR_QUANTITY_MINUS}], [${DATA_ATTR_QUANTITY_PLUS}]`));
+
+      this._$input.addEventListener('change', this._updateDOM.bind(this));
+      document.addEventListener(EVENT_QUEUE_START_INTERNAL, this._updateDOM.bind(this));
+      document.addEventListener(EVENT_REQUEST_END_INTERNAL, this._updateDOM.bind(this));
+      document.addEventListener(EVENT_QUEUE_END_INTERNAL, this._updateDOM.bind(this));
+      this._updateDOM();
+
+      this._$buttons.forEach($button => {
         $button.addEventListener('click', event => {
           const {quantityTagAllowZero} = settings;
           const minValue = quantityTagAllowZero === true ? 0 : 1;
@@ -54,6 +68,7 @@ function cartQuantityElementInit() {
             if (qtyValueNew !== qtyValueCurrent) {
               this._$input.value = qtyValueNew.toString();
               this._runAwaiting();
+              this._updateDOM();
             }
           }
 
@@ -95,6 +110,19 @@ function cartQuantityElementInit() {
       if (!getProcessingStatus()) {
         this._$input.dispatchEvent(new Event('change', {bubbles: true}));
       }
+    }
+
+    _updateDOM() {
+      this._$buttons.forEach($button => {
+        const disabled = getProcessingStatus()
+          || ($button.hasAttribute(DATA_ATTR_QUANTITY_MINUS) && !(settings.quantityTagAllowZero) && this._$input.value === "1");
+        disabled
+          ? $button.setAttribute("aria-disabled", "true")
+          : $button.removeAttribute("aria-disabled");
+        if ($button instanceof HTMLButtonElement) {
+          $button.toggleAttribute("disabled", disabled);
+        }
+      })
     }
   });
 }
