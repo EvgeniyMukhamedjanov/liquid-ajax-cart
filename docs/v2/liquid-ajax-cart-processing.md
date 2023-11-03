@@ -7,7 +7,7 @@ layout: docs-v2
 
 <p class="lead" markdown="1">
 A boolean read-only property of the [`liquidAjaxCart`](/v2/liquid-ajax-cart/) object, 
-which is `true` there is a Shopify Cart API Ajax request in progress.
+which is `true` when there is a Shopify Cart API Ajax request in progress.
 </p>
 
 ## How it works
