@@ -20,7 +20,7 @@ async function captureScreenshots() {
     });
 
     for (const {image, url, selector, autoscreenshot} of parsedData.links.portfolio) {
-      if (autoscreenshot === 'no') continue;
+      if (autoscreenshot !== 'yes') continue;
       await page.goto(url, {
         timeout: 0
       });
