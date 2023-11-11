@@ -37,6 +37,8 @@ const REQUEST_GET = 'get';
 const EVENT_QUEUE_START = `${EVENT_PREFIX}:queue-start`;
 const EVENT_QUEUE_START_INTERNAL = `${EVENT_PREFIX}:queue-start-internal`;
 
+const EVENT_QUEUE_EMPTY_INTERNAL = `${EVENT_PREFIX}:queue-empty-internal`;
+
 const EVENT_QUEUE_END_INTERNAL = `${EVENT_PREFIX}:queue-end-internal`;
 const EVENT_QUEUE_END = `${EVENT_PREFIX}:queue-end`;
 
@@ -64,6 +66,10 @@ function addToQueues(queueItem: QueueItemType) {
 }
 
 function runQueues() {
+  if (queues.length === 0) {
+    const eventInternal: EventQueueType = new CustomEvent(EVENT_QUEUE_EMPTY_INTERNAL);
+    document.dispatchEvent(eventInternal);
+  }
 
   if (queues.length === 0) {
     setProcessingStatus(false);
@@ -353,9 +359,15 @@ export {
   cartRequestGet,
   cartRequestUpdate,
   getProcessingStatus,
+
   REQUEST_ADD,
   REQUEST_CHANGE,
+  REQUEST_UPDATE,
+  REQUEST_CLEAR,
+  REQUEST_GET,
+
   EVENT_QUEUE_START_INTERNAL,
+  EVENT_QUEUE_EMPTY_INTERNAL,
   EVENT_QUEUE_END_INTERNAL,
   EVENT_REQUEST_START_INTERNAL,
   EVENT_REQUEST_END_INTERNAL

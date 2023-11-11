@@ -13,7 +13,8 @@ import {cartSectionsInit} from './sections';
 import {cartControlsInit} from './controls';
 import {cartMessagesInit} from './messages';
 import {cartGlobalClassesInit} from './global-classes';
-import {EVENT_PREFIX} from "./const";
+import {cartMutationsInit} from "./mutations";
+import {EVENT_INIT} from "./const";
 
 let isInit: boolean = false;
 
@@ -36,6 +37,7 @@ if (!('liquidAjaxCart' in window)) {
 
   cartSectionsInit();
   cartMessagesInit();
+  cartMutationsInit();
   cartStateInit().then(() => {
     cartDomBinderInit();
     cartControlsInit();
@@ -56,13 +58,13 @@ if (!('liquidAjaxCart' in window)) {
 
     (window as Window).addEventListener('pageshow', event => {
       if (event.persisted || (performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming).type === 'back_forward') {
-        (window as Window).liquidAjaxCart.update({}, undefined);
+        (window as Window).liquidAjaxCart.update({}, {});
       }
     });
 
     isInit = true;
 
-    const event = new CustomEvent(`${EVENT_PREFIX}:init`);
+    const event = new CustomEvent(EVENT_INIT);
     document.dispatchEvent(event);
 
   });

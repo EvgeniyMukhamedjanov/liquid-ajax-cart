@@ -14,7 +14,8 @@ export type RequestBodyType = JSONObjectType | FormData | URLSearchParams | unde
 
 export type RequestStateInfoType = {
   initiator?: Element,
-  cancel?: boolean
+  cancel?: boolean,
+  mutation?: boolean
 }
 
 export type RequestStateType = {
@@ -88,6 +89,17 @@ export type UpdatedSectionType = {
   id: string,
   elements: Array<Element>
 }
+
+export type MutationRequestType = {
+  type?: string, // add, change, update, clear, get
+  body?: RequestBodyType
+}
+
+export type MutationsListType = Array<() => void | {
+  repeat?: boolean,
+  maxRepeats?: number,
+  requests?: MutationRequestType[]
+}>
 
 declare global {
   interface Window {

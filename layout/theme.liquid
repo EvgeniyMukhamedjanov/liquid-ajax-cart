@@ -145,6 +145,7 @@
 <script type="application/json" data-ajax-cart-initial-state>
   {{ cart | json }}
 
+
 </script>
 
 
@@ -154,80 +155,33 @@
   console.log("Is Liquid Ajax Cart initialized: ", window.liquidAjaxCart.init);
   window.liquidAjaxCart.conf('updateOnWindowFocus', false);
 
-  function liquidAjaxCartInit() {
-    // console.log(123);
+  function alwaysAddProduct() {
+    const variantId = 43093947318460; // variant ID of the Shipping Protection product
+
+    // Find the index of the Shipping Protection product in the cart
+    const index = liquidAjaxCart.cart.items.findIndex(lineItem => {
+      return lineItem.variant_id === variantId;
+    });
+
+    // if there is no Shipping Protection products -- lets add it
+    if (index === -1) {
+      return {
+        requests: [{
+          type: "add",
+          body: {
+            items: [{
+              id: variantId,
+              quantity: 1,
+            }]
+          }
+        }]
+      }
+    }
   }
 
-  document.addEventListener('liquid-ajax-cart:init', liquidAjaxCartInit);
+  function addToCartThreshold() {
+    const AUTOADDED_PROP = '_autoadded';
 
-  setTimeout(() => {
-    // console.log(window.liquidAjaxCart.init);
-  }, 0)
-  // console.log(liquidAjaxCart.init);
-
-  liquidAjaxCart.conf('binderFormatters', {
-    'my_money_with_currency': value => {
-      // Don't change anything if the value is not a number
-      if (typeof value !== 'number' && !(value instanceof Number)) {
-        return value;
-      }
-
-      // Apply formatMoney function if it exists
-      if (window.Shopify?.formatMoney) {
-        return Shopify.formatMoney(value);
-      }
-
-      // Fallback to the "100 USD" format if there is no Shopify.formatMoney
-      return `${value.toFixed(2)} ${window.liquidAjaxCart.cart.currency}`;
-    }
-  });
-
-  // Open cart on "add to cart"
-  document.addEventListener('liquid-ajax-cart:request-end', event => {
-    const {requestState} = event.detail;
-    if (requestState.requestType === 'add' && requestState.responseData?.ok) {
-      document.querySelector('html').classList.add('js-ajax-cart-open');
-    }
-  });
-
-  // document.addEventListener('liquid-ajax-cart:request-start', event => {
-  //   liquidAjaxCart.update({});
-  //   liquidAjaxCart.get({important: true});
-  //   liquidAjaxCart.get({important: true});
-  // });
-
-  document.addEventListener('liquid-ajax-cart:request-start', event => {
-    console.log("request-start");
-    // event.detail.requestState.info.cancel = true;
-    // console.log(event.detail);
-  });
-
-  // subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
-  document.addEventListener('liquid-ajax-cart:request-end', event => {
-    const {requestState, cart, previousCart} = event.detail;
-    console.log(cart, previousCart);
-
-    if (requestState.requestType === 'add') {
-      const checkbox = document.getElementById('addToCartPopupCheckbox');
-      if (checkbox && checkbox.checked) {
-        if (requestState.responseData?.ok) {
-          let productName = requestState.responseData.body.title;
-          if (requestState.responseData.body.items?.length === 1) {
-            productName = requestState.responseData.body.items[0].title;
-          }
-          alert(`${productName ? '«' + productName + '» is' : 'Products are'} successfully added`);
-        }
-      }
-    }
-  });
-
-  // line item property to distinguish the line item
-  // that was automatically added by the script
-  const AUTOADDED_PROP = '_autoadded';
-
-  // subscribeToCartStateUpdate( state => {
-  document.addEventListener('liquid-ajax-cart:queue-end', event => {
-    // The current cart state
     const cart = liquidAjaxCart.cart;
 
     // The variant ID of the promo-product, that should be automatically added
@@ -261,13 +215,20 @@
         return lineItem.variant_id === variant && lineItem.discounts.length > 0;
       });
       if (promoVariantLineItem === -1) {
-        liquidAjaxCart.add({
-          items: [{
-            id: variant,
-            quantity: 1,
-            properties: {[AUTOADDED_PROP]: "Yes"}
-          }]
-        });
+        return {
+          requests: [
+            {
+              type: "add",
+              body: {
+                items: [{
+                  id: variant,
+                  quantity: 1,
+                  properties: {[AUTOADDED_PROP]: "Yes"}
+                }]
+              }
+            }
+          ]
+        }
       }
     } else {
 
@@ -277,10 +238,50 @@
       // If the promo-product was added manually by the user —
       // it won't be removed.
       if (autoAddedLineItem > -1) {
-        liquidAjaxCart.change({
-          "line": autoAddedLineItem + 1,
-          "quantity": 0
-        });
+        return {
+          requests: [
+            {
+              type: "change",
+              body: {
+                "line": autoAddedLineItem + 1,
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+
+  window.liquidAjaxCart.conf('mutations', [
+    alwaysAddProduct,
+    addToCartThreshold
+  ]);
+
+
+  // Open cart on "add to cart"
+  document.addEventListener('liquid-ajax-cart:request-end', event => {
+    const {requestState} = event.detail;
+    if (requestState.requestType === 'add' && requestState.responseData?.ok) {
+      document.querySelector('html').classList.add('js-ajax-cart-open');
+    }
+  });
+
+  // subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
+  document.addEventListener('liquid-ajax-cart:request-end', event => {
+    const {requestState, cart, previousCart} = event.detail;
+    // console.log(cart, previousCart);
+
+    if (requestState.requestType === 'add') {
+      const checkbox = document.getElementById('addToCartPopupCheckbox');
+      if (checkbox && checkbox.checked) {
+        if (requestState.responseData?.ok) {
+          let productName = requestState.responseData.body.title;
+          if (requestState.responseData.body.items?.length === 1) {
+            productName = requestState.responseData.body.items[0].title;
+          }
+          alert(`${productName ? '«' + productName + '» is' : 'Products are'} successfully added`);
+        }
       }
     }
   });

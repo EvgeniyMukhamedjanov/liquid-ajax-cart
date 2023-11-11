@@ -1,4 +1,4 @@
-import {FormattersObjectType, ConfigurationValue} from './ts-types';
+import {FormattersObjectType, ConfigurationValue, MutationsListType} from './ts-types';
 
 import {cartDomBinderRerender} from './dom-binder';
 
@@ -7,7 +7,8 @@ type SettingsType = {
   requestErrorText: string,
   updateOnWindowFocus: boolean,
   quantityTagAllowZero: boolean,
-  quantityTagDebounce: number
+  quantityTagDebounce: number,
+  mutations: MutationsListType
 }
 type SettingsKeysType = keyof SettingsType;
 
@@ -16,7 +17,8 @@ const settings: SettingsType = {
   requestErrorText: 'There was an error while updating your cart. Please try again.',
   updateOnWindowFocus: true,
   quantityTagAllowZero: false,
-  quantityTagDebounce: 300
+  quantityTagDebounce: 300,
+  mutations: []
 }
 
 function configureCart(property: string, value: ConfigurationValue) {
