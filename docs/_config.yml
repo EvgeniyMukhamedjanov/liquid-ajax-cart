@@ -29,6 +29,8 @@ links_v2:
 
         - title: Extension with JS
           links:
+            - title: Auto-add/remove cart items
+              file: cart-mutations
             - title: Lifecycle, events, API
               file: lifecycle-events-api
             - title: Ready snippets
@@ -144,6 +146,8 @@ links_v2:
               file: request-error-text
             - title: binderFormatters
               file: binder-formatters
+            - title: mutations
+              file: mutations
             - title: quantityTagAllowZero
               file: quantity-tag-allow-zero
             - title: quantityTagDebounce

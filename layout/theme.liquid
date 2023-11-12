@@ -146,6 +146,7 @@
   {{ cart | json }}
 
 
+
 </script>
 
 
@@ -179,9 +180,47 @@
     }
   }
 
-  function addToCartThreshold() {
-    const AUTOADDED_PROP = '_autoadded';
+  function noMoreThanOneProd() {
+    const variantId = 43093947318460; // variant ID of the Shipping Protection product
 
+    const items = window.liquidAjaxCart.cart.items;
+
+    // Find the line-items with the product
+    const lineItems = items.filter(item => {
+      return item.variant_id === variantId;
+    });
+
+    // If there is no product, or it is only one -- do nothing, stop the function
+    if (lineItems.length === 0 || (lineItems.length === 1 && lineItems[0].quantity === 1)) {
+      return;
+    }
+
+    // Prepare the body for the /cart/update.js request
+    const updates = {};
+
+    // Set the quantity of the first found line-item to 1,
+    // Set the quantity of the rest line-items to 0
+    for (let i = 0; i < lineItems.length; i++) {
+      updates[lineItems[i].key] = (i === 0 ? 1 : 0);
+    }
+
+    // Initiate the update request
+    return [
+      {
+        type: "update",
+        body: {
+          updates
+        }
+      }
+    ]
+  }
+
+  function addToCartThreshold() {
+    // line item property to distinguish the line item
+    // that was automatically added by the mutation
+    const autoaddedProp = '_autoadded';
+
+    // current cart state
     const cart = window.liquidAjaxCart.cart;
 
     // The variant ID of the promo-product, that should be automatically added
@@ -198,7 +237,7 @@
     // before comparing with the threshold
     // in order to understand if the promo-product has to be removed.
     const autoAddedLineItem = cart.items.findIndex(lineItem => {
-      return lineItem.properties?.[AUTOADDED_PROP] === 'Yes';
+      return lineItem.properties?.[autoaddedProp] === 'Yes';
     });
     if (autoAddedLineItem > -1) {
       total -= cart.items[autoAddedLineItem].final_line_price;
@@ -222,7 +261,7 @@
               items: [{
                 id: variant,
                 quantity: 1,
-                properties: {[AUTOADDED_PROP]: "Yes"}
+                properties: {[autoaddedProp]: "Yes"}
               }]
             }
           }
@@ -251,6 +290,7 @@
 
   window.liquidAjaxCart.conf('mutations', [
     alwaysAddProduct,
+    noMoreThanOneProd,
     addToCartThreshold
   ]);
 
