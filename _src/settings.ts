@@ -1,6 +1,7 @@
 import {FormattersObjectType, ConfigurationValue, MutationsListType} from './ts-types';
 
 import {cartDomBinderRerender} from './dom-binder';
+import {cartMutationsRun} from "./mutations";
 
 type SettingsType = {
   binderFormatters: FormattersObjectType,
@@ -24,8 +25,13 @@ const settings: SettingsType = {
 function configureCart(property: string, value: ConfigurationValue) {
   if (property in settings) {
     (settings[property as SettingsKeysType] as ConfigurationValue) = value;
-    if (property === 'binderFormatters') {
-      cartDomBinderRerender();
+    if (window.liquidAjaxCart.init) {
+      if (property === 'binderFormatters') {
+        cartDomBinderRerender();
+      }
+      if (property === 'mutations') {
+        cartMutationsRun();
+      }
     }
   } else {
     console.error(`Liquid Ajax Cart: unknown configuration parameter "${property}"`);

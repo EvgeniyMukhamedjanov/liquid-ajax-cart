@@ -159,14 +159,14 @@
     const variantId = 43093947318460; // variant ID of the Shipping Protection product
 
     // Find the index of the Shipping Protection product in the cart
-    const index = liquidAjaxCart.cart.items.findIndex(lineItem => {
+    const index = window.liquidAjaxCart.cart.items.findIndex(lineItem => {
       return lineItem.variant_id === variantId;
     });
 
     // if there is no Shipping Protection products -- lets add it
     if (index === -1) {
-      return {
-        requests: [{
+      return [
+        {
           type: "add",
           body: {
             items: [{
@@ -174,15 +174,15 @@
               quantity: 1,
             }]
           }
-        }]
-      }
+        }
+      ]
     }
   }
 
   function addToCartThreshold() {
     const AUTOADDED_PROP = '_autoadded';
 
-    const cart = liquidAjaxCart.cart;
+    const cart = window.liquidAjaxCart.cart;
 
     // The variant ID of the promo-product, that should be automatically added
     const variant = 40934235668668;
@@ -215,20 +215,18 @@
         return lineItem.variant_id === variant && lineItem.discounts.length > 0;
       });
       if (promoVariantLineItem === -1) {
-        return {
-          requests: [
-            {
-              type: "add",
-              body: {
-                items: [{
-                  id: variant,
-                  quantity: 1,
-                  properties: {[AUTOADDED_PROP]: "Yes"}
-                }]
-              }
+        return [
+          {
+            type: "add",
+            body: {
+              items: [{
+                id: variant,
+                quantity: 1,
+                properties: {[AUTOADDED_PROP]: "Yes"}
+              }]
             }
-          ]
-        }
+          }
+        ]
       }
     } else {
 
@@ -238,17 +236,15 @@
       // If the promo-product was added manually by the user —
       // it won't be removed.
       if (autoAddedLineItem > -1) {
-        return {
-          requests: [
-            {
-              type: "change",
-              body: {
-                "line": autoAddedLineItem + 1,
-                "quantity": 0
-              }
+        return [
+          {
+            type: "change",
+            body: {
+              "line": autoAddedLineItem + 1,
+              "quantity": 0
             }
-          ]
-        }
+          }
+        ]
       }
     }
   }

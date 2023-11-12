@@ -13,9 +13,8 @@ export type JSONObjectType = {
 export type RequestBodyType = JSONObjectType | FormData | URLSearchParams | undefined;
 
 export type RequestStateInfoType = {
-  initiator?: Element,
+  initiator?: Element | "mutation",
   cancel?: boolean,
-  mutation?: boolean
 }
 
 export type RequestStateType = {
@@ -95,11 +94,7 @@ export type MutationRequestType = {
   body?: RequestBodyType
 }
 
-export type MutationsListType = Array<() => void | {
-  repeat?: boolean,
-  maxRepeats?: number,
-  requests?: MutationRequestType[]
-}>
+export type MutationsListType = Array<() => void | MutationRequestType[]>
 
 declare global {
   interface Window {

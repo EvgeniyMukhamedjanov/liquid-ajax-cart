@@ -66,7 +66,7 @@ function addToQueues(queueItem: QueueItemType) {
 }
 
 function runQueues() {
-  if (queues.length === 0) {
+  if (queues.length === 1 && queues[0].length === 0) {
     const eventInternal: EventQueueType = new CustomEvent(EVENT_QUEUE_EMPTY_INTERNAL);
     document.dispatchEvent(eventInternal);
   }
@@ -359,6 +359,8 @@ export {
   cartRequestGet,
   cartRequestUpdate,
   getProcessingStatus,
+
+  addToQueues,
 
   REQUEST_ADD,
   REQUEST_CHANGE,

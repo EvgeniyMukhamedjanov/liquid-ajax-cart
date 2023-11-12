@@ -73,7 +73,7 @@ const changeRequestContainers = (requestState: RequestStateType): NodeListOf<Ele
 
 const addRequestContainers = (requestState: RequestStateType): NodeListOf<Element> => {
   let errorContainers: NodeListOf<Element>;
-  const initiator: Element = requestState.info?.initiator;
+  const initiator = requestState.info?.initiator;
   if (initiator instanceof HTMLProductFormElement) {
     errorContainers = initiator.querySelectorAll(`[${DATA_ATTR_ERRORS}="form"]`);
   }
