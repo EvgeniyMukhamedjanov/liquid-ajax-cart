@@ -204,7 +204,6 @@ links:
       image: jonopandolfi.jpg
       meta: Made by <a href="https://bean.la/" target="_blank">Bean</a>
       selector: .klaviyo-close-form
-      autoscreenshot: yes
     - title: NIGHTWORKS
       url: https://www.nightworksstudio.com/
       image: nightworksstudio.jpg

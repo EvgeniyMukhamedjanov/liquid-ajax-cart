@@ -5,9 +5,11 @@ layout: null
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {% for page in site.pages %}
   	{% if page.name contains '.md' %}
-	    <url>
-	      <loc>{{ page.url | replace: 'index.html', '' | absolute_url }}</loc>
-	    </url>
+		{% unless page.redirect_url %}
+			<url>
+				<loc>{{ page.url | replace: 'index.html', '' | absolute_url }}</loc>
+			</url>
+		{% endunless %}
     {% endif %}
   {% endfor %}
 </urlset>
