@@ -199,6 +199,12 @@ links:
       url: https://rubynz.com/
       image: rubynz.jpg
       meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
+    - title: Jono Pandolfi
+      url: https://www.jonopandolfi.com/
+      image: jonopandolfi.jpg
+      meta: Made by <a href="https://bean.la/" target="_blank">Bean</a>
+      selector: .klaviyo-close-form
+      autoscreenshot: yes
     - title: NIGHTWORKS
       url: https://www.nightworksstudio.com/
       image: nightworksstudio.jpg
@@ -235,6 +241,10 @@ links:
       selector: '.klaviyo-close-form'
       image: kitandace.jpg
       meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    - title: Nestera
+      url: https://nestera.co.uk/
+      image: nestera.jpg
+      meta: Made by <a href="https://www.goodkarma.agency/" target="_blank">GoodKarma</a>
     - title: Aleph Beauty
       url: https://alephbeauty.com/
       selector: '.klaviyo-close-form'
