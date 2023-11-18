@@ -48,13 +48,16 @@ There are only two reserved properties, `initiator` and `cancel`,
 that you shouldn't use for storing custom data.
 
 ### `info.initiator`
-When Liquid Ajax Cart makes a Shopify Cart API Ajax request that is initiated by a user action, 
+When Liquid Ajax Cart executes a Shopify Cart API Ajax request that is initiated by a user action, 
 such as a submitting a product form, modifying cart item quantity input value, or clicking a "remove cart item" button,
 Liquid Ajax Cart stores the `HTMLElement` object, that triggered the event, in the `info.initiator` property.
 
 For example, if a user changes a cart item quantity input value with the [`data-ajax-cart-quantity-input`](/v2/data-ajax-cart-quantity-input/) attribute,
 Liquid Ajax Cart intercepts the event and executes a `/cart/change.js` Shopify Cart API Ajax request. 
 Along with that, Liquid Ajax Cart attaches the input `HTMLElement` object to the `info.initiator` property.
+
+If a Shopify Cart API Ajax request is initiated by a [cart mutation](/v2/cart-mutations/) function,
+the `info.initiator` property has the string value `mutation`.
 
 ### `info.cancel`
 If the `info.cancel` is `true`, then the request won't be executed and the `responseData` property won't exist.

@@ -17,10 +17,6 @@ and then triggers the `liquid-ajax-cart:request-end` event.
 
 {% include v2/content/lifecycle-events-reference.html %}
 
-## Use cases
-
-{% include v2/content/request-end-use-cases.html %}
-
 
 
 ## Structure
@@ -68,7 +64,7 @@ document.addEventListener("liquid-ajax-cart:request-end", function(event) {
   
   // Print out re-rendered sections
   console.log(sections);
-  });
+});
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}
 
@@ -85,3 +81,30 @@ Result:
 
 * `id` — Shopify section's ID;
 * `elements` — an array of the re-rendered [`data-ajax-cart-section`](/v2/data-ajax-cart-section/) elements.
+
+## Sending requests from the event listener
+
+If you want to send a Shopify Cart API request from a `liquid-ajax-cart:request-end` event listener, 
+make sure that the request that has been just finished and triggered the event **is not a [cart mutation](/v2/cart-mutations/)** request.
+
+Otherwise there is a high chance that you'll get into infinity loop of requests:
+* cart mutation initiates a request A,
+* the request A finishes and fires the `liquid-ajax-cart:request-end` event,
+* your event listener initiates a request B,
+* Liquid Ajax Cart notices that there was a request B that might change the cart state, so it runs cart mutation functions
+* cart mutation initiates a request A ...
+
+In order to prevent this, check the `initiator` property of the [Request state](/v2/request-state/) object:
+{%- capture highlight_code -%}
+document.addEventListener("liquid-ajax-cart:request-end", function(event) {
+  const {requestState} = event.detail;
+  
+  // make sure that the request is not from a mutation function:
+  if (requestState.info.initiator !== "mutation") {
+    
+    // send your request
+    window.liquidAjaxCart.add(...);
+  }
+});
+{%- endcapture -%}
+{% include v2/codeblock.html language="javascript" code=highlight_code %}

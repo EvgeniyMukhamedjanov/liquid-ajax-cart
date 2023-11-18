@@ -6,20 +6,30 @@ layout: docs-v2
 # Cart mutations
 
 <p class="lead" markdown="1">
-The cart mutations let you automatically add/remove cart items based on certain conditions.
-Use it for promotions and cart corrections: add a free gift to the cart when the cart total reaches the $100 threshold,
-remove the product B when the product A is not in the cart anymore, etc.
+Liquid Ajax Cart lets you set up **cart mutations** that will automatically add or remove cart items based on specific conditions.
 </p>
+
+<p class="lead" markdown="1">
+Use it for promotions and cart corrections: add a free gift to the cart when the cart total reaches the $100 threshold,
+remove the product B when the product A is not in the cart, etc.
+</p>
+
+## What is a mutation
+
+A mutation is a JavaScript function defined by you, that checks the current cart state (what the cart total is, what items are in the cart, etc.), and if certain items should be added/removed, it tells Liquid Ajax Cart what Shopify Cart API Ajax requests should be performed in order to add/remove these items.
+
+If a mutation is defined, Liquid Ajax Cart will call this function when a page is just loaded 
+and each time after a user changes their cart.
 
 ## Set up a mutation
 
 Let's say, you have a promotion where you offer a free mug with every order.
-Thus, when a user has anything in the cart you want to automatically add the mug product to the cart as well.
+Thus, if a user puts something in the cart you want to add the mug product to the cart automatically.
 
 ### Define a mutation function
 
-In order to implement this you should define a function that will check the condition (a user has anything in the cart)
-and initiate the action (add the mug product to the cart).
+In order to implement this you should define a function that will check the condition (user's cart isn't empty)
+and initiate the action (add the mug product to the cart if it is not there).
 
 In order to let Liquid Ajax Cart know about the function, use the [`mutations`](/v2/mutations/) configuration parameter.
 It accepts array of such functions. In our case we have only one function, 
@@ -37,7 +47,7 @@ window.liquidAjaxCart.conf('mutations', [
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}
 
-Now Liquid Ajax Cart will call your function when a page is loaded and when a user changed their cart
+Now Liquid Ajax Cart will call your `myMutation` function when a page is loaded and when a user changes their cart
 so that you can check a new state of the cart (if it is empty or not in our case) and initiate an action.
 
 ### Check conditions
@@ -82,10 +92,11 @@ window.liquidAjaxCart.conf('mutations', [
 
 ### Initiate cart requests
 
-In order to initiate the cart update, your function should return an array of objects each of which should contain information 
+In order to initiate the cart update, your function should return an object with the `requests` property 
+that should be an array of objects with information 
 on what Shopify Cart API Ajax request you want to perform. 
 
-Each object must have the `type` property. 
+Each "request"-object must have the `type` property. 
 The available types are `add`, `get`, `update`, `change`, `clear`, 
 according to [Shopify Cart API endpoints](https://shopify.dev/docs/api/ajax/reference/cart).
 
@@ -94,8 +105,8 @@ The `body` object will be passed to the Shopify Cart API endpoint as is,
 so read what data Shopify expects in the [Shopify Cart API endpoints](https://shopify.dev/docs/api/ajax/reference/cart) documentation.
 
 In our case we want to perform one Shopify Cart API `/cart/add.js` POST request,
-so we should return an array with one object that has the `type` property to be equal to `add` 
-and the corresponding `body` property value:
+so the `requests` property should be an array with one "request"-object that has the `type` property equal to `add` 
+and the corresponding `body` value:
 
 {%- capture highlight_code -%}
 function myMutation() {
@@ -122,17 +133,19 @@ function myMutation() {
   
   // if you reach this point, the cart isn't empty and there is no mug in it
   // Initiate adding the Mug product to the cart:
-  return [
-    {
-      type: "add",
-      body: {
-        items: [{
-          id: mugVariantId,
-          quantity: 1,
-        }]
+  return {
+    requests: [
+      {
+        type: "add",
+        body: {
+          items: [{
+            id: mugVariantId,
+            quantity: 1,
+          }]
+        }
       }
-    }
-  ];
+    ]
+  };
 }
 
 // Let Liquid Ajax Cart know about the mutation functions
@@ -142,13 +155,11 @@ window.liquidAjaxCart.conf('mutations', [
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}
 
-That is it.
+Now if a user has anything in their cart, the Mug product will be in the cart as well.
 
 ## Multiple requests in a mutation
 
-The mutation function should return an array of objects each of which should contain information
-on what Shopify Cart API Ajax request needs to be performed. 
-In case of multiple objects the requests will be performed according to their positions in the array:
+If a mutation returns the `requests` array that contains multiple "request"-objects, the requests will be performed in order:
 
 {%- capture highlight_code -%}
 function myMutation() {
@@ -156,24 +167,26 @@ function myMutation() {
   // ... mutation code ...
 
   // Initiate two requests: the "change" first, the "add" second:
-  return [
-    {
-      type: "change", // remove the first item from the cart
-      body: {
-        line: 1,
-        quantity: 0
+  return {
+    requests: [
+      {
+        type: "change", // remove the first item from the cart
+        body: {
+          line: 1,
+          quantity: 0
+        }
+      },
+      {
+        type: "add", // add the product with "40934235668668" variant id 
+        body: {
+          items: [{
+            id: 40934235668668,
+            quantity: 1,
+          }]
+        }
       }
-    },
-    {
-      type: "add", // add the product with "40934235668668" variant id 
-      body: {
-        items: [{
-          id: 40934235668668,
-          quantity: 1,
-        }]
-      }
-    }
-  ];
+    ]
+  };
 }
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}
@@ -234,18 +247,25 @@ function myMutation() {
 
   // if you reach this point, the cart isn't empty and the product isn't there
   // Initiate adding the product to the cart:
-  return [
-    {
-      type: "add",
-      body: {
-        items: [{
-          id: variantId,
-          quantity: 1,
-        }]
+  return {
+    requests: [
+      {
+        type: "add",
+        body: {
+          items: [{
+            id: variantId,
+            quantity: 1,
+          }]
+        }
       }
-    }
-  ];
+    ]
+  };
 }
+
+// Let Liquid Ajax Cart know about the mutation functions
+window.liquidAjaxCart.conf('mutations', [
+  myMutation
+]);
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}
 
@@ -282,15 +302,22 @@ function myMutation() {
   }
 
   // initiate the update request
-  return [
-    {
-      type: "update",
-      body: {
-        updates
+  return {
+    requests: [
+      {
+        type: "update",
+        body: {
+          updates
+        }
       }
-    }
-  ]
+    ]
+  }
 }
+
+// Let Liquid Ajax Cart know about the mutation functions
+window.liquidAjaxCart.conf('mutations', [
+  myMutation
+]);
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}
 
@@ -346,18 +373,20 @@ function myMutation() {
       return lineItem.variant_id === variant && lineItem.discounts.length > 0;
     });
     if (promoVariantLineItem === -1) {
-      return [
-        {
-          type: "add",
-          body: {
-            items: [{
-              id: variant,
-              quantity: 1,
-              properties: {[autoaddedProp]: "Yes"}
-            }]
+      return {
+        requests: [
+          {
+            type: "add",
+            body: {
+              items: [{
+                id: variant,
+                quantity: 1,
+                properties: {[autoaddedProp]: "Yes"}
+              }]
+            }
           }
-        }
-      ]
+        ]
+      }
     }
   } else {
 
@@ -367,17 +396,24 @@ function myMutation() {
     // If the promo-product was added manually by the user —
     // it won't be removed.
     if (autoAddedLineItem > -1) {
-      return [
-        {
-          type: "change",
-          body: {
-            "line": autoAddedLineItem + 1,
-            "quantity": 0
+      return {
+        requests: [
+          {
+            type: "change",
+            body: {
+              "line": autoAddedLineItem + 1,
+              "quantity": 0
+            }
           }
-        }
-      ]
+        ]
+      }
     }
   }
 }
+
+// Let Liquid Ajax Cart know about the mutation functions
+window.liquidAjaxCart.conf('mutations', [
+  myMutation
+]);
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}

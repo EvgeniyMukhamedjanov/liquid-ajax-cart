@@ -14,7 +14,7 @@ to use with the [`data-ajax-cart-bind`](/v2/data-ajax-cart-bind/) attribute.
 
 For example, if you use the `option_selection.js` Shopify asset and its `Shopify.formatMoney` function, 
 you can specify your own formatter for money related values.
-Use the [`conf`](/v2/liquid-ajax-cart-conf/) method of the [`liquidAjaxCart`](/v2/liquid-ajax-cart) object to do this:
+Use the [`conf`](/v2/liquid-ajax-cart-conf/) method of the [`liquidAjaxCart`](/v2/liquid-ajax-cart/) object to do this:
 
 {%- capture highlight_code -%}
 liquidAjaxCart.conf('binderFormatters', {

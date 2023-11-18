@@ -94,7 +94,9 @@ export type MutationRequestType = {
   body?: RequestBodyType
 }
 
-export type MutationsListType = Array<() => void | MutationRequestType[]>
+export type MutationsListType = Array<() => void | {
+  requests?: MutationRequestType[]
+}>
 
 declare global {
   interface Window {

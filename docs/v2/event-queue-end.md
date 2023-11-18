@@ -27,8 +27,28 @@ document.addEventListener("liquid-ajax-cart:queue-end", function() {
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}
 
-## Use cases
+## Sending requests from the event listener
 
-{% include v2/content/queue-end-use-cases.html %}
+If you want to send a Shopify Cart API request from a `liquid-ajax-cart:queue-end` event listener, 
+you have a chance to get into infinity loop of requests:
 
+* a queue of requests is finishes and fires the `liquid-ajax-cart:queue-end` event,
+* your event listener initiates a request,
+* Liquid Ajax Cart creates a new queue of requests and puts the request there
+* when the new queue is finishes, it fires the `liquid-ajax-cart:queue-end` event ...
 
+In order to prevent this, make sure that you have a strong condition that won't let the loop happen:
+{%- capture highlight_code -%}
+let ranOnce = false;
+
+document.addEventListener("liquid-ajax-cart:queue-end", function(event) {
+  // condition to prevent infinity loop:
+  if (!ranOnce) {
+    ranOnce = true;
+
+    // send your request
+    window.liquidAjaxCart.add(...);
+  }
+});
+{%- endcapture -%}
+{% include v2/codeblock.html language="javascript" code=highlight_code %}

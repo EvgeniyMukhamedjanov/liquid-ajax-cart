@@ -49,14 +49,9 @@ code {
 
 .lead {
   font-size: 1.125rem;
-  //font-size: 1.25rem;
-  //padding-bottom: 1.5rem;
   margin-bottom: 1.5rem !important;
-  //border-bottom: 1px solid #DBDBDB;
-  + p {
-    //padding-top: 1.5rem;
-    //margin-top: 1.5rem !important;
-    //border-top: 1px solid #DBDBDB;
+  + .lead {
+    margin-top: -1rem;
   }
 }
 

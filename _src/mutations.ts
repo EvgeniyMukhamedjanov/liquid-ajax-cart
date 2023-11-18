@@ -8,15 +8,15 @@ import {
   REQUEST_GET,
   REQUEST_UPDATE
 } from "./ajax-api";
-import {EVENT_INIT} from "./const";
-import {settings} from "./settings";
-import {EventRequestStartType, MutationRequestType} from "./ts-types";
+import { EVENT_INIT } from "./const";
+import { settings } from "./settings";
+import { EventRequestStartType, MutationRequestType } from "./ts-types";
 
 let pointer: number;
 let needsRun = false;
 
 function runAll() {
-  const {mutations} = settings;
+  const { mutations } = settings;
   if (!Array.isArray(mutations)) {
     console.error(`Liquid Ajax Cart: the "mutations" settings parameter must be an array`);
   }
@@ -27,13 +27,16 @@ function runAll() {
 }
 
 function runFunction() {
-  const {mutations} = settings;
+  const { mutations } = settings;
   pointer++;
   if (pointer >= mutations.length) return;
 
   let requestsList: MutationRequestType[] = [];
   try {
-    requestsList = mutations[pointer]() || [];
+    const response = mutations[pointer]();
+    if (response) { 
+      requestsList = response?.requests || []; 
+    }
   } catch (e) {
     console.error(`Liquid Ajax Cart: Error in the "mutation" function with index ${pointer}`);
     console.error(e);
@@ -84,7 +87,7 @@ function init() {
     runAll();
   });
   document.addEventListener(EVENT_REQUEST_START_INTERNAL, (event: EventRequestStartType) => {
-    const {requestState} = event.detail;
+    const { requestState } = event.detail;
     if (requestState.info.initiator !== "mutation") needsRun = true;
   });
 }

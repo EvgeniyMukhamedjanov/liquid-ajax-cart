@@ -16,7 +16,7 @@ quantity control built using the [`<ajax-cart-quantity>`](/v2/ajax-cart-quantity
 By default, the minimum value, that a user can reach by clicking a `data-ajax-cart-quantity-minus` button, 
 is "1". Thus, a user can't remove an item from the cart by this way.
 
-Use the [`conf`](/v2/liquid-ajax-cart-conf/) method of the [`liquidAjaxCart`](/v2/liquid-ajax-cart) object to set 
+Use the [`conf`](/v2/liquid-ajax-cart-conf/) method of the [`liquidAjaxCart`](/v2/liquid-ajax-cart/) object to set 
 the `quantityTagAllowZero` to `true` that lets a user reach the "0" value:
 {%- capture highlight_code -%}
 liquidAjaxCart.conf("quantityTagAllowZero", true);

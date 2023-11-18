@@ -156,6 +156,7 @@
   console.log("Is Liquid Ajax Cart initialized: ", window.liquidAjaxCart.init);
   window.liquidAjaxCart.conf('updateOnWindowFocus', false);
 
+  {% comment %} 
   function alwaysAddProduct() {
     const variantId = 43093947318460; // variant ID of the Shipping Protection product
 
@@ -166,20 +167,24 @@
 
     // if there is no Shipping Protection products -- lets add it
     if (index === -1) {
-      return [
-        {
-          type: "add",
-          body: {
-            items: [{
-              id: variantId,
-              quantity: 1,
-            }]
+      return {
+        requests: [
+          {
+            type: "add",
+            body: {
+              items: [{
+                id: variantId,
+                quantity: 1,
+              }]
+            }
           }
-        }
-      ]
+        ]
+      }
     }
-  }
+  } 
+  {% endcomment %}
 
+  {% comment %}
   function noMoreThanOneProd() {
     const variantId = 43093947318460; // variant ID of the Shipping Protection product
 
@@ -205,15 +210,18 @@
     }
 
     // Initiate the update request
-    return [
-      {
-        type: "update",
-        body: {
-          updates
+    return {
+      requests: [
+        {
+          type: "update",
+          body: {
+            updates
+          }
         }
-      }
-    ]
+      ]
+    }
   }
+  {% endcomment %}
 
   function addToCartThreshold() {
     // line item property to distinguish the line item
@@ -254,18 +262,20 @@
         return lineItem.variant_id === variant && lineItem.discounts.length > 0;
       });
       if (promoVariantLineItem === -1) {
-        return [
-          {
-            type: "add",
-            body: {
-              items: [{
-                id: variant,
-                quantity: 1,
-                properties: {[autoaddedProp]: "Yes"}
-              }]
+        return {
+          requests: [
+            {
+              type: "add",
+              body: {
+                items: [{
+                  id: variant,
+                  quantity: 1,
+                  properties: {[autoaddedProp]: "Yes"}
+                }]
+              }
             }
-          }
-        ]
+          ]
+        }
       }
     } else {
 
@@ -275,22 +285,24 @@
       // If the promo-product was added manually by the user —
       // it won't be removed.
       if (autoAddedLineItem > -1) {
-        return [
-          {
-            type: "change",
-            body: {
-              "line": autoAddedLineItem + 1,
-              "quantity": 0
+        return {
+          requests: [
+            {
+              type: "change",
+              body: {
+                "line": autoAddedLineItem + 1,
+                "quantity": 0
+              }
             }
-          }
-        ]
+          ]
+        }
       }
     }
   }
 
   window.liquidAjaxCart.conf('mutations', [
-    alwaysAddProduct,
-    noMoreThanOneProd,
+    // alwaysAddProduct,
+    // noMoreThanOneProd,
     addToCartThreshold
   ]);
 

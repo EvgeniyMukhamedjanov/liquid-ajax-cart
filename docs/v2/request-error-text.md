@@ -16,7 +16,7 @@ or when the request is not performed at all due to the Internet connection.
 
 By default, the text is "There was an error while updating your cart. Please try again.".
 
-Use the [`conf`](/v2/liquid-ajax-cart-conf/) method of the [`liquidAjaxCart`](/v2/liquid-ajax-cart) object to set your value:
+Use the [`conf`](/v2/liquid-ajax-cart-conf/) method of the [`liquidAjaxCart`](/v2/liquid-ajax-cart/) object to set your value:
 {%- capture highlight_code -%}
 liquidAjaxCart.conf("requestErrorText", "My request error message");
 {%- endcapture -%}

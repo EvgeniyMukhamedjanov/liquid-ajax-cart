@@ -228,8 +228,6 @@ As Liquid Ajax Cart has executed all the requests from the [Queue](/v2/queue-of-
 and it is switching back to the "idle" mode,
 the [`liquid-ajax-cart:queue-end`](/v2/event-queue-end/) event is fired.
 
-{% include v2/content/queue-end-use-cases.html %}
-
 </div>
 </li>
 </ul>
@@ -404,8 +402,6 @@ get updated according to the cart state data.
 The [`liquid-ajax-cart:request-end`](/v2/event-request-end/) is the only event that is fired right after a request is executed, 
 the cart state ([`liquidAjaxCart.cart`](/v2/liquid-ajax-cart-cart/)) is updated
 and the cart-related content is re-rendered.
-
-{% include v2/content/request-end-use-cases.html %}
 </div>
 </li>
 

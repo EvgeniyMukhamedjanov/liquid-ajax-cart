@@ -13,7 +13,7 @@ the quantity controls built using the [`<ajax-cart-quantity>`](/v2/ajax-cart-qua
 ## Code example
 
 By default, the debounce time is 300 milliseconds. 
-Use the [`conf`](/v2/liquid-ajax-cart-conf/) method of the [`liquidAjaxCart`](/v2/liquid-ajax-cart) object to set
+Use the [`conf`](/v2/liquid-ajax-cart-conf/) method of the [`liquidAjaxCart`](/v2/liquid-ajax-cart/) object to set
 another value.
 
 For example if you want the [`<ajax-cart-quantity>`](/v2/ajax-cart-quantity/) custom tag to start updating 

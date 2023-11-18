@@ -11,6 +11,18 @@ Liquid Ajax Cart is also available on [npmjs.com](https://www.npmjs.com/package/
 
 <ul class="steps-list">
 <li class="steps-list__step steps-list__step--feat">
+<div class="steps-list__badge-list"><span class="steps-list__badge">2023, Nov 18</span></div>
+<div class="steps-list__title steps-list__title--hero">v2.1.0</div>
+<div class="steps-list__content" markdown="1">
+A new API called "<a href="/v2/cart-mutations/">Cart mutations</a>" is added. 
+It allows you to automatically add or remove cart items based on specific conditions.
+It is perfect solution for promotions and cart correction logic.
+
+<a href="/v2/releases/liquid-ajax-cart-v2.1.0.js" download class="steps-list__cta">Download</a>
+</div>
+</li>
+
+<li class="steps-list__step">
 <div class="steps-list__badge-list"><span class="steps-list__badge">2023, Nov 04</span></div>
 <div class="steps-list__title steps-list__title--hero">v2.0.2</div>
 <div class="steps-list__content" markdown="1">
