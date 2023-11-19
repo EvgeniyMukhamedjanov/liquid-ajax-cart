@@ -88,7 +88,7 @@ window.liquidAjaxCart.conf('mutations', [
   myMutation
 ]);
 {%- endcapture -%}
-{% include v2/codeblock.html language="javascript" code=highlight_code %}
+{% include v2/codeblock.html language="javascript" code=highlight_code highlight_lines="2-24" %}
 
 ### Initiate cart requests
 
@@ -153,7 +153,7 @@ window.liquidAjaxCart.conf('mutations', [
   myMutation
 ]);
 {%- endcapture -%}
-{% include v2/codeblock.html language="javascript" code=highlight_code %}
+{% include v2/codeblock.html language="javascript" code=highlight_code highlight_lines="25-37" %}
 
 Now if a user has anything in their cart, the Mug product will be in the cart as well.
 

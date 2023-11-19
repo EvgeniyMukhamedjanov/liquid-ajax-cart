@@ -194,7 +194,7 @@ Liquid Ajax Cart searches for the element designated for the cart item error mes
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="1,4,14,16,22,29,33,37,42" %}
 
 ## Cart note, cart item property, cart attribute fields
 
@@ -235,7 +235,7 @@ Explore examples for all the features on the [`data-ajax-cart-property-input`](/
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="8-12" %}
 
 ## Loading state
 
@@ -275,7 +275,7 @@ to the parent element of the area. Liquid Ajax Cart will maintain the inner HTML
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="8-10" %}
 
 ## JavaScript event after re-rendering
 

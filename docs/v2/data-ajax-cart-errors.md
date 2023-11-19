@@ -45,7 +45,7 @@ Liquid Ajax Cart puts the error message into the `data-ajax-cart-errors="form"` 
 </ajax-cart-product-form>
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/main-product.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/main-product.liquid" language="liquid" code=highlight_code highlight_lines="8-10" %}
 
 ## Line items
 
@@ -72,4 +72,4 @@ and inserts the error message into that element.
       <!-- ... -->
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="9-11" %}

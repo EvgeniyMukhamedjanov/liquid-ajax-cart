@@ -49,7 +49,7 @@ If the request is successful, Liquid Ajax Cart re-renders [`data-ajax-cart-secti
 </ajax-cart-product-form>
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/main-product.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/main-product.liquid" language="liquid" code=highlight_code highlight_lines="1,9" %}
 
 ## Error messages
 
@@ -74,7 +74,7 @@ if Shopify responds with an error message, Liquid Ajax Cart will insert the erro
 </ajax-cart-product-form>
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/main-product.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/main-product.liquid" language="liquid" code=highlight_code highlight_lines="8" %}
 
 {% include v2/content/form-loading-state-block.html %}
 

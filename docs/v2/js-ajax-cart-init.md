@@ -35,7 +35,7 @@ Hiding the "Update" button on the cart page, as all the elements are ajaxified a
 {% schema %} { "name": "Cart page" } {% endschema %}
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/main-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/main-cart.liquid" language="liquid" code=highlight_code highlight_lines="9-11" %}
 
 {%- capture highlight_code -%}
 html.js-ajax-cart-init .my-cart-page__update-button {

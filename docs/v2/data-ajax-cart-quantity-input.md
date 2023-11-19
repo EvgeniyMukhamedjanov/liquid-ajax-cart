@@ -47,7 +47,7 @@ according to the [`liquidAjaxCart.cart`](/v2/liquid-ajax-cart-cart/) object.
         <!-- ... -->
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="16" %}
 
 ## Using line item key
 
@@ -77,7 +77,7 @@ The line item key is supported also, but there were found unexpected behaviour o
         <!-- ... -->
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="14" %}
 
 ## Loading state
 

@@ -50,7 +50,7 @@ add the `data-ajax-cart-static-element` attribute to this element.
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="6" %}
 
 ## Multiple immutable elements
 
@@ -80,5 +80,5 @@ so that Liquid Ajax Cart can distinguish them after re-rendering:
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="3,10" %}
 

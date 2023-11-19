@@ -48,7 +48,7 @@ but it is recommended to use other approaches for these cases.
       <!-- ... -->
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="9" %}
 
 ### "Clear cart" button
 
@@ -64,7 +64,7 @@ but it is recommended to use other approaches for these cases.
   <!-- ... -->
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="4" %}
 
 ### "Plus" and "Minus" cart item quantity buttons (not recommended)
 
@@ -113,7 +113,7 @@ If you still want to use the `data-ajax-cart-request-button` for the case, this 
       <!-- ... -->
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="13,24" %}
 
 ### "Add to cart" button (not recommended)
 

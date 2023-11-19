@@ -29,6 +29,6 @@ The `<ajax-cart-product-form>` element must contain only one Shopify product for
 </ajax-cart-product-form>
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/main-product.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/main-product.liquid" language="liquid" code=highlight_code highlight_lines="1,9" %}
 
 {% include v2/content/form-loading-state-block.html %}

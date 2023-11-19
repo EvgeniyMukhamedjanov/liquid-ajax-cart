@@ -49,7 +49,7 @@ POST /cart/add.js
   "sections": "my-ajax-cart"
 }
 {%- endcapture -%}
-{% include v2/codeblock.html title="Modified final request" language="plain" code=highlight_code %}
+{% include v2/codeblock.html title="Modified final request" language="plain" code=highlight_code highlight_lines="11" %}
 
 If the request is successful, Shopify retrieves the re-rendered HTML for the `data-ajax-cart-section` elements from the response.
 It then replaces the current data-ajax-cart-section elements' outer HTML
@@ -74,7 +74,7 @@ In the following example the re-rendering is only enabled for the `.my-cart__wra
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="3" %}
 
 ### Immutable element inside
 
@@ -109,7 +109,7 @@ In the following example the re-rendering is enabled for the `.my-cart__wrapper`
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="3-6,11-14" %}
 
 It is useful when you have HTML elements (like the `.my-cart__another-content` in the example above) 
 that must be immutable and when they are placed between containers requiring re-rendering. 
@@ -144,13 +144,13 @@ The second `data-ajax-cart-section` container sometimes appears, sometimes — d
     <div class="my-cart__footer" data-ajax-cart-section >
       <!-- Cart footer -->
     </div>
-{% endif %}
+  {% endif %}
 </div> 
 
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="9-18" %}
 
 ### Correct example
 

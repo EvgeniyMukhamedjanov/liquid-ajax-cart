@@ -102,7 +102,7 @@ The value of the `data-ajax-cart-property-input` attribute should be `line_item_
       <!-- ... -->
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="16-18,23-25,39-44,54,56-60" %}
 
 
 ## Cart attribute
@@ -212,7 +212,7 @@ then you can leave the `data-ajax-cart-property-input` value empty:
 
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="14-20,29-32,57-62,74-77,79-84" %}
 
 If the form controls in the above example didn't have the correct `name` attributes, 
 then `data-ajax-cart-property-input` attributes should have values:
@@ -300,7 +300,7 @@ then you can leave the `data-ajax-cart-property-input` value empty:
 
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="13-16" %}
 
 If the form controls in the above example didn't have the correct `name` attribute ,
 then the `data-ajax-cart-property-input` attribute should have the `note` value:

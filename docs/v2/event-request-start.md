@@ -58,7 +58,7 @@ document.addEventListener("liquid-ajax-cart:request-start", function(event) {
   requestState.info.myCustomData = 'value';
 });
 {%- endcapture -%}
-{% include v2/codeblock.html language="javascript" code=highlight_code %}
+{% include v2/codeblock.html language="javascript" code=highlight_code highlight_lines="5,6,8,9,13,14" %}
 
 ### Wrong
 {%- capture highlight_code -%}
@@ -73,7 +73,7 @@ document.addEventListener("liquid-ajax-cart:request-start", function(event) {
   requestState.info = {myCustomData: 'value'};
 });
 {%- endcapture -%}
-{% include v2/codeblock.html language="javascript" code=highlight_code %}
+{% include v2/codeblock.html language="javascript" code=highlight_code highlight_lines="4,5,8,9" %}
 
 ## Cancel a request
 
@@ -88,4 +88,4 @@ document.addEventListener("liquid-ajax-cart:request-start", function(event) {
   requestState.info.cancel = true;
 })
 {%- endcapture -%}
-{% include v2/codeblock.html language="javascript" code=highlight_code %}
+{% include v2/codeblock.html language="javascript" code=highlight_code highlight_lines="5" %}

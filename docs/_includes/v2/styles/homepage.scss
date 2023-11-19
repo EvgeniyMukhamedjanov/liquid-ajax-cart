@@ -29,7 +29,7 @@
   position: absolute;
   box-shadow: 0 0 var(--homepage-light-strength, 10rem) calc(var(--homepage-light-strength, 10rem) / 2) rgba(57, 151, 72, var(--homepage-light-opacity, .5));
   z-index: -1;
-  transform: translateY(calc(var(--homepage-light-parallax, 0) * 0.3px));
+  transform: translateY(calc(var(--homepage-light-parallax, 0) * 0.4px));
   animation: homepage-light 4s infinite calc(var(--homepage-light-delay, 0) * 1.5s);
 }
 

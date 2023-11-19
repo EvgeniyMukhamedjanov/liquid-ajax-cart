@@ -40,7 +40,7 @@ Pass the `item_count` as the value for the `data-ajax-cart-bind` attribute.
 </span>
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code highlight_lines="3-5" %}
 
 The best practice is to use the `data-ajax-cart-bind` on top of Liquid expressions.
 The liquid expression `{% raw %}{{ cart.item_count }}{% endraw %}` lets you show the number of cart items
@@ -58,7 +58,7 @@ until Liquid Ajax Cart is initialized and if JavaScript is disabled.
 </span>
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code highlight_lines="5" %}
 
 ### Cart total price
 
@@ -77,7 +77,7 @@ Use the `money_with_currency` formatter with money related properties.
 </span>
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code highlight_lines="3-5" %}
 
 The best practice is to use the `data-ajax-cart-bind` on top of Liquid expressions.
 The liquid expression `{% raw %}{{ cart.total_price | money_with_currency }}{% endraw %}` lets you show the cart total price
@@ -95,7 +95,7 @@ until Liquid Ajax Cart is initialized and if JavaScript is disabled.
 </span>
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code highlight_lines="5" %}
 
 ## Formatters
 

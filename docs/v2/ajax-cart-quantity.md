@@ -39,7 +39,7 @@ ajaxified using the [`data-ajax-cart-quantity-input`](/v2/data-ajax-cart-quantit
         <!-- ... -->
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="14-18" %}
 
 In order to attach "Plus" and "Minus" buttons, add elements for them next to the input field with the
 `data-ajax-cart-quantity-plus` and `data-ajax-cart-quantity-minus` attributes
@@ -81,7 +81,7 @@ and wrap them all with the `<ajax-cart-quantity>` tag:
         <!-- ... -->
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="13-17,26-30" %}
 
 The `<ajax-cart-quantity>` custom tag subscribes to the `click` event of the `data-ajax-cart-quantity-minus` and `data-ajax-cart-quantity-plus` elements.
 When the event is fired, the `<ajax-cart-quantity>` adjusts the [`data-ajax-cart-quantity-input`](/v2/data-ajax-cart-quantity-input/) input value

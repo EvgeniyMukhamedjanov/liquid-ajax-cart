@@ -50,7 +50,7 @@ when the Shopify cart state is changed.
 </span>
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/header.liquid" language="liquid" code=highlight_code highlight_lines="1,4" %}
 
 ## Hide, when the cart is empty
 

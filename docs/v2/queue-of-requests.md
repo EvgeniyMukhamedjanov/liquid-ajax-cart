@@ -40,7 +40,7 @@ As the Queue is not empty, the request goes to the end of the Queue:
 #1: [/cart/change.js — executing]
 #2: [/cart/add.js]
 {%- endcapture -%}
-{% include v2/codeblock.html language="plain" code=highlight_code %}
+{% include v2/codeblock.html language="plain" code=highlight_code highlight_lines="2" %}
 
 Once the `/cart/change.js` is completed, it gets removed from the Queue, 
 then the `/cart/add.js` request becomes the first in the Queue:

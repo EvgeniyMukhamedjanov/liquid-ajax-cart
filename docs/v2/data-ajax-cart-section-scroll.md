@@ -41,7 +41,7 @@ Add the `data-ajax-cart-section-scroll` attribute to a scrollable element so tha
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="3" %}
 
 ## Multiple scrollable areas
 
@@ -70,5 +70,5 @@ Add the `data-ajax-cart-section-scroll` attribute with unique names to scrollabl
 {% schema %} { "name": "My Ajax cart" } {% endschema %}
 {% endraw %}
 {%- endcapture -%}
-{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code %}
+{% include v2/codeblock.html title="sections/my-ajax-cart.liquid" language="liquid" code=highlight_code highlight_lines="3,5" %}
 
