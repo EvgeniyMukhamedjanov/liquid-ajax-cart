@@ -97,7 +97,7 @@ h_min: 2
 
 <div class="container" style="position: relative; max-width: 66rem;">
 <div
-  class="homepage__light"
+  class="homepage__light homepage__light--no-parallax"
   style="
     --homepage-light-strength: 25rem;
     right: 10rem;
@@ -126,7 +126,7 @@ h_min: 2
         </a>
         <a style="margin-left: 1rem; font-size: .9rem;" href="/v2/differences-from-v1/">Differences from v1</a>
       </p>
-      <div class="homepage__light" style="left: 0rem; bottom: 2rem"></div>
+      <div class="homepage__light" style="left: 0rem; bottom: 2rem; --homepage-light-delay: 1;"></div>
     </div>
 
     <h2 class="homepage__subtitle">What's inside</h2>
@@ -198,6 +198,7 @@ h_min: 2
             top: 0rem;
             --homepage-light-strength: 20rem;
             --homepage-light-opacity: .25;
+            --homepage-light-delay: 1;
           "></div>
         <h3 class="cards__card-title">Error messages</h3>
         <div class="cards__card-description">
@@ -279,6 +280,7 @@ h_min: 2
             left: 4rem;
             top: 2rem;
             --homepage-light-strength: 7rem;
+            --homepage-light-delay: 1;
           "></div>
           <a href="https://avexdesigns.com" target="_blank" style="margin-bottom: .5rem; display: inline-block;">
             <svg width="102" height="22" viewBox="0 0 102 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -386,3 +388,17 @@ h_min: 2
     {% include v2/footer.html %}
   </div>
 </div>
+
+<script>
+  function renderParallax() {
+    const viewportMiddle = window.innerHeight / 2;
+    document.querySelectorAll(".homepage__light:not(.homepage__light--no-parallax)").forEach($item => {
+      const rect = $item.getBoundingClientRect();
+      const middle = (rect.bottom - rect.top) / 2 +  rect.top;
+      const dif = viewportMiddle - middle;
+      $item.style.setProperty("--homepage-light-parallax", dif);
+    })
+  }
+  window.addEventListener("scroll", renderParallax);
+  renderParallax();
+</script>
