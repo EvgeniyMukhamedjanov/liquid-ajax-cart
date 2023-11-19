@@ -71,14 +71,17 @@ h_min: 2
       }
 
       const $newDoc = new DOMParser().parseFromString(html, 'text/html');
+      const $newTitle = $newDoc.querySelector("head title");
       const $newContent = $newDoc.querySelector("[data-docs-page='content']");
       const $newPageMenu = $newDoc.querySelector("[data-docs-page='page-menu']");
+      const $curTitle = document.querySelector("head title");
       const $curContent = document.querySelector("[data-docs-page='content']");
       const $curPageMenu = document.querySelector("[data-docs-page='page-menu']");
       $curPageMenu.insertAdjacentElement('afterend', $newPageMenu);
       $curContent.insertAdjacentElement('afterend', $newContent);
       $curPageMenu.remove();
       $curContent.remove();
+      $curTitle.textContent = $newTitle.textContent;
       window.scrollTo({
         top: 0,
         left: 0,

@@ -4,9 +4,8 @@ layout: docs-v2
 ---
 
 # Releases
-
 <p class="lead" markdown="1">
-Liquid Ajax Cart is also available on [npmjs.com](https://www.npmjs.com/package/liquid-ajax-cart).
+Liquid Ajax Cart is also available as an npm package [![npm](https://img.shields.io/npm/v/liquid-ajax-cart)](https://www.npmjs.com/package/liquid-ajax-cart).
 </p>
 
 <ul class="steps-list">

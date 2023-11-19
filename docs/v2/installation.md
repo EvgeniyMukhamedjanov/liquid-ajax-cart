@@ -5,8 +5,8 @@ layout: docs-v2
 
 # Installation
 
-<p class="lead">
-Include Liquid Ajax Cart to the Shopify theme code or import the package from npm.
+<p class="lead" markdown="1">
+Include Liquid Ajax Cart to the Shopify theme code or import the package from [npm](https://www.npmjs.com/package/liquid-ajax-cart).
 In both cases it will be globally available on the website.
 </p>
 
@@ -45,7 +45,7 @@ If Liquid Ajax Cart doesn't find the cart JSON, it will make a Shopify Cart API 
 <label for="installation_type_npm">From npm</label> 
 <div>
 
-<p markdown="1">Download Liquid Ajax Cart from npm:</p>
+<p markdown="1">Download Liquid Ajax Cart from npm [![npm](https://img.shields.io/npm/v/liquid-ajax-cart)](https://www.npmjs.com/package/liquid-ajax-cart):</p>
 
 {%- capture highlight_code -%}
 npm install liquid-ajax-cart
