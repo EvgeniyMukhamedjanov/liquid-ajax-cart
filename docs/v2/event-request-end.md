@@ -85,13 +85,13 @@ Result:
 ## Sending requests from the event listener
 
 If you want to send a Shopify Cart API request from a `liquid-ajax-cart:request-end` event listener, 
-make sure that the request that has been just finished and triggered the event **is not a [cart mutation](/v2/cart-mutations/)** request.
+make sure that the request that triggered the event **is not a [cart mutation](/v2/cart-mutations/)** request.
 
 Otherwise there is a high chance that you'll get into infinity loop of requests:
 * cart mutation initiates a request A,
 * the request A finishes and fires the `liquid-ajax-cart:request-end` event,
 * your event listener initiates a request B,
-* Liquid Ajax Cart notices that there was a request B that might change the cart state, so it runs cart mutation functions
+* Liquid Ajax Cart notices that there was a request B that might change the cart state, so it runs cart mutation functions again,
 * cart mutation initiates a request A ...
 
 In order to prevent this, check the `initiator` property of the [Request state](/v2/request-state/) object:
