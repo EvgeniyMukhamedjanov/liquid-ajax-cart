@@ -274,11 +274,11 @@ links:
       selector: .cc-compliance .cc-allow
       image: starforge.jpg
       meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
-    - title: Becuming
-      url: https://becuming.com/
-      selector: .klaviyo-close-form
-      image: becuming.jpg
-      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
+    # - title: Becuming
+    #  url: https://becuming.com/
+    #  selector: .klaviyo-close-form
+    #  image: becuming.jpg
+    #  meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: Novus Shoes
       url: https://novushoes.com/
       selector: .klaviyo-close-form
