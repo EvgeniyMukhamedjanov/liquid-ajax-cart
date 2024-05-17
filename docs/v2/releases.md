@@ -10,6 +10,28 @@ Liquid Ajax Cart is also available as an npm package [![npm](https://img.shields
 
 <ul class="steps-list">
 <li class="steps-list__step steps-list__step--feat">
+<div class="steps-list__badge-list"><span class="steps-list__badge">2024, May 21</span></div>
+<div class="steps-list__title steps-list__title--hero">v2.1.1</div>
+<div class="steps-list__content" markdown="1">
+<ul>
+<li>The support of the <code>select</code> element is added for the <code>data-ajax-cart-quantity-input</code>.</li>
+<li>
+Wrong error rendering in the <code>data-ajax-cart-errors</code> element
+when the request error is an object is fixed.
+</li>
+<li>
+The <code>extraRequestOnError</code> configuration parameter with the <code>true</code> value by default is added. 
+It makes Liquid Ajax Cart send an additional request in order to re-render the cart related sections
+if the current request has returned an error. It fixes the <a href="https://github.com/Shopify/dawn/issues/2994">issue</a> 
+when a request that returns an error actually makes some changes in the cart.
+</li>
+</ul>
+
+<a href="/v2/releases/liquid-ajax-cart-v2.1.1.js" download class="steps-list__cta">Download</a>
+</div>
+</li>
+
+<li class="steps-list__step">
 <div class="steps-list__badge-list"><span class="steps-list__badge">2023, Nov 18</span></div>
 <div class="steps-list__title steps-list__title--hero">v2.1.0</div>
 <div class="steps-list__content" markdown="1">

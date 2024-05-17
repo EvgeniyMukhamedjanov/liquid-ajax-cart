@@ -142,16 +142,18 @@ links_v2:
           eyebrow: Configuration parameter
           id: configuration-subsection
           links:
-            - title: requestErrorText
-              file: request-error-text
             - title: binderFormatters
               file: binder-formatters
+            - title: extraRequestOnError
+              file: extra-request-on-error
             - title: mutations
               file: mutations
             - title: quantityTagAllowZero
               file: quantity-tag-allow-zero
             - title: quantityTagDebounce
               file: quantity-tag-debounce
+            - title: requestErrorText
+              file: request-error-text
             - title: updateOnWindowFocus
               file: update-on-window-focus
 
@@ -235,11 +237,6 @@ links:
       selector: .newsletter-popup__close
       image: mahsa.jpg
       meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
-    - title: Kit and Ace
-      url: https://www.kitandace.com/
-      selector: '.klaviyo-close-form'
-      image: kitandace.jpg
-      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: Nestera
       url: https://nestera.co.uk/
       image: nestera.jpg
