@@ -32,8 +32,9 @@ function isValidElement(element: Element): boolean {
     return false;
   }
 
-  if (!(element instanceof HTMLInputElement) || (element.type !== 'text' && element.type !== 'number')) {
-    console.error(`Liquid Ajax Cart: the ${DATA_ATTR_QUANTITY_INPUT} attribute supports "input" elements only with the "text" and the "number" types`);
+  if (!(element instanceof HTMLInputElement && ['text', 'number'].includes(element.type)) &&
+    !(element instanceof HTMLSelectElement && ['select-one'].includes(element.type))) {
+    console.error(`Liquid Ajax Cart: the ${DATA_ATTR_QUANTITY_INPUT} attribute supports "input" elements of types "text", "number" and non-multiple "select" elements`);
     return false;
   }
 
@@ -41,7 +42,7 @@ function isValidElement(element: Element): boolean {
 }
 
 function processingHandler() {
-  document.querySelectorAll(`input[${DATA_ATTR_QUANTITY_INPUT}]`).forEach((input: HTMLInputElement) => {
+  document.querySelectorAll(`input[${DATA_ATTR_QUANTITY_INPUT}], select[${DATA_ATTR_QUANTITY_INPUT}]`).forEach((input: HTMLInputElement) => {
     if (!isValidElement(input)) {
       return;
     }

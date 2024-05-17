@@ -13,6 +13,7 @@ import {
 import {
   EVENT_PREFIX
 } from './const';
+import {settings} from "./settings";
 
 type FetchPayloadType = {
   method: string,
@@ -100,6 +101,7 @@ function setProcessingStatus(value: boolean) {
 }
 
 function cartRequest(requestType: string, body: RequestBodyType, options: CartRequestOptionsType, finalCallback: () => void) {
+  const {extraRequestOnError} = settings;
   const endpoint = getEndpoint(requestType);
   let requestBody: RequestBodyType = undefined;
   if (requestType !== REQUEST_GET) {
@@ -113,7 +115,8 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
     requestBody,
     info
   }
-  const redundantSections: string[] = [];
+  const allSections: string[] = [];
+  const extraRequestSections: string[] = [];
 
   const eventInternal: EventRequestStartType = new CustomEvent(EVENT_REQUEST_START_INTERNAL, {
     detail: {
@@ -155,19 +158,24 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
       sectionsParam = requestBody.sections;
     }
     if (typeof sectionsParam === 'string' || <JSONValueType>sectionsParam instanceof String || Array.isArray(sectionsParam)) {
-      const allSections: string[] = [];
+
       if (Array.isArray(sectionsParam)) {
         allSections.push(...(sectionsParam as string[]));
       } else {
         allSections.push(...((sectionsParam as string).split(',')));
       }
+
+      // if it is an "add.js" request, it is better to get all the sections html from an extra request,
+      // because the response of the "add.js" request might contain html generated BEFORE merging cart items
+      // https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/issues/72
       if (REQUEST_ADD === requestType) {
-        // if it is an "add.js" request, it is better to get all sections html from a separate request
-        // https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/issues/72
-        redundantSections.push(...allSections.slice(0, 5));
+        extraRequestSections.push(...allSections.slice(0, 5));
       }
+
+      // Add sections starting from index 5th to the extra request,
+      // as Shopify supports maximum 5 sections per request
       if (allSections.length > 5) {
-        redundantSections.push(...allSections.slice(5));
+        extraRequestSections.push(...allSections.slice(5));
         const newSectionsParam = allSections.slice(0, 5).join(',');
         if (requestBody instanceof FormData || requestBody instanceof URLSearchParams) {
           requestBody.set('sections', newSectionsParam);
@@ -200,26 +208,30 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
   fetch(
     endpoint,
     fetchPayload
-  ).then(response => {
-    return response.json().then((responseBody: JSONObjectType) => {
-      return {
-        ok: response.ok,
-        status: response.status,
-        body: responseBody
-      }
-    });
-  }).then(data => {
+  ).then(async response => {
+    const responseBody = await response.json();
+    return {
+      ok: response.ok,
+      status: response.status,
+      body: responseBody
+    };
+  }).then(async data => {
 
     requestState.responseData = data;
 
-    if (!(requestState.responseData.ok) || (requestState.responseData.body.token && redundantSections.length === 0)) {
-      return requestState;
+    // If Shopify responded with error, we need to get all sections again from the extra request,
+    // because Shopify might change the cart even if the response is an error
+    // https://github.com/Shopify/dawn/issues/2994
+    if (!(requestState.responseData.ok) && extraRequestOnError) {
+      extraRequestSections.unshift(...allSections.slice(0, 5));
     }
 
-    return extraRequest(redundantSections).then(extraResponseData => {
-      requestState.extraResponseData = extraResponseData;
-      return requestState;
-    })
+    if (extraRequestSections.length > 0) {
+      requestState.extraResponseData = await extraRequest(extraRequestSections);
+    }
+
+
+    return requestState;
 
   }).catch(error => {
     console.error('Liquid Ajax Cart: Error while performing cart Ajax request')

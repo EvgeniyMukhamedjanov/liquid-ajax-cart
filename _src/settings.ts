@@ -9,7 +9,8 @@ type SettingsType = {
   updateOnWindowFocus: boolean,
   quantityTagAllowZero: boolean,
   quantityTagDebounce: number,
-  mutations: MutationsListType
+  mutations: MutationsListType,
+  extraRequestOnError: boolean
 }
 type SettingsKeysType = keyof SettingsType;
 
@@ -19,7 +20,8 @@ const settings: SettingsType = {
   updateOnWindowFocus: true,
   quantityTagAllowZero: false,
   quantityTagDebounce: 300,
-  mutations: []
+  mutations: [],
+  extraRequestOnError: true
 }
 
 function configureCart(property: string, value: ConfigurationValue) {

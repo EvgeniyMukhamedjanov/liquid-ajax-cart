@@ -78,7 +78,7 @@ function cartSectionsInit() {
     const parser = new DOMParser();
     const updatedSections: Array<UpdatedSectionType> = []; // for sections event
 
-    if (requestState.responseData?.ok && 'sections' in requestState.responseData.body) {
+    if (requestState.responseData.body.sections || requestState.extraResponseData?.body?.sections) {
       let sections = requestState.responseData.body.sections as ({ [key: string]: string });
       if (requestState.extraResponseData?.body?.sections) {
         sections = {...sections, ...(requestState.extraResponseData.body.sections as ({ [key: string]: string }))};

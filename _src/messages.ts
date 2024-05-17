@@ -12,18 +12,28 @@ import {HTMLProductFormElement} from "./controls/product-form-element";
 const DATA_ATTR_ERRORS = `${DATA_ATTR_PREFIX}-errors`;
 
 function getRequestError(requestState: RequestStateType): string {
-
   const {requestErrorText} = settings;
-
   if (requestState.responseData?.ok) return '';
 
-  return <string>requestState.responseData?.body?.description
-    || <string>requestState.responseData?.body?.message
-    || requestErrorText;
+  const errors = <string | Record<string, string[]> | undefined>requestState.responseData?.body?.errors
+    || <string | Record<string, string[]> | undefined>requestState.responseData?.body?.description
+    || <string | undefined>requestState.responseData?.body?.message;
+
+  if (!errors) return requestErrorText;
+
+  if (typeof errors === 'string') {
+    return errors;
+  }
+
+  if (typeof errors === 'object') {
+    return Object.values(errors).map((e) => e.join(', ')).join('; ');
+  }
+
+  return requestErrorText;
 }
 
-const changeRequestContainers = (requestState: RequestStateType): NodeListOf<Element> => {
-  let errorContainers: NodeListOf<Element>;
+const changeRequestContainers = (requestState: RequestStateType): Array<Element> => {
+  const errorContainers: Array<Element> = [];
 
   const state = getCartState();
 
@@ -56,60 +66,60 @@ const changeRequestContainers = (requestState: RequestStateType): NodeListOf<Ele
 
   if (requestedId) {
     if (requestedId.indexOf(':') > -1) {
-      errorContainers = document.querySelectorAll(`[${DATA_ATTR_ERRORS}="${requestedId}"]`);
+      errorContainers.push(...Array.from(document.querySelectorAll(`[${DATA_ATTR_ERRORS}="${requestedId}"]`)));
     } else {
-      errorContainers = document.querySelectorAll(
+      errorContainers.push(...Array.from(document.querySelectorAll(
         state.cart.items.reduce((acc, element) => {
           if (element.key === requestedId || element.id === Number(requestedId)) {
             acc.push(`[${DATA_ATTR_ERRORS}="${element.key}"]`);
           }
           return acc;
         }, []).join(',')
-      );
+      )));
     }
   }
   return errorContainers;
 }
 
-const addRequestContainers = (requestState: RequestStateType): NodeListOf<Element> => {
-  let errorContainers: NodeListOf<Element>;
+const addRequestContainers = (requestState: RequestStateType): Array<Element> => {
   const initiator = requestState.info?.initiator;
   if (initiator instanceof HTMLProductFormElement) {
-    errorContainers = initiator.querySelectorAll(`[${DATA_ATTR_ERRORS}="form"]`);
+    return Array.from(initiator.querySelectorAll(`[${DATA_ATTR_ERRORS}="form"]`));
   }
-  return errorContainers;
+  return [];
+}
+
+const getContainers = (requestState: RequestStateType): Array<Element> => {
+  switch (requestState.requestType) {
+    case REQUEST_ADD:
+      return addRequestContainers(requestState);
+    case REQUEST_CHANGE:
+      return changeRequestContainers(requestState);
+    default:
+      return [];
+  }
 }
 
 const cartMessagesInit = () => {
-  let errorContainers: NodeListOf<Element> | undefined;
-
   document.addEventListener(EVENT_REQUEST_START_INTERNAL, (event: EventRequestStartType) => {
     const {requestState} = event.detail;
-
-    errorContainers = undefined;
-
-    if (requestState.requestType === REQUEST_ADD)
-      errorContainers = addRequestContainers(requestState);
-    else if (requestState.requestType === REQUEST_CHANGE)
-      errorContainers = changeRequestContainers(requestState);
-
-    if (errorContainers && errorContainers.length > 0) {
-      errorContainers.forEach((element) => {
-        element.textContent = '';
-      });
-    }
+    getContainers(requestState).forEach((element) => {
+      element.textContent = '';
+    });
   });
 
   document.addEventListener(EVENT_REQUEST_END_INTERNAL, (event: EventRequestEndType) => {
     const {requestState} = event.detail;
     if (requestState.info.cancel) return;
 
-    if (!errorContainers || errorContainers.length === 0) return;
+    const containers = getContainers(requestState);
+
+    if (containers.length === 0) return;
 
     const errorMessage = getRequestError(requestState);
     if (!errorMessage) return;
 
-    errorContainers.forEach((element: Element) => {
+    containers.forEach((element: Element) => {
       element.textContent = errorMessage;
     });
   });
