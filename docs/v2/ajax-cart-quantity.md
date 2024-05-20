@@ -12,6 +12,9 @@ to a [`data-ajax-cart-quantity-input`](/v2/data-ajax-cart-quantity-input/) cart 
 
 ## Setup
 
+*Note*: the `<ajax-cart-quantity>` custom tag works only with `data-ajax-cart-quantity-input` elements 
+which are implemented via HTML `input` element of type `text` or `number`.
+
 Let's say you have a cart item quantity input, 
 ajaxified using the [`data-ajax-cart-quantity-input`](/v2/data-ajax-cart-quantity-input/) attribute:
 

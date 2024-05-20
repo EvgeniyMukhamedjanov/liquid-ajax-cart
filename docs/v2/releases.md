@@ -10,7 +10,7 @@ Liquid Ajax Cart is also available as an npm package [![npm](https://img.shields
 
 <ul class="steps-list">
 <li class="steps-list__step steps-list__step--feat">
-<div class="steps-list__badge-list"><span class="steps-list__badge">2024, May 21</span></div>
+<div class="steps-list__badge-list"><span class="steps-list__badge">2024, May 20</span></div>
 <div class="steps-list__title steps-list__title--hero">v2.1.1</div>
 <div class="steps-list__content" markdown="1">
 <ul>
