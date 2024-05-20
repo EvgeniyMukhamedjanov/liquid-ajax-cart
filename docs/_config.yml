@@ -253,14 +253,14 @@ links:
       meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: Pulse
       url: https://lovemypulse.com/
-      selector: .klaviyo-close-form
+      selector: '.klaviyo-close-form'
       image: lovemypulse.jpg
       meta: Made by <a href="http://seanmythen.net/" target="_blank">Seán Mythen</a>
-    - title: Talia di Napoli
-      url: https://www.taliadinapoli.com/
-      selector: .ot-cookie
-      image: talia.jpg
-      meta: Integrated by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    # - title: Talia di Napoli
+    #  url: https://www.taliadinapoli.com/
+    #  selector: .ot-cookie
+    #  image: talia.jpg
+    #  meta: Integrated by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: Natz
       url: https://www.drinknatz.com/
       selector: .age-verification__yes-button
