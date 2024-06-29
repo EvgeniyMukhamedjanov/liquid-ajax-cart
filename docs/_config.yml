@@ -180,6 +180,14 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   portfolio:
+    - title: Quip
+      url: https://www.getquip.com/
+      image: quip.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+    - title: Acorn Furniture
+      url: https://acornfurniture.co.nz/
+      image: acornfurniture.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: Deadly Ponies
       url: https://deadlyponies.com/
       image: deadlyponies.jpg
