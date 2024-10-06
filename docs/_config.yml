@@ -29,7 +29,7 @@ links_v2:
 
         - title: Extension with JS
           links:
-            - title: Auto-add/remove cart items
+            - title: Cart mutations
               file: cart-mutations
             - title: Lifecycle, events, API
               file: lifecycle-events-api
@@ -180,14 +180,29 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   portfolio:
-    - title: Quip
-      url: https://www.getquip.com/
-      image: quip.jpg
+    - title: KHAITE
+      url: https://khaite.com/
+      image: khaite.jpg
       meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+      selector: .onetrust-close-btn-handler
+    - title: alt.
+      url: https://getalt.co.nz/
+      image: getalt.jpg
+      meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
+    - title: edikted
+      url: https://edikted.com/
+      image: edikted.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+      selector: #onetrust-accept-btn-handler
     - title: Acorn Furniture
       url: https://acornfurniture.co.nz/
       image: acornfurniture.jpg
       meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
+    - title: Quip
+      url: https://www.getquip.com/
+      image: quip.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+      selector: .sidebar-iframe-close,#onetrust-accept-btn-handler
     - title: Deadly Ponies
       url: https://deadlyponies.com/
       image: deadlyponies.jpg
@@ -202,7 +217,7 @@ links:
       meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
     - title: Alastin Skincare
       url: https://alastin.com/
-      selector: ".ltkpopup-close,.banner-close-button,.onetrust-accept-btn-handler"
+      selector: ".ltkpopup-close,.banner-close-button,#onetrust-accept-btn-handler"
       image: alastin.jpg
       meta: Integrated by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
     - title: RUBY
@@ -298,6 +313,7 @@ links:
       url: https://christopheresber.com.au/
       image: ce.jpg
       meta: Made by <a href="https://www.almond.studio/" target="_blank">Studio Almond</a>
+      selector: .klaviyo-close-form
     - title: La Favorita Shoes
       url: https://lafavorita.com/
       selector: .hulk_cookie_bar .bar_btn
