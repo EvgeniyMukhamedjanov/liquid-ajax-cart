@@ -6,7 +6,7 @@ layout: docs-v2
 # data-ajax-cart-section
 
 <p class="lead" markdown="1">
-Liquid Ajax Cart re-renders elements with the `data-ajax-cart-section` attribute after each Shopify Cart API Ajax request. 
+Liquid Ajax Cart re-renders elements with the `data-ajax-cart-section` attribute after each `POST` Shopify Cart API Ajax request. 
 It uses Shopify <a href="https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering">Bundled section rendering</a> under the hood, 
 so the `data-ajax-cart-section` **must** be used inside a Shopify section.
 </p>
@@ -15,7 +15,12 @@ so the `data-ajax-cart-section` **must** be used inside a Shopify section.
 
 Before sending a Shopify Ajax Cart API Ajax request, which are initiated by user cart-related actions
 (such as adding a product to the cart or changing item quantity) or by a developer (using 
-{% include v2/content/links-to-request-methods.html %}), Liquid Ajax Cart does the following:
+the methods
+[`add`](/v2/liquid-ajax-cart-add/),
+[`change`](/v2/liquid-ajax-cart-change/),
+[`update`](/v2/liquid-ajax-cart-update/),
+[`clear`](/v2/liquid-ajax-cart-clear/)
+of the [`liquidAjaxCart`](/v2/liquid-ajax-cart/) object), Liquid Ajax Cart does the following:
 * finds all the Shopify sections on the page that contain the `data-ajax-cart-section` elements;
 * collects the IDs of the Shopify sections found;
 * modifies the original request by adding the `sections` property to the body of the request so that Shopify returns the re-rendered HTML of the Shopify sections found ([Bundled section rendering](https://shopify.dev/docs/api/ajax/reference/cart#bundled-section-rendering)).
