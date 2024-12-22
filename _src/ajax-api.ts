@@ -284,7 +284,9 @@ function cartRequestFinally(
 }
 
 function extraRequest(sections: string[] = []): Promise<{ ok: boolean, status: number, body: JSONObjectType }> {
-  const requestBody: JSONObjectType = {};
+  const requestBody: JSONObjectType = {
+    updates: {}
+  };
   if (sections.length > 0) {
     requestBody.sections = sections.slice(0, 5).join(',');
   }

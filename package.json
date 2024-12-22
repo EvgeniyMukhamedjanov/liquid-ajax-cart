@@ -1,6 +1,6 @@
 {
   "name": "liquid-ajax-cart",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Build a Shopify Ajax-cart without JavaScript coding",
   "private": false,
   "browser": "./liquid-ajax-cart.js",

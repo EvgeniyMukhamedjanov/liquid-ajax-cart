@@ -10,6 +10,17 @@ Liquid Ajax Cart is also available as an npm package [![npm](https://img.shields
 
 <ul class="steps-list">
 <li class="steps-list__step steps-list__step--feat">
+<div class="steps-list__badge-list"><span class="steps-list__badge">2024, Dec 22</span></div>
+<div class="steps-list__title steps-list__title--hero">v2.1.2</div>
+<div class="steps-list__content" markdown="1">
+An empty <code>update</code> object was added to the <a href="/v2/request-state/#extraresponsedata">extra request</a> payload
+in order to fix the <a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/issues/107">issue</a>.
+
+<a href="/v2/releases/liquid-ajax-cart-v2.1.2.js" download class="steps-list__cta">Download</a>
+</div>
+</li>
+
+<li class="steps-list__step">
 <div class="steps-list__badge-list"><span class="steps-list__badge">2024, May 20</span></div>
 <div class="steps-list__title steps-list__title--hero">v2.1.1</div>
 <div class="steps-list__content" markdown="1">
