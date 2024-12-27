@@ -180,6 +180,10 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   portfolio:
+    - title: Beau Domaine
+      url: https://www.beau-domaine.com/
+      image: beau.jpg
+      meta: Made by <a href="https://elkad.fr/" target="_blank">Elkad</a>
     - title: Acme Cups
       url: https://acmecups.nz/
       image: acmecups.jpg
