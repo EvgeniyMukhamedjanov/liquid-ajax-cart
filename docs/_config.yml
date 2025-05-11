@@ -180,6 +180,11 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   portfolio:
+    - title: AriZona Beverages
+      url: https://www.drinkarizona.com/
+      image: arizona.jpg
+      meta: Made by <a href="https://avexdesigns.com/" target="_blank">Avex Designs</a>
+      selector: .ngr-embed-block
     - title: Beau Domaine
       url: https://www.beau-domaine.com/
       image: beau.jpg
