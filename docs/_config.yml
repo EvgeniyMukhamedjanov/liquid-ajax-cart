@@ -180,6 +180,10 @@ links:
       brand: true
       url: https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart
   portfolio:
+    - title: Lucas Bauer Jewellery
+      url: https://lucasbauerjewellery.com/
+      image: lucasbauerjewellery.jpg
+      meta: Made by <a href="https://wwwstuudio.ee/" target="_blank">WWW</a>
     - title: AriZona Beverages
       url: https://www.drinkarizona.com/
       image: arizona.jpg
