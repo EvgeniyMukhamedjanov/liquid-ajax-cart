@@ -10,6 +10,17 @@ Liquid Ajax Cart is also available as an npm package [![npm](https://img.shields
 
 <ul class="steps-list">
 <li class="steps-list__step steps-list__step--feat">
+<div class="steps-list__badge-list"><span class="steps-list__badge">2025, Jul 6</span></div>
+<div class="steps-list__title steps-list__title--hero">v2.1.3</div>
+<div class="steps-list__content" markdown="1">
+The <code>step</code> attribute is now respected when it is used on the <code>input</code> element within the <code><a href="/v2/ajax-cart-quantity/">&lt;ajax-cart-quantity&gt;</a></code> custom tag.
+
+<a href="/v2/releases/liquid-ajax-cart-v2.1.3.js" download class="steps-list__cta">Download</a>
+</div>
+</li>
+
+<ul class="steps-list">
+<li class="steps-list__step steps-list__step">
 <div class="steps-list__badge-list"><span class="steps-list__badge">2024, Dec 22</span></div>
 <div class="steps-list__title steps-list__title--hero">v2.1.2</div>
 <div class="steps-list__content" markdown="1">

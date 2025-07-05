@@ -63,7 +63,11 @@ function cartQuantityElementInit() {
             }
 
             let qtyValueNew = qtyValueCurrent;
-            qtyValueNew = $button.hasAttribute(DATA_ATTR_QUANTITY_PLUS) ? qtyValueNew + 1 : qtyValueNew - 1;
+            let step = Number(this._$input.getAttribute('step') || 1);
+            if (!Number.isSafeInteger(step) || step <= 0) {
+              step = 1;
+            }
+            qtyValueNew = $button.hasAttribute(DATA_ATTR_QUANTITY_PLUS) ? qtyValueNew + step : qtyValueNew - step;
             if (qtyValueNew < minValue) qtyValueNew = minValue;
             if (qtyValueNew !== qtyValueCurrent) {
               this._$input.value = qtyValueNew.toString();
