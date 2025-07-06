@@ -188,7 +188,7 @@
   </div>
   <div>
     <div class="ajax-cart__discount-code">
-      <ajax-cart-product-form>
+      <ajax-cart-form>
         <form class="ajax-cart__discount-code-form" action="{{ routes.cart_update_url }}" method="post">
           <input
             type="text"
@@ -203,7 +203,7 @@
             Apply
           </button>
         </form>
-      </ajax-cart-product-form>
+      </ajax-cart-form>
       {%- if discount_codes.size > 0 -%}
         <ul class="ajax-cart__discount-code-list">
           {% for discount_code in discount_codes %}
