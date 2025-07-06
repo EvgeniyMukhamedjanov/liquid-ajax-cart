@@ -7,7 +7,7 @@ import {EVENT_REQUEST_END_INTERNAL, EVENT_REQUEST_START_INTERNAL, REQUEST_ADD, R
 import {getCartState} from './state';
 import {settings} from './settings';
 import {DATA_ATTR_PREFIX} from "./const";
-import {HTMLProductFormElement} from "./controls/product-form-element";
+import {HTMLAjaxFormElement} from "./controls/form-element";
 
 const DATA_ATTR_ERRORS = `${DATA_ATTR_PREFIX}-errors`;
 
@@ -83,7 +83,7 @@ const changeRequestContainers = (requestState: RequestStateType): Array<Element>
 
 const addRequestContainers = (requestState: RequestStateType): Array<Element> => {
   const initiator = requestState.info?.initiator;
-  if (initiator instanceof HTMLProductFormElement) {
+  if (initiator instanceof HTMLAjaxFormElement) {
     return Array.from(initiator.querySelectorAll(`[${DATA_ATTR_ERRORS}="form"]`));
   }
   return [];
