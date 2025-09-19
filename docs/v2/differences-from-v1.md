@@ -15,7 +15,7 @@ The architecture of the library is redesigned based on 1.5 years of hands-on exp
 unless you want to have the v2.x.x features.
 The maintenance of the library v1.x.x will be continued.
 
-Meanwhile, it is recommended to use v2.x.x for new Shopify stores, 
+Meanwhile, it is recommended to use v2.x.x for new Shopify stores,
 as new features will be introduced to Liquid Ajax Cart v2.x.x only.
 
 ## Quantity buttons
@@ -28,7 +28,7 @@ cart item quantity buttons.
 
 The new "Plus" and "Minus" buttons don't initiate a Shopify Cart API Ajax request immediately when clicked.
 Liquid Ajax Cart gives the user 300 ms time to click the button again before initiating the request (debounce).
-This approach lets the user change the quantity by more than one before sending 
+This approach lets the user change the quantity by more than one before sending
 the request and before the cart goes to the “processing requests” mode.
 
 **v1.x.x approach (still supported in v2.x.x but not recommended):**
@@ -40,13 +40,13 @@ the request and before the cart goes to the “processing requests” mode.
 </a>
 
 <input data-ajax-cart-quantity-input="{{ line_item_index }}"
-  name="updates[]" 
-  value="{{ item.quantity }}" 
+  name="updates[]"
+  value="{{ item.quantity }}"
   type="number" />
 
-<a data-ajax-cart-request-button 
-  href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ item.quantity | plus: 1 }}"> 
-  Plus one 
+<a data-ajax-cart-request-button
+  href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ item.quantity | plus: 1 }}">
+  Plus one
 </a>
 {% endraw %}
 {%- endcapture -%}
@@ -57,18 +57,18 @@ the request and before the cart goes to the “processing requests” mode.
 {% raw %}
 <ajax-cart-quantity>
   <a data-ajax-cart-quantity-minus
-    href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ item.quantity | minus: 1 }}" > 
-    Minus one 
+    href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ item.quantity | minus: 1 }}" >
+    Minus one
   </a>
 
   <input data-ajax-cart-quantity-input="{{ line_item_index }}"
-    name="updates[]" 
-    value="{{ item.quantity }}" 
+    name="updates[]"
+    value="{{ item.quantity }}"
     type="number" />
 
   <a data-ajax-cart-quantity-plus
-    href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ item.quantity | plus: 1 }}"> 
-    Plus one 
+    href="{{ routes.cart_change_url }}?line={{ line_item_index }}&quantity={{ item.quantity | plus: 1 }}">
+    Plus one
   </a>
 </ajax-cart-quantity>
 {% endraw %}
@@ -76,8 +76,8 @@ the request and before the cart goes to the “processing requests” mode.
 {% include v2/codeblock.html language="liquid" code=highlight_code %}
 
 ## Product forms
-Liquid Ajax Cart v2.x.x doesn't automatically ajaxifies all the Shopify product forms anymore as the v1.x.x did. 
-A Shopify product form should be wrapped in the [`<ajax-cart-product-form>`](/v2/ajax-cart-product-form/) 
+Liquid Ajax Cart v2.x.x doesn't automatically ajaxifies all the Shopify product forms anymore as the v1.x.x did.
+A Shopify product form should be wrapped in the [`<ajax-cart-product-form>`](/v2/ajax-cart-product-form/)
 to be ajaxified:
 
 {%- capture highlight_code -%}
@@ -175,26 +175,26 @@ The `data-ajax-cart-toggle-class-button` attribute is removed.
 
 ## Import Liquid Ajax Cart
 
-Liquid Ajax Cart v2.x.x **doesn't export anything**. 
+Liquid Ajax Cart v2.x.x **doesn't export anything**.
 Access to the API is provided by the global [`liquidAjaxCart`](/v2/liquid-ajax-cart/) object only.
 Most of the methods and properties of the [`liquidAjaxCart`](/v2/liquid-ajax-cart/) object
 are available only after the [initialization](#initialization).
 
-## Subscription to events 
+## Subscription to events
 
-All the `subscribeToCart*()` functions are replaced with events that are fired at the `document`. 
+All the `subscribeToCart*()` functions are replaced with events that are fired at the `document`.
 Therefore, you can subscribe to them even before Liquid Ajax Cart is loaded.
 
 ### subscribeToCartSectionsUpdate()
 
 The `subscribeToCartSectionsUpdate()` is removed.
-Subscribe to the [`liquid-ajax-cart:request-end`](/v2/event-request-end/) event instead, 
-as sections are updated after a successful Shopify Cart API Ajax request. 
+Subscribe to the [`liquid-ajax-cart:request-end`](/v2/event-request-end/) event instead,
+as sections are updated after a successful Shopify Cart API Ajax request.
 
 ### subscribeToCartAjaxRequests()
 
 The `subscribeToCartAjaxRequests()` function is removed.
-Instead, subscribe to the events [`liquid-ajax-cart:request-start`](/v2/event-request-start/), 
+Instead, subscribe to the events [`liquid-ajax-cart:request-start`](/v2/event-request-start/),
 [`liquid-ajax-cart:request-end`](/v2/event-request-end/).
 
 ### subscribeToCartStateUpdate()
@@ -215,13 +215,16 @@ liquidAjaxCart.subscribeToCartStateUpdate(( state, isCartUpdated ) => {
     console.log("User's cart state is updated");
     console.log("New cart state", state.cart);
     console.log("Previous cart state", state.previousCart);
-  } 
+  }
 });
 
 // v2.x.x
 document.addEventListener("liquid-ajax-cart:request-end", function(event) {
   const {cart, previousCart} = event.detail;
-  
+
+### Request cancellation support
+
+v2 requests accept an optional `signal` in the options object to support aborting in-flight requests via `AbortController`. This helps build optimistic UIs that cancel superseded requests.
   if (cart) {
     console.log("User's cart state is updated");
     console.log("New cart state", cart); // same as liquidAjaxCart.cart
@@ -231,7 +234,7 @@ document.addEventListener("liquid-ajax-cart:request-end", function(event) {
 {%- endcapture -%}
 {% include v2/codeblock.html language="javascript" code=highlight_code %}
 
-In v2.x.x the `state.status.requestInProgress` value is stored 
+In v2.x.x the `state.status.requestInProgress` value is stored
 in the [`liquidAjaxCart.processing`](/v2/liquid-ajax-cart-processing/) property.
 To subscribe to its update use the events the events [`liquid-ajax-cart:queue-start`](/v2/event-queue-start/)
 and [`liquid-ajax-cart:queue-end`](/v2/event-queue-end/):
@@ -284,7 +287,7 @@ and listen for the [`liquid-ajax-cart:init`](/v2/event-init/) event:
 
 ## getCartState()
 
-The `getCartState()` function is removed. In order to get the same data, 
+The `getCartState()` function is removed. In order to get the same data,
 use the properties of the [`liquidAjaxCart`](/v2/liquid-ajax-cart/) object.
 
 ### state.cart
@@ -318,7 +321,7 @@ liquidAjaxCart.subscribeToCartStateUpdate(( state, isCartUpdated ) => {
 // v2.x.x
 document.addEventListener("liquid-ajax-cart:request-end", function(event) {
   const {cart, previousCart} = event.detail;
-  
+
   if (cart) {
     console.log("User's cart state is updated");
     console.log("New cart state: ", cart); // same as liquidAjaxCart.cart
@@ -347,7 +350,7 @@ The `state.status.cartStateSet` value is not stored anymore. If Liquid Ajax Cart
 
 ## cartRequest*() methods
 
-All the function that send Shopify Cart API Ajax requests are replaced 
+All the function that send Shopify Cart API Ajax requests are replaced
 with the methods of the [`liquidAjaxCart`](/v2/liquid-ajax-cart/) object:
 * `cartRequestGet()` → [`liquidAjaxCart.get()`](/v2/liquid-ajax-cart-get/);
 * `cartRequestAdd()` → [`liquidAjaxCart.add()`](/v2/liquid-ajax-cart-add/);
@@ -396,5 +399,5 @@ The `stateBinderFormatters` is renamed to [`binderFormatters`](/v2/binder-format
 
 The `addToCartCssClass` configuration parameter is removed.
 Use the [`liquid-ajax-cart:request-end`](/v2/event-request-end/) event to append a CSS class
-when a product is added to the cart. 
+when a product is added to the cart.
 The ready snippet: [Open the Ajax-cart when a user adds a product to the cart](/v2/js-snippets/#open-the-ajax-cart-when-a-user-adds-a-product-to-the-cart).
