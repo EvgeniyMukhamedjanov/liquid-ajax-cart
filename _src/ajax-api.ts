@@ -20,7 +20,8 @@ type FetchPayloadType = {
   headers?: {
     [key: string]: string
   }
-  body?: string | FormData
+  body?: string | FormData,
+  signal?: AbortSignal
 }
 
 type QueueItemType = {
@@ -148,6 +149,14 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
     return;
   }
 
+  // If the AbortSignal is already aborted before starting the request, skip fetch
+  if (options?.signal?.aborted) {
+    requestState.responseData = null;
+    requestState.fetchError = 'AbortError' as any;
+    cartRequestFinally(options, finalCallback, requestState);
+    return;
+  }
+
   if (requestBody !== undefined) {
     let sectionsParam: JSONValueType = undefined;
     if (requestBody instanceof FormData || requestBody instanceof URLSearchParams) {
@@ -191,6 +200,9 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
   const fetchPayload: FetchPayloadType = {
     method
   }
+  if (options?.signal) {
+    fetchPayload.signal = options.signal;
+  }
   if (requestType !== REQUEST_GET) {
     if (requestBody instanceof FormData || requestBody instanceof URLSearchParams) {
       fetchPayload.body = requestBody;
@@ -227,17 +239,22 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
     }
 
     if (extraRequestSections.length > 0) {
-      requestState.extraResponseData = await extraRequest(extraRequestSections);
+      if (!(options?.signal?.aborted)) {
+        requestState.extraResponseData = await extraRequest(extraRequestSections, options?.signal);
+      }
     }
 
 
     return requestState;
 
   }).catch(error => {
-    console.error('Liquid Ajax Cart: Error while performing cart Ajax request')
-    console.error(error);
+    // Do not log aborts as errors; they are expected when requests are intentionally cancelled
+    if (!(error && (error.name === 'AbortError' || error.code === 20))) {
+      console.error('Liquid Ajax Cart: Error while performing cart Ajax request')
+      console.error(error);
+    }
     requestState.responseData = null;
-    requestState.fetchError = error;
+    requestState.fetchError = error as any;
   }).finally(() => {
     cartRequestFinally(options, finalCallback, requestState);
   });
@@ -283,7 +300,7 @@ function cartRequestFinally(
   finalCallback();
 }
 
-function extraRequest(sections: string[] = []): Promise<{ ok: boolean, status: number, body: JSONObjectType }> {
+function extraRequest(sections: string[] = [], signal?: AbortSignal): Promise<{ ok: boolean, status: number, body: JSONObjectType }> {
   const requestBody: JSONObjectType = {
     updates: {}
   };
@@ -296,7 +313,8 @@ function extraRequest(sections: string[] = []): Promise<{ ok: boolean, status: n
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(requestBody)
+    body: JSON.stringify(requestBody),
+    signal
   }).then(response => response.json().then(responseBody => {
     const data = {
       ok: response.ok,
@@ -307,7 +325,7 @@ function extraRequest(sections: string[] = []): Promise<{ ok: boolean, status: n
       return data;
     }
 
-    return extraRequest(sections.slice(5)).then(addData => {
+    return extraRequest(sections.slice(5), signal).then(addData => {
       if (addData.ok && addData.body?.sections && typeof addData.body.sections === 'object') {
         if (!('sections' in data.body)) {
           data.body.sections = {};

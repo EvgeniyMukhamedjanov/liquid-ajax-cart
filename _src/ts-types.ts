@@ -39,7 +39,8 @@ export type CartRequestOptionsType = {
   firstCallback?: (requestState: RequestStateType) => void,
   lastCallback?: (requestState: RequestStateType) => void,
   info?: RequestStateInfoType,
-  important?: boolean
+  important?: boolean,
+  signal?: AbortSignal
 }
 
 export type EventQueueType = CustomEvent;

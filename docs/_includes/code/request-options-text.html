@@ -4,7 +4,7 @@ The `options` parameter is an object and it might have the following properties:
 
 #### firstComplete
 
-The `firstComplete` parameter is a function that will be called right after the request is finished and before any other callbacks that are subscribed to the request. 
+The `firstComplete` parameter is a function that will be called right after the request is finished and before any other callbacks that are subscribed to the request.
 
 This function is called before updating of the [State](/v1/reference/state/) object, the `data-ajax-cart-section` sections, the `body` CSS classes, the `data-ajax-cart-bind-state` elements.
 
@@ -12,7 +12,7 @@ The `firstComplete` function will be called with the only parameter — the [Req
 
 #### lastComplete
 
-The `lastComplete` parameter is a function that will be called after the request is finished and after any other callbacks that are subscribed to the request. 
+The `lastComplete` parameter is a function that will be called after the request is finished and after any other callbacks that are subscribed to the request.
 
 You can use the [`getCartState`](/v1/reference/getCartState/) function to read the [`State`](/v1/reference/state/) object because it is already updated.
 
@@ -31,6 +31,10 @@ Don't use the `initiator` and the `cancel` keys:
 #### newQueue
 
 If the `newQueue` property is `true` then a new queue will be created and the request will be added to the new queue. Use it for requests that get performed on user actions:
+
+#### signal
+An optional `AbortSignal` from an `AbortController`. When provided, the request can be aborted. Aborted requests finish the lifecycle without error logs, which is useful when rapidly updating quantities and cancelling superseded requests.
+
 ```javascript
 const button = document.querySelector('[data-my-button]');
 if (button) {
