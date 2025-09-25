@@ -10,6 +10,17 @@ Liquid Ajax Cart is also available as an npm package [![npm](https://img.shields
 
 <ul class="steps-list">
 <li class="steps-list__step steps-list__step--feat">
+<div class="steps-list__badge-list"><span class="steps-list__badge">2025, Sep 25</span></div>
+<div class="steps-list__title steps-list__title--hero">v2.2.0</div>
+<div class="steps-list__content" markdown="1">
+The <code>AbortController</code> support is added to all cart requests so callers can cancel in-flight requests. Based on the: "<a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/issues/114">Fetch cannot be aborted</a>" GitHub issue.
+Thank you <a href="https://github.com/alexCevi">Alex</a> for the Pull Request <a href="https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/pull/115">"Fix: Added abort signal fixes issue 114"</a>.
+
+<a href="/v2/releases/liquid-ajax-cart-v2.2.0.js" download class="steps-list__cta">Download</a>
+</div>
+</li>
+
+<li class="steps-list__step">
 <div class="steps-list__badge-list"><span class="steps-list__badge">2025, Jul 6</span></div>
 <div class="steps-list__title steps-list__title--hero">v2.1.3</div>
 <div class="steps-list__content" markdown="1">
@@ -19,8 +30,7 @@ The <code>step</code> attribute is now respected when it is used on the <code>in
 </div>
 </li>
 
-<ul class="steps-list">
-<li class="steps-list__step steps-list__step">
+<li class="steps-list__step">
 <div class="steps-list__badge-list"><span class="steps-list__badge">2024, Dec 22</span></div>
 <div class="steps-list__title steps-list__title--hero">v2.1.2</div>
 <div class="steps-list__content" markdown="1">
