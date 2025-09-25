@@ -1,45 +1,89 @@
 import {
   AppStateType,
   AppStateCartType,
-  EventRequestEndType
-} from './ts-types';
+  EventRequestEndType,
+} from "./ts-types";
 
-import {
-  EVENT_REQUEST_END_INTERNAL,
-} from './ajax-api';
-import {DATA_ATTR_PREFIX} from "./const";
+import { EVENT_REQUEST_END_INTERNAL } from "./ajax-api";
+import { DATA_ATTR_PREFIX } from "./const";
 
 const DATA_ATTR_INITIAL_STATE = `${DATA_ATTR_PREFIX}-initial-state`;
 
 let cart: AppStateCartType = null;
-let previousCart: AppStateCartType | undefined = undefined
+let previousCart: AppStateCartType | undefined = undefined;
 
 function cartStateInit(): Promise<void> {
+  document.addEventListener(
+    EVENT_REQUEST_END_INTERNAL,
+    (event: EventRequestEndType) => {
+      const { requestState } = event.detail;
+      let newCart: AppStateCartType;
 
-  document.addEventListener(EVENT_REQUEST_END_INTERNAL, (event: EventRequestEndType) => {
-    const {requestState} = event.detail;
-    let newCart: AppStateCartType;
-    if (requestState.extraResponseData?.ok && requestState.extraResponseData.body.token) {
-      newCart = requestState.extraResponseData.body as AppStateCartType;
-    } else if (requestState.responseData?.ok && requestState.responseData.body.token) {
-      newCart = requestState.responseData.body as AppStateCartType;
+      // Pulling cart state from sections response
+      if (
+        requestState.responseData?.ok &&
+        requestState.responseData.body.sections
+      ) {
+        for (const sectionHtml of Object.values(
+          requestState.responseData.body.sections
+        )) {
+          if (
+            typeof sectionHtml === "string" &&
+            sectionHtml.includes(DATA_ATTR_INITIAL_STATE)
+          ) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(sectionHtml, 'text/html');
+            const initialStateScript = doc.querySelector(
+              `[${DATA_ATTR_INITIAL_STATE}]`
+            );
+            if (initialStateScript) {
+              try {
+                newCart = JSON.parse(initialStateScript.textContent);
+              } catch (e) {
+                console.error(
+                  `Liquid Ajax Cart: can't parse cart JSON from the "${DATA_ATTR_INITIAL_STATE}" script`
+                );
+                console.error(e);
+              }
+            }
+          }
+        }
+      }
+
+      if (!newCart) {
+        if (
+          requestState.extraResponseData?.ok &&
+          requestState.extraResponseData.body.token
+        ) {
+          newCart = requestState.extraResponseData.body as AppStateCartType;
+        } else if (
+          requestState.responseData?.ok &&
+          requestState.responseData.body.token
+        ) {
+          newCart = requestState.responseData.body as AppStateCartType;
+        }
+      }
+
+      if (newCart) {
+        previousCart = cart;
+        cart = newCart;
+
+        event.detail.previousCart = previousCart;
+        event.detail.cart = cart;
+      }
     }
+  );
 
-    if (newCart) {
-      previousCart = cart;
-      cart = newCart;
-
-      event.detail.previousCart = previousCart;
-      event.detail.cart = cart;
-    }
-  });
-
-  const initialStateContainer = document.querySelector(`[${DATA_ATTR_INITIAL_STATE}]`);
+  const initialStateContainer = document.querySelector(
+    `[${DATA_ATTR_INITIAL_STATE}]`
+  );
   if (initialStateContainer) {
     try {
       cart = JSON.parse(initialStateContainer.textContent);
     } catch (e) {
-      console.error(`Liquid Ajax Cart: can't parse cart JSON from the "${DATA_ATTR_INITIAL_STATE}" script`);
+      console.error(
+        `Liquid Ajax Cart: can't parse cart JSON from the "${DATA_ATTR_INITIAL_STATE}" script`
+      );
       console.error(e);
     }
   }
@@ -49,27 +93,30 @@ function cartStateInit(): Promise<void> {
       resolve();
       return;
     }
-    fetch(`${window.Shopify?.routes?.root || '/'}cart.js`, {
+    fetch(`${window.Shopify?.routes?.root || "/"}cart.js`, {
       headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(response => {
-      return response.json();
-    }).then(data => {
-      cart = data;
-      resolve();
-    }).catch(error => {
-      console.error(error);
-      reject('Can\'t load the cart state from the "/cart.js" endpoint');
+        "Content-Type": "application/json",
+      },
     })
-  })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        cart = data;
+        resolve();
+      })
+      .catch((error) => {
+        console.error(error);
+        reject('Can\'t load the cart state from the "/cart.js" endpoint');
+      });
+  });
 }
 
 function getCartState(): AppStateType {
   return {
     cart,
-    previousCart
-  }
+    previousCart,
+  };
 }
 
-export {cartStateInit, getCartState};
+export { cartStateInit, getCartState };

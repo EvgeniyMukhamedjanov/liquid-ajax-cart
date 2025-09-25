@@ -177,9 +177,9 @@ function cartRequest(requestType: string, body: RequestBodyType, options: CartRe
       // if it is an "add.js" request, it is better to get all the sections html from an extra request,
       // because the response of the "add.js" request might contain html generated BEFORE merging cart items
       // https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/issues/72
-      if (REQUEST_ADD === requestType) {
-        extraRequestSections.push(...allSections.slice(0, 5));
-      }
+      // if (REQUEST_ADD === requestType) {
+      //   extraRequestSections.push(...allSections.slice(0, 5));
+      // }
 
       // Add sections starting from index 5th to the extra request,
       // as Shopify supports maximum 5 sections per request
