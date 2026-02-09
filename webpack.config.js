@@ -6,11 +6,11 @@ module.exports = (env, argv) => {
   let filename = 'liquid-ajax-cart.js';
 
   if ( argv.mode === 'production' ) {
-    folder = 'docs/v2/releases';
+    folder = 'docs/v3/releases';
     filename = `liquid-ajax-cart-v${PACKAGE.version}.js`;
 
     if ( env.last ) {
-      folder = 'docs/v2/releases/last';
+      folder = 'docs/v3/releases/last';
     }
 
     if ( env.npm ) {

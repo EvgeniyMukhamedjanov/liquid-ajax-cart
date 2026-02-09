@@ -1,6 +1,6 @@
 {
   "name": "liquid-ajax-cart",
-  "version": "2.2.0",
+  "version": "3.0.0-alpha.1",
   "description": "Build a Shopify Ajax-cart without JavaScript coding",
   "private": false,
   "browser": "./liquid-ajax-cart.js",
@@ -13,7 +13,7 @@
     "webpack-watch": "webpack --mode=development --watch",
     "shopify-watch": "shopify theme dev --store=liquid-ajax-cart",
     "start": "npm-run-all --parallel webpack-watch shopify-watch",
-    "build": "rimraf docs/v2/releases/last && webpack --mode=production && webpack --mode=production --env last=true  && webpack --mode=production --env npm=true"
+    "build": "rimraf docs/v3/releases/last && webpack --mode=production && webpack --mode=production --env last=true  && webpack --mode=production --env npm=true"
   },
   "keywords": [
     "shopify",
