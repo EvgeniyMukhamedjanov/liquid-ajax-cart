@@ -12,8 +12,6 @@ Cart state is no longer fetched from Cart API JSON responses. Instead, merchants
 
 **Replaces**: `data-ajax-cart-initial-state` from v2.
 
-**Public API properties**: `liquidAjaxCart.cart`, `liquidAjaxCart.previousCart`, `liquidAjaxCart.state` (full state including custom keys), `liquidAjaxCart.previousState`.
-
 ### 2. Liquid-Side Custom State
 
 Since state lives in a Liquid-rendered `<script>` tag, merchants can include arbitrary computed properties alongside `cart`. For example, a gift product variant ID that depends on cart total, or a free shipping threshold remainder — all computed in Liquid rather than JavaScript.
@@ -47,13 +45,9 @@ Flat queue with priority levels (`normal` / `high`) instead of v2's 2D array str
 
 ### 7. CSS Classes Module
 
-Default global classes on `<html>` (no configuration needed):
-- `js-ajax-cart-init` — library initialized
-- `js-ajax-cart-processing` — any request in progress
-- `js-ajax-cart-empty` — cart has 0 items
-- `js-ajax-cart-not-empty` — cart has items
+No automatic classes.
 
-Per-element classes for advanced scenarios are also planned (see Open Questions below).
+Per-element classes for are also (see Open Questions below).
 
 ### 8. Optimistic UI (Template-Based)
 
@@ -65,13 +59,9 @@ Replace Webpack 5 with Rollup. Output includes full bundle (`liquid-ajax-cart.js
 
 **Why**: Rollup is the standard for library building. Better tree-shaking output, simpler config for multi-entry libraries.
 
-### 10. Controls: Merge and Simplify
+### 11. DOM Binder
 
-`quantity-element.ts` and `quantity-input.ts` merged into single `quantity.ts`. Controls use core's public getter (`liquidAjaxCart.state`) instead of importing from state module directly. Custom elements (`<ajax-cart-product-form>`, `<ajax-cart-quantity>`) and data attributes carried over from v2.
-
-### 11. DOM Binder: Full State Access
-
-`data-ajax-cart-bind` now accesses the full state object, not just cart. This enables binding to custom state keys (e.g. `data-ajax-cart-bind="state.freeShippingRemaining | money_with_currency"`). Pipe formatters and custom formatter configuration carried over from v2.
+Deprecated
 
 ### 12. Individual Cart API Methods
 
@@ -105,12 +95,9 @@ Calling `liquidAjaxCart.add()` (queued methods) inside `task()` instead of `cart
 - **`toString()` warning**: on `task()` call, the callback source is checked for `liquidAjaxCart.add/change/update/clear/get` references and a console warning is logged if found.
 - **Timeout warning**: if a queued request hasn't started executing within a few seconds, a console warning suggests possible deadlock.
 
-`task()` can be added post-launch if users need it — no existing signatures change.
-
 ### 15. Testing: Playwright Only
 
-All tests run in a real browser via Playwright — no simulated DOM (jsdom/happy-dom). Two test modes:
-- **Mocked network**: `page.route()` intercepts fetch calls with canned responses. Fast, isolated, tests library logic with real DOM and real Custom Elements.
+All tests run in a real browser via Playwright
 - **E2E against demo store**: tests hit the live Shopify store (`liquid-ajax-cart.myshopify.com`) to verify real Cart API behavior, section rendering freshness, and end-to-end flows.
 
 Module-specific tests are co-located with source (`*.spec.ts` next to the module). Cross-cutting integration tests live in `e2e/` at the project root.
