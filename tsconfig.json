@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "noImplicitAny": true,
+    "strict": true,
     "module": "es6",
     "target": "es6",
     "allowJs": false,
-    "moduleResolution": "node",
-    "experimentalDecorators": true
-  }
+    "moduleResolution": "node"
+  },
+  "include": ["_src"]
 }
