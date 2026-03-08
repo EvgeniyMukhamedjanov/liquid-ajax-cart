@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "screenshot": "node screenshot.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "webpack-watch": "webpack --mode=development --watch",
     "shopify-watch": "shopify theme dev --store=liquid-ajax-cart",
     "start": "npm-run-all --parallel webpack-watch shopify-watch",
@@ -29,6 +30,7 @@
   "license": "ISC",
   "homepage": "https://liquid-ajax-cart.js.org",
   "devDependencies": {
+    "@vitest/browser-playwright": "^4.0.18",
     "js-yaml": "^4.1.0",
     "npm-run-all": "^4.1.5",
     "puppeteer": "^21.5.0",
@@ -36,6 +38,7 @@
     "rimraf": "^3.0.2",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.4",
+    "vitest": "^4.0.18",
     "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0"
   }

@@ -4,13 +4,26 @@ type QueueItem = {
   reject: (reason?: unknown) => void;
 };
 
+type QueueOptions = {
+  onStart?: () => void;
+  onEnd?: () => void;
+};
+
 export class Queue {
   private items: QueueItem[] = [];
   private running = false;
+  private onStart?: () => void;
+  private onEnd?: () => void;
+
+  constructor(options?: QueueOptions) {
+    this.onStart = options?.onStart;
+    this.onEnd = options?.onEnd;
+  }
 
   private async process(): Promise<void> {
     if (this.running) return;
     this.running = true;
+    this.onStart?.();
 
     while (this.items.length > 0) {
       const item = this.items.shift()!;
@@ -24,6 +37,7 @@ export class Queue {
     }
 
     this.running = false;
+    this.onEnd?.();
   }
 
   enqueue<T>(fn: () => Promise<T>): Promise<T> {
