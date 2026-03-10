@@ -5,15 +5,15 @@ type QueueItem = {
 };
 
 type QueueOptions = {
-  onStart?: () => void;
-  onEnd?: () => void;
+  onStart?: () => Promise<void> | void;
+  onEnd?: () => Promise<void> | void;
 };
 
 export class Queue {
   private items: QueueItem[] = [];
   private running = false;
-  private onStart?: () => void;
-  private onEnd?: () => void;
+  private onStart?: () => Promise<void> | void;
+  private onEnd?: () => Promise<void> | void;
 
   constructor(options?: QueueOptions) {
     this.onStart = options?.onStart;
@@ -23,7 +23,7 @@ export class Queue {
   private async process(): Promise<void> {
     if (this.running) return;
     this.running = true;
-    this.onStart?.();
+    await this.onStart?.();
 
     while (this.items.length > 0) {
       const item = this.items.shift()!;
@@ -37,7 +37,7 @@ export class Queue {
     }
 
     this.running = false;
-    this.onEnd?.();
+    await this.onEnd?.();
   }
 
   enqueue<T>(fn: () => Promise<T>): Promise<T> {

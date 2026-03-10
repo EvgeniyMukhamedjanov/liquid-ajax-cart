@@ -111,3 +111,5 @@ BFcache should be solved
 
 Dynamic checkout button disappears
 https://github.com/EvgeniyMukhamedjanov/liquid-ajax-cart/discussions/62
+
+Add error messaging to "send as gift" add to cart form
