@@ -53,7 +53,7 @@ Pure type definitions, no runtime code. Key types:
 | `AddBody`, `ChangeBody`, `UpdateBody` | Typed request bodies per method |
 | `RequestBody` | Union: typed body \| `FormData` \| `URLSearchParams` |
 | `RequestOptions` | `{ signal?, priority?, info? }` |
-| `CartRequestResult` | `{ ok, status, body }` — the Promise return value |
+| `RequestResult` | `{ ok, status, body }` — the Promise return value |
 | `QueueItem` | Internal: request + `resolve`/`reject` for the Promise |
 | `RequestStartDetail`, `RequestEndDetail` | Event detail shapes |
 | `InternalSubscriber<T>` | Async callback type for internal events |
@@ -86,7 +86,7 @@ Dev-only: expose `{ onInternal, fireEvent }` on `window.__lacEvents__` behind `_
 
 Key design:
 - `queue: QueueItem[]` — flat array (replaces v2's 2D `queues[][]`)
-- `enqueue(type, body, options)` returns `Promise<CartRequestResult>` by creating a QueueItem with `resolve`/`reject`
+- `enqueue(type, body, options)` returns `Promise<RequestResult>` by creating a QueueItem with `resolve`/`reject`
 - High priority: `queue.unshift()`. Normal: `queue.push()`
 - `processQueue()` is async — awaits `fireEvent('request-start', startDetail)`, performs fetch, awaits `fireEvent('request-end', endDetail)`, then resolves the Promise
 - **Body mutation pattern**: the `startDetail.body` reference is what gets sent to `fetch()`. Internal subscribers (like the state module) can modify this body during `request-start` to inject section IDs

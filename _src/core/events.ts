@@ -1,27 +1,23 @@
 type Listener = (detail: unknown) => Promise<void>;
 
 export class EventEmitter {
-  private prefix: string;
-  private listeners = new Map<string, Listener[]>();
+  #prefix: string;
+  #listeners = new Map<string, Listener[]>();
 
   constructor(prefix: string) {
-    this.prefix = prefix;
+    this.#prefix = prefix;
   }
 
   on(event: string, fn: Listener): void {
-    if (!this.listeners.has(event)) {
-      this.listeners.set(event, []);
+    if (!this.#listeners.has(event)) {
+      this.#listeners.set(event, []);
     }
-    this.listeners.get(event)!.push(fn);
+    this.#listeners.get(event)!.push(fn);
   }
 
-  async emit(
-    event: string,
-    detail: Record<string, unknown>,
-    ctx: unknown,
-  ): Promise<void> {
+  async emit(event: string, detail: object, ctx: unknown): Promise<void> {
     // 1. Internal async subscribers run sequentially
-    const listeners = this.listeners.get(event) || [];
+    const listeners = this.#listeners.get(event) || [];
     for (const fn of listeners) {
       await fn(detail);
     }
@@ -37,7 +33,7 @@ export class EventEmitter {
     };
 
     document.dispatchEvent(
-      new CustomEvent(`${this.prefix}:${event}`, { detail: publicDetail }),
+      new CustomEvent(`${this.#prefix}:${event}`, { detail: publicDetail }),
     );
 
     // 3. Run collected callbacks sequentially

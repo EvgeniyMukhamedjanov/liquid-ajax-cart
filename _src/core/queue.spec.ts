@@ -65,7 +65,7 @@ test('tasks wait for previous task to complete', async () => {
 
 test('calls onStart when queue begins processing', async () => {
   let started = false;
-  const queue = new Queue({ onStart: () => { started = true; } });
+  const queue = new Queue({ onStart: async () => { started = true; } });
 
   expect(started).toBe(false);
   await queue.enqueue(async () => {});
@@ -74,7 +74,7 @@ test('calls onStart when queue begins processing', async () => {
 
 test('calls onEnd when queue becomes idle', async () => {
   let ended = false;
-  const queue = new Queue({ onEnd: () => { ended = true; } });
+  const queue = new Queue({ onEnd: async () => { ended = true; } });
 
   await queue.enqueue(async () => {});
   expect(ended).toBe(true);
@@ -84,8 +84,8 @@ test('onStart/onEnd fire once per batch', async () => {
   let starts = 0;
   let ends = 0;
   const queue = new Queue({
-    onStart: () => { starts++; },
-    onEnd: () => { ends++; },
+    onStart: async () => { starts++; },
+    onEnd: async () => { ends++; },
   });
 
   queue.enqueue(async () => {});

@@ -34,7 +34,7 @@ await liquidAjaxCart.task(async (cart) => {
 });
 ```
 
-`task()` is generic over its callback's return type — `task<T>(fn: (cart) => Promise<T>): Promise<T>`. The queued cart methods (`liquidAjaxCart.add()`, `.change()`, etc.) are sugar over `task()` — each is equivalent to `task(async (cart) => cart.add(body, options))` and returns `Promise<CartRequestResult>`. This makes `task()` + direct cart methods the only two primitives; queued methods are one-liners on top.
+`task()` is generic over its callback's return type — `task<T>(fn: (cart) => Promise<T>): Promise<T>`. The queued cart methods (`liquidAjaxCart.add()`, `.change()`, etc.) are sugar over `task()` — each is equivalent to `task(async (cart) => cart.add(body, options))` and returns `Promise<RequestResult>`. This makes `task()` + direct cart methods the only two primitives; queued methods are one-liners on top.
 
 Calling `liquidAjaxCart.add()` (queued methods) inside `task()` instead of `cart.add()` causes a deadlock. Guarded by two mechanisms:
 - **`toString()` warning**: on `task()` call, the callback source is checked for `liquidAjaxCart.add/change/update/clear/get` references and a console warning is logged if found.
@@ -90,9 +90,9 @@ Individual methods per Shopify Cart API endpoint: `liquidAjaxCart.get(options?)`
 
 ## 7. Promise-Based Methods with Typed Bodies
 
-All cart methods return `Promise<CartRequestResult>`. Typed request body per method (`AddBody`, `ChangeBody`, `UpdateBody`), `FormData`, or `URLSearchParams`. When `FormData`/`URLSearchParams` is passed, it's sent directly to `fetch()`. When a typed object is passed, it's JSON-stringified with `Content-Type: application/json`.
+All cart methods return `Promise<RequestResult>`. Typed request body per method (`AddBody`, `ChangeBody`, `UpdateBody`), `FormData`, or `URLSearchParams`. When `FormData`/`URLSearchParams` is passed, it's sent directly to `fetch()`. When a typed object is passed, it's JSON-stringified with `Content-Type: application/json`.
 
-Options: `{ signal?: AbortSignal, info?: Record<string, unknown> }`.
+Options: `{ signal?: AbortSignal, meta?: Record<string, unknown> }`.
 
 Result: `{ ok: boolean, status: number | null, body: object | null }`. Cart state is not in the result — accessible via `liquidAjaxCart.cart`/`liquidAjaxCart.state`, already updated when the Promise resolves.
 
@@ -100,9 +100,4 @@ Result: `{ ok: boolean, status: number | null, body: object | null }`. Cart stat
 
 ## 8. Fully Independent Modules
 
-All modules are completely decoupled. Each module depends only on core events and core's public getters — modules never import from each other. Users can import only the modules they need to minimize bundle size. Each module auto-initializes on import (side-effect import pattern).
-
-**Source structure**:
-- `_src/core/` — queue, state, events, types
-- `_src/modules/` — sections, css-classes, optimistic-ui, dom-binder, messages, controls/
-- `_src/index.ts` — full bundle entry (imports core + all modules)
+All modules are completely decoupled. Each module depends only on core events and core's public getters — modules never import from each other. Users can import only the modules they need to minimize bundle size. Each module auto-initializes on import (side-effect import pattern).wi

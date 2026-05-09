@@ -1,93 +1,104 @@
-import type {
-  AddBody,
-  ChangeBody,
-  UpdateBody,
-  RequestOptions,
-  CartRequestResult,
-  CartMethod,
-} from './types';
+export type RequestBody = Record<string, unknown> | FormData | URLSearchParams;
 
-type EmitFn = (event: string, detail: Record<string, unknown>) => Promise<void>;
-
-const ENDPOINTS: Record<CartMethod, string> = {
-  add: '/cart/add.js',
-  change: '/cart/change.js',
-  update: '/cart/update.js',
-  clear: '/cart/clear.js',
-  get: '/cart.js',
+export type RequestOptions = {
+  signal?: AbortSignal;
+  meta?: Record<string, unknown>;
 };
 
-const HTTP_METHODS: Record<CartMethod, string> = {
-  add: 'POST',
-  change: 'POST',
-  update: 'POST',
-  clear: 'POST',
-  get: 'GET',
+export type RequestResult = {
+  ok: boolean;
+  status: number | null;
+  body: object | null;
+};
+
+const ENDPOINTS = {
+  add: { url: "/cart/add.js", httpMethod: "POST" },
+  change: { url: "/cart/change.js", httpMethod: "POST" },
+  update: { url: "/cart/update.js", httpMethod: "POST" },
+  clear: { url: "/cart/clear.js", httpMethod: "POST" },
+  get: { url: "/cart.js", httpMethod: "GET" },
+} as const;
+
+type Endpoint = keyof typeof ENDPOINTS;
+
+type RequestStartContext = {
+  endpoint: Endpoint;
+  body: RequestBody | null;
+  meta: Record<string, unknown>;
+};
+
+type RequestEndContext = RequestStartContext & {
+  result: RequestResult;
+};
+
+type RequestHooks = {
+  onStart?: (ctx: RequestStartContext) => Promise<void>;
+  onEnd?: (ctx: RequestEndContext) => Promise<void>;
 };
 
 function buildRequestInit(
-  method: CartMethod,
-  body?: AddBody | ChangeBody | UpdateBody | FormData | URLSearchParams,
+  endpoint: Endpoint,
+  body: RequestBody | null,
   signal?: AbortSignal,
 ): RequestInit {
   const init: RequestInit = {
-    method: HTTP_METHODS[method],
+    method: ENDPOINTS[endpoint].httpMethod,
     signal,
   };
 
-  if (method === 'get') return init;
+  if (endpoint === "get") return init;
 
   if (body instanceof FormData || body instanceof URLSearchParams) {
     init.body = body;
   } else {
-    init.headers = { 'Content-Type': 'application/json' };
+    init.headers = { "Content-Type": "application/json" };
     init.body = JSON.stringify(body ?? {});
   }
 
   return init;
 }
 
-export class CartRequest {
-  private emit: EmitFn;
+export class CartApi {
+  #hooks: RequestHooks;
 
-  constructor(emit: EmitFn) {
-    this.emit = emit;
+  constructor(hooks: RequestHooks = {}) {
+    this.#hooks = hooks;
   }
 
-  add(body: AddBody | FormData | URLSearchParams, options?: RequestOptions): Promise<CartRequestResult> {
-    return this.request('add', body, options);
+  add(body: RequestBody, options?: RequestOptions): Promise<RequestResult> {
+    return this.#request("add", body, options);
   }
 
-  change(body: ChangeBody | FormData | URLSearchParams, options?: RequestOptions): Promise<CartRequestResult> {
-    return this.request('change', body, options);
+  change(body: RequestBody, options?: RequestOptions): Promise<RequestResult> {
+    return this.#request("change", body, options);
   }
 
-  update(body: UpdateBody | FormData | URLSearchParams, options?: RequestOptions): Promise<CartRequestResult> {
-    return this.request('update', body, options);
+  update(body: RequestBody, options?: RequestOptions): Promise<RequestResult> {
+    return this.#request("update", body, options);
   }
 
-  clear(options?: RequestOptions): Promise<CartRequestResult> {
-    return this.request('clear', undefined, options);
+  clear(options?: RequestOptions): Promise<RequestResult> {
+    return this.#request("clear", null, options);
   }
 
-  get(options?: RequestOptions): Promise<CartRequestResult> {
-    return this.request('get', undefined, options);
+  get(options?: RequestOptions): Promise<RequestResult> {
+    return this.#request("get", null, options);
   }
 
-  private async request(
-    method: CartMethod,
-    body: AddBody | ChangeBody | UpdateBody | FormData | URLSearchParams | undefined,
+  async #request(
+    endpoint: Endpoint,
+    body: RequestBody | null,
     options: RequestOptions | undefined,
-  ): Promise<CartRequestResult> {
-    const info = options?.info ?? {};
+  ): Promise<RequestResult> {
+    const meta = options?.meta ?? {};
 
-    await this.emit('request-start', { method, body: body ?? null, info });
+    await this.#hooks.onStart?.({ endpoint, body, meta });
 
-    let result: CartRequestResult;
+    let result: RequestResult;
 
     try {
-      const url = ENDPOINTS[method];
-      const init = buildRequestInit(method, body, options?.signal);
+      const url = ENDPOINTS[endpoint].url;
+      const init = buildRequestInit(endpoint, body, options?.signal);
       const response = await fetch(url, init);
 
       let responseBody: object | null = null;
@@ -107,7 +118,7 @@ export class CartRequest {
       result = { ok: false, status: null, body: null };
     }
 
-    await this.emit('request-end', { method, body: body ?? null, info, result });
+    await this.#hooks.onEnd?.({ endpoint, body, meta, result });
 
     return result;
   }

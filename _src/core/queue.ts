@@ -5,28 +5,42 @@ type QueueItem = {
 };
 
 type QueueOptions = {
-  onStart?: () => Promise<void> | void;
-  onEnd?: () => Promise<void> | void;
+  onStart?: () => Promise<void>;
+  onEnd?: () => Promise<void>;
 };
 
 export class Queue {
-  private items: QueueItem[] = [];
-  private running = false;
-  private onStart?: () => Promise<void> | void;
-  private onEnd?: () => Promise<void> | void;
+  #items: QueueItem[] = [];
+  #running = false;
+  #options?: QueueOptions;
 
   constructor(options?: QueueOptions) {
-    this.onStart = options?.onStart;
-    this.onEnd = options?.onEnd;
+    this.#options = options;
   }
 
-  private async process(): Promise<void> {
-    if (this.running) return;
-    this.running = true;
-    await this.onStart?.();
+  enqueue<T>(fn: () => Promise<T>): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      this.#items.push({
+        fn,
+        resolve: resolve as (value: unknown) => void,
+        reject,
+      });
 
-    while (this.items.length > 0) {
-      const item = this.items.shift()!;
+      this.#process();
+    });
+  }
+
+  get isProcessing(): boolean {
+    return this.#running;
+  }
+
+  async #process(): Promise<void> {
+    if (this.#running) return;
+    this.#running = true;
+    await this.#options?.onStart?.();
+
+    while (this.#items.length > 0) {
+      const item = this.#items.shift()!;
 
       try {
         const result = await item.fn();
@@ -36,23 +50,7 @@ export class Queue {
       }
     }
 
-    this.running = false;
-    await this.onEnd?.();
-  }
-
-  enqueue<T>(fn: () => Promise<T>): Promise<T> {
-    return new Promise<T>((resolve, reject) => {
-      this.items.push({
-        fn,
-        resolve: resolve as (value: unknown) => void,
-        reject,
-      });
-
-      this.process();
-    });
-  }
-
-  get isProcessing(): boolean {
-    return this.running;
+    this.#running = false;
+    await this.#options?.onEnd?.();
   }
 }

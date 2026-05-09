@@ -1,63 +1,56 @@
 import { Queue } from "./queue";
 import { EventEmitter } from "./events";
-import { CartRequest } from "./request";
-import type {
-  AddBody,
-  ChangeBody,
-  UpdateBody,
-  RequestOptions,
-  CartRequestResult,
+import {
   CartApi,
-} from "./types";
-
-export type { CartApi, CartRequestResult, RequestOptions };
+  type RequestBody,
+  type RequestOptions,
+  type RequestResult,
+} from "./request";
 
 const events = new EventEmitter("liquid-ajax-cart");
-const request = new CartRequest((event, detail): Promise<void> => {
-  return events.emit(event, detail, request);
+
+const api: CartApi = new CartApi({
+  onStart: (ctx) => events.emit("request-start", ctx, api),
+  onEnd: (ctx) => events.emit("request-end", ctx, api),
 });
 
 const queue = new Queue({
-  onStart() {
-    return events.emit("queue-start", {}, request);
-  },
-  onEnd() {
-    return events.emit("queue-end", {}, request);
-  },
+  onStart: () => events.emit("queue-start", {}, api),
+  onEnd: () => events.emit("queue-end", {}, api),
 });
 
-export function task<T>(fn: (ctx: CartApi) => Promise<T>): Promise<T> {
+export function task<T>(fn: (api: CartApi) => Promise<T>): Promise<T> {
   checkForDeadlock(fn);
-  return queue.enqueue(() => fn(request));
+  return queue.enqueue(() => fn(api));
 }
 
 export function add(
-  body: AddBody | FormData | URLSearchParams,
+  body: RequestBody,
   options?: RequestOptions,
-): Promise<CartRequestResult> {
-  return task(async (ctx) => ctx.add(body, options));
+): Promise<RequestResult> {
+  return task(async (api) => api.add(body, options));
 }
 
 export function change(
-  body: ChangeBody | FormData | URLSearchParams,
+  body: RequestBody,
   options?: RequestOptions,
-): Promise<CartRequestResult> {
-  return task(async (ctx) => ctx.change(body, options));
+): Promise<RequestResult> {
+  return task(async (api) => api.change(body, options));
 }
 
 export function update(
-  body: UpdateBody | FormData | URLSearchParams,
+  body: RequestBody,
   options?: RequestOptions,
-): Promise<CartRequestResult> {
-  return task(async (ctx) => ctx.update(body, options));
+): Promise<RequestResult> {
+  return task(async (api) => api.update(body, options));
 }
 
-export function clear(options?: RequestOptions): Promise<CartRequestResult> {
-  return task(async (ctx) => ctx.clear(options));
+export function clear(options?: RequestOptions): Promise<RequestResult> {
+  return task(async (api) => api.clear(options));
 }
 
-export function get(options?: RequestOptions): Promise<CartRequestResult> {
-  return task(async (ctx) => ctx.get(options));
+export function get(options?: RequestOptions): Promise<RequestResult> {
+  return task(async (api) => api.get(options));
 }
 
 export function isProcessing(): boolean {
@@ -69,7 +62,7 @@ export function isProcessing(): boolean {
 const QUEUED_METHOD_PATTERN =
   /liquidAjaxCart\.(add|change|update|clear|get)\s*\(/;
 
-function checkForDeadlock<T>(fn: (ctx: CartApi) => Promise<T>): void {
+function checkForDeadlock<T>(fn: (api: CartApi) => Promise<T>): void {
   try {
     const source = fn.toString();
     if (QUEUED_METHOD_PATTERN.test(source)) {
