@@ -1,3 +1,11 @@
+declare global {
+  interface Window {
+    Shopify?: {
+      routes?: { root?: string };
+    };
+  }
+}
+
 export type RequestBody = Record<string, unknown> | FormData | URLSearchParams;
 
 export type RequestOptions = {
@@ -12,11 +20,11 @@ export type RequestResult = {
 };
 
 const ENDPOINTS = {
-  add: { url: "/cart/add.js", httpMethod: "POST" },
-  change: { url: "/cart/change.js", httpMethod: "POST" },
-  update: { url: "/cart/update.js", httpMethod: "POST" },
-  clear: { url: "/cart/clear.js", httpMethod: "POST" },
-  get: { url: "/cart.js", httpMethod: "GET" },
+  add: { path: "cart/add.js", httpMethod: "POST" },
+  change: { path: "cart/change.js", httpMethod: "POST" },
+  update: { path: "cart/update.js", httpMethod: "POST" },
+  clear: { path: "cart/clear.js", httpMethod: "POST" },
+  get: { path: "cart.js", httpMethod: "GET" },
 } as const;
 
 type Endpoint = keyof typeof ENDPOINTS;
@@ -50,6 +58,7 @@ function buildRequestInit(
   if (endpoint === "get") return init;
 
   if (body instanceof FormData || body instanceof URLSearchParams) {
+    init.headers = { "X-Requested-With": "XMLHttpRequest" };
     init.body = body;
   } else {
     init.headers = { "Content-Type": "application/json" };
@@ -95,7 +104,7 @@ export class CartApi {
 
     const controller = new AbortController();
     const callerSignal = options?.signal;
-    let removeChainListener: (() => void) | undefined;
+    let removeSignalListener: (() => void) | undefined;
 
     if (callerSignal) {
       if (callerSignal.aborted) {
@@ -103,7 +112,7 @@ export class CartApi {
       } else {
         const onCallerAbort = () => controller.abort(callerSignal.reason);
         callerSignal.addEventListener("abort", onCallerAbort);
-        removeChainListener = () =>
+        removeSignalListener = () =>
           callerSignal.removeEventListener("abort", onCallerAbort);
       }
     }
@@ -119,7 +128,8 @@ export class CartApi {
       result = { ok: false, status: null, body: null };
     } else {
       try {
-        const url = ENDPOINTS[endpoint].url;
+        const root = window.Shopify?.routes?.root ?? "/";
+        const url = `${root}${ENDPOINTS[endpoint].path}`;
         const init = buildRequestInit(endpoint, body, signal);
         const response = await fetch(url, init);
 
@@ -142,7 +152,7 @@ export class CartApi {
       }
     }
 
-    removeChainListener?.();
+    removeSignalListener?.();
 
     await this.#hooks.onEnd?.({ endpoint, body, meta, result });
 
