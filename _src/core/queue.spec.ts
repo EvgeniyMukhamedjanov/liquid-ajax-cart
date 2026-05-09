@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest';
+import { test, expect, vi } from 'vitest';
 import { Queue } from './queue';
 
 test('runs tasks sequentially', async () => {
@@ -94,4 +94,56 @@ test('onStart/onEnd fire once per batch', async () => {
 
   expect(starts).toBe(1);
   expect(ends).toBe(1);
+});
+
+test('onStart hook error does not block items from running', async () => {
+  const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  const queue = new Queue({
+    onStart: async () => { throw new Error('onStart boom'); },
+  });
+
+  const result = await queue.enqueue(async () => 'ok');
+
+  expect(result).toBe('ok');
+  expect(errSpy).toHaveBeenCalled();
+  errSpy.mockRestore();
+});
+
+test('onEnd hook error does not break the queue for subsequent enqueues', async () => {
+  const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  const queue = new Queue({
+    onEnd: async () => { throw new Error('onEnd boom'); },
+  });
+
+  const first = await queue.enqueue(async () => 'first');
+  const second = await queue.enqueue(async () => 'second');
+
+  expect(first).toBe('first');
+  expect(second).toBe('second');
+  expect(errSpy).toHaveBeenCalled();
+  errSpy.mockRestore();
+});
+
+test('isProcessing resets to false after onStart hook throws', async () => {
+  const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  const queue = new Queue({
+    onStart: async () => { throw new Error('boom'); },
+  });
+
+  await queue.enqueue(async () => {});
+
+  expect(queue.isProcessing).toBe(false);
+  errSpy.mockRestore();
+});
+
+test('isProcessing resets to false after onEnd hook throws', async () => {
+  const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  const queue = new Queue({
+    onEnd: async () => { throw new Error('boom'); },
+  });
+
+  await queue.enqueue(async () => {});
+
+  expect(queue.isProcessing).toBe(false);
+  errSpy.mockRestore();
 });

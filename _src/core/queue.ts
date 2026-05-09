@@ -37,7 +37,12 @@ export class Queue {
   async #process(): Promise<void> {
     if (this.#running) return;
     this.#running = true;
-    await this.#options?.onStart?.();
+
+    try {
+      await this.#options?.onStart?.();
+    } catch (error) {
+      console.error('Liquid Ajax Cart: queue onStart hook threw', error);
+    }
 
     while (this.#items.length > 0) {
       const item = this.#items.shift()!;
@@ -51,6 +56,11 @@ export class Queue {
     }
 
     this.#running = false;
-    await this.#options?.onEnd?.();
+
+    try {
+      await this.#options?.onEnd?.();
+    } catch (error) {
+      console.error('Liquid Ajax Cart: queue onEnd hook threw', error);
+    }
   }
 }
