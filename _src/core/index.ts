@@ -5,7 +5,7 @@ import {
   type RequestBody,
   type RequestOptions,
   type RequestResult,
-} from "./request";
+} from "./api";
 
 const events = new EventEmitter("liquid-ajax-cart");
 

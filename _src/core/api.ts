@@ -25,9 +25,10 @@ type RequestStartContext = {
   endpoint: Endpoint;
   body: RequestBody | null;
   meta: Record<string, unknown>;
+  abort: (reason?: unknown) => void;
 };
 
-type RequestEndContext = RequestStartContext & {
+type RequestEndContext = Omit<RequestStartContext, "abort"> & {
   result: RequestResult;
 };
 
@@ -39,7 +40,7 @@ type RequestHooks = {
 function buildRequestInit(
   endpoint: Endpoint,
   body: RequestBody | null,
-  signal?: AbortSignal,
+  signal: AbortSignal,
 ): RequestInit {
   const init: RequestInit = {
     method: ENDPOINTS[endpoint].httpMethod,
@@ -92,31 +93,56 @@ export class CartApi {
   ): Promise<RequestResult> {
     const meta = options?.meta ?? {};
 
-    await this.#hooks.onStart?.({ endpoint, body, meta });
+    const controller = new AbortController();
+    const callerSignal = options?.signal;
+    let removeChainListener: (() => void) | undefined;
+
+    if (callerSignal) {
+      if (callerSignal.aborted) {
+        controller.abort(callerSignal.reason);
+      } else {
+        const onCallerAbort = () => controller.abort(callerSignal.reason);
+        callerSignal.addEventListener("abort", onCallerAbort);
+        removeChainListener = () =>
+          callerSignal.removeEventListener("abort", onCallerAbort);
+      }
+    }
+
+    const signal = controller.signal;
+    const abort = (reason?: unknown) => controller.abort(reason);
+
+    await this.#hooks.onStart?.({ endpoint, body, meta, abort });
 
     let result: RequestResult;
 
-    try {
-      const url = ENDPOINTS[endpoint].url;
-      const init = buildRequestInit(endpoint, body, options?.signal);
-      const response = await fetch(url, init);
-
-      let responseBody: object | null = null;
-      try {
-        responseBody = await response.json();
-      } catch {
-        // Some responses may not have JSON body
-      }
-
-      result = {
-        ok: response.ok,
-        status: response.status,
-        body: responseBody,
-      };
-    } catch {
-      // Network error or abort
+    if (signal.aborted) {
       result = { ok: false, status: null, body: null };
+    } else {
+      try {
+        const url = ENDPOINTS[endpoint].url;
+        const init = buildRequestInit(endpoint, body, signal);
+        const response = await fetch(url, init);
+
+        let responseBody: object | null = null;
+        try {
+          responseBody = await response.json();
+        } catch {
+          // Some responses may not have JSON body
+        }
+
+        result = {
+          ok: response.ok,
+          status: response.status,
+          body: responseBody,
+        };
+      } catch {
+        // Network error or abort
+        // TODO: handle abort differently, add error, abort info
+        result = { ok: false, status: null, body: null };
+      }
     }
+
+    removeChainListener?.();
 
     await this.#hooks.onEnd?.({ endpoint, body, meta, result });
 
