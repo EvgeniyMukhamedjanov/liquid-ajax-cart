@@ -57,6 +57,9 @@ export class Queue {
 
     this.#running = false;
 
+    // TODO: think if we need to run the onEnd hooks after the setting this.#running to false
+    // it might lead to execution of two async operation in parallel
+    // if at the momemnt of running onEnd hooks, new queue starts
     try {
       await this.#options?.onEnd?.();
     } catch (error) {
