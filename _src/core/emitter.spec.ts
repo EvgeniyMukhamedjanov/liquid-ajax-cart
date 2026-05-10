@@ -63,12 +63,12 @@ test('public DOM event fires with detail', async () => {
 test('internal listeners run before public DOM event', async () => {
   const order: string[] = [];
 
-  emitter.on('test-order', async () => {
-    order.push('internal');
-  });
-
   listenDOM('liquid-ajax-cart:test-order', () => {
     order.push('public');
+  });
+
+  emitter.on('test-order', async () => {
+    order.push('internal');
   });
 
   await emitter.emit('test-order', {}, ctx);
