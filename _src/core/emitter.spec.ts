@@ -1,5 +1,5 @@
 import { test, expect, afterEach, beforeEach } from 'vitest';
-import { EventEmitter } from './events';
+import { EventEmitter } from './emitter';
 
 // Store listeners added during tests so we can clean them up
 const domCleanups: (() => void)[] = [];

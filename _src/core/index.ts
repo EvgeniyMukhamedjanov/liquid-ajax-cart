@@ -1,5 +1,5 @@
 import { Queue } from "./queue";
-import { EventEmitter } from "./events";
+import { EventEmitter } from "./emitter";
 import {
   CartApi,
   type RequestBody,
@@ -7,16 +7,16 @@ import {
   type RequestResult,
 } from "./api";
 
-const events = new EventEmitter("liquid-ajax-cart");
+const emitter = new EventEmitter("liquid-ajax-cart");
 
 const api: CartApi = new CartApi({
-  onStart: (ctx) => events.emit("request-start", ctx, api),
-  onEnd: (ctx) => events.emit("request-end", ctx, api),
+  onStart: (ctx) => emitter.emit("request-start", ctx, api),
+  onEnd: (ctx) => emitter.emit("request-end", ctx, api),
 });
 
 const queue = new Queue({
-  onStart: () => events.emit("queue-start", {}, api),
-  onEnd: () => events.emit("queue-end", {}, api),
+  onStart: () => emitter.emit("queue-start", {}, api),
+  onEnd: () => emitter.emit("queue-end", {}, api),
 });
 
 export function task<T>(fn: (api: CartApi) => Promise<T>): Promise<T> {
