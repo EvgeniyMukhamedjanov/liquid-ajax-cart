@@ -238,3 +238,176 @@ test('onStart of the next batch does not fire while the previous onEnd is still 
   await pending;
   expect(starts).toBe(2);
 });
+
+test('tasks enqueued from inside a running task run in the same batch', async () => {
+  let starts = 0;
+  let ends = 0;
+  const order: string[] = [];
+  const queue = new Queue({
+    onStart: async () => { starts++; order.push('start'); },
+    onEnd: async () => { ends++; order.push('end'); },
+  });
+
+  await queue.enqueue(async () => {
+    order.push('A');
+    queue.enqueue(async () => { order.push('B'); });
+    queue.enqueue(async () => { order.push('C'); });
+  });
+  // Let the nested tasks finish — they were enqueued without an await.
+  await new Promise(resolve => setTimeout(resolve, 10));
+
+  expect(order).toEqual(['start', 'A', 'B', 'C', 'end']);
+  expect(starts).toBe(1);
+  expect(ends).toBe(1);
+});
+
+test('tasks enqueued from inside onStart run in the same batch', async () => {
+  let starts = 0;
+  let ends = 0;
+  const order: string[] = [];
+  let injected = false;
+  const queue = new Queue({
+    onStart: async () => {
+      starts++;
+      order.push('start');
+      if (!injected) {
+        injected = true;
+        queue.enqueue(async () => { order.push('injected'); });
+      }
+    },
+    onEnd: async () => { ends++; order.push('end'); },
+  });
+
+  await queue.enqueue(async () => { order.push('original'); });
+  await new Promise(resolve => setTimeout(resolve, 10));
+
+  expect(order).toEqual(['start', 'original', 'injected', 'end']);
+  expect(starts).toBe(1);
+  expect(ends).toBe(1);
+});
+
+test('tasks enqueued from a task that throws still run in the same batch', async () => {
+  let starts = 0;
+  let ends = 0;
+  const order: string[] = [];
+  const queue = new Queue({
+    onStart: async () => { starts++; },
+    onEnd: async () => { ends++; },
+  });
+
+  queue.enqueue(async () => {
+    order.push('a');
+    queue.enqueue(async () => { order.push('b'); });
+    throw new Error('fail');
+  }).catch(() => { order.push('a-rejected'); });
+
+  await new Promise(resolve => setTimeout(resolve, 10));
+
+  expect(order).toContain('a');
+  expect(order).toContain('b');
+  expect(order).toContain('a-rejected');
+  expect(starts).toBe(1);
+  expect(ends).toBe(1);
+});
+
+test('enqueue inside a throwing onEnd is still processed in a new batch', async () => {
+  const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  let injected = false;
+  const order: string[] = [];
+  const queue = new Queue({
+    onEnd: async () => {
+      if (!injected) {
+        injected = true;
+        queue.enqueue(async () => { order.push('injected'); });
+      }
+      throw new Error('onEnd boom');
+    },
+  });
+
+  await queue.enqueue(async () => { order.push('original'); });
+  await new Promise(resolve => setTimeout(resolve, 20));
+
+  expect(order).toEqual(['original', 'injected']);
+  errSpy.mockRestore();
+});
+
+test('tasks never overlap, even when each yields multiple microtasks', async () => {
+  const queue = new Queue();
+  let inFlight = 0;
+  let maxConcurrent = 0;
+
+  const work = async () => {
+    inFlight++;
+    maxConcurrent = Math.max(maxConcurrent, inFlight);
+    await Promise.resolve();
+    await Promise.resolve();
+    inFlight--;
+  };
+
+  await Promise.all(Array.from({ length: 20 }, () => queue.enqueue(work)));
+
+  expect(maxConcurrent).toBe(1);
+  expect(inFlight).toBe(0);
+});
+
+test('FIFO ordering is preserved when tasks resolve at different real-time rates', async () => {
+  const queue = new Queue();
+  const order: number[] = [];
+
+  const slow = queue.enqueue(async () => {
+    await new Promise(resolve => setTimeout(resolve, 30));
+    order.push(1);
+  });
+  const med = queue.enqueue(async () => {
+    await new Promise(resolve => setTimeout(resolve, 0));
+    order.push(2);
+  });
+  const fast = queue.enqueue(async () => { order.push(3); });
+
+  await Promise.all([slow, med, fast]);
+  expect(order).toEqual([1, 2, 3]);
+});
+
+test('isProcessing is true during onStart', async () => {
+  let processingDuringStart: boolean | undefined;
+  const queue = new Queue({
+    onStart: async () => { processingDuringStart = queue.isProcessing; },
+  });
+
+  await queue.enqueue(async () => {});
+  expect(processingDuringStart).toBe(true);
+});
+
+test('enqueue chained via .then on a previous enqueue starts a new batch', async () => {
+  let starts = 0;
+  let ends = 0;
+  const queue = new Queue({
+    onStart: async () => { starts++; },
+    onEnd: async () => { ends++; },
+  });
+
+  await queue
+    .enqueue(async () => 'a')
+    .then(() => queue.enqueue(async () => 'b'));
+  // Let the second batch's onEnd settle.
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  expect(starts).toBe(2);
+  expect(ends).toBe(2);
+});
+
+test('rapid await/enqueue cycles produce one batch per cycle', async () => {
+  let starts = 0;
+  let ends = 0;
+  const queue = new Queue({
+    onStart: async () => { starts++; },
+    onEnd: async () => { ends++; },
+  });
+
+  for (let i = 0; i < 5; i++) {
+    await queue.enqueue(async () => {});
+  }
+
+  expect(starts).toBe(5);
+  expect(ends).toBe(5);
+});
