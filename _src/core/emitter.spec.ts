@@ -219,3 +219,214 @@ test("one throwing waitUntil callback does not skip other modules' callbacks", a
   await emitter.emit("test-await-isolation", {}, waitUntilContext);
   expect(secondRan).toBe(true);
 });
+
+test("one throwing internal listener does not skip subsequent internal listeners", async () => {
+  // Mirror of the waitUntil-isolation guarantee: an internal subscriber that
+  // rejects should be logged but not break the chain for other modules.
+  const order: number[] = [];
+  emitter.on("test-internal-isolation", async () => {
+    order.push(1);
+    throw new Error("boom");
+  });
+  emitter.on("test-internal-isolation", async () => {
+    order.push(2);
+  });
+
+  await emitter.emit("test-internal-isolation", {}, waitUntilContext);
+  expect(order).toEqual([1, 2]);
+});
+
+test("internal listener throw does not skip the public DOM event", async () => {
+  // The DOM event must fire even when an internal listener rejected — internal
+  // and public phases are independent.
+  let publicFired = false;
+  emitter.on("test-internal-throw-dom", async () => {
+    throw new Error("boom");
+  });
+  listenDOM("liquid-ajax-cart:test-internal-throw-dom", () => {
+    publicFired = true;
+  });
+
+  await emitter.emit("test-internal-throw-dom", {}, waitUntilContext);
+  expect(publicFired).toBe(true);
+});
+
+test("synchronously throwing internal listener is caught like an async rejection", async () => {
+  // The type says Listener returns Promise<void>, but a JS caller can pass a
+  // sync-throwing function. `await fn()` converts sync throws into the same
+  // rejected-promise path, so the catch block must still apply.
+  let secondRan = false;
+  emitter.on("test-internal-sync-throw", (() => {
+    throw new Error("sync boom");
+  }) as unknown as (detail: unknown) => Promise<void>);
+  emitter.on("test-internal-sync-throw", async () => {
+    secondRan = true;
+  });
+
+  await emitter.emit("test-internal-sync-throw", {}, waitUntilContext);
+  expect(secondRan).toBe(true);
+});
+
+test("synchronously throwing waitUntil callback is caught like an async rejection", async () => {
+  // Same shape as the internal-listener sync-throw case, but on the waitUntil
+  // queue. The wrapper `() => fn(ctx)` throws synchronously when fn does, and
+  // the surrounding `await` + try/catch must still isolate it.
+  let secondRan = false;
+  listenDOM("liquid-ajax-cart:test-wu-sync-throw", ((
+    e: WaitUntilEvent<unknown>,
+  ) => {
+    e.waitUntil((() => {
+      throw new Error("sync boom");
+    }) as unknown as Parameters<typeof e.waitUntil>[0]);
+    e.waitUntil(async () => {
+      secondRan = true;
+    });
+  }) as EventListener);
+
+  await emitter.emit("test-wu-sync-throw", {}, waitUntilContext);
+  expect(secondRan).toBe(true);
+});
+
+test("waitUntil() called from a microtask after dispatch throws", async () => {
+  // dispatchEvent is synchronous and the event seals immediately after it
+  // returns, so any waitUntil() call deferred even one microtask is too late.
+  let captured: unknown;
+  listenDOM("liquid-ajax-cart:test-wu-microtask", ((
+    e: WaitUntilEvent<unknown>,
+  ) => {
+    Promise.resolve().then(() => {
+      try {
+        e.waitUntil(async () => {});
+      } catch (err) {
+        captured = err;
+      }
+    });
+  }) as EventListener);
+
+  await emitter.emit("test-wu-microtask", {}, waitUntilContext);
+  expect(captured).toBeInstanceOf(DOMException);
+});
+
+test("waitUntil() called from inside a waitUntil callback throws", async () => {
+  // By the time the waitUntil queue runs, the event is already sealed
+  // (state.open = false sits between dispatch and the callback loop). A
+  // callback that captured the event and tries to push more work must fail.
+  let innerError: unknown;
+  let outerCompleted = false;
+  listenDOM("liquid-ajax-cart:test-wu-nested", ((
+    e: WaitUntilEvent<unknown>,
+  ) => {
+    e.waitUntil(async () => {
+      try {
+        e.waitUntil(async () => {});
+      } catch (err) {
+        innerError = err;
+      }
+      outerCompleted = true;
+    });
+  }) as EventListener);
+
+  await emitter.emit("test-wu-nested", {}, waitUntilContext);
+  expect(outerCompleted).toBe(true);
+  expect(innerError).toBeInstanceOf(DOMException);
+});
+
+test("listener registered during emit runs on the next emit", async () => {
+  // Complement to the snapshot-semantics test: the new listener is added to
+  // the map even though it was skipped this emit, so the next emit's fresh
+  // snapshot must include it.
+  let count = 0;
+  emitter.on("test-next-emit", async () => {
+    count++;
+    if (count === 1) {
+      emitter.on("test-next-emit", async () => {
+        count++;
+      });
+    }
+  });
+
+  await emitter.emit("test-next-emit", {}, waitUntilContext);
+  expect(count).toBe(1);
+
+  await emitter.emit("test-next-emit", {}, waitUntilContext);
+  // emit 2: original runs (count=2), then the listener added during emit 1
+  // is now in the snapshot and runs (count=3).
+  expect(count).toBe(3);
+});
+
+test("multiple DOM listeners each contribute waitUntil callbacks in registration order", async () => {
+  // Two independent modules listening to the same DOM event must both be
+  // able to register waitUntil work, and the queue must preserve the order
+  // in which calls happened across listeners.
+  const order: string[] = [];
+  listenDOM("liquid-ajax-cart:test-multi-dom", ((
+    e: WaitUntilEvent<unknown>,
+  ) => {
+    e.waitUntil(async () => {
+      order.push("a");
+    });
+  }) as EventListener);
+  listenDOM("liquid-ajax-cart:test-multi-dom", ((
+    e: WaitUntilEvent<unknown>,
+  ) => {
+    e.waitUntil(async () => {
+      order.push("b");
+    });
+  }) as EventListener);
+
+  await emitter.emit("test-multi-dom", {}, waitUntilContext);
+  expect(order).toEqual(["a", "b"]);
+});
+
+test("nested emit() of a different event from inside an internal listener works", async () => {
+  // emit is reentrant: a listener for `outer` can emit `inner` and the inner
+  // listeners must complete before the outer listener resumes.
+  const order: string[] = [];
+  emitter.on("outer", async () => {
+    order.push("outer-start");
+    await emitter.emit("inner", {}, waitUntilContext);
+    order.push("outer-end");
+  });
+  emitter.on("inner", async () => {
+    order.push("inner");
+  });
+
+  await emitter.emit("outer", {}, waitUntilContext);
+  expect(order).toEqual(["outer-start", "inner", "outer-end"]);
+});
+
+test("concurrent emits of the same event keep their WaitUntilEventState isolated", async () => {
+  // Each emit constructs a fresh state object, so two emits in flight at the
+  // same time cannot cross-contaminate their open flag or callback queue.
+  let aRan = 0;
+  let bRan = 0;
+  listenDOM("liquid-ajax-cart:test-concurrent", ((
+    e: WaitUntilEvent<{ id: string }>,
+  ) => {
+    e.waitUntil(async () => {
+      if (e.detail.id === "a") aRan++;
+      if (e.detail.id === "b") bRan++;
+    });
+  }) as EventListener);
+
+  const p1 = emitter.emit("test-concurrent", { id: "a" }, waitUntilContext);
+  const p2 = emitter.emit("test-concurrent", { id: "b" }, waitUntilContext);
+  await Promise.all([p1, p2]);
+
+  expect(aRan).toBe(1);
+  expect(bRan).toBe(1);
+});
+
+test("event detail remains readable on a retained event after emit completes", async () => {
+  // The end-of-emit cleanup nulls the waitUntilContext but does NOT touch
+  // CustomEvent.detail, so listeners that stash the event can still read it.
+  let saved: WaitUntilEvent<{ value: number }> | undefined;
+  listenDOM("liquid-ajax-cart:test-retain", ((
+    e: WaitUntilEvent<{ value: number }>,
+  ) => {
+    saved = e;
+  }) as EventListener);
+
+  await emitter.emit("test-retain", { value: 7 }, waitUntilContext);
+  expect(saved!.detail.value).toBe(7);
+});
