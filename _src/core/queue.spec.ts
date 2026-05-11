@@ -151,7 +151,90 @@ test('isProcessing resets to false after onEnd hook throws', async () => {
   });
 
   await queue.enqueue(async () => {});
+  // The queue keeps #running=true across onEnd (including its catch path) so a
+  // re-entrant enqueue can't start a new batch in parallel with the current
+  // onEnd. Wait one tick for that lifecycle to unwind before asserting.
+  await new Promise(resolve => setTimeout(resolve, 0));
 
   expect(queue.isProcessing).toBe(false);
   errSpy.mockRestore();
+});
+
+test('does not start a new batch in parallel with the previous onEnd', async () => {
+  const events: string[] = [];
+  const queue = new Queue({
+    onStart: async () => { events.push('start'); },
+    onEnd: async () => {
+      events.push('end-begin');
+      await new Promise(resolve => setTimeout(resolve, 20));
+      events.push('end-finish');
+    },
+  });
+
+  await queue.enqueue(async () => { events.push('task1'); });
+  await queue.enqueue(async () => { events.push('task2'); });
+  await new Promise(resolve => setTimeout(resolve, 80));
+
+  expect(events).toEqual([
+    'start', 'task1', 'end-begin', 'end-finish',
+    'start', 'task2', 'end-begin', 'end-finish',
+  ]);
+});
+
+test('enqueue called from inside onEnd waits for current onEnd to finish', async () => {
+  const events: string[] = [];
+  let scheduled = false;
+  const queue = new Queue({
+    onStart: async () => { events.push('start'); },
+    onEnd: async () => {
+      events.push('end-begin');
+      if (!scheduled) {
+        scheduled = true;
+        queue.enqueue(async () => { events.push('task2'); });
+      }
+      await new Promise(resolve => setTimeout(resolve, 20));
+      events.push('end-finish');
+    },
+  });
+
+  await queue.enqueue(async () => { events.push('task1'); });
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  expect(events).toEqual([
+    'start', 'task1', 'end-begin', 'end-finish',
+    'start', 'task2', 'end-begin', 'end-finish',
+  ]);
+});
+
+test('isProcessing stays true while onEnd is running', async () => {
+  let processingDuringEnd: boolean | undefined;
+  const queue = new Queue({
+    onEnd: async () => {
+      processingDuringEnd = queue.isProcessing;
+    },
+  });
+
+  await queue.enqueue(async () => {});
+
+  expect(processingDuringEnd).toBe(true);
+});
+
+test('onStart of the next batch does not fire while the previous onEnd is still pending', async () => {
+  let starts = 0;
+  const queue = new Queue({
+    onStart: async () => { starts++; },
+    onEnd: async () => {
+      await new Promise(resolve => setTimeout(resolve, 20));
+    },
+  });
+
+  await queue.enqueue(async () => {});
+  // Previous onEnd is now in flight (still inside its setTimeout).
+  // Enqueueing a new task must not synchronously kick off batch 2's onStart —
+  // otherwise the two batches' lifecycles overlap.
+  const pending = queue.enqueue(async () => {});
+  expect(starts).toBe(1);
+
+  await pending;
+  expect(starts).toBe(2);
 });

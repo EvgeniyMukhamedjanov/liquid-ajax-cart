@@ -38,32 +38,36 @@ export class Queue {
     if (this.#running) return;
     this.#running = true;
 
-    try {
-      await this.#options?.onStart?.();
-    } catch (error) {
-      console.error('Liquid Ajax Cart: queue onStart hook threw', error);
-    }
-
     while (this.#items.length > 0) {
-      const item = this.#items.shift()!;
+      if (this.#options?.onStart) {
+        try {
+          await this.#options.onStart();
+        } catch (error) {
+          console.error('Liquid Ajax Cart: queue onStart hook threw', error);
+        }
+      }
 
-      try {
-        const result = await item.fn();
-        item.resolve(result);
-      } catch (error) {
-        item.reject(error);
+      while (this.#items.length > 0) {
+        const item = this.#items.shift()!;
+
+        try {
+          const result = await item.fn();
+          item.resolve(result);
+        } catch (error) {
+          item.reject(error);
+        }
+      }
+
+      if (this.#options?.onEnd) {
+        try {
+          await this.#options.onEnd();
+        } catch (error) {
+          console.error('Liquid Ajax Cart: queue onEnd hook threw', error);
+        }
       }
     }
 
     this.#running = false;
-
-    // TODO: think if we need to run the onEnd hooks after the setting this.#running to false
-    // it might lead to execution of two async operation in parallel
-    // if at the momemnt of running onEnd hooks, new queue starts
-    try {
-      await this.#options?.onEnd?.();
-    } catch (error) {
-      console.error('Liquid Ajax Cart: queue onEnd hook threw', error);
-    }
+    // todo: add sync hook on real end
   }
 }

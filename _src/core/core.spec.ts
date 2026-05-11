@@ -49,6 +49,10 @@ test('isProcessing reflects task execution', async () => {
   await task(async () => {
     during = isProcessing();
   });
+  // The queue has an onEnd hook (the queue-end emit) and keeps #running=true
+  // across it so the next batch can't overlap with the previous queue-end.
+  // Wait one tick for that emit to finish before asserting isProcessing.
+  await new Promise(resolve => setTimeout(resolve, 0));
 
   expect(during).toBe(true);
   expect(isProcessing()).toBe(false);
