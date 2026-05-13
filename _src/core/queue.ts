@@ -7,6 +7,7 @@ type QueueItem = {
 type QueueOptions = {
   onStart?: () => Promise<void>;
   onEnd?: () => Promise<void>;
+  onIdle?: () => void;
 };
 
 export class Queue {
@@ -68,6 +69,13 @@ export class Queue {
     }
 
     this.#running = false;
-    // todo: add sync hook on real end
+
+    if (this.#options?.onIdle) {
+      try {
+        this.#options.onIdle();
+      } catch (error) {
+        console.error('Liquid Ajax Cart: queue onIdle hook threw', error);
+      }
+    }
   }
 }

@@ -411,3 +411,320 @@ test('rapid await/enqueue cycles produce one batch per cycle', async () => {
   expect(starts).toBe(5);
   expect(ends).toBe(5);
 });
+
+test('calls onIdle after the queue settles', async () => {
+  let idle = 0;
+  const queue = new Queue({ onIdle: () => { idle++; } });
+
+  await queue.enqueue(async () => {});
+
+  expect(idle).toBe(1);
+});
+
+test('onIdle fires after onEnd', async () => {
+  const order: string[] = [];
+  const queue = new Queue({
+    onEnd: async () => { order.push('end'); },
+    onIdle: () => { order.push('idle'); },
+  });
+
+  await queue.enqueue(async () => { order.push('task'); });
+  // The task promise resolves before onEnd is awaited; drain microtasks so
+  // the full end → idle tail runs before we assert.
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  expect(order).toEqual(['task', 'end', 'idle']);
+});
+
+test('onIdle sees isProcessing = false', async () => {
+  let processingDuringIdle: boolean | undefined;
+  const queue = new Queue({
+    onIdle: () => { processingDuringIdle = queue.isProcessing; },
+  });
+
+  await queue.enqueue(async () => {});
+
+  expect(processingDuringIdle).toBe(false);
+});
+
+test('onIdle fires once per batch', async () => {
+  let idle = 0;
+  const queue = new Queue({ onIdle: () => { idle++; } });
+
+  queue.enqueue(async () => {});
+  queue.enqueue(async () => {});
+  await queue.enqueue(async () => {});
+
+  expect(idle).toBe(1);
+});
+
+test('onIdle does not fire while onEnd re-enqueues work', async () => {
+  let idle = 0;
+  let injected = false;
+  const order: string[] = [];
+  const queue = new Queue({
+    onEnd: async () => {
+      order.push('end');
+      if (!injected) {
+        injected = true;
+        queue.enqueue(async () => { order.push('injected'); });
+      }
+    },
+    onIdle: () => { idle++; order.push('idle'); },
+  });
+
+  await queue.enqueue(async () => { order.push('original'); });
+  await new Promise(resolve => setTimeout(resolve, 10));
+
+  expect(idle).toBe(1);
+  expect(order).toEqual(['original', 'end', 'injected', 'end', 'idle']);
+});
+
+test('onIdle fires once per drain cycle across separate batches', async () => {
+  let idle = 0;
+  const queue = new Queue({ onIdle: () => { idle++; } });
+
+  await queue.enqueue(async () => {});
+  await queue.enqueue(async () => {});
+  await queue.enqueue(async () => {});
+
+  expect(idle).toBe(3);
+});
+
+test('onIdle hook error does not break subsequent batches', async () => {
+  const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  const queue = new Queue({
+    onIdle: () => { throw new Error('onIdle boom'); },
+  });
+
+  const first = await queue.enqueue(async () => 'first');
+  const second = await queue.enqueue(async () => 'second');
+
+  expect(first).toBe('first');
+  expect(second).toBe('second');
+  expect(errSpy).toHaveBeenCalled();
+  errSpy.mockRestore();
+});
+
+test('isProcessing stays false after onIdle throws', async () => {
+  const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  const queue = new Queue({
+    onIdle: () => { throw new Error('boom'); },
+  });
+
+  await queue.enqueue(async () => {});
+
+  expect(queue.isProcessing).toBe(false);
+  errSpy.mockRestore();
+});
+
+test('enqueue from inside onIdle starts a new batch', async () => {
+  let starts = 0;
+  let idles = 0;
+  let injected = false;
+  const order: string[] = [];
+  const queue = new Queue({
+    onStart: async () => { starts++; order.push('start'); },
+    onIdle: () => {
+      idles++;
+      order.push('idle');
+      if (!injected) {
+        injected = true;
+        queue.enqueue(async () => { order.push('injected'); });
+      }
+    },
+  });
+
+  await queue.enqueue(async () => { order.push('original'); });
+  await new Promise(resolve => setTimeout(resolve, 10));
+
+  expect(starts).toBe(2);
+  expect(idles).toBe(2);
+  expect(order).toEqual(['start', 'original', 'idle', 'start', 'injected', 'idle']);
+});
+
+test('onIdle does not fire when items are still pending', async () => {
+  let idle = 0;
+  const order: string[] = [];
+  const queue = new Queue({ onIdle: () => { idle++; order.push('idle'); } });
+
+  queue.enqueue(async () => {
+    order.push('a');
+    // Sees idle === 0 — siblings B and C are still pending.
+    expect(idle).toBe(0);
+  });
+  queue.enqueue(async () => {
+    order.push('b');
+    expect(idle).toBe(0);
+  });
+  await queue.enqueue(async () => { order.push('c'); });
+
+  expect(idle).toBe(1);
+  expect(order).toEqual(['a', 'b', 'c', 'idle']);
+});
+
+test('onIdle runs synchronously after the task promise resolves', async () => {
+  let idle = false;
+  const queue = new Queue({ onIdle: () => { idle = true; } });
+
+  await queue.enqueue(async () => {});
+
+  // onIdle fired inside #process before the task promise's awaiter resumed.
+  expect(idle).toBe(true);
+});
+
+// ---------------------------------------------------------------------------
+// Breaking tests — probe documented failure modes and edge cases that could
+// expose subtle bugs.
+// ---------------------------------------------------------------------------
+
+test('deadlocks when a task awaits a same-queue enqueue', async () => {
+  // The current task holds the inner while loop; the nested item is queued
+  // but won't be shifted until the current task.fn() resolves — and it can't,
+  // because it's awaiting the nested item. This is the failure mode v3 plans
+  // to mitigate via task() + bypass-queue cart methods.
+  const queue = new Queue();
+  let nestedRan = false;
+
+  queue.enqueue(async () => {
+    await queue.enqueue(async () => { nestedRan = true; });
+  });
+
+  await new Promise(resolve => setTimeout(resolve, 50));
+
+  expect(nestedRan).toBe(false);
+  expect(queue.isProcessing).toBe(true);
+});
+
+test('deadlocks when onStart awaits an enqueue', async () => {
+  let nestedRan = false;
+  const queue: Queue = new Queue({
+    onStart: async () => {
+      await queue.enqueue(async () => { nestedRan = true; });
+    },
+  });
+
+  queue.enqueue(async () => {});
+  await new Promise(resolve => setTimeout(resolve, 50));
+
+  expect(nestedRan).toBe(false);
+});
+
+test('deadlocks when onEnd awaits an enqueue', async () => {
+  let nestedRan = false;
+  const queue: Queue = new Queue({
+    onEnd: async () => {
+      await queue.enqueue(async () => { nestedRan = true; });
+    },
+  });
+
+  queue.enqueue(async () => {});
+  await new Promise(resolve => setTimeout(resolve, 50));
+
+  expect(nestedRan).toBe(false);
+});
+
+test('preserves FIFO order across 500 items with mixed microtask timing', async () => {
+  const queue = new Queue();
+  const order: number[] = [];
+  const count = 500;
+
+  const tasks = Array.from({ length: count }, (_, i) =>
+    queue.enqueue(async () => {
+      // Force a couple of microtask hops so the scheduler has room to misbehave.
+      await Promise.resolve();
+      await Promise.resolve();
+      order.push(i);
+    })
+  );
+
+  await Promise.all(tasks);
+
+  expect(order.length).toBe(count);
+  expect(order).toEqual(Array.from({ length: count }, (_, i) => i));
+});
+
+test('rejects when fn throws synchronously before any await', async () => {
+  const queue = new Queue();
+
+  await expect(
+    queue.enqueue((() => { throw new Error('sync fail'); }) as () => Promise<unknown>)
+  ).rejects.toThrow('sync fail');
+});
+
+test('a synchronous throw in one task does not break the same batch', async () => {
+  const queue = new Queue();
+  const results: string[] = [];
+
+  queue.enqueue((() => { throw new Error('sync fail'); }) as () => Promise<unknown>)
+    .catch(() => results.push('rejected'));
+  const second = await queue.enqueue(async () => 'ok');
+
+  expect(second).toBe('ok');
+  expect(results).toEqual(['rejected']);
+});
+
+test('handles a task that returns a non-Promise value', async () => {
+  const queue = new Queue();
+  // Type contract says Promise<unknown>, but JS allows anything — await unwraps it.
+  const result = await queue.enqueue((() => 42) as () => Promise<unknown>);
+  expect(result).toBe(42);
+});
+
+test('hook returning a rejected Promise (without throwing) is caught', async () => {
+  const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  const queue = new Queue({
+    onStart: () => Promise.reject(new Error('rejected start')),
+    onEnd: () => Promise.reject(new Error('rejected end')),
+  });
+
+  const result = await queue.enqueue(async () => 'ok');
+
+  expect(result).toBe('ok');
+  expect(errSpy).toHaveBeenCalled();
+  expect(queue.isProcessing).toBe(false);
+  errSpy.mockRestore();
+});
+
+test('onIdle re-enqueuing across multiple cycles processes everything', async () => {
+  const order: number[] = [];
+  let cycle = 0;
+  const queue: Queue = new Queue({
+    onIdle: () => {
+      if (cycle < 3) {
+        cycle++;
+        for (let i = 0; i < 5; i++) {
+          queue.enqueue(async () => { order.push(cycle * 10 + i); });
+        }
+      }
+    },
+  });
+
+  await queue.enqueue(async () => { order.push(0); });
+  await new Promise(resolve => setTimeout(resolve, 50));
+
+  // initial + 3 cycles × 5 items
+  expect(order.length).toBe(1 + 3 * 5);
+  expect(queue.isProcessing).toBe(false);
+});
+
+test('50 nested enqueues from inside a single task all land in the same batch', async () => {
+  let starts = 0;
+  let idles = 0;
+  const seen: number[] = [];
+  const queue: Queue = new Queue({
+    onStart: async () => { starts++; },
+    onIdle: () => { idles++; },
+  });
+
+  await queue.enqueue(async () => {
+    for (let i = 0; i < 50; i++) {
+      queue.enqueue(async () => { seen.push(i); });
+    }
+  });
+  await new Promise(resolve => setTimeout(resolve, 20));
+
+  expect(seen.length).toBe(50);
+  expect(starts).toBe(1);
+  expect(idles).toBe(1);
+});
