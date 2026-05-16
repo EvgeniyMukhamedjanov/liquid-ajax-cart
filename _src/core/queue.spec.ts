@@ -680,6 +680,10 @@ test('hook returning a rejected Promise (without throwing) is caught', async () 
 
   const result = await queue.enqueue(async () => 'ok');
 
+  // The task promise resolves before onEnd is awaited; drain microtasks so
+  // the full end → idle tail runs before we assert.
+  await new Promise(resolve => setTimeout(resolve, 0));
+
   expect(result).toBe('ok');
   expect(errSpy).toHaveBeenCalled();
   expect(queue.isProcessing).toBe(false);

@@ -17,6 +17,8 @@ const api: CartApi = new CartApi({
 const queue = new Queue({
   onStart: () => emitter.emit("queue-start", {}, api),
   onEnd: () => emitter.emit("queue-end", {}, api),
+  // onIdle is sync — fire-and-forget the emit (its async tail runs after).
+  onIdle: () => void emitter.emit("queue-idle", {}, api),
 });
 
 export function task<T>(fn: (api: CartApi) => Promise<T>): Promise<T> {
