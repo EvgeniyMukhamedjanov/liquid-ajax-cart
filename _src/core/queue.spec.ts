@@ -617,6 +617,65 @@ test("onIdle fires once per drain cycle across separate batches", async () => {
   expect(idle).toBe(3);
 });
 
+test("an async onEnd hook merges sequentially awaited enqueues into one drain cycle", async () => {
+  // Counterpart to the test above. There the queue has no onEnd, so #running
+  // clears synchronously before each caller's await resumes — every enqueue is
+  // its own drain and onIdle fires three times. Add an async onEnd and the
+  // timing shifts: onEnd dispatches but #process suspends on `await onEnd()`
+  // with #running still true, so the caller's await resumes mid-drain. The
+  // next sequentially-awaited enqueue lands in that in-flight drain instead of
+  // opening a fresh one. onStart/onEnd live inside the per-batch loop and
+  // still fire per call; onIdle lives outside it and fires once for the whole
+  // merged drain. This is the exact shape core/index.ts runs (its onEnd hook
+  // is emitter.emit(QUEUE_END)).
+  let starts = 0;
+  let ends = 0;
+  let idle = 0;
+  const order: string[] = [];
+  const queue = new Queue({
+    onStart: async () => {
+      starts++;
+      order.push("start");
+    },
+    onEnd: async () => {
+      ends++;
+      order.push("end");
+    },
+    onIdle: () => {
+      idle++;
+      order.push("idle");
+    },
+  });
+
+  await queue.enqueue(async () => {
+    order.push("t1");
+  });
+  await queue.enqueue(async () => {
+    order.push("t2");
+  });
+  await queue.enqueue(async () => {
+    order.push("t3");
+  });
+  // Let the final drain's onEnd then onIdle tail unwind.
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  expect(starts).toBe(3);
+  expect(ends).toBe(3);
+  expect(idle).toBe(1);
+  expect(order).toEqual([
+    "start",
+    "t1",
+    "end",
+    "start",
+    "t2",
+    "end",
+    "start",
+    "t3",
+    "end",
+    "idle",
+  ]);
+});
+
 test("onIdle hook error does not break subsequent batches", async () => {
   const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
   const queue = new Queue({
@@ -903,15 +962,16 @@ test("50 nested enqueues from inside a single task all land in the same batch", 
 });
 
 // ---------------------------------------------------------------------------
-// Slow-item detection — onItemSlow fires when an item out-runs itemSlowAfterMs.
+// Slow-step detection — onSlow fires when any queue step (a lifecycle hook or a
+// queued item) out-runs slowAfterMs.
 // ---------------------------------------------------------------------------
 
-test("onItemSlow fires when an item runs past itemSlowAfterMs", async () => {
+test("onSlow fires when an item runs past slowAfterMs", async () => {
   vi.useFakeTimers();
   let slow = 0;
   const queue = new Queue({
-    itemSlowAfterMs: 100,
-    onItemSlow: () => {
+    slowAfterMs: 100,
+    onSlow: () => {
       slow++;
     },
   });
@@ -925,12 +985,12 @@ test("onItemSlow fires when an item runs past itemSlowAfterMs", async () => {
   vi.useRealTimers();
 });
 
-test("onItemSlow does not fire for an item that settles before itemSlowAfterMs", async () => {
+test("onSlow does not fire for an item that settles before slowAfterMs", async () => {
   vi.useFakeTimers();
   let slow = 0;
   const queue = new Queue({
-    itemSlowAfterMs: 100,
-    onItemSlow: () => {
+    slowAfterMs: 100,
+    onSlow: () => {
       slow++;
     },
   });
@@ -945,12 +1005,12 @@ test("onItemSlow does not fire for an item that settles before itemSlowAfterMs",
   vi.useRealTimers();
 });
 
-test("onItemSlow arms per item — two slow items warn twice", async () => {
+test("onSlow arms per item — two slow items warn twice", async () => {
   vi.useFakeTimers();
   let slow = 0;
   const queue = new Queue({
-    itemSlowAfterMs: 100,
-    onItemSlow: () => {
+    slowAfterMs: 100,
+    onSlow: () => {
       slow++;
     },
   });
@@ -964,13 +1024,13 @@ test("onItemSlow arms per item — two slow items warn twice", async () => {
   vi.useRealTimers();
 });
 
-test("onItemSlow hook error does not break the queue", async () => {
+test("onSlow hook error does not break the queue", async () => {
   vi.useFakeTimers();
   const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
   const queue = new Queue({
-    itemSlowAfterMs: 100,
-    onItemSlow: () => {
-      throw new Error("onItemSlow boom");
+    slowAfterMs: 100,
+    onSlow: () => {
+      throw new Error("onSlow boom");
     },
   });
 
@@ -983,5 +1043,44 @@ test("onItemSlow hook error does not break the queue", async () => {
   expect(errSpy).toHaveBeenCalled();
 
   errSpy.mockRestore();
+  vi.useRealTimers();
+});
+
+test("onSlow fires when an onStart hook runs past slowAfterMs", async () => {
+  vi.useFakeTimers();
+  let slow = 0;
+  const queue = new Queue({
+    slowAfterMs: 100,
+    onSlow: () => {
+      slow++;
+    },
+    onStart: () => new Promise<void>((resolve) => setTimeout(resolve, 500)),
+  });
+
+  const item = queue.enqueue(async () => {});
+  await vi.advanceTimersByTimeAsync(100);
+  expect(slow).toBe(1);
+
+  await vi.advanceTimersByTimeAsync(500);
+  await item;
+  vi.useRealTimers();
+});
+
+test("onSlow fires when an onEnd hook runs past slowAfterMs", async () => {
+  vi.useFakeTimers();
+  let slow = 0;
+  const queue = new Queue({
+    slowAfterMs: 100,
+    onSlow: () => {
+      slow++;
+    },
+    onEnd: () => new Promise<void>((resolve) => setTimeout(resolve, 500)),
+  });
+
+  const item = queue.enqueue(async () => {});
+  await vi.advanceTimersByTimeAsync(600);
+  await item;
+
+  expect(slow).toBe(1);
   vi.useRealTimers();
 });

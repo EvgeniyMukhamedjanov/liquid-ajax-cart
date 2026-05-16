@@ -1,5 +1,5 @@
 import { test, expect, vi, beforeEach, afterEach } from "vitest";
-import { task, add, change, update, clear, get, EVENTS } from "./index";
+import { task, add, change, update, clear, get, isProcessing, EVENTS } from "./index";
 import { WaitUntilEvent } from "./emitter";
 
 // These tests cover ONLY what core/index.ts adds on top of its components:
@@ -238,5 +238,137 @@ test("a request-end waitUntil callback blocks the queue before the next item", a
     "fetch",
     "waitUntil-start",
     "waitUntil-end",
+  ]);
+});
+
+// =============================================================================
+// Adversarial — error paths and wiring seams the happy-path tests skip
+// =============================================================================
+
+test("isProcessing() tracks the queue lifecycle, not individual task resolution", async () => {
+  expect(isProcessing()).toBe(false);
+
+  let busyInsideTask = false;
+  const running = task(async () => {
+    busyInsideTask = isProcessing();
+  });
+  // Enqueuing flips the queue to running synchronously, before the first await.
+  expect(isProcessing()).toBe(true);
+
+  await running;
+  expect(busyInsideTask).toBe(true);
+  // A resolved task is NOT an idle queue: queue-end still has to run after it.
+  expect(isProcessing()).toBe(true);
+
+  // The queue only reports idle once it has fully drained (queue-idle fired).
+  await new Promise<void>((resolve) => listenDOM(EVENTS.QUEUE_IDLE, () => resolve()));
+  expect(isProcessing()).toBe(false);
+});
+
+test("a task that throws rejects, yet still drains the queue for the next caller", async () => {
+  fetchMock.mockResolvedValue(mockResponse());
+  const seen: string[] = [];
+  listenDOM(EVENTS.QUEUE_END, () => seen.push("queue-end"));
+  listenDOM(EVENTS.QUEUE_IDLE, () => seen.push("queue-idle"));
+
+  await expect(
+    task(async () => {
+      throw new Error("boom");
+    }),
+  ).rejects.toThrow("boom");
+  // queue-end / queue-idle run on the post-resolve tail.
+  await new Promise((r) => setTimeout(r, 0));
+
+  // A thrown task must not strand the queue: it still closes out cleanly...
+  expect(seen).toEqual(["queue-end", "queue-idle"]);
+  // ...and the next request goes through as normal.
+  expect(await add({ id: 1 })).toEqual({ ok: true, status: 200, body: null });
+});
+
+test("a network failure resolves to a failed result and still emits both request events", async () => {
+  fetchMock.mockRejectedValue(new TypeError("network down"));
+  const seen: string[] = [];
+  listenDOM(EVENTS.REQUEST_START, () => seen.push("start"));
+  listenDOM(EVENTS.REQUEST_END, () => seen.push("end"));
+
+  // The api swallows network errors, so the queued method resolves, never rejects.
+  const result = await add({ id: 1 });
+
+  expect(result).toEqual({ ok: false, status: null, body: null });
+  expect(seen).toEqual(["start", "end"]);
+});
+
+test("request-start waitUntil callback receives the cart api as its context", async () => {
+  let ctx: any;
+  listenDOM(EVENTS.REQUEST_START, ((e: WaitUntilEvent<unknown>) => {
+    e.waitUntil(async (c) => {
+      ctx = c;
+    });
+  }) as EventListener);
+  fetchMock.mockResolvedValue(mockResponse());
+
+  await add({ id: 1 });
+
+  expect(typeof ctx.add).toBe("function");
+  expect(typeof ctx.get).toBe("function");
+});
+
+test("a request-start listener can abort the request before fetch is reached", async () => {
+  fetchMock.mockResolvedValue(mockResponse());
+  // request-start carries the live request context as event.detail, abort included.
+  listenDOM(EVENTS.REQUEST_START, ((e: WaitUntilEvent<{ abort: () => void }>) => {
+    e.detail.abort();
+  }) as EventListener);
+
+  const result = await add({ id: 1 });
+
+  expect(fetchMock).not.toHaveBeenCalled();
+  expect(result).toEqual({ ok: false, status: null, body: null });
+});
+
+test("a request-start waitUntil callback blocks fetch until it settles", async () => {
+  const order: string[] = [];
+  listenDOM(EVENTS.REQUEST_START, ((e: WaitUntilEvent<unknown>) => {
+    e.waitUntil(async () => {
+      order.push("waitUntil-start");
+      await new Promise((r) => setTimeout(r, 20));
+      order.push("waitUntil-end");
+    });
+  }) as EventListener);
+  fetchMock.mockImplementation(async () => {
+    order.push("fetch");
+    return mockResponse();
+  });
+
+  await add({ id: 1 });
+
+  expect(order).toEqual(["waitUntil-start", "waitUntil-end", "fetch"]);
+});
+
+test("two requests inside one task() emit one queue pair but two request pairs", async () => {
+  fetchMock.mockResolvedValue(mockResponse());
+  const order: string[] = [];
+  for (const ev of [
+    EVENTS.QUEUE_START,
+    EVENTS.REQUEST_START,
+    EVENTS.REQUEST_END,
+    EVENTS.QUEUE_END,
+  ]) {
+    listenDOM(ev, () => order.push(ev));
+  }
+
+  await task(async (cart) => {
+    await cart.add({ id: 1 });
+    await cart.add({ id: 2 });
+  });
+  await new Promise((r) => setTimeout(r, 0));
+
+  expect(order).toEqual([
+    EVENTS.QUEUE_START,
+    EVENTS.REQUEST_START,
+    EVENTS.REQUEST_END,
+    EVENTS.REQUEST_START,
+    EVENTS.REQUEST_END,
+    EVENTS.QUEUE_END,
   ]);
 });

@@ -17,22 +17,22 @@ const api: CartApi = new CartApi({
   onEnd: (ctx) => emitter.emit(EVENTS.REQUEST_END, ctx, api),
 });
 
-// A queued request still running this long has most likely deadlocked.
-const SLOW_REQUEST_SECONDS = 10;
+// A single queue step still running this long has most likely deadlocked.
+const QUEUE_STUCK_SECONDS = 10;
 
 // TODO: add a link to docs about deadlocks
-const SLOW_REQUEST_WARNING =
-  `Liquid Ajax Cart: a queued request has been running for over ` +
-  `${SLOW_REQUEST_SECONDS}s — possible deadlock. Calling ` +
-  `liquidAjaxCart.add/change/update/clear/get inside task() deadlocks ` +
-  `the queue; use the methods on the task() context instead.`;
+const QUEUE_STUCK_WARNING =
+  `Liquid Ajax Cart: the cart queue has been stuck for over ${QUEUE_STUCK_SECONDS}s — ` +
+  `possible deadlock. Calling a queued method (liquidAjaxCart.add/change/update/clear/` +
+  `get) from inside task() or a queue-start/queue-end listener deadlocks the queue; ` +
+  `use the api passed to your callback instead.`;
 
 const queue = new Queue({
   onStart: () => emitter.emit(EVENTS.QUEUE_START, {}, api),
   onEnd: () => emitter.emit(EVENTS.QUEUE_END, {}, api),
   onIdle: () => document.dispatchEvent(new CustomEvent(EVENTS.QUEUE_IDLE, { detail: {} })),
-  itemSlowAfterMs: SLOW_REQUEST_SECONDS * 1000,
-  onItemSlow: () => console.warn(SLOW_REQUEST_WARNING),
+  slowAfterMs: QUEUE_STUCK_SECONDS * 1000,
+  onSlow: () => console.warn(QUEUE_STUCK_WARNING),
 });
 
 export function task<T>(fn: (api: CartApi) => Promise<T>): Promise<T> {

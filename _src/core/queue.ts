@@ -8,8 +8,8 @@ type QueueOptions = {
   onStart?: () => Promise<void>;
   onEnd?: () => Promise<void>;
   onIdle?: () => void;
-  itemSlowAfterMs?: number;
-  onItemSlow?: () => void;
+  slowAfterMs?: number;
+  onSlow?: () => void;
 };
 
 export class Queue {
@@ -41,18 +41,23 @@ export class Queue {
     if (this.#running) return;
     this.#running = true;
 
+    // the outer while loop is needed because tasks might be added to the items list during onEnd execution
+    // so the new queue loop will start again without calling onIdle
     while (this.#items.length > 0) {
       if (this.#options?.onStart) {
+        const timer = this.#startSlowTimer();
         try {
           await this.#options.onStart();
         } catch (error) {
           console.error("Liquid Ajax Cart: queue onStart hook threw", error);
+        } finally {
+          if (timer !== undefined) clearTimeout(timer);
         }
       }
 
       while (this.#items.length > 0) {
         const item = this.#items.shift()!;
-        const slowTimer = this.#startSlowTimer();
+        const timer = this.#startSlowTimer();
 
         try {
           const result = await item.fn();
@@ -60,15 +65,18 @@ export class Queue {
         } catch (error) {
           item.reject(error);
         } finally {
-          if (slowTimer !== undefined) clearTimeout(slowTimer);
+          if (timer !== undefined) clearTimeout(timer);
         }
       }
 
       if (this.#options?.onEnd) {
+        const timer = this.#startSlowTimer();
         try {
           await this.#options.onEnd();
         } catch (error) {
           console.error("Liquid Ajax Cart: queue onEnd hook threw", error);
+        } finally {
+          if (timer !== undefined) clearTimeout(timer);
         }
       }
     }
@@ -85,15 +93,15 @@ export class Queue {
   }
 
   #startSlowTimer(): ReturnType<typeof setTimeout> | undefined {
-    const { itemSlowAfterMs, onItemSlow } = this.#options ?? {};
-    if (itemSlowAfterMs === undefined || !onItemSlow) return undefined;
+    const { slowAfterMs, onSlow } = this.#options ?? {};
+    if (slowAfterMs === undefined || !onSlow) return undefined;
 
     return setTimeout(() => {
       try {
-        onItemSlow();
+        onSlow();
       } catch (error) {
-        console.error("Liquid Ajax Cart: queue onItemSlow hook threw", error);
+        console.error("Liquid Ajax Cart: queue onSlow hook threw", error);
       }
-    }, itemSlowAfterMs);
+    }, slowAfterMs);
   }
 }
