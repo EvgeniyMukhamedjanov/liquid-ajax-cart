@@ -14,7 +14,7 @@ afterEach(() => {
 
 let emitter: EventEmitter;
 beforeEach(() => {
-  emitter = new EventEmitter("liquid-ajax-cart");
+  emitter = new EventEmitter();
 });
 
 const waitUntilContext = { marker: true };
@@ -51,7 +51,7 @@ test("public DOM event fires with detail and exposes waitUntil on the event", as
   let receivedDetail: any;
   let receivedEvent: any;
 
-  listenDOM("liquid-ajax-cart:test-dom", ((e: WaitUntilEvent<any>) => {
+  listenDOM("test-dom", ((e: WaitUntilEvent<any>) => {
     receivedDetail = e.detail;
     receivedEvent = e;
   }) as EventListener);
@@ -66,7 +66,7 @@ test("public DOM event fires with detail and exposes waitUntil on the event", as
 test("internal listeners run before public DOM event", async () => {
   const order: string[] = [];
 
-  listenDOM("liquid-ajax-cart:test-order", () => {
+  listenDOM("test-order", () => {
     order.push("public");
   });
 
@@ -81,7 +81,7 @@ test("internal listeners run before public DOM event", async () => {
 test("waitUntil() callbacks are awaited before emit resolves", async () => {
   let done = false;
 
-  listenDOM("liquid-ajax-cart:test-await", ((e: WaitUntilEvent<unknown>) => {
+  listenDOM("test-await", ((e: WaitUntilEvent<unknown>) => {
     e.waitUntil(async () => {
       await new Promise((r) => setTimeout(r, 50));
       done = true;
@@ -95,9 +95,7 @@ test("waitUntil() callbacks are awaited before emit resolves", async () => {
 test("waitUntil() callback receives waitUntilContext", async () => {
   let receivedCtx: unknown;
 
-  listenDOM("liquid-ajax-cart:test-await-waitUntilContext", ((
-    e: WaitUntilEvent<unknown>,
-  ) => {
+  listenDOM("test-await-waitUntilContext", ((e: WaitUntilEvent<unknown>) => {
     e.waitUntil(async (c: unknown) => {
       receivedCtx = c;
     });
@@ -110,9 +108,7 @@ test("waitUntil() callback receives waitUntilContext", async () => {
 test("multiple waitUntil() callbacks run sequentially", async () => {
   const order: number[] = [];
 
-  listenDOM("liquid-ajax-cart:test-sequential", ((
-    e: WaitUntilEvent<unknown>,
-  ) => {
+  listenDOM("test-sequential", ((e: WaitUntilEvent<unknown>) => {
     e.waitUntil(async () => {
       await new Promise((r) => setTimeout(r, 50));
       order.push(1);
@@ -128,21 +124,7 @@ test("multiple waitUntil() callbacks run sequentially", async () => {
 });
 
 test("emit works when no listeners are registered", async () => {
-  await expect(
-    emitter.emit("test-no-listeners", {}, waitUntilContext),
-  ).resolves.toBeUndefined();
-});
-
-test("uses custom prefix for DOM events", async () => {
-  const custom = new EventEmitter("my-lib");
-  let fired = false;
-
-  listenDOM("my-lib:test-prefix", () => {
-    fired = true;
-  });
-
-  await custom.emit("test-prefix", {}, waitUntilContext);
-  expect(fired).toBe(true);
+  await expect(emitter.emit("test-no-listeners", {}, waitUntilContext)).resolves.toBeUndefined();
 });
 
 test("waitUntil() called after emit completes throws InvalidStateError", async () => {
@@ -150,9 +132,7 @@ test("waitUntil() called after emit completes throws InvalidStateError", async (
   // event and call waitUntil() asynchronously fail loudly instead of silently
   // dropping work into a closed-over array. Matches ExtendableEvent semantics.
   let savedEvent: any;
-  listenDOM("liquid-ajax-cart:test-late-await", ((
-    e: WaitUntilEvent<unknown>,
-  ) => {
+  listenDOM("test-late-await", ((e: WaitUntilEvent<unknown>) => {
     savedEvent = e;
   }) as EventListener);
 
@@ -168,17 +148,11 @@ test("detail is a passthrough — caller-controlled keys are not overwritten", a
   // caller-controlled. A caller-supplied `await` (or any other) field survives
   // unchanged.
   let observed: unknown;
-  listenDOM("liquid-ajax-cart:test-detail-passthrough", ((
-    e: WaitUntilEvent<any>,
-  ) => {
+  listenDOM("test-detail-passthrough", ((e: WaitUntilEvent<any>) => {
     observed = e.detail.await;
   }) as EventListener);
 
-  await emitter.emit(
-    "test-detail-passthrough",
-    { await: "user-payload" },
-    waitUntilContext,
-  );
+  await emitter.emit("test-detail-passthrough", { await: "user-payload" }, waitUntilContext);
 
   expect(observed).toBe("user-payload");
 });
@@ -205,9 +179,7 @@ test("one throwing waitUntil callback does not skip other modules' callbacks", a
   // A throw in one waitUntil callback is reported via console.error but does
   // not abort the loop, so independent modules cannot silently break each other.
   let secondRan = false;
-  listenDOM("liquid-ajax-cart:test-await-isolation", ((
-    e: WaitUntilEvent<unknown>,
-  ) => {
+  listenDOM("test-await-isolation", ((e: WaitUntilEvent<unknown>) => {
     e.waitUntil(async () => {
       throw new Error("boom");
     });
@@ -243,7 +215,7 @@ test("internal listener throw does not skip the public DOM event", async () => {
   emitter.on("test-internal-throw-dom", async () => {
     throw new Error("boom");
   });
-  listenDOM("liquid-ajax-cart:test-internal-throw-dom", () => {
+  listenDOM("test-internal-throw-dom", () => {
     publicFired = true;
   });
 
@@ -272,9 +244,7 @@ test("synchronously throwing waitUntil callback is caught like an async rejectio
   // queue. The wrapper `() => fn(ctx)` throws synchronously when fn does, and
   // the surrounding `await` + try/catch must still isolate it.
   let secondRan = false;
-  listenDOM("liquid-ajax-cart:test-wu-sync-throw", ((
-    e: WaitUntilEvent<unknown>,
-  ) => {
+  listenDOM("test-wu-sync-throw", ((e: WaitUntilEvent<unknown>) => {
     e.waitUntil((() => {
       throw new Error("sync boom");
     }) as unknown as Parameters<typeof e.waitUntil>[0]);
@@ -291,9 +261,7 @@ test("waitUntil() called from a microtask after dispatch throws", async () => {
   // dispatchEvent is synchronous and the event seals immediately after it
   // returns, so any waitUntil() call deferred even one microtask is too late.
   let captured: unknown;
-  listenDOM("liquid-ajax-cart:test-wu-microtask", ((
-    e: WaitUntilEvent<unknown>,
-  ) => {
+  listenDOM("test-wu-microtask", ((e: WaitUntilEvent<unknown>) => {
     Promise.resolve().then(() => {
       try {
         e.waitUntil(async () => {});
@@ -313,9 +281,7 @@ test("waitUntil() called from inside a waitUntil callback throws", async () => {
   // callback that captured the event and tries to push more work must fail.
   let innerError: unknown;
   let outerCompleted = false;
-  listenDOM("liquid-ajax-cart:test-wu-nested", ((
-    e: WaitUntilEvent<unknown>,
-  ) => {
+  listenDOM("test-wu-nested", ((e: WaitUntilEvent<unknown>) => {
     e.waitUntil(async () => {
       try {
         e.waitUntil(async () => {});
@@ -359,16 +325,12 @@ test("multiple DOM listeners each contribute waitUntil callbacks in registration
   // able to register waitUntil work, and the queue must preserve the order
   // in which calls happened across listeners.
   const order: string[] = [];
-  listenDOM("liquid-ajax-cart:test-multi-dom", ((
-    e: WaitUntilEvent<unknown>,
-  ) => {
+  listenDOM("test-multi-dom", ((e: WaitUntilEvent<unknown>) => {
     e.waitUntil(async () => {
       order.push("a");
     });
   }) as EventListener);
-  listenDOM("liquid-ajax-cart:test-multi-dom", ((
-    e: WaitUntilEvent<unknown>,
-  ) => {
+  listenDOM("test-multi-dom", ((e: WaitUntilEvent<unknown>) => {
     e.waitUntil(async () => {
       order.push("b");
     });
@@ -400,9 +362,7 @@ test("concurrent emits of the same event keep their WaitUntilEventState isolated
   // same time cannot cross-contaminate their open flag or callback queue.
   let aRan = 0;
   let bRan = 0;
-  listenDOM("liquid-ajax-cart:test-concurrent", ((
-    e: WaitUntilEvent<{ id: string }>,
-  ) => {
+  listenDOM("test-concurrent", ((e: WaitUntilEvent<{ id: string }>) => {
     e.waitUntil(async () => {
       if (e.detail.id === "a") aRan++;
       if (e.detail.id === "b") bRan++;
@@ -421,9 +381,7 @@ test("event detail remains readable on a retained event after emit completes", a
   // The end-of-emit cleanup nulls the waitUntilContext but does NOT touch
   // CustomEvent.detail, so listeners that stash the event can still read it.
   let saved: WaitUntilEvent<{ value: number }> | undefined;
-  listenDOM("liquid-ajax-cart:test-retain", ((
-    e: WaitUntilEvent<{ value: number }>,
-  ) => {
+  listenDOM("test-retain", ((e: WaitUntilEvent<{ value: number }>) => {
     saved = e;
   }) as EventListener);
 

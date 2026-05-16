@@ -112,8 +112,7 @@ export class CartApi {
       } else {
         const onCallerAbort = () => controller.abort(callerSignal.reason);
         callerSignal.addEventListener("abort", onCallerAbort);
-        removeSignalListener = () =>
-          callerSignal.removeEventListener("abort", onCallerAbort);
+        removeSignalListener = () => callerSignal.removeEventListener("abort", onCallerAbort);
       }
     }
 

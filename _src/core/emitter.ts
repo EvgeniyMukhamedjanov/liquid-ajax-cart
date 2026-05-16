@@ -10,11 +10,7 @@ interface WaitUntilEventState {
 export class WaitUntilEvent<T> extends CustomEvent<T> {
   #state: WaitUntilEventState;
 
-  constructor(
-    type: string,
-    init: CustomEventInit<T>,
-    state: WaitUntilEventState,
-  ) {
+  constructor(type: string, init: CustomEventInit<T>, state: WaitUntilEventState) {
     super(type, init);
     this.#state = state;
   }
@@ -31,12 +27,7 @@ export class WaitUntilEvent<T> extends CustomEvent<T> {
 }
 
 export class EventEmitter {
-  #prefix: string;
   #listeners = new Map<string, Listener[]>();
-
-  constructor(prefix: string) {
-    this.#prefix = prefix;
-  }
 
   on(event: string, fn: Listener): void {
     if (!this.#listeners.has(event)) {
@@ -45,19 +36,14 @@ export class EventEmitter {
     this.#listeners.get(event)!.push(fn);
   }
 
-  async emit(
-    event: string,
-    detail: object,
-    waitUntilContext: unknown,
-  ): Promise<void> {
-    // 1. Internal async subscribers run sequentially; one failure must not skip the rest.
-    //    Snapshot the list so listeners added during dispatch only run on the next emit.
+  async emit(event: string, detail: object, waitUntilContext: unknown): Promise<void> {
+    // 1. Internal async subscribers
     const listeners = [...(this.#listeners.get(event) || [])];
     for (const fn of listeners) {
       try {
         await fn(detail);
       } catch (err) {
-        console.error(`${this.#prefix}:${event} internal listener threw`, err);
+        console.error(`${event} internal listener threw`, err);
       }
     }
 
@@ -67,9 +53,7 @@ export class EventEmitter {
       callbacks: [],
       waitUntilContext,
     };
-    document.dispatchEvent(
-      new WaitUntilEvent(`${this.#prefix}:${event}`, { detail }, state),
-    );
+    document.dispatchEvent(new WaitUntilEvent(event, { detail }, state));
     // Seal the event so late waitUntil() calls fail loudly
     state.open = false;
 
@@ -78,7 +62,7 @@ export class EventEmitter {
       try {
         await fn();
       } catch (err) {
-        console.error(`${this.#prefix}:${event} waitUntil callback threw`, err);
+        console.error(`${event} waitUntil callback threw`, err);
       }
     }
     // Drop heavy references so a user that retains the event doesn't drag the

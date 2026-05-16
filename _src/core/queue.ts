@@ -44,7 +44,7 @@ export class Queue {
         try {
           await this.#options.onStart();
         } catch (error) {
-          console.error('Liquid Ajax Cart: queue onStart hook threw', error);
+          console.error("Liquid Ajax Cart: queue onStart hook threw", error);
         }
       }
 
@@ -63,7 +63,7 @@ export class Queue {
         try {
           await this.#options.onEnd();
         } catch (error) {
-          console.error('Liquid Ajax Cart: queue onEnd hook threw', error);
+          console.error("Liquid Ajax Cart: queue onEnd hook threw", error);
         }
       }
     }
@@ -74,7 +74,7 @@ export class Queue {
       try {
         this.#options.onIdle();
       } catch (error) {
-        console.error('Liquid Ajax Cart: queue onIdle hook threw', error);
+        console.error("Liquid Ajax Cart: queue onIdle hook threw", error);
       }
     }
   }

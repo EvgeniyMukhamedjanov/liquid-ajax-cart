@@ -1,24 +1,26 @@
 import { Queue } from "./queue";
 import { EventEmitter } from "./emitter";
-import {
-  CartApi,
-  type RequestBody,
-  type RequestOptions,
-  type RequestResult,
-} from "./api";
+import { CartApi, type RequestBody, type RequestOptions, type RequestResult } from "./api";
 
-const emitter = new EventEmitter("liquid-ajax-cart");
+export const EVENTS = {
+  REQUEST_START: "liquid-ajax-cart:request-start",
+  REQUEST_END: "liquid-ajax-cart:request-end",
+  QUEUE_START: "liquid-ajax-cart:queue-start",
+  QUEUE_END: "liquid-ajax-cart:queue-end",
+  QUEUE_IDLE: "liquid-ajax-cart:queue-idle",
+} as const;
+
+const emitter = new EventEmitter();
 
 const api: CartApi = new CartApi({
-  onStart: (ctx) => emitter.emit("request-start", ctx, api),
-  onEnd: (ctx) => emitter.emit("request-end", ctx, api),
+  onStart: (ctx) => emitter.emit(EVENTS.REQUEST_START, ctx, api),
+  onEnd: (ctx) => emitter.emit(EVENTS.REQUEST_END, ctx, api),
 });
 
 const queue = new Queue({
-  onStart: () => emitter.emit("queue-start", {}, api),
-  onEnd: () => emitter.emit("queue-end", {}, api),
-  // onIdle is sync — fire-and-forget the emit (its async tail runs after).
-  onIdle: () => void emitter.emit("queue-idle", {}, api),
+  onStart: () => emitter.emit(EVENTS.QUEUE_START, {}, api),
+  onEnd: () => emitter.emit(EVENTS.QUEUE_END, {}, api),
+  onIdle: () => document.dispatchEvent(new CustomEvent(EVENTS.QUEUE_IDLE, { detail: {} })),
 });
 
 export function task<T>(fn: (api: CartApi) => Promise<T>): Promise<T> {
@@ -26,24 +28,15 @@ export function task<T>(fn: (api: CartApi) => Promise<T>): Promise<T> {
   return queue.enqueue(() => fn(api));
 }
 
-export function add(
-  body: RequestBody,
-  options?: RequestOptions,
-): Promise<RequestResult> {
+export function add(body: RequestBody, options?: RequestOptions): Promise<RequestResult> {
   return task(async (api) => api.add(body, options));
 }
 
-export function change(
-  body: RequestBody,
-  options?: RequestOptions,
-): Promise<RequestResult> {
+export function change(body: RequestBody, options?: RequestOptions): Promise<RequestResult> {
   return task(async (api) => api.change(body, options));
 }
 
-export function update(
-  body: RequestBody,
-  options?: RequestOptions,
-): Promise<RequestResult> {
+export function update(body: RequestBody, options?: RequestOptions): Promise<RequestResult> {
   return task(async (api) => api.update(body, options));
 }
 
@@ -61,8 +54,7 @@ export function isProcessing(): boolean {
 
 // --- Deadlock detection ---
 
-const QUEUED_METHOD_PATTERN =
-  /liquidAjaxCart\.(add|change|update|clear|get)\s*\(/;
+const QUEUED_METHOD_PATTERN = /liquidAjaxCart\.(add|change|update|clear|get)\s*\(/;
 
 function checkForDeadlock<T>(fn: (api: CartApi) => Promise<T>): void {
   try {
