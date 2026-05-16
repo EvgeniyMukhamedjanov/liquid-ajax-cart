@@ -901,3 +901,87 @@ test("50 nested enqueues from inside a single task all land in the same batch", 
   expect(starts).toBe(1);
   expect(idles).toBe(1);
 });
+
+// ---------------------------------------------------------------------------
+// Slow-item detection — onItemSlow fires when an item out-runs itemSlowAfterMs.
+// ---------------------------------------------------------------------------
+
+test("onItemSlow fires when an item runs past itemSlowAfterMs", async () => {
+  vi.useFakeTimers();
+  let slow = 0;
+  const queue = new Queue({
+    itemSlowAfterMs: 100,
+    onItemSlow: () => {
+      slow++;
+    },
+  });
+
+  const item = queue.enqueue(() => new Promise((resolve) => setTimeout(resolve, 500)));
+  await vi.advanceTimersByTimeAsync(100);
+  expect(slow).toBe(1);
+
+  await vi.advanceTimersByTimeAsync(500);
+  await item;
+  vi.useRealTimers();
+});
+
+test("onItemSlow does not fire for an item that settles before itemSlowAfterMs", async () => {
+  vi.useFakeTimers();
+  let slow = 0;
+  const queue = new Queue({
+    itemSlowAfterMs: 100,
+    onItemSlow: () => {
+      slow++;
+    },
+  });
+
+  const item = queue.enqueue(() => new Promise((resolve) => setTimeout(resolve, 20)));
+  await vi.advanceTimersByTimeAsync(20);
+  await item;
+  // Advance well past the threshold — the timer was cleared on settle.
+  await vi.advanceTimersByTimeAsync(500);
+
+  expect(slow).toBe(0);
+  vi.useRealTimers();
+});
+
+test("onItemSlow arms per item — two slow items warn twice", async () => {
+  vi.useFakeTimers();
+  let slow = 0;
+  const queue = new Queue({
+    itemSlowAfterMs: 100,
+    onItemSlow: () => {
+      slow++;
+    },
+  });
+
+  const first = queue.enqueue(() => new Promise((resolve) => setTimeout(resolve, 300)));
+  const second = queue.enqueue(() => new Promise((resolve) => setTimeout(resolve, 300)));
+  await vi.advanceTimersByTimeAsync(700);
+  await Promise.all([first, second]);
+
+  expect(slow).toBe(2);
+  vi.useRealTimers();
+});
+
+test("onItemSlow hook error does not break the queue", async () => {
+  vi.useFakeTimers();
+  const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  const queue = new Queue({
+    itemSlowAfterMs: 100,
+    onItemSlow: () => {
+      throw new Error("onItemSlow boom");
+    },
+  });
+
+  const slow = queue.enqueue(() => new Promise((resolve) => setTimeout(resolve, 300)));
+  await vi.advanceTimersByTimeAsync(300);
+  await slow;
+
+  const next = await queue.enqueue(async () => "ok");
+  expect(next).toBe("ok");
+  expect(errSpy).toHaveBeenCalled();
+
+  errSpy.mockRestore();
+  vi.useRealTimers();
+});

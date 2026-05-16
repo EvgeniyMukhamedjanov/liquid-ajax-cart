@@ -8,6 +8,8 @@ type QueueOptions = {
   onStart?: () => Promise<void>;
   onEnd?: () => Promise<void>;
   onIdle?: () => void;
+  itemSlowAfterMs?: number;
+  onItemSlow?: () => void;
 };
 
 export class Queue {
@@ -50,12 +52,15 @@ export class Queue {
 
       while (this.#items.length > 0) {
         const item = this.#items.shift()!;
+        const slowTimer = this.#startSlowTimer();
 
         try {
           const result = await item.fn();
           item.resolve(result);
         } catch (error) {
           item.reject(error);
+        } finally {
+          if (slowTimer !== undefined) clearTimeout(slowTimer);
         }
       }
 
@@ -77,5 +82,18 @@ export class Queue {
         console.error("Liquid Ajax Cart: queue onIdle hook threw", error);
       }
     }
+  }
+
+  #startSlowTimer(): ReturnType<typeof setTimeout> | undefined {
+    const { itemSlowAfterMs, onItemSlow } = this.#options ?? {};
+    if (itemSlowAfterMs === undefined || !onItemSlow) return undefined;
+
+    return setTimeout(() => {
+      try {
+        onItemSlow();
+      } catch (error) {
+        console.error("Liquid Ajax Cart: queue onItemSlow hook threw", error);
+      }
+    }, itemSlowAfterMs);
   }
 }

@@ -17,14 +17,25 @@ const api: CartApi = new CartApi({
   onEnd: (ctx) => emitter.emit(EVENTS.REQUEST_END, ctx, api),
 });
 
+// A queued request still running this long has most likely deadlocked.
+const SLOW_REQUEST_SECONDS = 10;
+
+// TODO: add a link to docs about deadlocks
+const SLOW_REQUEST_WARNING =
+  `Liquid Ajax Cart: a queued request has been running for over ` +
+  `${SLOW_REQUEST_SECONDS}s — possible deadlock. Calling ` +
+  `liquidAjaxCart.add/change/update/clear/get inside task() deadlocks ` +
+  `the queue; use the methods on the task() context instead.`;
+
 const queue = new Queue({
   onStart: () => emitter.emit(EVENTS.QUEUE_START, {}, api),
   onEnd: () => emitter.emit(EVENTS.QUEUE_END, {}, api),
   onIdle: () => document.dispatchEvent(new CustomEvent(EVENTS.QUEUE_IDLE, { detail: {} })),
+  itemSlowAfterMs: SLOW_REQUEST_SECONDS * 1000,
+  onItemSlow: () => console.warn(SLOW_REQUEST_WARNING),
 });
 
 export function task<T>(fn: (api: CartApi) => Promise<T>): Promise<T> {
-  checkForDeadlock(fn);
   return queue.enqueue(() => fn(api));
 }
 
@@ -50,21 +61,4 @@ export function get(options?: RequestOptions): Promise<RequestResult> {
 
 export function isProcessing(): boolean {
   return queue.isProcessing;
-}
-
-// --- Deadlock detection ---
-
-const QUEUED_METHOD_PATTERN = /liquidAjaxCart\.(add|change|update|clear|get)\s*\(/;
-
-function checkForDeadlock<T>(fn: (api: CartApi) => Promise<T>): void {
-  try {
-    const source = fn.toString();
-    if (QUEUED_METHOD_PATTERN.test(source)) {
-      console.warn(
-        "Liquid Ajax Cart: possible deadlock — use ctx.add/change/update/clear/get inside task(), not liquidAjaxCart.add/etc.",
-      );
-    }
-  } catch {
-    // toString() may not be available in all environments
-  }
 }
