@@ -1,5 +1,5 @@
 import { Queue } from "./queue";
-import { EventEmitter } from "./emitter";
+import { EventEmitter, type Listener } from "./emitter";
 import { CartApi, type RequestBody, type RequestOptions, type RequestResult } from "./api";
 
 export const EVENTS = {
@@ -61,4 +61,8 @@ export function get(options?: RequestOptions): Promise<RequestResult> {
 
 export function isProcessing(): boolean {
   return queue.isProcessing;
+}
+
+export function on(event: string, fn: Listener): void {
+  emitter.on(event, fn);
 }

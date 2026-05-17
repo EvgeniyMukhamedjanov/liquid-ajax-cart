@@ -1,4 +1,4 @@
-type Listener = (detail: unknown) => Promise<void>;
+export type Listener = (detail: unknown) => Promise<void>;
 type WaitUntilCallback = (waitUntilContext: unknown) => Promise<void>;
 
 interface WaitUntilEventState {
