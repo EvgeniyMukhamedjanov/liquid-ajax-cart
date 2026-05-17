@@ -102,5 +102,5 @@ Download the latest version of the `liquid-ajax-cart.js` from the [documentation
 ## The repository content
 
  * `docs` folder — the [documentation](https://liquid-ajax-cart.js.org) website;
- * `_src` folder — the library sources;
- * `assets`, `config`, `layout`, `locales`, `sections`, `snippets`, `templates` folders — the [demo store](https://liquid-ajax-cart.myshopify.com) theme sources. The password of the store — `liquid-ajax-cart`.
+ * `src` folder — the library sources;
+ * `demo` folder — the [demo store](https://liquid-ajax-cart.myshopify.com) theme sources (`assets`, `config`, `layout`, `locales`, `sections`, `snippets`, `templates`). The password of the store — `liquid-ajax-cart`.

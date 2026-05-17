@@ -6,5 +6,5 @@
     "allowJs": false,
     "moduleResolution": "node"
   },
-  "include": ["_src"]
+  "include": ["src"]
 }

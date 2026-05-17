@@ -40,7 +40,7 @@ Module-specific tests are co-located with source (`*.spec.ts` next to the module
 ### Folder Structure
 
 ```
-_src/
+src/
   core/
     queue.ts
     queue.spec.ts

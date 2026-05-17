@@ -12,7 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "webpack-watch": "webpack --mode=development --watch",
-    "shopify-watch": "shopify theme dev --store=liquid-ajax-cart",
+    "shopify-watch": "shopify theme dev --store=liquid-ajax-cart --path=demo",
     "start": "npm-run-all --parallel webpack-watch shopify-watch",
     "build": "rimraf docs/v3/releases/last && webpack --mode=production && webpack --mode=production --env last=true  && webpack --mode=production --env npm=true"
   },

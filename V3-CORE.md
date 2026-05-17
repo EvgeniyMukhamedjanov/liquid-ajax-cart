@@ -1,6 +1,6 @@
 # V3 Core Architecture
 
-Decided architecture for the core layer (`_src/core/`). Covers the queue, task system, state, events, and public API — the foundation that all modules depend on.
+Decided architecture for the core layer (`src/core/`). Covers the queue, task system, state, events, and public API — the foundation that all modules depend on.
 
 ## 1. State from Section HTML
 

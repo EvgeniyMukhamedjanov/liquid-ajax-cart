@@ -885,7 +885,7 @@ test("a synchronous throw in one task does not break the same batch", async () =
 test("handles a task that returns a non-Promise value", async () => {
   const queue = new Queue();
   // Type contract says Promise<unknown>, but JS allows anything — await unwraps it.
-  const result = await queue.enqueue((() => 42) as () => Promise<unknown>);
+  const result = await queue.enqueue((() => 42) as unknown as () => Promise<unknown>);
   expect(result).toBe(42);
 });
 

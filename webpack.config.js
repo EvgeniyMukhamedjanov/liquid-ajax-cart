@@ -2,7 +2,7 @@ const path = require('path');
 var PACKAGE = require('./package.json');
 
 module.exports = (env, argv) => { 
-  let folder = 'assets';
+  let folder = 'demo/assets';
   let filename = 'liquid-ajax-cart.js';
 
   if ( argv.mode === 'production' ) {
@@ -21,7 +21,7 @@ module.exports = (env, argv) => {
 
   return {
     mode: argv.mode,
-    entry: './_src/index.ts',
+    entry: './src/index.ts',
     module: {
       rules: [
         {

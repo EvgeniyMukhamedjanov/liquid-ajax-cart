@@ -28,10 +28,10 @@ No test suite or linter is configured.
 ## Branch State (v3 Refactor)
 
 The `v3` branch has a major rewrite in progress:
-- `_src/` — new source (entry point at `_src/index.ts`, currently near-empty)
+- `src/` — new source (entry point at `src/index.ts`, currently near-empty)
 - `_src-old/` — complete v2 source code moved here for reference (untracked)
-- Webpack entry point is `_src/index.ts`
-- The built `assets/liquid-ajax-cart.js` is used by the demo Shopify theme
+- Webpack entry point is `src/index.ts`
+- The built `demo/assets/liquid-ajax-cart.js` is used by the demo Shopify theme
 - **See `V3-ARCHITECTURE.md`** for all decided architecture directions and open questions
 
 ## Architecture (v2 source in `_src-old/`)
@@ -65,7 +65,7 @@ The `v3` branch has a major rewrite in progress:
 - Webpack 5 bundling to ES module output
 - No framework dependencies — vanilla JS with Web Components API
 - Docs site: Jekyll (in `docs/`)
-- Demo store files: `sections/`, `snippets/`, `templates/`, `layout/`, `assets/`, `config/`, `locales/`
+- Demo store files live in `demo/`: `demo/sections/`, `demo/snippets/`, `demo/templates/`, `demo/layout/`, `demo/assets/`, `demo/config/`, `demo/locales/`
 
 ## Key Implementation Details
 
