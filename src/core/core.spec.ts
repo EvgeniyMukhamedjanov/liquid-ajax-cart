@@ -1,5 +1,5 @@
 import { test, expect, vi, beforeEach, afterEach } from "vitest";
-import { task, add, change, update, clear, get, isProcessing, EVENTS } from "./index";
+import { task, add, change, update, clear, get, isProcessing, EVENTS } from "./core";
 import { WaitUntilEvent } from "./emitter";
 
 // These tests cover ONLY what core/index.ts adds on top of its components:
