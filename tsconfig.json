@@ -4,7 +4,7 @@
     "module": "es6",
     "target": "ES2022",
     "allowJs": false,
-    "moduleResolution": "node"
+    "moduleResolution": "bundler"
   },
   "include": ["src"]
 }
