@@ -61,8 +61,8 @@ export class ProductFormElement extends HTMLElement {
     const formData = new FormData(this.#form, event.submitter);
 
     this.setAttribute(ATTR_PROCESSING, "");
-
-    add(formData, { meta: { initiator: this, source: ELEMENT_TAG } }).finally(() => {
+    
+    add(formData, { trigger: { source: ELEMENT_TAG, initiator: this } }).finally(() => {
       this.removeAttribute(ATTR_PROCESSING);
     });
   };

@@ -284,6 +284,24 @@ test("options.meta propagates to both hooks", async () => {
   expect(endMeta).toEqual({ initiator: "button-1" });
 });
 
+test("meta is a shared mutable scratchpad — onStart mutations are visible in onEnd", async () => {
+  let endMeta: Record<string, unknown> | undefined;
+  fetchMock.mockResolvedValue(mockResponse());
+  const api = new CartApi({
+    onStart: async (ctx) => {
+      ctx.meta.startedAt = 123;
+    },
+    onEnd: async (ctx) => {
+      endMeta = ctx.meta;
+    },
+  });
+  const passed = { initiator: "button-1" };
+  await api.add({ id: 1 }, { meta: passed });
+  expect(endMeta).toEqual({ initiator: "button-1", startedAt: 123 });
+  // same object reference end-to-end — not a defensive copy
+  expect(endMeta).toBe(passed);
+});
+
 test("missing meta defaults to {} in hook context", async () => {
   let startMeta: unknown;
   fetchMock.mockResolvedValue(mockResponse());
@@ -294,6 +312,35 @@ test("missing meta defaults to {} in hook context", async () => {
   });
   await api.add({ id: 1 });
   expect(startMeta).toEqual({});
+});
+
+test("options.trigger propagates to both hooks", async () => {
+  let startTrigger: unknown;
+  let endTrigger: unknown;
+  fetchMock.mockResolvedValue(mockResponse());
+  const api = new CartApi({
+    onStart: async (ctx) => {
+      startTrigger = ctx.trigger;
+    },
+    onEnd: async (ctx) => {
+      endTrigger = ctx.trigger;
+    },
+  });
+  await api.add({ id: 1 }, { trigger: { source: "product-form" } });
+  expect(startTrigger).toEqual({ source: "product-form" });
+  expect(endTrigger).toEqual({ source: "product-form" });
+});
+
+test("missing trigger stays undefined in hook context", async () => {
+  let startTrigger: unknown = "unset";
+  fetchMock.mockResolvedValue(mockResponse());
+  const api = new CartApi({
+    onStart: async (ctx) => {
+      startTrigger = ctx.trigger;
+    },
+  });
+  await api.add({ id: 1 });
+  expect(startTrigger).toBeUndefined();
 });
 
 // =============================================================================

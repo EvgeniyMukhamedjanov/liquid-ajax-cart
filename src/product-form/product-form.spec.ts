@@ -103,8 +103,8 @@ test("submits the form data via add() and prevents native submission", () => {
   const [body, options] = addMock.mock.calls[0];
   expect(body).toBeInstanceOf(FormData);
   expect((body as FormData).get("id")).toBe("12345");
-  expect(options?.meta?.initiator).toBe(element);
-  expect(options?.meta?.source).toBe("ajax-cart-product-form");
+  expect(options?.trigger?.initiator).toBe(element);
+  expect(options?.trigger?.source).toBe("ajax-cart-product-form");
 });
 
 test("includes the activated submit button's name/value", () => {

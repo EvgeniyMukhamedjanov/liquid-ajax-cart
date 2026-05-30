@@ -8,8 +8,14 @@ declare global {
 
 export type RequestBody = Record<string, unknown> | FormData | URLSearchParams;
 
+export type RequestTrigger = {
+  source: string;
+  initiator?: Element;
+};
+
 export type RequestOptions = {
   signal?: AbortSignal;
+  trigger?: RequestTrigger;
   meta?: Record<string, unknown>;
 };
 
@@ -32,6 +38,7 @@ type Endpoint = keyof typeof ENDPOINTS;
 type RequestStartContext = {
   endpoint: Endpoint;
   body: RequestBody | null;
+  trigger?: RequestTrigger;
   meta: Record<string, unknown>;
   abort: (reason?: unknown) => void;
 };
@@ -101,6 +108,7 @@ export class CartApi {
     options: RequestOptions | undefined,
   ): Promise<RequestResult> {
     const meta = options?.meta ?? {};
+    const trigger = options?.trigger;
 
     const controller = new AbortController();
     const callerSignal = options?.signal;
@@ -119,7 +127,7 @@ export class CartApi {
     const signal = controller.signal;
     const abort = (reason?: unknown) => controller.abort(reason);
 
-    await this.#hooks.onStart?.({ endpoint, body, meta, abort });
+    await this.#hooks.onStart?.({ endpoint, body, trigger, meta, abort });
 
     let result: RequestResult;
 
@@ -153,7 +161,7 @@ export class CartApi {
 
     removeSignalListener?.();
 
-    await this.#hooks.onEnd?.({ endpoint, body, meta, result });
+    await this.#hooks.onEnd?.({ endpoint, body, trigger, meta, result });
 
     return result;
   }
