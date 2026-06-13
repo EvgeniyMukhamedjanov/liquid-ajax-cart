@@ -19,17 +19,33 @@ Co-locating each surface with its owning module keeps each module small, single-
 
 ## Markup contract
 
-Three attributes, all placed by the merchant **inside** the `<ajax-cart-product-form>` subtree:
+Slots and inputs are normally placed by the merchant **inside** the `<ajax-cart-product-form>` subtree, but may also live **outside** it and associate by the form's `id` (see [Element association](#element-association)).
 
 | Attribute | Placed on | Role | Multiplicity |
 |---|---|---|---|
 | `data-ajax-cart-product-form-error` | Slot element | Catch-all slot | Zero or more per form |
 | `data-ajax-cart-product-form-error="<error key>"` | Slot element | Field-keyed slot; value matches a key in Shopify's response `errors` object | Zero or more per form |
 | `data-ajax-cart-product-form-input="<error key>"` | Input element | Marks the input as the target of `aria-invalid` wiring when an error with this key arrives. Decoupled from the slot — input wiring and slot rendering are independent | Zero or more per input |
+| `data-ajax-cart-product-form-error-for="<form id>"` | Slot element | Associates an **out-of-tree** slot (one living outside the wrapper) with the form by its `id`. On an in-tree slot, re-points it to a *different* form (or away from this one). | Zero or more per slot |
+
+Out-of-tree **inputs** associate via the native HTML `form="<form id>"` attribute — no custom attribute is needed, since the browser already exposes form-membership intent through `form=`.
 
 The catch-all receives: string `body.errors`, `body.description`, `body.message`, network/transport failures, and any object-keyed errors that don't match a field-keyed slot. Multiple catch-all slots inside the same form all receive the same text (intentional — a merchant may want both inline and toast-style placements).
 
 The slot and input attributes both use the **Shopify response key** as their value. They are deliberately parallel: a merchant who wants both error text AND input highlighting writes the same key in both places. A merchant who only wants one of the two writes only that attribute.
+
+### Element association
+
+A slot or input "belongs to" a form by one of two rules, evaluated per element:
+
+1. **Out-of-tree, by `id`.** A slot with `data-ajax-cart-product-form-error-for="<id>"` or an input with native `form="<id>"` belongs to the form whose `id` matches `<id>`, wherever it sits in the document. This lets merchants place toast-style catch-alls or field slots outside the `<ajax-cart-product-form>` wrapper (e.g., in a sticky header or a cart drawer).
+2. **In-tree, by containment.** A slot/input inside the wrapper that does **not** carry an explicit out-of-tree pointer belongs to the form it is nested within.
+
+**Partition rule (no double-claim).** An in-tree element that explicitly points elsewhere — `data-…-error-for="<other id>"` on a slot, or `form="<other id>"` on an input — is **not** claimed by containment. It belongs only to the form it names, mirroring how native `form=` reassigns an input out of its containing form. An element pointing at its *own* form's id is filled exactly once (containment and the id pointer resolve to the same form; discovery dedupes, and `replaceChildren` makes a repeat write idempotent anyway).
+
+**Empty / missing form id.** If the form has no `id`, out-of-tree pointers are inert: the library must never let `data-…-error-for=""` or `form=""` match the empty-valued attribute. Guard by skipping the id-based query entirely when the form id is absent or empty.
+
+**Discovery keys off attributes, never `form.elements`.** Both `renderErrors` and `clearErrors` find their targets by attribute query (containment query for in-tree, `[…-for="<id>"]` / `[form="<id>"]` for out-of-tree) — *not* by reading the live `form.elements` collection. `form.elements` is live membership and can drift between the submit that set `aria-invalid` and the next submit's `clearErrors`: an input that left the collection in between would never be cleared, leaking `aria-invalid` onto an element the cleanup can no longer reach. Attribute-keyed discovery guarantees render and clear always operate on the identical set, so there is nothing to leak.
 
 ### Shopify response keys — merchant docs reference
 
@@ -57,6 +73,8 @@ The library does not auto-augment slots with `role` / `aria-live` / `aria-atomic
 1. Live regions must exist in the DOM at page load to be announced reliably (per current screen-reader behavior). Static attributes belong in static markup.
 2. Cart sections re-render from server HTML on every cart change. Library-augmented attributes would have to be re-applied after each re-render; merchant-written attributes are fresh from Liquid every time.
 3. Merchants who want to override defaults (e.g., `aria-live="assertive"` on a field slot) don't fight library logic.
+
+**Exception — `aria-invalid` is library-owned.** It is the one a11y attribute the library writes, because it is *transient error state*, not static markup: it has no meaningful page-load value (a never-submitted form has nothing invalid) and must flip with every request result. The merchant opts in by marking an input with `data-ajax-cart-product-form-input="<key>"`; from then on the library sets `aria-invalid="true"` on a matching error and removes it on the next `clearErrors`. **Merchants must not write `aria-invalid` in Liquid on marked inputs** — any value there is treated as library-managed and will be cleared on the next submit. (Removing the attribute is equivalent to `aria-invalid="false"` for assistive tech, so nothing is lost.)
 
 Recommended Liquid pattern (full WCAG — input highlighting works at every level below this too):
 
@@ -141,18 +159,19 @@ No global event subscription. Each form handles only its own request, eliminatin
 
 ### `clearErrors(element)`
 
-For each `[data-ajax-cart-product-form-error]` inside the element:
+Resolve the form's associated slots and inputs (in-tree by containment plus out-of-tree by form `id`, applying the [partition rule](#element-association)).
+
+For each associated `[data-ajax-cart-product-form-error]` slot:
 - Set `textContent = ""`.
 
-For each input the module previously set `aria-invalid="true"` on (tracked via a per-element `WeakSet<HTMLElement>`):
+For each associated `[data-ajax-cart-product-form-input]` input:
 - Remove `aria-invalid`.
-- Clear the tracking set.
 
-(The tracking set only contains inputs the module touched. Inputs the merchant manually pre-set `aria-invalid` on are never modified.)
+The library fully owns `aria-invalid` on marked inputs (see the a11y section), so there is no per-element tracking to consult — every marked input is simply reset. Removing the attribute is semantically identical to `aria-invalid="false"` for assistive tech. Because discovery is attribute-keyed (never `form.elements`), the exact set cleared here matches the set `renderErrors` wrote to — no marked input can drift out of reach between calls.
 
 ### `renderErrors(element, result)`
 
-1. Re-query `[data-ajax-cart-product-form-error]` slots inside the element. (Re-query, don't cache — handles section re-renders cleanly.)
+1. Re-query the form's associated `[data-ajax-cart-product-form-error]` slots — in-tree by containment plus out-of-tree by form `id`, applying the [partition rule](#element-association). (Re-query, don't cache — handles section re-renders cleanly.)
 2. Split into `keyed: Map<string, Element[]>` and `catchAll: Element[]`.
 3. Determine the source of errors. Shopify's response shapes vary; the library walks a precedence chain:
    - **Object errors:** if `result.body.errors` is a non-null object (not array), per-key routing applies.
@@ -164,9 +183,9 @@ For each input the module previously set `aria-invalid="true"` on (tracked via a
 4. For object errors:
    - For each `(key, messages: string[])`:
      - **Slot rendering:** if `keyed.has(key)`, write `messages` into all matching slots via the shared `renderMessages` helper (see Render shape); otherwise push every entry of `messages` onto an `unmatched: string[]` accumulator. Keys themselves are not rendered — only the message texts.
-     - **Input wiring (via response-key attribute):** find inputs inside the element matching `[data-ajax-cart-product-form-input="<key>"]` (escape the value with `CSS.escape`). For each match, set `aria-invalid="true"` and add to the per-element WeakSet. Runs independently of slot presence — merchants who only want input highlighting (no inline slot) get it by marking the input alone, and vice versa.
+     - **Input wiring (via response-key attribute):** find the form's associated inputs matching `[data-ajax-cart-product-form-input="<key>"]` — in-tree by containment plus out-of-tree by native `form="<id>"`, applying the [partition rule](#element-association); escape the value with `CSS.escape`. For each match, set `aria-invalid="true"`. Runs independently of slot presence — merchants who only want input highlighting (no inline slot) get it by marking the input alone, and vice versa.
    - Catch-all (if any slots present and `unmatched.length > 0`): write `unmatched` into every catch-all slot via the same `renderMessages` helper, so multiple messages are `<br>`-separated for consistency with field-keyed slots.
-5. For string / no-info: write the message into every catch-all slot as `textContent`.
+5. For string / no-info: write the single message into every catch-all slot via the same `renderMessages` helper (as `renderMessages(slot, [message])`) — **not** by setting `textContent` directly. All rendering, object-form and string-form alike, goes through the one helper so every message ends up wrapped in a `<span>`. This keeps the per-message styling hook and DOM shape identical regardless of error source.
 
 ### Render shape
 
@@ -257,13 +276,11 @@ const FALLBACK_TEXT = "We couldn't update your cart. Please try again.";
 
 No hardcoded Shopify-key → input-name map. The library routes purely by attribute value matching the response key. The set of known Shopify response keys lives in merchant-facing documentation, not in the library code — when Shopify ships new validated property fields, merchants can adopt them immediately without waiting for a library release.
 
-Per-element `aria-invalid` tracking lives in a module-scoped `WeakMap<HTMLElement, WeakSet<HTMLElement>>` so multiple instances don't share state and disconnected elements are GC'd cleanly.
+No `aria-invalid` tracking state is needed: the library owns `aria-invalid` on every `[data-ajax-cart-product-form-input]` element, so `clearErrors` just resets all marked inputs and `renderErrors` sets the matching ones. There is nothing to remember between calls.
 
 ## Hardcoded fallback
 
-The fallback text is a constant in `product-form-errors.ts`. When a settings source is designed later (likely an `<html data-ajax-cart-error-fallback="...">` attribute or a dedicated settings module), the constant becomes a default and the module reads the override.
-
-No per-slot `-fallback="..."` attribute. Decision is intentional — the per-slot escape hatch adds markup surface for a setting that nearly every merchant wants set once globally.
+The fallback text is a constant in `product-form-errors.ts`. When a settings source is designed later, the constant becomes a default and the module reads the override.
 
 ## Known Shopify response shapes (test fixtures)
 
@@ -271,10 +288,11 @@ Real `cart/add.js` 422 responses captured from the live gift-card recipient flow
 
 ### Observed shape conventions
 
-- `status` is the HTTP status (422 in all gift-card validation cases)
+- `status` is **not reliable** and the library never reads it. In gift-card validation it is the numeric HTTP status (`422`), but other failures put a non-numeric string there (`"bad_request"` in `variant-not-sent` below). Routing is driven entirely by `result.ok` from the HTTP layer plus the `errors`/`description`/`message` body fields — `body.status` is ignored.
 - `errors` and `description` both contain the **same object** in gift-card validation — duplicated per-field. Precedence: read `errors` first, ignore `description` to avoid double-rendering.
-- `message` is a single string with `"Validation failed: <FieldName> <error text>"` formatting that awkwardly duplicates the field name. Catch-all only; never used when object-form `errors`/`description` is present.
-- Only one field appears per response in observed data, but the value is always `string[]` so the helper must handle multi-message rendering even if rare.
+- `message` is a single string with `"Validation failed: <FieldName> <error text>"` formatting that awkwardly duplicates the field name. When multiple fields fail, the per-field clauses are comma-joined into one string (see `all-fields-invalid` below). Catch-all only; never used when object-form `errors`/`description` is present.
+- A single response can carry **multiple field keys** at once (see `all-fields-invalid` below). Each key routes independently to its matching slot/input; unmatched keys accumulate into the catch-all. Each key's value is always `string[]`, so the helper must handle multi-message rendering even though observed data shows one message per key.
+- The object can contain a field key literally named `message` (the gift-card "Message" property). This is an object-form **field error**, completely distinct from the top-level `message` **string**. The precedence chain reads the whole `errors` / `description` object as object-form before it ever considers the top-level string `message`, so the collision is harmless — but tests must lock it in.
 
 ### Fixtures
 
@@ -328,6 +346,28 @@ Real `cart/add.js` 422 responses captured from the live gift-card recipient flow
 }
 ```
 
+```json
+// all-fields-invalid.json — Persona got every gift-card field wrong at once.
+// Demonstrates (a) multiple field keys in one response, (b) the object-form
+// "message" field key colliding namewise with the top-level "message" string.
+{
+  "status": 422,
+  "description": {
+    "send_on": ["Send on must be a valid date"],
+    "name":    ["Name is too long (maximum is 255 characters)"],
+    "message": ["Message is too long (maximum is 200 characters)"],
+    "email":   ["Email can't be blank"]
+  },
+  "errors": {
+    "send_on": ["Send on must be a valid date"],
+    "name":    ["Name is too long (maximum is 255 characters)"],
+    "message": ["Message is too long (maximum is 200 characters)"],
+    "email":   ["Email can't be blank"]
+  },
+  "message": "Validation failed: Send on Send on must be a valid date, Name Name is too long (maximum is 255 characters), Message Message is too long (maximum is 200 characters), Email Email can't be blank"
+}
+```
+
 ### Non-gift-card 422 fixtures (string `description`, no `errors` field)
 
 Captured from live `cart/add.js` failures unrelated to gift cards. These always route to the catch-all slot.
@@ -359,7 +399,18 @@ Captured from live `cart/add.js` failures unrelated to gift cards. These always 
 }
 ```
 
+```json
+// variant-not-sent.json — id/items parameter missing or malformed (e.g. empty submit)
+{
+  "status": "bad_request",
+  "message": "Parameter Missing or Invalid",
+  "description": "Required parameter missing or invalid: items"
+}
+```
+
 **Key observation from `variant-not-found`:** `message` and `description` differ. `description` carries the informative text (`"Cannot find variant"`); `message` is the generic `"Cart Error"`. The precedence chain (string `description` before string `message`) ensures the merchant sees the informative one. This is a meaningful test assertion — proves the precedence chain isn't just an arbitrary order.
+
+**Key observation from `variant-not-sent`:** a second instance of the same precedence (`description` = `"Required parameter missing or invalid: items"` beats the generic `message` = `"Parameter Missing or Invalid"`), and the first fixture where `status` is a non-numeric string (`"bad_request"`). It locks in that the library routes purely on `result.ok` + body text fields and never inspects `body.status`.
 
 ### Required test cases derived from these fixtures
 
@@ -372,6 +423,9 @@ Captured from live `cart/add.js` failures unrelated to gift cards. These always 
 5. **Input wiring runs even without a slot** — `data-ajax-cart-product-form-input="email"` alone (no matching error slot) still receives `aria-invalid="true"`.
 6. **Slot rendering runs even without a marked input** — `data-ajax-cart-product-form-error="email"` alone (no matching `data-…-input`) still receives the message; no `aria-invalid` wiring fires.
 7. **`clearErrors` reverses both** — removes `aria-invalid` from previously-marked inputs only; clears textContent from all error slots.
+14. **Multiple field keys route independently** — `all-fields-invalid` fixture with slots/inputs for all four keys (`send_on`, `name`, `message`, `email`): each slot receives only its own message and each marked input gets `aria-invalid="true"`; no key's text leaks into another's slot.
+15. **Mixed matched/unmatched keys** — `all-fields-invalid` with slots present for only `email` and `name`: those two get their messages; the `send_on` and `message` texts accumulate into the catch-all (key names are not rendered, only the message texts), `<br>`-separated.
+16. **Object-form `message` key ≠ top-level `message` string** — `all-fields-invalid` with a `data-ajax-cart-product-form-error="message"` slot receives `"Message is too long (maximum is 200 characters)"` (the field error), NOT the top-level `"Validation failed: …"` string. Proves the precedence chain treats the object as object-form before considering the top-level string.
 
 **Non-gift-card string-form fixtures (`max-in-cart`, `variant-not-found`, `variant-sold-out`):**
 

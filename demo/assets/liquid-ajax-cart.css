@@ -65,7 +65,8 @@
 /*	color: red;*/
 /*}*/
 
-[data-ajax-cart-errors] {
+[data-ajax-cart-errors],
+[data-ajax-cart-product-form-error] {
 	font-size: .8em;
 	color: red;
 }

@@ -1,0 +1,6 @@
+{
+  "status": 422,
+  "description": { "email": ["Email is invalid"] },
+  "errors": { "email": ["Email is invalid"] },
+  "message": "Validation failed: Email Email is invalid"
+}

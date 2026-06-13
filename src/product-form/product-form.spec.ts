@@ -127,6 +127,41 @@ test("respects window.Shopify.routes.root when validating the action URL", () =>
 });
 
 // =============================================================================
+// Error rendering wiring
+// =============================================================================
+
+/** Appends a catch-all error slot inside the wrapper and returns it. */
+function addErrorSlot(element: HTMLElement, initialHTML = ""): HTMLElement {
+  const slot = document.createElement("div");
+  slot.setAttribute("data-ajax-cart-product-form-error", "");
+  slot.innerHTML = initialHTML;
+  element.appendChild(slot);
+  return slot;
+}
+
+test("renders errors into a slot when the request fails", async () => {
+  const { element, form, button } = mountProductForm();
+  const slot = addErrorSlot(element);
+
+  addMock.mockResolvedValue({ ok: false, status: 422, body: { description: "Sold out" } });
+  form!.requestSubmit(button);
+  await flush();
+
+  expect(slot.querySelector("span")?.textContent).toBe("Sold out");
+});
+
+test("clears stale errors before submitting and does not re-render on success", async () => {
+  const { element, form, button } = mountProductForm();
+  const slot = addErrorSlot(element, "<span>old error</span>");
+
+  // addMock defaults to a successful result in beforeEach.
+  form!.requestSubmit(button);
+  await flush();
+
+  expect(slot.textContent).toBe("");
+});
+
+// =============================================================================
 // Processing attribute
 // =============================================================================
 

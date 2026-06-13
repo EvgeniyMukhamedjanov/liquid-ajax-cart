@@ -1,0 +1,5 @@
+{
+  "status": 422,
+  "message": "The maximum quantity of this item is already in your cart.",
+  "description": "The maximum quantity of this item is already in your cart."
+}

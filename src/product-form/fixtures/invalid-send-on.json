@@ -1,0 +1,6 @@
+{
+  "status": 422,
+  "description": { "send_on": ["Send on must be a valid date"] },
+  "errors": { "send_on": ["Send on must be a valid date"] },
+  "message": "Validation failed: Send on Send on must be a valid date"
+}

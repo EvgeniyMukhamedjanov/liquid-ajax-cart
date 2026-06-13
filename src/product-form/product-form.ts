@@ -1,4 +1,5 @@
 import { add } from "../core";
+import { clearErrors, renderErrors } from "./product-form-errors";
 
 const ELEMENT_TAG = "ajax-cart-product-form";
 const ATTR_PROCESSING = "processing";
@@ -54,17 +55,21 @@ export class ProductFormElement extends HTMLElement {
     form.addEventListener("submit", this.#onSubmit);
   }
 
-  #onSubmit = (event: SubmitEvent): void => {
+  #onSubmit = async (event: SubmitEvent): Promise<void> => {
     event.preventDefault();
     if (!this.#form || this.hasAttribute(ATTR_PROCESSING)) return;
 
     const formData = new FormData(this.#form, event.submitter);
 
     this.setAttribute(ATTR_PROCESSING, "");
-    
-    add(formData, { trigger: { source: ELEMENT_TAG, initiator: this } }).finally(() => {
-      this.removeAttribute(ATTR_PROCESSING);
-    });
+    clearErrors(this);
+
+    // `add` resolves (never rejects) per the core contract, so the cleanup runs
+    // right after it settles — before `renderErrors`, the only line that could
+    // throw — which keeps `processing` from ever sticking without a try/finally.
+    const result = await add(formData, { trigger: { source: ELEMENT_TAG, initiator: this } });
+    this.removeAttribute(ATTR_PROCESSING);
+    if (!result.ok) renderErrors(this, result);
   };
 }
 

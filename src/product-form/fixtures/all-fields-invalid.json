@@ -1,0 +1,16 @@
+{
+  "status": 422,
+  "description": {
+    "send_on": ["Send on must be a valid date"],
+    "name": ["Name is too long (maximum is 255 characters)"],
+    "message": ["Message is too long (maximum is 200 characters)"],
+    "email": ["Email can't be blank"]
+  },
+  "errors": {
+    "send_on": ["Send on must be a valid date"],
+    "name": ["Name is too long (maximum is 255 characters)"],
+    "message": ["Message is too long (maximum is 200 characters)"],
+    "email": ["Email can't be blank"]
+  },
+  "message": "Validation failed: Send on Send on must be a valid date, Name Name is too long (maximum is 255 characters), Message Message is too long (maximum is 200 characters), Email Email can't be blank"
+}
