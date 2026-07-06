@@ -35,7 +35,7 @@ afterEach(() => {
 });
 
 /** Wrap a Shopify response body into a failed RequestResult. */
-function fail(body: object | null, status: number | null = 422): RequestResult {
+function fail(body: Record<string, unknown> | null, status: number | null = 422): RequestResult {
   return { ok: false, status, body };
 }
 
@@ -523,7 +523,7 @@ describe("renderErrors — precedence & shape matrix", () => {
 
   type Row = {
     name: string;
-    body: object | null;
+    body: Record<string, unknown> | null;
     keyed?: string[];
     catchAll?: string[];
     aria?: boolean;

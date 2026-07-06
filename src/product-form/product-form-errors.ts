@@ -107,7 +107,7 @@ export function renderErrors(element: HTMLElement, result: RequestResult): void 
   const formId = formIdOf(element);
   const { keyed, catchAll } = splitSlots(collectSlots(element, formId));
 
-  const body = result.body as Record<string, unknown> | null;
+  const body = result.body;
 
   // Precedence: object errors → object description → string errors →
   // string description → string message → fallback. Empty objects fall through.

@@ -22,8 +22,18 @@ export type RequestOptions = {
 export type RequestResult = {
   ok: boolean;
   status: number | null;
-  body: object | null;
+  body: Record<string, unknown> | null;
 };
+
+/**
+ * Type guard for a plain object, used to narrow untyped JSON (`any` from
+ * `response.json()`) at the single boundary where it enters the typed world.
+ * Arrays, primitives, and null are rejected — the Shopify Cart API always returns
+ * a JSON object (success or error), so anything else is malformed and unusable.
+ */
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
 
 const ENDPOINTS = {
   add: { path: "cart/add.js", httpMethod: "POST" },
@@ -140,9 +150,10 @@ export class CartApi {
         const init = buildRequestInit(endpoint, body, signal);
         const response = await fetch(url, init);
 
-        let responseBody: object | null = null;
+        let responseBody: Record<string, unknown> | null = null;
         try {
-          responseBody = await response.json();
+          const raw: unknown = await response.json();
+          responseBody = isRecord(raw) ? raw : null;
         } catch {
           // Some responses may not have JSON body
         }
