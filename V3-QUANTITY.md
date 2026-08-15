@@ -94,6 +94,8 @@ A `<select>` matches nothing, so a widget built around one reports "found 0".
 
 The step markers go on any element — the library only binds `click`. Use `<button type="button">` or `<a href>` so keyboard users can activate them: Enter/Space on a `<div tabindex="0">` fires no `click`, and the library does not synthesize activation. An `href` degrades without JS; the library never requires JS-only markup but guarantees no fallback.
 
+**A marker may wrap an icon.** Click resolution narrows the target to `Element`, not `HTMLElement`, because an inline `<svg>` or `<path>` inside a button extends `Element` only — tightening it would break every stepper with an icon. Resolution then walks up with `closest()` to find the marker.
+
 ## Input binding
 
 | Trigger | Action |
@@ -277,6 +279,7 @@ This drops v2's mechanism, which set `aria-disabled` **and** `disabled` on real 
 ## Ordering facts (verified in core)
 
 - `emitter.ts:41-56` awaits internal listeners, *then* dispatches the DOM event. Since sections renders from an internal listener, DOM listeners always run after the render — no import-order dependency — in the same task, so no flash.
+- `addEventListener` ignores a repeat of the same `(type, callback, capture)` triple. `initInputBinding()` is therefore idempotent with no flag of its own, since every handler it registers is a stable module-level reference — a flag would only re-implement what the platform already guarantees.
 - `queue.ts:84` clears `#running` *after* `queue-end`. `isProcessing()` is still `true` throughout that hook; `queue-idle` (`core.ts:33`) is the only point it reads `false`. Re-enabling on `queue-end` would disable controls permanently.
 
 ## Parameters
