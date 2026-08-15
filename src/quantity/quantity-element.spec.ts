@@ -154,8 +154,9 @@ describe("stepping", () => {
 
   // An empty field carries no quantity to step from, and native treats it as 0
   // — so minus would land on `min` (or 0 with no `min`) and remove the line.
-  // Normally the blur-driven `change` restores first, but macOS Safari/Firefox
-  // do not move focus on a button click, so the field is still empty here.
+  // Reachable only with no `value` attribute: the blur-driven `change` runs
+  // commit(), whose empty branch calls restore() — which no-ops when there is
+  // nothing to restore to, leaving the field empty when the click lands.
   it("does nothing when the field is empty", () => {
     mount(WIDGET);
     input().value = "";
@@ -204,10 +205,12 @@ describe("stepping", () => {
     expect(input().value).toBe("0");
   });
 
-  // The case with no other line of defence: a local stepper fires no request,
-  // so the queue never goes busy and nothing throttles repeated clicks. Without
-  // the element's own floor the value walks 0 → -1 → -2 on screen.
-  it("never steps a local stepper below 0", () => {
+  // The element wraps cart-connected inputs only, so an input without the
+  // identity marker is invisible to the selector and the structure check
+  // reports "found 0" — the same message as no input at all. Nothing is bound,
+  // so the buttons keep their own href fallback.
+  it("ignores an input that is not cart-connected", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
     mount(`
       <ajax-cart-quantity>
         <a data-ajax-cart-quantity-minus>-</a>
@@ -215,8 +218,25 @@ describe("stepping", () => {
         <a data-ajax-cart-quantity-plus>+</a>
       </ajax-cart-quantity>`);
 
+    expect(spy).toHaveBeenCalledTimes(1);
+    click("[data-ajax-cart-quantity-minus]");
+    expect(input().value).toBe("1"); // untouched
+  });
+
+  // Kept as a marked input: the binding floors negatives too, so this is not
+  // the last line of defence — but the display should not show -1 in the gap
+  // before that request lands.
+  it("never steps below 0", () => {
+    mount(`
+      <ajax-cart-quantity>
+        <a data-ajax-cart-quantity-minus>-</a>
+        <input type="number" data-ajax-cart-quantity-input="1" value="1">
+        <a data-ajax-cart-quantity-plus>+</a>
+      </ajax-cart-quantity>`);
+
     click("[data-ajax-cart-quantity-minus]");
     expect(input().value).toBe("0");
+    isProcessingMock.mockReturnValue(false); // the request the click would start
     click("[data-ajax-cart-quantity-minus]");
     click("[data-ajax-cart-quantity-minus]");
     expect(input().value).toBe("0");
@@ -357,6 +377,30 @@ describe("stepping", () => {
     expect(input().value).toBe("4");
   });
 
+  // The immediate-fire test asks "is this a removal", not "is this small". A
+  // fractional step is the only thing that tells the two apart: 0.5 is below 1
+  // but removes nothing, and sending it alone would draw "expected integer"
+  // from Shopify instead of coalescing with the next click into a real 0.
+  it("debounces a fractional step that lands between 0 and 1", () => {
+    vi.useFakeTimers();
+    mount(`
+      <ajax-cart-quantity>
+        <input type="number" step="0.5" data-ajax-cart-quantity-input="1" value="1">
+        <a data-ajax-cart-quantity-minus>-</a>
+      </ajax-cart-quantity>`);
+    const seen: string[] = [];
+    document.addEventListener("change", (e) => seen.push((e.target as HTMLInputElement).value));
+
+    click("[data-ajax-cart-quantity-minus]");
+    expect(input().value).toBe("0.5");
+    expect(seen).toEqual([]); // not a removal, so it waits
+
+    click("[data-ajax-cart-quantity-minus]"); // coalesces to a real 0
+    expect(input().value).toBe("0");
+    expect(seen).toEqual(["0"]); // and that one goes at once
+    vi.useRealTimers();
+  });
+
   it.each(["abc", "0", "-3", ""])("accepts step=%s, which falls back to 1", (step) => {
     const spy = vi.spyOn(console, "error").mockImplementation(() => {});
     mount(`
@@ -402,6 +446,34 @@ describe("stepping", () => {
     expect(input().value).toBe("2"); // unchanged
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy.mock.calls[0]).toContain(boom); // the cause is passed through
+  });
+
+  // The mirror of the button case below. A children-only render replaces the
+  // input while the element stays put, so #onClick and refresh() re-query it
+  // rather than holding a reference from #init — cache it there and the stepper
+  // silently drives a detached node: clicks change nothing on screen, and the
+  // buttons dim from a value nobody can see.
+  it("steps an input swapped in after connect", () => {
+    const el = mount(WIDGET);
+    const replacement = input().cloneNode() as HTMLInputElement;
+    replacement.value = "7";
+    input().replaceWith(replacement);
+
+    click("[data-ajax-cart-quantity-plus]");
+    expect(replacement.value).toBe("8"); // the live node stepped
+    expect(el.querySelectorAll("input")).toHaveLength(1);
+  });
+
+  it("dims from the swapped-in input's value, not the replaced one", () => {
+    const el = mount(WIDGET); // min=1, max=10
+    const replacement = input().cloneNode() as HTMLInputElement;
+    replacement.value = "10"; // at max
+    input().replaceWith(replacement);
+
+    (el as unknown as { refresh(): void }).refresh();
+    expect(el.querySelector("[data-ajax-cart-quantity-plus]")?.getAttribute("aria-disabled")).toBe(
+      "true",
+    );
   });
 
   it("steps a button inserted after connect", () => {
@@ -456,6 +528,36 @@ describe("remove-at-min", () => {
     mount(B2B.replace(" remove-at-min", ""));
     click("[data-ajax-cart-quantity-minus]");
     expect(input().value).toBe("6");
+  });
+
+  // The value not moving is only half of it. #onClick's refusal branch returns
+  // BEFORE #schedule, and nothing else pins that: let the refusal fall through
+  // and every press on a dimmed button fires a change.js re-sending the
+  // quantity the cart already holds — invisible to a value-only assertion,
+  // since a synthetic change alters no value.
+  it("dispatches nothing when a step is refused", () => {
+    vi.useFakeTimers();
+    mount(B2B.replace(" remove-at-min", "")); // min=6, value=6
+    const seen: string[] = [];
+    document.addEventListener("change", () => seen.push("fired"));
+
+    click("[data-ajax-cart-quantity-minus]"); // refused at min
+    vi.advanceTimersByTime(300);
+    expect(seen).toEqual([]);
+    vi.useRealTimers();
+  });
+
+  it("dispatches nothing when plus is refused at max", () => {
+    vi.useFakeTimers();
+    mount(WIDGET); // max=10
+    input().value = "10";
+    const seen: string[] = [];
+    document.addEventListener("change", () => seen.push("fired"));
+
+    click("[data-ajax-cart-quantity-plus]");
+    vi.advanceTimersByTime(300);
+    expect(seen).toEqual([]);
+    vi.useRealTimers();
   });
 
   // Without the already-0 guard a second press would re-send 0 for a line that
@@ -542,6 +644,31 @@ describe("debounce", () => {
 
     vi.advanceTimersByTime(300);
     expect(seen).toEqual(["5"]); // no stale "3" dispatched behind it
+    vi.useRealTimers();
+  });
+
+  // The listener is on the element, so every change bubbling out of it arrives
+  // — and the structure check only rejects extra input[type="number"], so a
+  // line-property select or a gift-wrap checkbox may legitimately sit inside.
+  // Without narrowing, toggling one mid-window silently discards the step.
+  it("keeps a pending step when another control inside the widget changes", () => {
+    vi.useFakeTimers();
+    mount(`
+      <ajax-cart-quantity>
+        <input type="number" data-ajax-cart-quantity-input="1" value="2">
+        <a data-ajax-cart-quantity-plus>+</a>
+        <input type="checkbox" id="wrap">
+      </ajax-cart-quantity>`);
+    const seen: string[] = [];
+    document.addEventListener("change", (e) => {
+      if ((e.target as HTMLElement).id !== "wrap") seen.push((e.target as HTMLInputElement).value);
+    });
+
+    click("[data-ajax-cart-quantity-plus]"); // timer armed at 3
+    document.getElementById("wrap")?.dispatchEvent(new Event("change", { bubbles: true }));
+
+    vi.advanceTimersByTime(300);
+    expect(seen).toEqual(["3"]); // the step survived
     vi.useRealTimers();
   });
 
@@ -645,6 +772,194 @@ describe("debounce", () => {
 function ariaOf(selector: string): string | null {
   return (document.querySelector(selector) as HTMLElement).getAttribute("aria-disabled");
 }
+
+describe("early flush", () => {
+  function pointerdownOn(node: EventTarget): void {
+    node.dispatchEvent(new Event("pointerdown", { bubbles: true }));
+  }
+
+  function focusoutTo(el: HTMLElement, relatedTarget: EventTarget | null): void {
+    el.dispatchEvent(new FocusEvent("focusout", { bubbles: true, relatedTarget }));
+  }
+
+  // Programmatic value writes fire no native `change`, so a stepped quantity is
+  // carried ONLY by this timer. Click Checkout with one pending and the value
+  // is lost — pointerdown runs before navigation, so the request gets away.
+  it("flushes a pending step on pointerdown outside the element", () => {
+    vi.useFakeTimers();
+    mount(`<div>${WIDGET}<button id="out">checkout</button></div>`);
+    const seen: string[] = [];
+    document.addEventListener("change", (e) => seen.push((e.target as HTMLInputElement).value));
+
+    click("[data-ajax-cart-quantity-plus]");
+    expect(seen).toEqual([]); // still inside the 300ms window
+
+    pointerdownOn(document.getElementById("out") as HTMLElement);
+    expect(seen).toEqual(["3"]); // fired without waiting
+    vi.advanceTimersByTime(300);
+    expect(seen).toEqual(["3"]); // and only once
+    vi.useRealTimers();
+  });
+
+  it("leaves the timer alone for a pointerdown inside the element", () => {
+    vi.useFakeTimers();
+    mount(WIDGET);
+    const seen: string[] = [];
+    document.addEventListener("change", (e) => seen.push((e.target as HTMLInputElement).value));
+
+    click("[data-ajax-cart-quantity-plus]");
+    pointerdownOn(document.querySelector("[data-ajax-cart-quantity-minus]") as HTMLElement);
+    expect(seen).toEqual([]); // pressing the other button must not commit mid-adjustment
+
+    vi.advanceTimersByTime(300);
+    expect(seen).toEqual(["3"]);
+    vi.useRealTimers();
+  });
+
+  it("does nothing on an outside pointerdown when no step is pending", () => {
+    mount(`<div>${WIDGET}<button id="out">x</button></div>`);
+    const seen: string[] = [];
+    document.addEventListener("change", () => seen.push("fired"));
+
+    pointerdownOn(document.getElementById("out") as HTMLElement);
+    expect(seen).toEqual([]);
+  });
+
+  // Keyboard users generate no pointer event at all.
+  it("flushes on focusout that leaves the element", () => {
+    vi.useFakeTimers();
+    const el = mount(WIDGET);
+    const seen: string[] = [];
+    document.addEventListener("change", (e) => seen.push((e.target as HTMLInputElement).value));
+
+    click("[data-ajax-cart-quantity-plus]");
+    focusoutTo(el, document.body);
+    expect(seen).toEqual(["3"]);
+    vi.useRealTimers();
+  });
+
+  it("flushes on focusout with no relatedTarget", () => {
+    vi.useFakeTimers();
+    const el = mount(WIDGET);
+    const seen: string[] = [];
+    document.addEventListener("change", () => seen.push("fired"));
+
+    click("[data-ajax-cart-quantity-plus]");
+    focusoutTo(el, null); // focus went nowhere the browser will name
+    expect(seen).toEqual(["fired"]);
+    vi.useRealTimers();
+  });
+
+  // Tabbing from minus to plus must not commit a half-made adjustment.
+  it("ignores focusout that stays within the element", () => {
+    vi.useFakeTimers();
+    const el = mount(WIDGET);
+    const seen: string[] = [];
+    document.addEventListener("change", () => seen.push("fired"));
+
+    click("[data-ajax-cart-quantity-plus]");
+    focusoutTo(el, document.querySelector("[data-ajax-cart-quantity-minus]"));
+    expect(seen).toEqual([]);
+
+    vi.advanceTimersByTime(300);
+    expect(seen).toEqual(["fired"]);
+    vi.useRealTimers();
+  });
+
+  // pointerdown precedes focusout in one gesture; the second must find nothing.
+  it("fires once when both signals arrive for the same gesture", () => {
+    vi.useFakeTimers();
+    const el = mount(`<div>${WIDGET}<button id="out">x</button></div>`);
+    const seen: string[] = [];
+    document.addEventListener("change", () => seen.push("fired"));
+
+    click("[data-ajax-cart-quantity-plus]");
+    pointerdownOn(document.getElementById("out") as HTMLElement);
+    focusoutTo(el.querySelector("ajax-cart-quantity") as HTMLElement, document.body);
+    vi.advanceTimersByTime(300);
+    expect(seen).toEqual(["fired"]);
+    vi.useRealTimers();
+  });
+
+  // Capture, not bubble: a theme's own pointerdown handler calling
+  // stopPropagation() — drawer overlays and dropdown-dismiss code do this
+  // routinely — would otherwise silently disable every early flush on the page.
+  it("flushes even when a handler in between stops propagation", () => {
+    vi.useFakeTimers();
+    mount(`<div>${WIDGET}<button id="out">checkout</button></div>`);
+    const seen: string[] = [];
+    document.addEventListener("change", () => seen.push("fired"));
+    document.getElementById("out")?.addEventListener("pointerdown", (e) => e.stopPropagation());
+
+    click("[data-ajax-cart-quantity-plus]");
+    pointerdownOn(document.getElementById("out") as HTMLElement);
+    expect(seen).toEqual(["fired"]);
+    vi.useRealTimers();
+  });
+
+  // Scoped to this element, not the document: on a cart page every line is a
+  // widget, so a document-wide lookup would dispatch into the first line's
+  // input no matter which line was stepped.
+  it("flushes its own input, not the first one on the page", () => {
+    vi.useFakeTimers();
+    document.body.innerHTML = `
+      <div>
+        <ajax-cart-quantity>
+          <input type="number" data-ajax-cart-quantity-input="1" value="5">
+          <a data-ajax-cart-quantity-plus>+</a>
+        </ajax-cart-quantity>
+        <ajax-cart-quantity>
+          <input type="number" data-ajax-cart-quantity-input="2" value="2">
+          <a id="second-plus" data-ajax-cart-quantity-plus>+</a>
+        </ajax-cart-quantity>
+        <button id="out">x</button>
+      </div>`;
+    const seen: string[] = [];
+    document.addEventListener("change", (e) =>
+      seen.push(
+        (e.target as HTMLInputElement).getAttribute("data-ajax-cart-quantity-input") ?? "?",
+      ),
+    );
+
+    (document.getElementById("second-plus") as HTMLElement).click(); // step line 2
+    pointerdownOn(document.getElementById("out") as HTMLElement);
+
+    expect(seen).toEqual(["2"]); // line 2's input, not line 1's
+    vi.useRealTimers();
+  });
+
+  it("stops listening for outside pointerdown once disconnected", () => {
+    vi.useFakeTimers();
+    mount(`<div>${WIDGET}<button id="out">x</button></div>`);
+    const seen: string[] = [];
+    document.addEventListener("change", () => seen.push("fired"));
+
+    click("[data-ajax-cart-quantity-plus]");
+    (document.querySelector("ajax-cart-quantity") as HTMLElement).remove();
+
+    pointerdownOn(document.getElementById("out") as HTMLElement);
+    vi.advanceTimersByTime(300);
+    expect(seen).toEqual([]); // disconnect already cleared the timer
+    vi.useRealTimers();
+  });
+
+  // The input is re-queried at flush time, not captured when the timer was set.
+  it("flushes into an input swapped in after the step", () => {
+    vi.useFakeTimers();
+    mount(`<div>${WIDGET}<button id="out">x</button></div>`);
+    const seen: string[] = [];
+    document.addEventListener("change", (e) => seen.push((e.target as HTMLInputElement).value));
+
+    click("[data-ajax-cart-quantity-plus]");
+    const replacement = input().cloneNode() as HTMLInputElement;
+    replacement.value = "9";
+    input().replaceWith(replacement);
+
+    pointerdownOn(document.getElementById("out") as HTMLElement);
+    expect(seen).toEqual(["9"]); // the live node, not the detached one
+    vi.useRealTimers();
+  });
+});
 
 describe("button states", () => {
   // Dimming has to agree with what a click actually does. With `min` absent the

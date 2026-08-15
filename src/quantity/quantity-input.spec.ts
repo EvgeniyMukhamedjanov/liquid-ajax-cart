@@ -409,6 +409,78 @@ function flush(): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
+describe("resync after a failed request", () => {
+  function endRequest(ok: boolean, status: number | null): void {
+    document.dispatchEvent(
+      new CustomEvent(EVENTS.REQUEST_END, { detail: { result: { ok, status, body: null } } }),
+    );
+  }
+
+  // The gap this closes: a commit dropped while the queue was busy leaves the
+  // stepped value on screen, and a request that fails at the network level
+  // renders nothing (sections.ts:131), so nothing else would ever correct it.
+  it("restores a control whose commit was dropped while busy", () => {
+    const el = mount(
+      `<input type="number" data-ajax-cart-quantity-input="3" value="2">`,
+    ) as HTMLInputElement;
+    el.value = "3"; // stepped, then commit() was dropped by the isProcessing guard
+
+    endRequest(false, null);
+    expect(el.value).toBe("2");
+  });
+
+  // A success may have moved the cart past the attribute. If it rendered, these
+  // nodes were replaced and this is moot; if it did not, restoring would repaint
+  // a CORRECT display with a STALE attribute and create the divergence.
+  it("leaves the display alone after a successful request", () => {
+    const el = mount(
+      `<input type="number" data-ajax-cart-quantity-input="3" value="2">`,
+    ) as HTMLInputElement;
+    el.value = "3"; // committed and confirmed; the attribute simply has not caught up
+
+    endRequest(true, 200);
+    expect(el.value).toBe("3");
+  });
+
+  it("restores on a 422 as well as a network failure", () => {
+    const el = mount(
+      `<input type="number" data-ajax-cart-quantity-input="3" value="2">`,
+    ) as HTMLInputElement;
+    el.value = "9";
+
+    endRequest(false, 422);
+    expect(el.value).toBe("2");
+  });
+
+  // v2 set `disabled`, which blurs, so it never met this case. `readonly` keeps
+  // focus, so an unconditional resync would wipe an edit in progress.
+  it("does not wipe the field the shopper is typing in", () => {
+    document.body.innerHTML = `
+      <input type="number" data-ajax-cart-quantity-input="3" value="2">
+      <input type="number" data-ajax-cart-quantity-input="4" value="5">`;
+    const [focused, other] = [...document.querySelectorAll("input")] as HTMLInputElement[];
+    focused.value = "7";
+    other.value = "8";
+    focused.focus();
+
+    endRequest(false, null);
+    expect(focused.value).toBe("7"); // still being edited
+    expect(other.value).toBe("5"); // resynced
+  });
+
+  it("restores every marked control, not only the one that requested", () => {
+    document.body.innerHTML = `
+      <input type="number" data-ajax-cart-quantity-input="1" value="2">
+      <input type="number" data-ajax-cart-quantity-input="2" value="4">`;
+    const [a, b] = [...document.querySelectorAll("input")] as HTMLInputElement[];
+    a.value = "3";
+    b.value = "9";
+
+    endRequest(false, null);
+    expect([a.value, b.value]).toEqual(["2", "4"]);
+  });
+});
+
 describe("carrier validation", () => {
   // The binding and the stepper element must agree about the same markup: the
   // element requires input[type="number"], so a marker on anything else has to
@@ -426,6 +498,72 @@ describe("carrier validation", () => {
     el.dispatchEvent(new Event("change", { bubbles: true }));
     expect(spy).toHaveBeenCalledTimes(1);
     expect(changeMock).not.toHaveBeenCalled();
+  });
+
+  // The value attribute is the module's whole substitute for cart state, so
+  // its absence disables Escape, the failure restore, the request-end resync
+  // and the no-op guard at once. Liquid always renders it for a cart line, so
+  // a marked input without one is a markup error, not a supported mode.
+  it("reports a marked input with no value attribute", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    mount(`<input type="number" data-ajax-cart-quantity-input="3">`);
+    const el = document.querySelector("input") as HTMLInputElement;
+    el.value = "5";
+
+    el.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  // An empty attribute is exactly as useless as a missing one as a record of
+  // the cart's quantity, and reads the same through defaultValue.
+  it("reports an empty value attribute too", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    mount(`<input type="number" data-ajax-cart-quantity-input="3" value="">`);
+    document.querySelector("input")?.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  // Reports and CONTINUES, unlike the carrier and identity errors. We know the
+  // line and the quantity, so the request is still correct — only the undo is
+  // lost. Refusing would take the cart hostage over a missing attribute.
+  it("still commits despite the missing attribute", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    mount(`<input type="number" data-ajax-cart-quantity-input="3">`);
+    const el = document.querySelector("input") as HTMLInputElement;
+    el.value = "5";
+
+    el.dispatchEvent(new Event("change", { bubbles: true }));
+    await flush();
+    expect(sentBody()).toEqual({ line: "3", quantity: "5" });
+  });
+
+  // Escape never reaches commit(), which is why the check lives in controlFrom
+  // — and Escape is the gesture that silently does nothing without the value.
+  it("reports on Escape, not only on commit gestures", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    mount(`<input type="number" data-ajax-cart-quantity-input="3">`);
+    const el = document.querySelector("input") as HTMLInputElement;
+    el.value = "5";
+
+    el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(el.value).toBe("5"); // and Escape did nothing, which is the point
+  });
+
+  // Deliberately no test that a control outside [data-ajax-cart-fragment] is
+  // reported. That check was written and removed: it asserts ONE renderer's
+  // markup, and the planned morph preserves nodes rather than replacing them,
+  // so it would warn at markup that is fine. See controlFrom().
+
+  it("stays silent when the attribute is present", async () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    mount(`<input type="number" data-ajax-cart-quantity-input="3" value="2">`);
+    const el = document.querySelector("input") as HTMLInputElement;
+    el.value = "5";
+
+    el.dispatchEvent(new Event("change", { bubbles: true }));
+    await flush();
+    expect(spy).not.toHaveBeenCalled();
   });
 
   // Runs on every keystroke on the page, so the key is checked before the
@@ -485,6 +623,39 @@ describe("delegation", () => {
     expect(changeMock).not.toHaveBeenCalled();
   });
 
+  // Escape cannot undo a request that has been sent, so repainting the server
+  // value over an in-flight edit would make the field assert something false
+  // until the render lands — 5, then 2, then 5 again.
+  it("does not restore while the queue is processing", async () => {
+    isProcessingMock.mockReturnValue(true);
+    const el = mount(
+      `<input type="number" data-ajax-cart-quantity-input="3" value="2">`,
+    ) as HTMLInputElement;
+    el.value = "5"; // committed by Enter; its request is still running
+
+    el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await flush();
+    expect(el.value).toBe("5");
+    expect(changeMock).not.toHaveBeenCalled();
+  });
+
+  // The cost of the guard above, asserted so it is a decision rather than a
+  // surprise: a second press once the queue idles works.
+  it("restores on the next Escape once the queue is idle", async () => {
+    isProcessingMock.mockReturnValue(true);
+    const el = mount(
+      `<input type="number" data-ajax-cart-quantity-input="3" value="2">`,
+    ) as HTMLInputElement;
+    el.value = "5";
+    el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(el.value).toBe("5");
+
+    isProcessingMock.mockReturnValue(false);
+    el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await flush();
+    expect(el.value).toBe("2");
+  });
+
   it("ignores other keys", async () => {
     const el = mount(
       `<input type="number" data-ajax-cart-quantity-input="3" value="2">`,
@@ -521,6 +692,24 @@ describe("busy state", () => {
     applyBusyState();
     expect(document.activeElement).toBe(el);
   });
+
+  // The spec singles out unconditional clearing as the deliberate reversal of a
+  // design that preserved a merchant's own `readonly`. Asserting it with a lock
+  // the LIBRARY set passes under either implementation, so the lock here is
+  // authored in the markup — the only fixture that tells them apart.
+  it("clears a merchant-authored readonly, rather than preserving it", () => {
+    mount(`<input type="number" readonly data-ajax-cart-quantity-input="3" value="2">`);
+    const el = document.querySelector("input") as HTMLInputElement;
+    expect(el.readOnly).toBe(true); // as rendered
+
+    isProcessingMock.mockReturnValue(true);
+    applyBusyState();
+    expect(el.readOnly).toBe(true);
+
+    isProcessingMock.mockReturnValue(false);
+    applyBusyState();
+    expect(el.readOnly).toBe(false); // the library owns it outright
+  });
 });
 
 describe("initInputBinding", () => {
@@ -543,5 +732,24 @@ describe("initInputBinding", () => {
 
     document.dispatchEvent(new CustomEvent(EVENTS.REQUEST_END, { detail: {} }));
     expect(el.readOnly).toBe(true);
+  });
+
+  // Registered, but until now never dispatched here: the busy-state tests call
+  // applyBusyState() directly, and the only lifecycle event this file fired was
+  // request-end. Deleting either registration therefore shipped green — losing
+  // queue-idle leaves every quantity field readonly for the life of the page
+  // after one request, and losing queue-start leaves them editable during one.
+  it("locks on queue-start and unlocks on queue-idle", () => {
+    initInputBinding();
+    mount(`<input type="number" data-ajax-cart-quantity-input="3" value="2">`);
+    const el = document.querySelector("input") as HTMLInputElement;
+
+    isProcessingMock.mockReturnValue(true);
+    document.dispatchEvent(new CustomEvent(EVENTS.QUEUE_START, { detail: {} }));
+    expect(el.readOnly).toBe(true);
+
+    isProcessingMock.mockReturnValue(false);
+    document.dispatchEvent(new CustomEvent(EVENTS.QUEUE_IDLE, { detail: {} }));
+    expect(el.readOnly).toBe(false);
   });
 });

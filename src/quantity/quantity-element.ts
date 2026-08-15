@@ -1,4 +1,8 @@
 import { isProcessing, EVENTS } from "../core";
+// One constant, one direction: this element requires a cart-connected input, so
+// it depends on the binding's definition of that. The binding never imports
+// back, and neither calls the other — they meet at a synthetic `change` event.
+import { ATTR as INPUT_ATTR } from "./quantity-input";
 
 const TAG = "ajax-cart-quantity";
 
@@ -14,7 +18,15 @@ const TAG = "ajax-cart-quantity";
 // and steps normally, so there is nothing else to filter. The `i` flag is
 // load-bearing: the keyword is ASCII case-insensitive, so step="ANY" throws
 // too, and without it that markup would slip through and fail silently.
-const INPUT = 'input[type="number"]:not([step="any" i])';
+//
+// The identity marker is part of the requirement, not merely expected: this
+// element only wraps CART-CONNECTED inputs (v2 held the same rule at
+// `_src-old/controls/quantity-element.ts:32-39`). That is what makes the busy
+// state honest — every stepper is affected by the queue, so dimming on
+// `isProcessing()` is true of all of them rather than of most. Folding it into
+// the selector rather than checking it separately means an unmarked input is
+// simply invisible, and the existing "found 0" error already covers it.
+const INPUT = `input[type="number"][${INPUT_ATTR}]:not([step="any" i])`;
 const PLUS = "data-ajax-cart-quantity-plus";
 const MINUS = "data-ajax-cart-quantity-minus";
 
@@ -103,9 +115,15 @@ export class QuantityElement extends HTMLElement {
     const inputs = this.querySelectorAll<HTMLInputElement>(INPUT);
     if (inputs.length !== 1) {
       console.error(
-        `Liquid Ajax Cart: <${TAG}> must contain exactly one <input type="number">, found ${inputs.length}.`,
+        `Liquid Ajax Cart: <${TAG}> must contain exactly one <input type="number" ${INPUT_ATTR}>, found ${inputs.length}.`,
         this,
       );
+      // Binding NOTHING is the point, not an oversight. The step markers are
+      // normally `<a href="{{ routes.cart_change_url }}?…">`, a no-JS fallback
+      // that still changes the quantity server-side — so a widget we have
+      // refused to drive falls back to markup that works. Binding #onClick just
+      // to preventDefault() would replace a working, if clunky, path with dead
+      // buttons. The error is logged here at connect, before any click.
       return;
     }
 
@@ -126,6 +144,21 @@ export class QuantityElement extends HTMLElement {
     document.addEventListener(EVENTS.QUEUE_START, this.#onQueue, { signal });
     document.addEventListener(EVENTS.QUEUE_IDLE, this.#onQueue, { signal });
 
+    // Early flush, on the two ways a shopper can turn away from this widget.
+    //
+    // `pointerdown`, in the CAPTURE phase and on `document`: it precedes both
+    // focus movement and navigation, so a step still inside the debounce window
+    // gets its request away before a Checkout click leaves the page — and
+    // capture means no handler in between can stop it by halting propagation.
+    // It also works regardless of focus, which is why it replaces v2's
+    // `focusout` (`_src-old/controls/quantity-element.ts:82-89`) as the primary
+    // signal rather than joining it.
+    //
+    // `focusout` is still needed, but only for the keyboard: tabbing away
+    // produces no pointer event at all.
+    document.addEventListener("pointerdown", this.#onOutsidePointer, { signal, capture: true });
+    this.addEventListener("focusout", this.#onFocusOut, { signal });
+
     this.refresh();
   }
 
@@ -133,10 +166,72 @@ export class QuantityElement extends HTMLElement {
     this.refresh();
   };
 
-  #onChange = (): void => {
-    // Any change on this input — a human commit, or our own #fire — means the
-    // value has been committed by some route, so a step still sitting in the
-    // debounce window is stale. Left armed, it would fire after the newer
+  /**
+   * Sends a pending step now instead of waiting out the debounce.
+   *
+   * Debouncing exists to coalesce a burst of clicks; once the shopper has
+   * turned away, there is no burst left to coalesce and the delay only risks
+   * losing the step to a navigation.
+   *
+   * The input is re-queried rather than taken from the timer, so a node swapped
+   * in by a render between the click and the flush is the one that fires.
+   */
+  #flush(): void {
+    if (this.#timer === undefined) return;
+    clearTimeout(this.#timer);
+    this.#timer = undefined;
+
+    const input = this.querySelector<HTMLInputElement>(INPUT);
+    if (input) this.#fire(input);
+  }
+
+  #onOutsidePointer = (event: Event): void => {
+    // Speed, not correctness — #flush() re-checks this, so removing it changes
+    // no behaviour and no test. It is here because this handler runs for every
+    // pointerdown anywhere on the page, once per <ajax-cart-quantity> on it,
+    // and with nothing pending the contains() walk below is wasted work.
+    if (this.#timer === undefined) return;
+
+    // Inside our own widget means the adjustment is still being made — pressing
+    // the other button, or clicking back into the field, must not commit a
+    // half-made change.
+    const target = event.target;
+    if (target instanceof Node && this.contains(target)) return;
+
+    this.#flush();
+  };
+
+  #onFocusOut = (event: FocusEvent): void => {
+    if (this.#timer === undefined) return;
+
+    // Where focus is heading. Tabbing from minus to plus stays inside and must
+    // not flush; a null relatedTarget (focus left for nowhere nameable) counts
+    // as leaving.
+    const next = event.relatedTarget;
+    if (next instanceof Node && this.contains(next)) return;
+
+    this.#flush();
+  };
+
+  #onChange = (event: Event): void => {
+    // This widget's own input only. The listener is on `this`, so every `change`
+    // bubbling out of the element arrives here — and the structure check only
+    // rejects extra `input[type="number"]`, so a line-property <select> or a
+    // gift-wrap checkbox may legitimately sit inside. Without this guard,
+    // toggling one within the debounce window silently discards a step:
+    //
+    //     press + (display 2 -> 3, timer armed), toggle the checkbox
+    //       -> its change cancels the timer -> no request ever fires
+    //       -> input keeps showing 3 while the cart still holds 2
+    //
+    // Correct regardless of whether such widgets are "supported": a timer that
+    // tracks THIS input's value has no business being cancelled by another
+    // control's commit.
+    if (event.target !== this.querySelector(INPUT)) return;
+
+    // A `change` from the stepped input — a human commit, or our own #fire —
+    // means the value has been committed by some route, so a step still sitting
+    // in the debounce window is stale. Left armed, it would fire after the newer
     // commit and re-enter commit() while the queue is busy, repainting the old
     // quantity over the edit in flight.
     clearTimeout(this.#timer);
@@ -178,11 +273,15 @@ export class QuantityElement extends HTMLElement {
     // treats it as 0 — so minus would land on `min` (or on 0 with no `min`) and
     // remove the line. commit() guards the same trap on its side.
     //
-    // Normally unreachable: clicking a button blurs the input, and the `change`
-    // that fires restores the server value before this runs. But macOS Safari
-    // and Firefox do not move focus on a button click — the same behaviour that
-    // makes `focusout` useless for flushing the debounce — so there the field is
-    // still empty when the click arrives.
+    // Reached only when there is no `value` attribute. Normally the click
+    // blurs the input first, the `change` that fires runs commit(), and its
+    // empty-value branch restores before this line — but restore() is a no-op
+    // with nothing to restore to, so the field is still empty here.
+    //
+    // This used to be justified by macOS Safari and Firefox "not blurring on a
+    // button click". That was wrong: Safari fires `change` and moves focus for
+    // both a <button> and an <a>, exactly like Chromium (checked on a real
+    // Safari, both markers). The guard survives on the attribute case alone.
     if (input.value.trim() === "") return;
 
     const before = input.value;
@@ -212,11 +311,9 @@ export class QuantityElement extends HTMLElement {
     // press removes the line, exactly as a step onto 0 would; reverting left a
     // dead button and forced `remove-at-min` on markup that has no `min` at all.
     //
-    // It is also the ONLY protection for a local stepper (an input with no
-    // identity, as on a product page): its synthetic `change` reaches no cart
-    // line, so no request starts, so `isProcessing()` never blocks a further
-    // click and the value would walk 0 → -1 → -2. A cart-connected input is
-    // also floored by the binding, so there this saves a wasted request.
+    // `commit()` floors negatives too, so this is not the last line of defence
+    // — it saves a request the binding would only reduce to 0 anyway, and keeps
+    // the display honest in the gap before that request lands.
     if (Number(input.value) < 0) input.value = "0";
 
     // Native refused to move at all — the value sits on `min` (minus) or `max`
@@ -227,6 +324,27 @@ export class QuantityElement extends HTMLElement {
     // to change the number, so `value="06"` under `min="6"` comes back as "6" —
     // a string comparison would read that as movement and skip this branch,
     // leaving remove-at-min inert. Every other comparison here is numeric.
+    //
+    // KNOWN AND ACCEPTED — do not "fix" without asking. Numeric equality is
+    // wrong above 2^53, where a step is smaller than the float can represent:
+    //
+    //     min="6" remove-at-min, value="10000000000000000", press minus
+    //     stepDown() writes "9999999999999999"   <- the STRING did change
+    //     Number(after) === Number(before)       <- but this is TRUE
+    //     => read as "refused at min" => remove-at-min writes "0" => line deleted
+    //
+    // Note the two failure modes are mirror images, so neither comparison is
+    // right on its own and combining them does not help — both cases look
+    // identical (string changed, number did not):
+    //
+    //     "06" -> "6"   string changed, number same  => genuinely a refusal
+    //     1e16 -> ...   string changed, number same  => genuinely moved
+    //
+    // Telling them apart needs a magnitude precondition, not a smarter compare:
+    // `if (Math.abs(Number(before)) > Number.MAX_SAFE_INTEGER) return;` above.
+    // Left open on purpose — a cart line of nine quadrillion is not a scenario,
+    // and it cannot be reached from Liquid-rendered markup, only by typing 17+
+    // digits into the field by hand.
     if (Number(input.value) === Number(before)) {
       // `remove-at-min` turns that dead press into a removal, for B2B lines
       // where `min` is a real quantity_rule.min (say 6) rather than a floor of
@@ -250,14 +368,20 @@ export class QuantityElement extends HTMLElement {
     // steps, and nothing accumulates below 0 — so waiting would only delay a
     // destructive action the shopper has already committed to, with no change
     // on screen to show it registered.
-    if (Number(input.value) < 1) {
+    //
+    // Tests for a removal, not for smallness. Everything reaching here has
+    // passed #onClick, which floors negatives and writes "0" for remove-at-min,
+    // so the value is never below 0 and "is a removal" is exactly "is 0". With
+    // an integer step the two are the same test; with a fractional one they are
+    // not, and `< 1` would send an 0.5 immediately as though it removed the
+    // line — skipping the coalescing that would have reached a real 0.
+    if (Number(input.value) === 0) {
       this.#fire(input);
       return;
     }
 
-    // TODO: nothing flushes this early. See "Early flush of a pending debounce"
-    // in V3-QUANTITY.md — v2's focusout approach no-ops on macOS Safari; a
-    // module-level pointerdown capture listener is the way to add it.
+    // Cut short by #flush() when the shopper interacts outside the widget, so
+    // this full window only elapses while they are still clicking here.
     this.#timer = setTimeout(() => this.#fire(input), DEBOUNCE_MS);
   }
 

@@ -15,10 +15,12 @@ Renders no error text. A 422 is reconciled by the sections module (`sections.ts:
 | Marker | `data-ajax-cart-quantity-input="<identity>"` | `<ajax-cart-quantity>` |
 | File | `quantity-input.ts` | `quantity-element.ts` |
 | Listens | Delegated `change` / `keydown` on `document` | Its own buttons and input, inside itself |
-| Knows the line item | Yes | No |
+| Knows the line item | Yes | No — but requires its input to have one |
 | Fires requests | Yes | No — dispatches `change` |
 
-**Neither reads the other's markers.** The element writes `input.value` and dispatches a synthetic `change`; the binding handles it exactly as a human edit. Local stepping therefore needs no code: an input with no identity attribute is stepped by the element and ignored by the binding.
+**Neither calls the other.** The element writes `input.value` and dispatches a synthetic `change`; the binding handles it exactly as a human edit. That is the whole runtime contract between them.
+
+One import crosses, in one direction: the element takes the identity attribute's name from the binding, because it requires its input to be cart-connected and the binding is what defines that. The element is an enhancement of the input, so depending on its contract is honest — a shared leaf module would only have hidden the dependency behind ceremony. The binding never imports back, and the selective-import boundary is `src/quantity/` as a whole, so an edge inside it costs nothing.
 
 ## Markup
 
@@ -42,7 +44,9 @@ Line indices and item keys (`variantId:hash`) are disjoint languages, so this is
 
 `line` is the documented default (Horizon sends only `line`). `id` covers fragments rendering a *subset* of the cart, where `forloop.index` would address the wrong lines, and staleness, where a stale index silently hits the wrong item while a stale key fails harmlessly.
 
-**No attribute = not cart-connected.** Invisible to the binding; still steppable, which is how a product-page stepper works.
+**No attribute = not a quantity control.** Invisible to the binding, and invisible to the element too — `<ajax-cart-quantity>` wraps cart-connected inputs only (v2 parity, `_src-old/controls/quantity-element.ts:32-39`). That is what makes the busy state honest: every stepper on the page is affected by the queue, so dimming on `isProcessing()` is true of all of them rather than of most.
+
+**Local stepping is therefore not supported.** A product-page quantity selector gets no help from this module; the merchant writes their own. Supporting it would mean the element could not tell whether the queue concerns it.
 
 **A quantity control is an `input[type="number"]`, everywhere.** The binding and the stepper element hold the same requirement, so the two halves never disagree about the same markup — a marker on a `type="text"` input, a `<textarea>`, or a wrapper is reported by the binding rather than silently ignored while the element errors about it. v2 also accepted text inputs; requiring `number` buys native numeric keyboards on mobile and native validation, and costs markup a merchant can convert with one attribute.
 
@@ -55,11 +59,12 @@ The element requires *more* than the binding, but only about stepping: the step 
 Exactly one **steppable** input among its descendants — zero or several is a console error and the element does nothing (v2 parity, `_src-old/controls/quantity-element.ts:22-30`). One selector defines it, and everything in the element resolves through it:
 
 ```
-input[type="number"]:not([step="any" i])
+input[type="number"][data-ajax-cart-quantity-input]:not([step="any" i])
 ```
 
 Two details in that selector are load-bearing:
 
+- **The identity marker is part of it.** Folding it in rather than checking separately means an unmarked input is simply invisible, so the existing "found 0" error covers it with no extra branch.
 - **Other inputs are ignored, not counted.** Shopify markup carries `type="hidden"` fields constantly — `id`, section params, line properties — and a bare `input` count would reject those widgets as "more than one input" and disable them entirely.
 - **The `i` flag.** `step="any"` means "no allowed value step", so `stepUp()` throws on it — and the keyword is ASCII case-insensitive, while CSS attribute matching is not. Without `i`, `step="ANY"` would pass the check and then fail silently at click time.
 
@@ -69,10 +74,13 @@ A **fractional** step is not excluded either. Shopify quantities are integers �
 
 A `<select>` matches nothing, so a widget built around one reports "found 0".
 
+**A structure error binds nothing, deliberately.** The step markers are normally `<a href="{{ routes.cart_change_url }}?…">` — a no-JS fallback that still changes the quantity server-side — so a widget the library refuses to drive falls back to markup that works. Binding the click handler just to `preventDefault()` would replace a working, if clunky, path with dead buttons. The error is logged at connect, before any click.
+
 **Nesting is unsupported and undetected.** An outer element wrapping an inner one still sees exactly one steppable input — the inner's — so both initialize and a click steps it twice. Nobody writes this, and detecting it costs more than it saves.
 
 ```liquid
-{# cart line #}
+{# cart line, inside the fragment that re-renders it #}
+<div data-ajax-cart-fragment="cart/lines">
 <ajax-cart-quantity>
   <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}"
      data-ajax-cart-quantity-minus>−</a>
@@ -81,13 +89,7 @@ A `<select>` matches nothing, so a widget built around one reports "found 0".
   <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}"
      data-ajax-cart-quantity-plus>+</a>
 </ajax-cart-quantity>
-
-{# product form — steps locally, never touches the cart #}
-<ajax-cart-quantity>
-  <a data-ajax-cart-quantity-minus>−</a>
-  <input type="number" name="quantity" value="1" min="1">
-  <a data-ajax-cart-quantity-plus>+</a>
-</ajax-cart-quantity>
+</div>
 ```
 
 The step markers go on any element — the library only binds `click`. Use `<button type="button">` or `<a href>` so keyboard users can activate them: Enter/Space on a `<div tabindex="0">` fires no `click`, and the library does not synthesize activation. An `href` degrades without JS; the library never requires JS-only markup but guarantees no fallback.
@@ -98,11 +100,21 @@ The step markers go on any element — the library only binds `click`. Use `<but
 |---|---|
 | `change` | Commit |
 | `keydown` Enter | Commit, `preventDefault()` |
-| `keydown` Escape | Restore server value, no request |
+| `keydown` Escape | Restore server value, no request — inert while the queue is busy |
+
+**Escape is inert while the queue is busy**, which makes one rule absolute: nothing in this module writes to a control while a request is in flight. `commit()` already drops, `applyBusyState()` only locks, and the resync runs after a request rather than during one — Escape was the sole exception. It also cannot undo a request already sent, so restoring would paint the attribute over a value the cart is already becoming (type 5, Enter, Escape gives 5, 2, 5). The cost is that Escape is inert during another line request too; nothing is lost, since a second press once idle works.
+
+Escape does not cancel a pending step in the stepper element. Harmless with a `value` attribute — the timer fires, and the no-op guard eats the commit because the restored value already matches the cart. Without one, `restore()` no-ops and the abandoned step commits ~300 ms later; that configuration is now [reported as a markup error](#server-value) rather than supported.
 
 Commit:
 
-1. `isProcessing()` → ignore, changing nothing on screen. `readOnly` blocks new edits but does not suppress the `change` for an edit made *before* the lock, so ordinary commits reach here — Enter then blur, or a blur while the queue is already busy. Restoring the server value here would repaint over an edit whose own request is still in flight. A genuinely dropped step needs no restore either: the queue is busy, so a request is in flight, and every request ends in a section render that replaces the control with server truth.
+1. `isProcessing()` → **drop the commit**, changing nothing on screen.
+
+   Dropping rather than queueing is deliberate: a body built from a `line` index and sent after another mutation would address the wrong item, since removing a line shifts every index after it.
+
+   Changing nothing on screen is also deliberate. `readOnly` blocks new edits but does not suppress the `change` for an edit made *before* the lock, so ordinary commits reach here — Enter then blur, or a blur while the queue is already busy. Restoring here would repaint the server value over an edit whose own request is still in flight, snapping the shopper's 5 back to 2.
+
+   The display is reconciled afterwards instead, by [Resync after a failed request](#resync-after-a-failed-request) — which is where the divergence actually lives, since a request that succeeds ends in a render and one that fails does not.
 2. Identity fails the grammar → console error, stop.
 3. **Empty value → restore, no request, no error** (ordinary typing). Checked first and separately: `Number("")` is `0`, and `type="number"` blanks unparseable input, so falling through would send `quantity=0` and delete the line. A **non-finite** value (`1e999` parses to `Infinity`) restores too — not because the server disallows it, but because there is nothing meaningful to put in the body.
 4. Floor a negative value at 0 — the only correction applied to a typed value — then write the result back only when it differs from what is displayed. The write happens **before** step 5 and regardless of whether a request follows: when the guard below skips the request there is no render, so a typed `-9` against a cart holding 0 would otherwise sit on screen indefinitely. Skipping the write when nothing changed matters because assigning `input.value` moves the caret to the end, and Enter commits without blurring.
@@ -122,7 +134,15 @@ Nothing else about the value is corrected — see [Parameters](#parameters). `ma
 | `input.value` (property) | Displayed now | Read to build the request; write to change the display |
 | `value` attribute (read via `defaultValue`) | What Liquid rendered | **Read only, never written** |
 
-The browser never changes the attribute, so it is a standing record of the cart's quantity — this is what removes the state dependency. Escape, failure restore, and the no-op guard all read it, via `input.defaultValue`, which despite its name IS the `value` attribute. Writing it would destroy that record. With no server value, those paths are no-ops rather than blanking the control.
+The browser never changes the attribute, so it is a standing record of the cart's quantity — this is what removes the state dependency. Escape, failure restore, the request-end resync, and the no-op guard all read it, via `input.defaultValue`, which despite its name IS the `value` attribute. Writing it would destroy that record.
+
+**Something must re-render the control after a success**, or the attribute goes stale while the cart moves on — and the no-op guard then compares against a stale number and silently drops a later corrective edit. With the sections module that means placing it inside `[data-ajax-cart-fragment]`.
+
+**This is a theme-integration requirement, not something the module checks.** A fragment test would assert one renderer's markup, and the planned morph preserves nodes rather than replacing them — so it would warn at markup that is perfectly fine, which is worse than not warning at all. Only the renderer knows which nodes it covers; this module depends on `../core` alone and does not get to guess.
+
+**A marked input without a `value` is a markup error, not a supported mode.** It disables four things at once — Escape, the failure restore, the resync, and the guard that stops a repeat commit re-sending a quantity the cart already holds — and Liquid renders `value="{{ item.quantity }}"` for every cart line, so its absence is a mistake rather than a choice. An empty attribute reads identically through `defaultValue` and is treated the same.
+
+**Reported, but not refused.** The request still goes: the line and the quantity are both known, so it is correct — only the undo is lost. Refusing would take the cart hostage over a missing attribute. An invalid identity stops instead, because there the line itself is unknown. The check lives in `controlFrom()` rather than `commit()` because Escape never reaches `commit()`, and Escape is the gesture that silently does nothing without a server value.
 
 ### Failure handling
 
@@ -134,6 +154,20 @@ The browser never changes the attribute, so it is a standing record of the cart'
 |---|---|---|
 | 422 with no section HTML | Re-fetches and re-renders (`sections.ts:139-141`) | Control detached — self-skips |
 | Network failure / abort (`status === null`) | Renders nothing (`sections.ts:131`) | Restores from the attribute |
+
+### Resync after a failed request
+
+> On `REQUEST_END`, **if the result was not ok**, restore every marked control from its `value` attribute — except the one the shopper is currently typing in.
+
+A dropped commit leaves a stepped or typed quantity on screen with no request behind it. That is normally harmless, because the in-flight request ends in a render that replaces the node — but not when it *fails*: `sections.ts:131` returns without rendering on `status === null`, so the display keeps a quantity the cart never received and nothing is scheduled to correct it.
+
+Reachable whenever a request starts without an interaction that would flush a pending step — a merchant's auto-add mutation, an app, a programmatic `add()` — and then fails.
+
+**Only on failure, and that distinction is load-bearing.** After a *success* the cart has moved and the `value` attribute may be behind it. If that request rendered, these nodes were replaced and a resync is a no-op; if it did not, restoring would repaint a **correct** display with a **stale** attribute and create the very divergence this exists to prevent. A failure is precisely the case where no render happened *and* the attribute is still the last confirmed truth.
+
+**The focused control is skipped.** v2's equivalent (`_src-old/controls/quantity-input.ts:55-63`) set `disabled` during processing, which blurs the field, so it never met this case; `readonly` keeps focus, so an unconditional resync would wipe an edit in progress.
+
+This is v2's `processingHandler` with the `value` attribute standing in for `getCartState()`. v2 could resync unconditionally because it held the cart; a per-node attribute cannot.
 
 ### Browser value restoration
 
@@ -161,7 +195,11 @@ Both element-level events bubble, so no per-child wiring is needed: a click reso
 
 Click: `preventDefault()` → `isProcessing()` ignores → an **empty field** stops here → `input.stepUp()` / `stepDown()` → a result below 0 lands on 0 → unchanged means stop → refresh button states, schedule the debounce.
 
-**An empty field is not a quantity to step from.** Native treats it as 0, so minus would land on `min` — or on 0 with no `min`, removing the line — and plus would collapse a line of 8 down to `min`. Both are data loss from a field the shopper merely cleared. It is normally unreachable, because clicking a button blurs the input and the `change` that fires restores the server value first; but macOS Safari and Firefox do not move focus on a button click (the same behaviour that makes `focusout` useless for flushing the debounce), so there the field is still empty when the click arrives. `commit()` guards the identical trap on its side.
+**An empty field is not a quantity to step from.** Native treats it as 0, so minus would land on `min` — or on 0 with no `min`, removing the line — and plus would collapse a line of 8 down to `min`. Both are data loss from a field the shopper merely cleared.
+
+**Reached only when the input has no `value` attribute.** Clicking a button blurs the input, the `change` that fires runs `commit()`, and its empty-value branch restores the server value before the click handler runs — but `restore()` is a no-op with nothing to restore to, so the field is still empty when the click arrives. `commit()` guards the identical trap on its side.
+
+This guard was originally justified by macOS Safari and Firefox "not blurring on a button click". **That was wrong** — see [Browser facts](#browser-facts).
 
 The `try/catch` around stepping **reports the error**, including the exception itself. No known markup reaches it: the selector excludes both documented throw cases, and an input edited after connect stops matching that selector, so the null check bails first. That is the reason it reports rather than swallowing — a throw here is by definition something the selector does not model, and silence would leave a button that does nothing with no clue why.
 
@@ -171,7 +209,43 @@ An empty field must read as "no value", not as 0: `Number("")` is `0`, which wou
 
 **Known limitation.** If `max` is not itself on the step grid, native refuses to step to it while the comparison says the button is live — so plus looks enabled and does nothing, permanently, because the refusal fires no request and therefore no render. Shopify's own rules prevent this: `QuantityRule` requires both `minimum` and `maximum` to be multiples of `increment`, so markup derived from `quantity_rule` always lands on the grid. It is reachable only from hand-written misaligned values, and closing it would mean re-introducing the client-side grid model this module deliberately does not hold. States refresh on connect, on its input's `change`, on its own clicks, and on the two queue events.
 
-Debounce is a per-instance timer, **cancelled on any `change`** — a human commit or the element's own fire. A step still in the window is stale once the value has been committed by another route; left armed it fires after the newer commit and, with the queue busy, repaints the old quantity over the edit in flight. On fire it dispatches `new Event("change", { bubbles: true })` on its input. Nothing flushes it early — see the deferred early-flush note, which the implementation should mark with a `// TODO` at the timer.
+Debounce is a per-instance timer, **cancelled on any `change`** — a human commit or the element's own fire. A step still in the window is stale once the value has been committed by another route; left armed it fires after the newer commit and, with the queue busy, repaints the old quantity over the edit in flight. On fire it dispatches `new Event("change", { bubbles: true })` on its input.
+
+### Early flush
+
+A pending step is sent immediately once the shopper turns away from the widget. Debouncing exists to coalesce a burst of clicks; when the burst is over, the remaining delay buys nothing and can lose the step entirely.
+
+**It has to be flushed, because nothing native carries it.** Writing `input.value` from script fires no `change` — verified — so a stepped quantity exists only in this timer. A shopper who clicks `+` and then Checkout navigates away with the step still pending and no request sent.
+
+Two signals, both registered per instance on the element's `AbortController`:
+
+| Signal | Where | Why |
+|---|---|---|
+| `pointerdown` | `document`, **capture** | Precedes focus movement *and* navigation, so the request leaves before a Checkout click. Capture, because a theme handler calling `stopPropagation()` would otherwise disable every flush on the page. |
+| `focusout` | the element | Keyboard only — tabbing away fires no pointer event. |
+
+Both bail when no timer is pending, and when the interaction stays **inside** the element: pressing the other button, or clicking back into the field, is a continuing adjustment, not a departure. `focusout` judges by `relatedTarget`, treating `null` as leaving.
+
+The input is re-queried at flush time rather than captured with the timer, so a node swapped in by a render between click and flush is the one that fires.
+
+**This supersedes v2's `focusout`-only approach** (`_src-old/controls/quantity-element.ts:82-89`) rather than repeating or discarding it. `pointerdown` carries the common case because it depends on no focus behaviour at all and fires before navigation; `focusout` is kept for the keyboard, which produces no pointer event. Ordering makes them safe together: `pointerdown` precedes `focusout`, and whichever runs first clears the timer, so the second finds nothing pending.
+
+`focusout` alone would in fact work in the browsers tested — see [Browser facts](#browser-facts). `pointerdown` leads anyway because it depends on no focus behaviour at all, which is what makes it safe on touch, where a tap need not focus anything.
+
+## Browser facts
+
+Checked rather than assumed, because several decisions here were built on a wrong one.
+
+| Behaviour | Result |
+|---|---|
+| Typing, then clicking a `<button>` / `<a>` / plain `<div>` / `tabindex` `<div>` | `change` fires and the input blurs — **Chromium and Safari alike**, both step markers |
+| Writing `input.value` from script | fires **no** `change` — so a stepped quantity is carried only by the debounce timer |
+| `stepUp()` / `stepDown()` | throws on a non-number type and on `step="any"`; snaps an off-grid value onto the grid |
+| `[type="number"]` in a selector | matches `type="NUMBER"` — `type` is matched ASCII case-insensitively, unlike `step="any"` |
+
+**The correction that mattered:** macOS Safari and Firefox are known not to *focus* a button on click, and this document previously treated that as "the input does not blur, so `change` never fires". Those are different claims, and the second is false — Safari blurs to the button and fires `change` exactly as Chromium does. Everything that rested on it has been re-derived, and one deferred feature was deleted rather than built.
+
+macOS Firefox is still untested, but nothing now depends on it.
 
 No `request-end` subscription here: a freshly rendered element connects while `isProcessing()` is still `true` (`queue.ts:84`), so `connectedCallback` applies the busy state itself, and elements that weren't replaced already hold the state `queue-start` gave them. The binding cannot do this — a plain `<input>` has no lifecycle callback — which is why it keeps `request-end` in every configuration, wrapped or bare.
 
@@ -230,11 +304,11 @@ That is deliberately a statement of *our* contract, not a copy of the browser's 
 
 Landing on 0 rather than refusing matters whenever the grid skips 0: with `min` absent the step base is the `value` attribute, so `step="2"` from 1 runs `…-3, -1, 1, 3…` and stepping down overshoots to −1. Clamping makes that press remove the line exactly as a step onto 0 would. Refusing instead would leave a dead button and force `remove-at-min` onto markup with no `min` at all.
 
-The floor is also the only thing bounding a **local stepper** — an input with no identity fires no request, so `isProcessing()` never throttles clicks and the value would otherwise walk 0 → −1 → −2.
+The floor is not the last line of defence — `commit()` floors negatives too — but it saves a request the binding would only reduce to 0 anyway, and keeps the display honest in the gap before that request lands.
 
 **Writing 0 makes the input invalid, deliberately.** Under `min="6"` it reports `rangeUnderflow`; under a grid that skips 0, `stepMismatch`. That is accurate — 0 is not a valid *quantity* there, because it does not mean a quantity at all. Setting it never throws; the value setter only sanitizes.
 
-The consequence to know about is that **native form submission is blocked while an invalid value sits in the field**. On a cart page nothing submits — the library uses `fetch` — and the state lasts only until the render drops the row, or until a failed request restores the server value. On a **product form** it matters more: `<ajax-cart-product-form>` listens for `submit`, and a blocked submission means that listener never runs, so add-to-cart would silently do nothing. Reachable only on a local stepper with **no `min`**, so product-form steppers should carry `min="1"` — which also makes native refuse at 1, so the overshoot path never fires.
+The consequence to know about is that **native form submission is blocked while an invalid value sits in the field**. It does not bite here: nothing on a cart page submits natively — the library uses `fetch` — and the state lasts only until the render drops the row, or until a failed request restores the server value. The product-form case that would have mattered is gone with local stepping: `<ajax-cart-quantity>` now wraps cart-connected inputs only, so no `<ajax-cart-product-form>` quantity field is ever written to by this module.
 
 Not worth guarding in code: reverting on invalidity would break `remove-at-min` outright, since 0 is always `rangeUnderflow` under a `min` above 0.
 
@@ -277,7 +351,14 @@ Plain `console.error`, never deduped. Deduplication was dropped deliberately: a 
 
 **Reported by the element on click**, in the one case that should be impossible: `stepUp()` / `stepDown()` threw despite the selector having excluded every documented cause. The exception is passed along, since it is the only evidence of what the selector failed to model.
 
-**Reported by the binding on commit:** an identity matching neither grammar, and a marker on anything but an `input[type="number"]`. Both need a `change`, an Enter, or an Escape, so they are bounded by user action — which is also why `handleKeydown` checks the key *before* resolving the control, since it otherwise runs on every keystroke on the page.
+**Reported by the binding on a gesture** — a `change`, an Enter, or an Escape, so all three are bounded by user action. This is also why `handleKeydown` checks the key *before* resolving the control, since it otherwise runs on every keystroke on the page.
+
+| Problem | Then |
+|---|---|
+| Identity matches neither grammar | **stops** — the line is unknown, so any request would be a guess |
+| Marker on anything but an `input[type="number"]` | **stops** — and matches what the element requires, so the two halves never disagree |
+| No `value` attribute (or an empty one) | **continues** — line and quantity are both known, so the request is right; only the undo is lost |
+
 
 Nothing else is reported. A value the server may refuse — over `max`, off the grid, fractional — is not a merchant markup error, so it goes to Shopify and the answer comes back as a line-item error.
 
@@ -298,22 +379,24 @@ Both implementation files import only `src/core`, never each other. There is no 
 Vitest browser mode, `vi.mock("../core")` stubbing `change` / `isProcessing` (pattern from `product-form.spec.ts:4-6`). Lifecycle events are dispatched as real `CustomEvent`s.
 
 - **commit** — both grammars produce the right `FormData`; invalid grammar errors without requesting; Enter commits and prevents default; Escape restores; a value over `max` and a value off the `step` grid are both sent as typed; the write-back is skipped when nothing changed and happens exactly once when it is not (counted via a value-setter spy, since a `type=number` field has no selection API to assert the caret against); no-op guard; `isProcessing()` leaves the display alone rather than restoring; `trigger` passed.
-- **floor** — a typed `0` sends 0 even with `min="1"`; a typed value below a B2B `min` is sent as typed; a typed negative floors to 0 and is written back, even when the request is then skipped; minus obeys `min`, reaches 0 when `min` is absent, and never crosses 0 however fast it is clicked; a removal fires without waiting for the debounce.
+- **floor** — a typed `0` sends 0 even with `min="1"`; a typed value below a B2B `min` is sent as typed; a typed negative floors to 0 and is written back, even when the request is then skipped; minus obeys `min`, reaches 0 when `min` is absent, and never crosses 0 however fast it is clicked; a removal fires without waiting for the debounce, while a fractional step landing between 0 and 1 still waits; `queue-start` locks and `queue-idle` unlocks through the real registrations, not a direct call.
 - **unusable input** — **empty never requests, asserted against `min="0"` where the bug would delete the line**; unparseable text in `type="number"` restores; a fraction is sent as typed with no console error; a non-finite value restores without requesting.
+- **resync** — a failed request restores every marked control from its `value` attribute, including one whose commit was dropped while busy; a 422 behaves like a network failure; a SUCCESSFUL request leaves the display alone; the focused control is skipped.
 - **failure** — `status === null` on a connected control restores; a replaced control is left untouched; success never restores; `defaultValue` survives a commit.
 - **element structure** — zero and two number inputs each error once; `type="text"`, a missing `type`, and `step` in all of `any`/`ANY`/`AnY` error too; `step` in `abc`/`0`/`-3`/`""` are **not** errors and still step (they fall back to 1); a fractional step is not rejected either, and steps onto the browser's grid; hidden inputs alongside the number input are ignored rather than counted.
-- **element** — a button inserted after connect still steps; an identity-less element steps but never calls `change`; an off-grid value snaps rather than adding the step; an empty field is ignored by both buttons; N clicks coalesce into one `change` once the window elapses; a stray `debounce` attribute is inert; disconnect clears the timer and listeners.
+- **element** — an input without the identity marker is reported as "found 0" and nothing binds; a `change` from another control inside the widget does not cancel a pending step; a button inserted after connect still steps, and so does an input swapped in after connect, which also drives the dimming; a refused step dispatches no `change` at either bound; an identity-less element steps but never calls `change`; an off-grid value snaps rather than adding the step; an empty field is ignored by both buttons; N clicks coalesce into one `change` once the window elapses; a stray `debounce` attribute is inert; disconnect clears the timer and listeners; an outside pointerdown or a departing focusout flushes a pending step, an inside one does not, a theme handler calling stopPropagation cannot suppress it, and the flush reaches the stepped widget rather than the first on the page.
 - **subscription** — queue events drive each element independently; a disconnected element stops reacting (its listeners went with the abort); a re-appended one reacts exactly once, not twice; `initQuantityElement()` tolerates repeat calls.
 - **remove-at-min** — minus at `min` sends 0, including for non-canonical values (`06`, `6.0`, `6e0`) where the browser renormalises the string and steps normally above it; without the attribute the same press does nothing; a second press at 0 does not re-send; plus at `max` is never turned into a removal; minus stays live at `min` and dims at 0; inert with `min="0"`; a grid that skips 0 (`step="2"` from 1, no `min`) lands on 0 without needing the attribute; asserted end to end that the request carries `quantity=0`.
-- **carrier** — a marker on a `type="text"` input, an untyped input, a `<textarea>` or a wrapper is reported once per commit gesture and never requests; an ordinary keystroke neither resolves the control nor reports, since the key is checked first.
-- **states** — `readonly` is applied and cleared unconditionally, with no merchant-authored lock to preserve; minus is not dimmed at 1 when `min` is absent (0 is reachable), dims at 0 when `min` is negative, and both buttons stay live on an empty field; no path ever sets `disabled` on a button or an input; busy sets `readonly` on inputs and `disabled` only on `<select>`; a focused button keeps focus through queue-start; `min="1"` with `value="01"` dims minus; an element connected mid-queue is busy from `connectedCallback` with no `request-end` involved; an input rendered mid-queue is re-applied on `request-end`.
+- **carrier** — a marker on a `type="text"` input, an untyped input, a `<textarea>` or a wrapper is reported once per commit gesture and never requests; a missing or empty `value` attribute is reported on a change AND on an Escape, and still commits; an ordinary keystroke neither resolves the control nor reports, since the key is checked first.
+- **escape** — restores from the attribute, requests nothing, is inert while the queue is busy, and works on the next press once idle.
+- **states** — `readonly` is applied and cleared unconditionally, clearing even a lock the MERCHANT authored in Liquid; minus is not dimmed at 1 when `min` is absent (0 is reachable), dims at 0 when `min` is negative, and both buttons stay live on an empty field; no path ever sets `disabled` on a button or an input; busy sets `readonly` on inputs and never `disabled` on anything; a focused button keeps focus through queue-start; `min="1"` with `value="01"` dims minus; an element connected mid-queue is busy from `connectedCallback` with no `request-end` involved; an input rendered mid-queue is re-applied on `request-end`.
 
 ## Deferred
 
 - **Live controls during processing** — disabling makes dropped intent visible; the alternative reimplements node preservation for one control.
 - **Focus restoration** — see below.
 - **Controls outside a fragment** — nothing re-renders them after a success. (The failure restore reaches them incidentally; that is not support.)
-- **Early flush of a pending debounce** when the user interacts outside the widget. v2 used `focusout` (`_src-old/controls/quantity-element.ts:82-89`), which silently no-ops on Safari and Firefox for macOS, where clicking a button never focuses it — so the one case it targets is the one case it misses. If revisited, use a module-level `pointerdown` capture listener flushing when the target is outside the element; it works regardless of focus and starts the request before a Checkout click navigates away. **Mark the debounce timer with a `// TODO` referencing this.**
+- **Quantities above 2^53**, in both halves, each closed by one line nobody is writing. `commit()` lets `String(Number(raw))` mangle them — `"12345678901234567890"` becomes `"...567000"`, `1e21` becomes `"1e+21"` — and the element's refusal check reads `stepDown()` on `1e16` as "native refused", so `remove-at-min` deletes the line. Unreachable from Liquid-rendered markup; both are commented at the code with full traces so a review does not re-derive them. `Number.isSafeInteger` is the wrong test in both places: it is false for `1.5`, so it would also reject the fractions this module deliberately forwards.
 - **Global `conf()` defaults**, **stepping a `<select>`**.
 
 ## Requirements handed to the morph spec
