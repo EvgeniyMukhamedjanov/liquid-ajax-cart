@@ -8,15 +8,7 @@ vi.mock("../core", async (importOriginal) => {
 });
 
 import { change, isProcessing, EVENTS } from "../core";
-import {
-  parseIdentity,
-  restore,
-  commit,
-  handleChange,
-  handleKeydown,
-  applyBusyState,
-  initInputBinding,
-} from "./quantity-input";
+import { parseIdentity, restore, commit, applyBusyState, initInputBinding } from "./quantity-input";
 
 const changeMock = vi.mocked(change);
 const isProcessingMock = vi.mocked(isProcessing);
