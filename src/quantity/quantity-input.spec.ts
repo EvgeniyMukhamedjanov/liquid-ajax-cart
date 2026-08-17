@@ -722,7 +722,15 @@ describe("initInputBinding", () => {
     const el = document.querySelector("input") as HTMLInputElement;
     expect(el.readOnly).toBe(false);
 
-    document.dispatchEvent(new CustomEvent(EVENTS.REQUEST_END, { detail: {} }));
+    // A well-formed detail, even though this test only cares about readOnly:
+    // restoreAfterFailure() shares this registration and now reads
+    // detail.result.ok directly. `ok: true` makes it a no-op so it cannot
+    // interfere with the assertion below.
+    document.dispatchEvent(
+      new CustomEvent(EVENTS.REQUEST_END, {
+        detail: { result: { ok: true, status: 200, body: null } },
+      }),
+    );
     expect(el.readOnly).toBe(true);
   });
 

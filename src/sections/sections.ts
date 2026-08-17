@@ -1,5 +1,10 @@
 import { applyContent, clearContent } from "./apply-content";
-import type { RequestBody, RequestResult } from "../core";
+import type {
+  RequestBody,
+  RequestResult,
+  RequestStartContext,
+  RequestEndContext,
+} from "../core";
 
 const FRAGMENT_ATTR = "data-ajax-cart-fragment";
 const SECTIONS_PER_REQUEST = 5;
@@ -151,18 +156,18 @@ export async function reconcile(
   renderSections({ ...provided, ...fetched }, root);
 }
 
-// Narrow shapes of the emitter `detail` we consume. The full context types are
-// internal to core/api.ts; we read only what we need and cast at the boundary.
-type RequestStartDetail = { endpoint: string; body: RequestBody | null };
-type RequestEndDetail = { result: RequestResult };
-
+// These arrive through the internal emitter, whose Listener signature is
+// `(detail: unknown)`, so a cast is still needed here — core/events.d.ts only
+// types the public DOM path. What changed is the target: core/api.ts now exports
+// the real context types, so this asserts the contract itself rather than a
+// hand-written approximation of it that was free to drift.
 export async function handleRequestStart(detail: unknown): Promise<void> {
-  const { endpoint, body } = detail as RequestStartDetail;
+  const { endpoint, body } = detail as RequestStartContext;
   if (endpoint === "get" || !body) return;
   const ids = collectSectionIds();
   if (ids.length) injectSections(body, ids);
 }
 
 export async function handleRequestEnd(detail: unknown): Promise<void> {
-  await reconcile((detail as RequestEndDetail).result);
+  await reconcile((detail as RequestEndContext).result);
 }

@@ -36,7 +36,11 @@ export class EventEmitter {
     this.#listeners.get(event)!.push(fn);
   }
 
-  async emit(event: string, detail: object, waitUntilContext: unknown): Promise<void> {
+  // Generic in the detail so the dispatched event is a `WaitUntilEvent<T>` and
+  // not a `WaitUntilEvent<object>`. Nothing here reads T, but it keeps the type
+  // core.ts passes in visible at the dispatch site, which is what core/events.d.ts
+  // claims DOM listeners receive.
+  async emit<T extends object>(event: string, detail: T, waitUntilContext: unknown): Promise<void> {
     // 1. Internal async subscribers
     const listeners = [...(this.#listeners.get(event) || [])];
     for (const fn of listeners) {
@@ -53,7 +57,7 @@ export class EventEmitter {
       callbacks: [],
       waitUntilContext,
     };
-    document.dispatchEvent(new WaitUntilEvent(event, { detail }, state));
+    document.dispatchEvent(new WaitUntilEvent<T>(event, { detail }, state));
     // Seal the event so late waitUntil() calls fail loudly
     state.open = false;
 

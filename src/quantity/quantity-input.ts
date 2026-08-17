@@ -1,4 +1,4 @@
-import { change, isProcessing, EVENTS } from "../core";
+import { change, isProcessing, EVENTS, type WaitUntilEvent, type RequestEndContext } from "../core";
 
 /**
  * The marker that binds a control to a cart line — and the definition of
@@ -291,9 +291,14 @@ export function applyBusyState(): void {
  * with the `value` attribute standing in for `getCartState()`. v2 could resync
  * unconditionally because it held the cart; reading a per-node attribute cannot.
  */
-function restoreAfterFailure(event: Event): void {
-  const result = (event as CustomEvent<{ result?: { ok?: boolean } }>).detail?.result;
-  if (result?.ok !== false) return;
+function restoreAfterFailure(event: WaitUntilEvent<RequestEndContext>): void {
+  // Reached without a cast because core/events.d.ts maps this event name onto
+  // DocumentEventMap. `result` is required there, so a detail that lacks it
+  // throws rather than quietly skipping the restore — the previous
+  // `detail?.result` / `?.ok !== false` spelling turned a broken contract into a
+  // silent no-op, which is the same failure mode the registration test below
+  // exists to catch.
+  if (event.detail.result.ok) return;
 
   document.querySelectorAll(`[${ATTR}]`).forEach((control) => {
     // Skip a field being typed in. v2 set `disabled`, which blurs, so it never

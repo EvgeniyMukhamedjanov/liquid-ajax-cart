@@ -43,9 +43,14 @@ const ENDPOINTS = {
   get: { path: "cart.js", httpMethod: "GET" },
 } as const;
 
-type Endpoint = keyof typeof ENDPOINTS;
+export type Endpoint = keyof typeof ENDPOINTS;
 
-type RequestStartContext = {
+// Exported because these are the `detail` of the public `request-start` /
+// `request-end` DOM events — see core/events.d.ts, which maps them onto
+// DocumentEventMap so listeners read `event.detail` without a cast. Kept
+// internal, every listener had to re-declare the shape by hand, and each
+// re-declaration was free to get it wrong.
+export type RequestStartContext = {
   endpoint: Endpoint;
   body: RequestBody | null;
   trigger?: RequestTrigger;
@@ -53,7 +58,7 @@ type RequestStartContext = {
   abort: (reason?: unknown) => void;
 };
 
-type RequestEndContext = Omit<RequestStartContext, "abort"> & {
+export type RequestEndContext = Omit<RequestStartContext, "abort"> & {
   result: RequestResult;
 };
 
