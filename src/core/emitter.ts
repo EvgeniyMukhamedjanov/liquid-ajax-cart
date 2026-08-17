@@ -1,4 +1,4 @@
-export type Listener = (detail: unknown) => Promise<void>;
+export type Listener<D = unknown> = (detail: D) => Promise<void>;
 type WaitUntilCallback = (waitUntilContext: unknown) => Promise<void>;
 
 interface WaitUntilEventState {
@@ -26,23 +26,28 @@ export class WaitUntilEvent<T> extends CustomEvent<T> {
   }
 }
 
-export class EventEmitter {
-  #listeners = new Map<string, Listener[]>();
+export class EventEmitter<M extends Record<string, object> = Record<string, object>> {
+  // A mapped object, not a Map: a Map needs one value type for every key, and
+  // there isn't one — Listener is contravariant in its detail, so a
+  // `Listener<M[K]>` is not a `Listener<M[keyof M]>`. Indexing a mapped type
+  // keeps each event's listeners at that event's own detail type, which is what
+  // lets core.ts subscribe without a cast.
+  #listeners: { [K in keyof M]?: Listener<M[K]>[] } = {};
 
-  on(event: string, fn: Listener): void {
-    if (!this.#listeners.has(event)) {
-      this.#listeners.set(event, []);
-    }
-    this.#listeners.get(event)!.push(fn);
+  on<K extends keyof M>(event: K, fn: Listener<M[K]>): void {
+    const existing = this.#listeners[event];
+    if (existing) existing.push(fn);
+    else this.#listeners[event] = [fn];
   }
 
-  // Generic in the detail so the dispatched event is a `WaitUntilEvent<T>` and
-  // not a `WaitUntilEvent<object>`. Nothing here reads T, but it keeps the type
-  // core.ts passes in visible at the dispatch site, which is what core/events.d.ts
-  // claims DOM listeners receive.
-  async emit<T extends object>(event: string, detail: T, waitUntilContext: unknown): Promise<void> {
+  // `& string` because WaitUntilEvent's constructor takes a string type name.
+  async emit<K extends keyof M & string>(
+    event: K,
+    detail: M[K],
+    waitUntilContext: unknown,
+  ): Promise<void> {
     // 1. Internal async subscribers
-    const listeners = [...(this.#listeners.get(event) || [])];
+    const listeners = [...(this.#listeners[event] ?? [])];
     for (const fn of listeners) {
       try {
         await fn(detail);
@@ -57,7 +62,7 @@ export class EventEmitter {
       callbacks: [],
       waitUntilContext,
     };
-    document.dispatchEvent(new WaitUntilEvent<T>(event, { detail }, state));
+    document.dispatchEvent(new WaitUntilEvent<M[K]>(event, { detail }, state));
     // Seal the event so late waitUntil() calls fail loudly
     state.open = false;
 

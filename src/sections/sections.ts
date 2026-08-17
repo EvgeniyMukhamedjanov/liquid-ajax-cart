@@ -78,9 +78,8 @@ export function injectSections(body: RequestBody, ids: string[]): void {
     const existing = body.get("sections");
     body.set("sections", buildSectionsParam(existing == null ? null : String(existing), ids));
   } else if (body && typeof body === "object") {
-    const record = body as Record<string, unknown>;
-    const existing = typeof record.sections === "string" ? record.sections : null;
-    record.sections = buildSectionsParam(existing, ids);
+    const existing = typeof body.sections === "string" ? body.sections : null;
+    body.sections = buildSectionsParam(existing, ids);
   }
 }
 
@@ -156,18 +155,13 @@ export async function reconcile(
   renderSections({ ...provided, ...fetched }, root);
 }
 
-// These arrive through the internal emitter, whose Listener signature is
-// `(detail: unknown)`, so a cast is still needed here — core/events.d.ts only
-// types the public DOM path. What changed is the target: core/api.ts now exports
-// the real context types, so this asserts the contract itself rather than a
-// hand-written approximation of it that was free to drift.
-export async function handleRequestStart(detail: unknown): Promise<void> {
-  const { endpoint, body } = detail as RequestStartContext;
+export async function handleRequestStart(detail: RequestStartContext): Promise<void> {
+  const { endpoint, body } = detail;
   if (endpoint === "get" || !body) return;
   const ids = collectSectionIds();
   if (ids.length) injectSections(body, ids);
 }
 
-export async function handleRequestEnd(detail: unknown): Promise<void> {
-  await reconcile((detail as RequestEndContext).result);
+export async function handleRequestEnd(detail: RequestEndContext): Promise<void> {
+  await reconcile(detail.result);
 }

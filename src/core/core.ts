@@ -1,6 +1,13 @@
 import { Queue } from "./queue";
-import { EventEmitter, type Listener } from "./emitter";
-import { CartApi, type RequestBody, type RequestOptions, type RequestResult } from "./api";
+import { EventEmitter } from "./emitter";
+import {
+  CartApi,
+  type RequestBody,
+  type RequestOptions,
+  type RequestResult,
+  type RequestStartContext,
+  type RequestEndContext,
+} from "./api";
 
 export const EVENTS = {
   REQUEST_START: "liquid-ajax-cart:request-start",
@@ -10,7 +17,33 @@ export const EVENTS = {
   QUEUE_IDLE: "liquid-ajax-cart:queue-idle",
 } as const;
 
-const emitter = new EventEmitter();
+/**
+ * The `detail` of an event that carries no payload.
+ *
+ * `Record<never, never>`, not `Record<string, never>`: the latter has a string
+ * index signature, so reading any property off it is legal and yields `never`
+ * rather than an error — which would let a queue-event listener write
+ * `detail.result` and compile.
+ */
+export type EmptyContext = Record<never, never>;
+
+/**
+ * Which `detail` each event carries — the single source of truth for both
+ * subscription paths: `on()` below is keyed on it, and core/events.d.ts reuses
+ * its values for `DocumentEventMap` on the public DOM path.
+ *
+ * Keyed off `EVENTS` itself rather than repeating the strings, so an event
+ * cannot be added without also landing here.
+ */
+export type CartEventDetailMap = {
+  [EVENTS.REQUEST_START]: RequestStartContext;
+  [EVENTS.REQUEST_END]: RequestEndContext;
+  [EVENTS.QUEUE_START]: EmptyContext;
+  [EVENTS.QUEUE_END]: EmptyContext;
+  [EVENTS.QUEUE_IDLE]: EmptyContext;
+};
+
+const emitter = new EventEmitter<CartEventDetailMap>();
 
 const api: CartApi = new CartApi({
   onStart: (ctx) => emitter.emit(EVENTS.REQUEST_START, ctx, api),
@@ -63,6 +96,10 @@ export function isProcessing(): boolean {
   return queue.isProcessing;
 }
 
-export function on(event: string, fn: Listener): void {
+/** Subscribes an internal listener, typed by event. */
+export function on<K extends keyof CartEventDetailMap>(
+  event: K,
+  fn: (detail: CartEventDetailMap[K]) => Promise<void>,
+): void {
   emitter.on(event, fn);
 }

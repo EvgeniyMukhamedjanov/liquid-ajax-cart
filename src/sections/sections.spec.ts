@@ -10,7 +10,22 @@ import {
   handleRequestStart,
   handleRequestEnd,
 } from "./sections";
-import type { RequestBody, RequestResult } from "../core";
+import type {
+  RequestBody,
+  RequestResult,
+  Endpoint,
+  RequestStartContext,
+  RequestEndContext,
+} from "../core";
+
+/** A full request context; these handlers read only `endpoint` and `body`. */
+function startContext(endpoint: Endpoint, body: RequestBody | null): RequestStartContext {
+  return { endpoint, body, meta: {}, abort: () => {} };
+}
+
+function endContext(result: RequestResult): RequestEndContext {
+  return { endpoint: "add", body: null, meta: {}, result };
+}
 
 let mounted: HTMLElement[] = [];
 function mount(html: string): HTMLElement {
@@ -431,7 +446,7 @@ describe("handleRequestStart", () => {
     );
     void root;
     const body = new FormData();
-    await handleRequestStart({ endpoint: "add", body });
+    await handleRequestStart(startContext("add", body));
     expect(body.get("sections")).toBe("a,b,c,d,e"); // capped at 5
   });
 
@@ -441,7 +456,7 @@ describe("handleRequestStart", () => {
     );
     const body = new FormData();
     body.set("sections", "m1,m2,m3"); // merchant already requested 3
-    await handleRequestStart({ endpoint: "add", body });
+    await handleRequestStart(startContext("add", body));
     const sections = String(body.get("sections")).split(",");
     expect(sections.length).toBeLessThanOrEqual(5);
     // merchant's sections are preserved (ours self-heal via reconcile, theirs don't)
@@ -451,26 +466,26 @@ describe("handleRequestStart", () => {
   it("does nothing for the get endpoint", async () => {
     mount(`<div data-ajax-cart-fragment="cart/x"></div>`);
     const body = new FormData();
-    await handleRequestStart({ endpoint: "get", body });
+    await handleRequestStart(startContext("get", body));
     expect(body.get("sections")).toBeNull();
   });
 
   it("does nothing when the body is null (e.g. clear)", async () => {
     mount(`<div data-ajax-cart-fragment="cart/x"></div>`);
-    await expect(handleRequestStart({ endpoint: "clear", body: null })).resolves.toBeUndefined();
+    await expect(handleRequestStart(startContext("clear", null))).resolves.toBeUndefined();
   });
 });
 
 describe("handleRequestEnd", () => {
   it("reconciles and renders from the result", async () => {
     const root = mount(`<div data-ajax-cart-fragment="cart/x">old</div>`);
-    await handleRequestEnd({
-      result: {
+    await handleRequestEnd(
+      endContext({
         ok: true,
         status: 200,
         body: { sections: { cart: `<div data-ajax-cart-fragment="cart/x">new</div>` } },
-      },
-    });
+      }),
+    );
     expect(root.querySelector('[data-ajax-cart-fragment="cart/x"]')!.textContent).toBe("new");
   });
 });
