@@ -1,3 +1,4 @@
-// Public surface of the `product-form` module. Importing it auto-registers the
-// custom element via the side-effect init in product-form.ts.
-export { ProductFormElement, initProductForm } from "./product-form";
+// Side-effect init: register the custom element. Matches quantity/index.ts and
+// sections/index.ts — nothing re-exports from a module index, and nothing
+// consumed the named exports that used to live here.
+import "./product-form";

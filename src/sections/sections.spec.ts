@@ -429,11 +429,18 @@ describe("reconcile", () => {
     warn.mockRestore();
   });
 
-  it("leaves a section's targets unchanged when it cannot be fetched", async () => {
+  it("leaves a section's targets unchanged when it cannot be fetched, and warns", async () => {
     const root = mount(`<div data-ajax-cart-fragment="cart/x">keep</div>`);
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const fetchMissing = vi.fn(async () => ({})); // fetch returned nothing for cart
     await reconcile({ ok: false, status: 422, body: {} } as RequestResult, fetchMissing, root);
     expect(root.querySelector('[data-ajax-cart-fragment="cart/x"]')!.textContent).toBe("keep");
+    // Silently leaving stale markup on screen is the failure this warn exists to
+    // surface; without asserting it, the warn could be deleted and stay green.
+    // Only this one console site is reachable here, so the call itself pins the
+    // branch and the message text stays out of the test.
+    expect(warn).toHaveBeenCalled();
+    warn.mockRestore();
   });
 });
 

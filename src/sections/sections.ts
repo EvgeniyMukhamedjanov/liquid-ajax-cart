@@ -87,7 +87,7 @@ export function injectSections(body: RequestBody, ids: string[]): void {
 // dropping (and warning about) anything else. Section HTML always arrives as a
 // map of `sectionId -> htmlString`; validating at the boundary keeps a malformed
 // value (object, number, null) from being coerced into garbage HTML downstream.
-export function assignStringEntries(
+function assignStringEntries(
   data: unknown,
   into: Record<string, string>,
   context: string,

@@ -1,4 +1,4 @@
-import { test, expect, afterEach, beforeEach } from "vitest";
+import { test, expect, afterEach, beforeEach, vi } from "vitest";
 import { EventEmitter, WaitUntilEvent } from "./emitter";
 
 // Store listeners added during tests so we can clean them up
@@ -178,6 +178,7 @@ test("listener registered during emit does not run in the same emit", async () =
 test("one throwing waitUntil callback does not skip other modules' callbacks", async () => {
   // A throw in one waitUntil callback is reported via console.error but does
   // not abort the loop, so independent modules cannot silently break each other.
+  const spy = vi.spyOn(console, "error").mockImplementation(() => {});
   let secondRan = false;
   listenDOM("test-await-isolation", ((e: WaitUntilEvent<unknown>) => {
     e.waitUntil(async () => {
@@ -190,11 +191,19 @@ test("one throwing waitUntil callback does not skip other modules' callbacks", a
 
   await emitter.emit("test-await-isolation", {}, waitUntilContext);
   expect(secondRan).toBe(true);
+  // "Keeps going" looks identical whether or not the throw was reported, so the
+  // log is the only thing separating this from silently swallowing the error.
+  // The bare fact of the call is enough: only one console site is reachable on
+  // this path, so naming the message would couple to wording without pinning
+  // anything the call itself doesn't already pin.
+  expect(spy).toHaveBeenCalled();
+  spy.mockRestore();
 });
 
 test("one throwing internal listener does not skip subsequent internal listeners", async () => {
   // Mirror of the waitUntil-isolation guarantee: an internal subscriber that
   // rejects should be logged but not break the chain for other modules.
+  const spy = vi.spyOn(console, "error").mockImplementation(() => {});
   const order: number[] = [];
   emitter.on("test-internal-isolation", async () => {
     order.push(1);
@@ -206,6 +215,8 @@ test("one throwing internal listener does not skip subsequent internal listeners
 
   await emitter.emit("test-internal-isolation", {}, waitUntilContext);
   expect(order).toEqual([1, 2]);
+  expect(spy).toHaveBeenCalled();
+  spy.mockRestore();
 });
 
 test("internal listener throw does not skip the public DOM event", async () => {

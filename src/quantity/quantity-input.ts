@@ -196,12 +196,12 @@ function controlFrom(target: EventTarget | null): HTMLInputElement | null {
   return control;
 }
 
-export function handleChange(event: Event): void {
+function handleChange(event: Event): void {
   const control = controlFrom(event.target);
   if (control) void commit(control);
 }
 
-export function handleKeydown(event: KeyboardEvent): void {
+function handleKeydown(event: KeyboardEvent): void {
   // Key first: this runs on every keystroke anywhere on the page, and resolving
   // the control would mean a closest() walk — and a possible console error —
   // per character typed.

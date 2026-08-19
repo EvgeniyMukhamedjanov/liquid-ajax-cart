@@ -56,8 +56,21 @@ describe("structure", () => {
 
   it("errors when there is more than one number input", () => {
     const spy = vi.spyOn(console, "error").mockImplementation(() => {});
-    mount(`<ajax-cart-quantity><input type="number"><input type="number"></ajax-cart-quantity>`);
+    // Both must carry the marker, or the selector matches zero and this passes
+    // through the "found 0" branch without ever testing multiplicity.
+    mount(`<ajax-cart-quantity>
+      <input type="number" data-ajax-cart-quantity-input="1" value="2">
+      <input type="number" data-ajax-cart-quantity-input="2" value="3">
+      <a data-ajax-cart-quantity-plus>+</a>
+    </ajax-cart-quantity>`);
     expect(spy).toHaveBeenCalledTimes(1);
+
+    // The contract itself, asserted in place of the message text: a widget we
+    // refuse to drive binds nothing, so its <a href> no-JS fallback still works.
+    // Pinning prose here would only couple the test to wording — the markup
+    // above is what makes this the >1 case rather than the "found 0" one.
+    click("[data-ajax-cart-quantity-plus]");
+    expect(input().value).toBe("2");
     spy.mockRestore();
   });
 
@@ -114,11 +127,13 @@ describe("stepping", () => {
 
   it("stops at min and max", () => {
     mount(WIDGET);
-    input().value = "1";
+    input().value = "2";
+    click("[data-ajax-cart-quantity-minus]");
     click("[data-ajax-cart-quantity-minus]");
     expect(input().value).toBe("1");
 
-    input().value = "10";
+    input().value = "9";
+    click("[data-ajax-cart-quantity-plus]");
     click("[data-ajax-cart-quantity-plus]");
     expect(input().value).toBe("10");
   });
@@ -542,7 +557,7 @@ describe("remove-at-min", () => {
     document.addEventListener("change", () => seen.push("fired"));
 
     click("[data-ajax-cart-quantity-minus]"); // refused at min
-    vi.advanceTimersByTime(300);
+    vi.runAllTimers();
     expect(seen).toEqual([]);
     vi.useRealTimers();
   });
@@ -555,7 +570,7 @@ describe("remove-at-min", () => {
     document.addEventListener("change", () => seen.push("fired"));
 
     click("[data-ajax-cart-quantity-plus]");
-    vi.advanceTimersByTime(300);
+    vi.runAllTimers();
     expect(seen).toEqual([]);
     vi.useRealTimers();
   });
@@ -571,7 +586,7 @@ describe("remove-at-min", () => {
     click("[data-ajax-cart-quantity-minus]");
     expect(seen).toEqual(["fired"]); // removals skip the debounce
     click("[data-ajax-cart-quantity-minus]");
-    vi.advanceTimersByTime(300);
+    vi.runAllTimers();
     expect(seen).toEqual(["fired"]);
     vi.useRealTimers();
   });
@@ -642,7 +657,7 @@ describe("debounce", () => {
     input().value = "5"; // shopper types over it
     input().dispatchEvent(new Event("change", { bubbles: true })); // and commits
 
-    vi.advanceTimersByTime(300);
+    vi.runAllTimers();
     expect(seen).toEqual(["5"]); // no stale "3" dispatched behind it
     vi.useRealTimers();
   });
@@ -738,7 +753,7 @@ describe("debounce", () => {
     // connected again.
     document.body.append(widget);
 
-    vi.advanceTimersByTime(300);
+    vi.runAllTimers();
     expect(seen).toEqual([]);
     vi.useRealTimers();
   });
@@ -763,7 +778,7 @@ describe("debounce", () => {
     replacement.max = "10";
     oldInput.replaceWith(replacement);
 
-    vi.advanceTimersByTime(300);
+    vi.runAllTimers();
     expect(seenOnOldInput).toEqual([]);
     vi.useRealTimers();
   });
@@ -796,7 +811,7 @@ describe("early flush", () => {
 
     pointerdownOn(document.getElementById("out") as HTMLElement);
     expect(seen).toEqual(["3"]); // fired without waiting
-    vi.advanceTimersByTime(300);
+    vi.runAllTimers();
     expect(seen).toEqual(["3"]); // and only once
     vi.useRealTimers();
   });
@@ -876,7 +891,7 @@ describe("early flush", () => {
     click("[data-ajax-cart-quantity-plus]");
     pointerdownOn(document.getElementById("out") as HTMLElement);
     focusoutTo(el.querySelector("ajax-cart-quantity") as HTMLElement, document.body);
-    vi.advanceTimersByTime(300);
+    vi.runAllTimers();
     expect(seen).toEqual(["fired"]);
     vi.useRealTimers();
   });
