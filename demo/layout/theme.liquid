@@ -158,188 +158,160 @@
     <script
       type="module"
     >
-  import '{{ 'liquid-ajax-cart.js' | asset_url }}';
+      import '{{ 'liquid-ajax-cart.js' | asset_url }}';
 
-  console.log("Is Liquid Ajax Cart initialized: ", window.liquidAjaxCart.init);
-  window.liquidAjaxCart.conf('updateOnWindowFocus', false);
+      // console.log("Is Liquid Ajax Cart initialized: ", window.liquidAjaxCart.init);
+      // window.liquidAjaxCart.conf('updateOnWindowFocus', false);
 
-  {% comment %}
-  function alwaysAddProduct() {
-    const variantId = 43093947318460; // variant ID of the Shipping Protection product
+      {% comment %}
+      function alwaysAddProduct() {
+        const variantId = 43093947318460; // variant ID of the Shipping Protection product
 
-    // Find the index of the Shipping Protection product in the cart
-    const index = window.liquidAjaxCart.cart.items.findIndex(lineItem => {
-      return lineItem.variant_id === variantId;
-    });
+        // Find the index of the Shipping Protection product in the cart
+        const index = window.liquidAjaxCart.cart.items.findIndex(lineItem => {
+          return lineItem.variant_id === variantId;
+        });
 
-    // if there is no Shipping Protection products -- lets add it
-    if (index === -1) {
-      return {
-        requests: [
-          {
-            type: "add",
-            body: {
-              items: [{
-                id: variantId,
-                quantity: 1,
-              }]
-            }
-          }
-        ]
-      }
-    }
-  }
-  {% endcomment %}
-
-  {% comment %}
-  function noMoreThanOneProd() {
-    const variantId = 43093947318460; // variant ID of the Shipping Protection product
-
-    const items = window.liquidAjaxCart.cart.items;
-
-    // Find the line-items with the product
-    const lineItems = items.filter(item => {
-      return item.variant_id === variantId;
-    });
-
-    // If there is no product, or it is only one -- do nothing, stop the function
-    if (lineItems.length === 0 || (lineItems.length === 1 && lineItems[0].quantity === 1)) {
-      return;
-    }
-
-    // Prepare the body for the /cart/update.js request
-    const updates = {};
-
-    // Set the quantity of the first found line-item to 1,
-    // Set the quantity of the rest line-items to 0
-    for (let i = 0; i < lineItems.length; i++) {
-      updates[lineItems[i].key] = (i === 0 ? 1 : 0);
-    }
-
-    // Initiate the update request
-    return {
-      requests: [
-        {
-          type: "update",
-          body: {
-            updates
+        // if there is no Shipping Protection products -- lets add it
+        if (index === -1) {
+          return {
+            requests: [
+              {
+                type: "add",
+                body: {
+                  items: [{
+                    id: variantId,
+                    quantity: 1,
+                  }]
+                }
+              }
+            ]
           }
         }
-      ]
-    }
-  }
-  {% endcomment %}
+      }
+      {% endcomment %}
 
-  function addToCartThreshold() {
-    // line item property to distinguish the line item
-    // that was automatically added by the mutation
-    const autoaddedProp = '_autoadded';
+      {% comment %}
+      function noMoreThanOneProd() {
+        const variantId = 43093947318460; // variant ID of the Shipping Protection product
 
-    // current cart state
-    const cart = window.liquidAjaxCart.cart;
+        const items = window.liquidAjaxCart.cart.items;
 
-    // The variant ID of the promo-product, that should be automatically added
-    const variant = 40934235668668;
+        // Find the line-items with the product
+        const lineItems = items.filter(item => {
+          return item.variant_id === variantId;
+        });
 
-    // The product should be added when the cart total is $100 or higher
-    const threshold = 10000;
+        // If there is no product, or it is only one -- do nothing, stop the function
+        if (lineItems.length === 0 || (lineItems.length === 1 && lineItems[0].quantity === 1)) {
+          return;
+        }
 
-    // The variable to keep the cart total price
-    // that will be compared with the threshold.
-    let total = cart.items_subtotal_price;
-    // If the promo-product is already automatically added to the cart,
-    // and it is not free, we should subtract its price from the cart total
-    // before comparing with the threshold
-    // in order to understand if the promo-product has to be removed.
-    const autoAddedLineItem = cart.items.findIndex(lineItem => {
-      return lineItem.properties?.[autoaddedProp] === 'Yes';
-    });
-    if (autoAddedLineItem > -1) {
-      total -= cart.items[autoAddedLineItem].final_line_price;
-    }
+        // Prepare the body for the /cart/update.js request
+        const updates = {};
 
-    // Compare the cart total that doesn't include
-    // the possibly automatically added product
-    if (total >= threshold) {
+        // Set the quantity of the first found line-item to 1,
+        // Set the quantity of the rest line-items to 0
+        for (let i = 0; i < lineItems.length; i++) {
+          updates[lineItems[i].key] = (i === 0 ? 1 : 0);
+        }
 
-      // If the total price is equal or higher than the threshold,
-      // and the cart doesn't contain the promo-product —
-      // add the promo-product automatically.
-      const promoVariantLineItem = cart.items.findIndex(lineItem => {
-        return lineItem.variant_id === variant && lineItem.discounts.length > 0;
-      });
-      if (promoVariantLineItem === -1) {
+        // Initiate the update request
         return {
           requests: [
             {
-              type: "add",
+              type: "update",
               body: {
-                items: [{
-                  id: variant,
-                  quantity: 1,
-                  properties: {[autoaddedProp]: "Yes"}
-                }]
+                updates
               }
             }
           ]
         }
       }
-    } else {
+      {% endcomment %}
 
-      // If the total price is lower than the threshold,
-      // and the cart contains the automatically added promo-product —
-      // remove the promo-product from there.
-      // If the promo-product was added manually by the user —
-      // it won't be removed.
-      if (autoAddedLineItem > -1) {
-        return {
-          requests: [
-            {
-              type: "change",
-              body: {
-                "line": autoAddedLineItem + 1,
-                "quantity": 0
-              }
+      function addToCartThreshold() {
+        // line item property to distinguish the line item
+        // that was automatically added by the mutation
+        const autoaddedProp = '_autoadded';
+
+        // current cart state
+        const cart = window.liquidAjaxCart.cart;
+
+        // The variant ID of the promo-product, that should be automatically added
+        const variant = 40934235668668;
+
+        // The product should be added when the cart total is $100 or higher
+        const threshold = 10000;
+
+        // The variable to keep the cart total price
+        // that will be compared with the threshold.
+        let total = cart.items_subtotal_price;
+        // If the promo-product is already automatically added to the cart,
+        // and it is not free, we should subtract its price from the cart total
+        // before comparing with the threshold
+        // in order to understand if the promo-product has to be removed.
+        const autoAddedLineItem = cart.items.findIndex(lineItem => {
+          return lineItem.properties?.[autoaddedProp] === 'Yes';
+        });
+        if (autoAddedLineItem > -1) {
+          total -= cart.items[autoAddedLineItem].final_line_price;
+        }
+
+        // Compare the cart total that doesn't include
+        // the possibly automatically added product
+        if (total >= threshold) {
+
+          // If the total price is equal or higher than the threshold,
+          // and the cart doesn't contain the promo-product —
+          // add the promo-product automatically.
+          const promoVariantLineItem = cart.items.findIndex(lineItem => {
+            return lineItem.variant_id === variant && lineItem.discounts.length > 0;
+          });
+          if (promoVariantLineItem === -1) {
+            return {
+              requests: [
+                {
+                  type: "add",
+                  body: {
+                    items: [{
+                      id: variant,
+                      quantity: 1,
+                      properties: {[autoaddedProp]: "Yes"}
+                    }]
+                  }
+                }
+              ]
             }
-          ]
-        }
-      }
-    }
-  }
-
-  window.liquidAjaxCart.conf('mutations', [
-    // alwaysAddProduct,
-    // noMoreThanOneProd,
-    addToCartThreshold
-  ]);
-
-
-  // Open cart on "add to cart"
-  document.addEventListener('liquid-ajax-cart:request-end', event => {
-    const {requestState} = event.detail;
-    if (requestState.requestType === 'add' && requestState.responseData?.ok) {
-      document.querySelector('html').classList.add('js-ajax-cart-open');
-    }
-  });
-
-  // subscribeToCartAjaxRequests(( requestState, subscribeToResult ) => {
-  document.addEventListener('liquid-ajax-cart:request-end', event => {
-    const {requestState, cart, previousCart} = event.detail;
-    // console.log(cart, previousCart);
-
-    if (requestState.requestType === 'add') {
-      const checkbox = document.getElementById('addToCartPopupCheckbox');
-      if (checkbox && checkbox.checked) {
-        if (requestState.responseData?.ok) {
-          let productName = requestState.responseData.body.title;
-          if (requestState.responseData.body.items?.length === 1) {
-            productName = requestState.responseData.body.items[0].title;
           }
-          alert(`${productName ? '«' + productName + '» is' : 'Products are'} successfully added`);
+        } else {
+
+          // If the total price is lower than the threshold,
+          // and the cart contains the automatically added promo-product —
+          // remove the promo-product from there.
+          // If the promo-product was added manually by the user —
+          // it won't be removed.
+          if (autoAddedLineItem > -1) {
+            return {
+              requests: [
+                {
+                  type: "change",
+                  body: {
+                    "line": autoAddedLineItem + 1,
+                    "quantity": 0
+                  }
+                }
+              ]
+            }
+          }
         }
       }
-    }
-  });
+
+      // window.liquidAjaxCart.conf('mutations', [
+      //   // alwaysAddProduct,
+      //   // noMoreThanOneProd,
+      //   addToCartThreshold
+      // ]);
     </script>
   </body>
 </html>

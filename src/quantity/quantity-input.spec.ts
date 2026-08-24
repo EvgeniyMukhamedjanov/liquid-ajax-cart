@@ -32,7 +32,7 @@ function sentBody(call = 0): Record<string, string> {
 
 beforeEach(() => {
   changeMock.mockReset();
-  changeMock.mockResolvedValue({ ok: true, status: 200, body: {} });
+  changeMock.mockResolvedValue({ ok: true, status: 200, body: {}, cancelled: false });
   isProcessingMock.mockReset();
   isProcessingMock.mockReturnValue(false);
 });
@@ -356,7 +356,7 @@ describe("commit", () => {
   });
 
   it("restores a still-connected control when the request fails", async () => {
-    changeMock.mockResolvedValue({ ok: false, status: null, body: null });
+    changeMock.mockResolvedValue({ ok: false, status: null, body: null, cancelled: false });
     const el = mount(
       `<input type="number" data-ajax-cart-quantity-input="3" value="2">`,
     ) as HTMLInputElement;
@@ -366,7 +366,7 @@ describe("commit", () => {
   });
 
   it("leaves a detached control alone when the request fails", async () => {
-    changeMock.mockResolvedValue({ ok: false, status: null, body: null });
+    changeMock.mockResolvedValue({ ok: false, status: null, body: null, cancelled: false });
     const el = mount(
       `<input type="number" data-ajax-cart-quantity-input="3" value="2">`,
     ) as HTMLInputElement;
@@ -728,7 +728,7 @@ describe("initInputBinding", () => {
     // interfere with the assertion below.
     document.dispatchEvent(
       new CustomEvent(EVENTS.REQUEST_END, {
-        detail: { result: { ok: true, status: 200, body: null } },
+        detail: { result: { ok: true, status: 200, body: null, cancelled: false } },
       }),
     );
     expect(el.readOnly).toBe(true);

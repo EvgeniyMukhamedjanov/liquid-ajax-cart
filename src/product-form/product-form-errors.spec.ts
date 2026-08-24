@@ -36,7 +36,7 @@ afterEach(() => {
 
 /** Wrap a Shopify response body into a failed RequestResult. */
 function fail(body: Record<string, unknown> | null, status: number | null = 422): RequestResult {
-  return { ok: false, status, body };
+  return { ok: false, status, body, cancelled: false };
 }
 
 /** Catch-all slot when key omitted; field-keyed slot otherwise. */
@@ -230,14 +230,14 @@ describe("renderErrors — synthetic precedence & fallback", () => {
   // Case 12
   it("falls back to default text on a network failure (null body)", () => {
     const el = mount(`<div data-ajax-cart-product-form-error></div>`);
-    renderErrors(el, { ok: false, status: null, body: null });
+    renderErrors(el, { ok: false, status: null, body: null, cancelled: false });
     expect(messages(errorSlot(el))).toEqual([FALLBACK_TEXT]);
   });
 
   // Case 13
   it("falls back to default text on an empty body", () => {
     const el = mount(`<div data-ajax-cart-product-form-error></div>`);
-    renderErrors(el, { ok: false, status: 500, body: {} });
+    renderErrors(el, { ok: false, status: 500, body: {}, cancelled: false });
     expect(messages(errorSlot(el))).toEqual([FALLBACK_TEXT]);
   });
 
@@ -631,7 +631,10 @@ describe("renderErrors — precedence & shape matrix", () => {
   CASES.forEach(({ name, body, keyed = [], catchAll = [], aria = false }) => {
     it(name, () => {
       const el = matrixMount();
-      renderErrors(el, body === null ? { ok: false, status: null, body: null } : fail(body));
+      renderErrors(
+        el,
+        body === null ? { ok: false, status: null, body: null, cancelled: false } : fail(body),
+      );
       expect(messages(el.querySelector(".keyed")!)).toEqual(keyed);
       expect(messages(el.querySelector(".catch")!)).toEqual(catchAll);
       expect(el.querySelector("input")!.hasAttribute("aria-invalid")).toBe(aria);
@@ -644,6 +647,50 @@ describe("renderErrors — precedence & shape matrix", () => {
     renderErrors(el, fail({ errors: { message: ["field_msg"] }, message: "TOP" }));
     expect(messages(errorSlot(el, "message"))).toEqual(["field_msg"]);
     expect(errorSlot(el, "message").textContent).not.toContain("TOP");
+  });
+});
+
+// ---- result gating --------------------------------------------------------
+//
+// renderErrors decides for itself whether a result is worth painting, so every
+// caller gets the same answer without having to remember the rule. Both gates
+// hold universally: a success has no errors, and a cancellation is a request the
+// merchant's own code called off (via a `request-start` listener's
+// `detail.abort()` or an `options.signal`), so the shopper must not be told it
+// failed. A timeout is NOT a cancellation and still reports — see `cancelled` in
+// core/api.ts.
+
+describe("renderErrors — result gating", () => {
+  it("renders nothing for a cancelled request", () => {
+    const el = mount(`<div data-ajax-cart-product-form-error></div>`);
+    renderErrors(el, { ok: false, status: null, body: null, cancelled: true });
+    expect(errorSlot(el).textContent).toBe("");
+  });
+
+  // Without this gate a successful cart body walks the whole precedence chain —
+  // it carries no errors/description/message — and paints FALLBACK_TEXT after a
+  // request that actually worked.
+  it("renders nothing for a successful request", () => {
+    const el = mount(`<div data-ajax-cart-product-form-error></div>`);
+    renderErrors(el, { ok: true, status: 200, body: { item_count: 1 }, cancelled: false });
+    expect(errorSlot(el).textContent).toBe("");
+  });
+
+  it("leaves an existing message untouched rather than clearing it", () => {
+    const el = mount(`<div data-ajax-cart-product-form-error></div>`);
+    renderErrors(el, fail(maxInCart));
+    renderErrors(el, { ok: false, status: null, body: null, cancelled: true });
+    // Clearing is clearErrors' job; a gated render is a no-op, not a wipe.
+    expect(messages(errorSlot(el))).toEqual([
+      "The maximum quantity of this item is already in your cart.",
+    ]);
+  });
+
+  it("still reports a timeout, which is not a cancellation", () => {
+    const el = mount(`<div data-ajax-cart-product-form-error></div>`);
+    // AbortSignal.timeout() aborts the signal, but core reports cancelled:false.
+    renderErrors(el, { ok: false, status: null, body: null, cancelled: false });
+    expect(messages(errorSlot(el))).toEqual([FALLBACK_TEXT]);
   });
 });
 

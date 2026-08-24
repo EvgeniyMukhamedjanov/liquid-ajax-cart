@@ -16,7 +16,7 @@ let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
 beforeEach(() => {
   addMock.mockReset();
-  addMock.mockResolvedValue({ ok: true, status: 200, body: {} });
+  addMock.mockResolvedValue({ ok: true, status: 200, body: {}, cancelled: false });
   consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 });
 
@@ -143,13 +143,22 @@ test("renders errors into a slot when the request fails", async () => {
   const { element, form, button } = mountProductForm();
   const slot = addErrorSlot(element);
 
-  addMock.mockResolvedValue({ ok: false, status: 422, body: { description: "Sold out" } });
+  addMock.mockResolvedValue({
+    ok: false,
+    status: 422,
+    body: { description: "Sold out" },
+    cancelled: false,
+  });
   form!.requestSubmit(button);
   await flush();
 
   expect(slot.querySelector("span")?.textContent).toBe("Sold out");
 });
 
+// Which results are worth rendering is renderErrors' own decision (success and
+// cancellation render nothing) — covered in product-form-errors.spec.ts. This
+// file proves only the wiring: the result reaches renderErrors, and the call is
+// unconditional, so a result with nothing to say paints nothing.
 test("clears stale errors before submitting and does not re-render on success", async () => {
   const { element, form, button } = mountProductForm();
   const slot = addErrorSlot(element, "<span>old error</span>");
@@ -174,7 +183,7 @@ test("sets the processing attribute while the request is in flight", async () =>
 
   expect(element.hasAttribute("processing")).toBe(true);
 
-  pending.resolve({ ok: true, status: 200, body: {} });
+  pending.resolve({ ok: true, status: 200, body: {}, cancelled: false });
   await flush();
 
   expect(element.hasAttribute("processing")).toBe(false);
@@ -188,7 +197,7 @@ test("clears the processing attribute when the request fails", async () => {
   form!.requestSubmit(button);
 
   // core resolves with ok:false on failure — it never rejects.
-  pending.resolve({ ok: false, status: null, body: null });
+  pending.resolve({ ok: false, status: null, body: null, cancelled: false });
   await flush();
 
   expect(element.hasAttribute("processing")).toBe(false);
@@ -409,9 +418,8 @@ test("element removed during a pending request still clears processing on resolv
 
   element.remove();
 
-  pending.resolve({ ok: true, status: 200, body: {} });
+  pending.resolve({ ok: true, status: 200, body: {}, cancelled: false });
   await flush();
 
   expect(element.hasAttribute("processing")).toBe(false);
 });
-

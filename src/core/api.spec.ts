@@ -138,31 +138,31 @@ test("window.Shopify exists but routes missing → falls back to /", async () =>
 test("200 OK with JSON → result has ok/status/body", async () => {
   fetchMock.mockResolvedValue(mockResponse({ status: 200, body: { token: "abc" } }));
   const result = await new CartApi().get();
-  expect(result).toEqual({ ok: true, status: 200, body: { token: "abc" } });
+  expect(result).toEqual({ ok: true, status: 200, body: { token: "abc" }, cancelled: false });
 });
 
 test("4xx response → result has ok=false with parsed body", async () => {
   fetchMock.mockResolvedValue(mockResponse({ status: 422, body: { description: "oops" } }));
   const result = await new CartApi().add({ id: 1 });
-  expect(result).toEqual({ ok: false, status: 422, body: { description: "oops" } });
+  expect(result).toEqual({ ok: false, status: 422, body: { description: "oops" }, cancelled: false });
 });
 
 test("network error → result is full failure", async () => {
   fetchMock.mockRejectedValue(new TypeError("network"));
   const result = await new CartApi().add({ id: 1 });
-  expect(result).toEqual({ ok: false, status: null, body: null });
+  expect(result).toEqual({ ok: false, status: null, body: null, cancelled: false });
 });
 
 test("non-JSON response body → body is null but ok/status preserved", async () => {
   fetchMock.mockResolvedValue(mockResponse({ status: 200, jsonThrows: true }));
   const result = await new CartApi().get();
-  expect(result).toEqual({ ok: true, status: 200, body: null });
+  expect(result).toEqual({ ok: true, status: 200, body: null, cancelled: false });
 });
 
 test("empty response body (null) → body is null", async () => {
   fetchMock.mockResolvedValue(mockResponse({ status: 200, body: null }));
   const result = await new CartApi().get();
-  expect(result).toEqual({ ok: true, status: 200, body: null });
+  expect(result).toEqual({ ok: true, status: 200, body: null, cancelled: false });
 });
 
 // =============================================================================
@@ -200,7 +200,7 @@ test("onEnd fires after fetch with result in context", async () => {
   await api.add({ id: 1 });
   expect(endCtx.endpoint).toBe("add");
   expect(endCtx.body).toEqual({ id: 1 });
-  expect(endCtx.result).toEqual({ ok: true, status: 200, body: { ok: 1 } });
+  expect(endCtx.result).toEqual({ ok: true, status: 200, body: { ok: 1 }, cancelled: false });
   expect(endCtx.abort).toBeUndefined();
 });
 
@@ -213,7 +213,7 @@ test("onEnd fires when fetch fails", async () => {
     },
   });
   await api.add({ id: 1 });
-  expect(endCtx.result).toEqual({ ok: false, status: null, body: null });
+  expect(endCtx.result).toEqual({ ok: false, status: null, body: null, cancelled: false });
 });
 
 test("async onStart blocks fetch until resolved", async () => {
@@ -353,7 +353,7 @@ test("pre-aborted caller signal → fetch not called, result is failure", async 
   fetchMock.mockResolvedValue(mockResponse());
   const result = await new CartApi().add({ id: 1 }, { signal: controller.signal });
   expect(fetchMock).not.toHaveBeenCalled();
-  expect(result).toEqual({ ok: false, status: null, body: null });
+  expect(result).toEqual({ ok: false, status: null, body: null, cancelled: true });
 });
 
 test("caller-signal abort during fetch cancels the request", async () => {
@@ -370,7 +370,7 @@ test("caller-signal abort during fetch cancels the request", async () => {
   await Promise.resolve();
   callerController.abort("user");
   const result = await promise;
-  expect(result).toEqual({ ok: false, status: null, body: null });
+  expect(result).toEqual({ ok: false, status: null, body: null, cancelled: true });
 });
 
 test("subscriber abort() in onStart → fetch skipped, result is failure", async () => {
@@ -382,7 +382,7 @@ test("subscriber abort() in onStart → fetch skipped, result is failure", async
   });
   const result = await api.add({ id: 1 });
   expect(fetchMock).not.toHaveBeenCalled();
-  expect(result).toEqual({ ok: false, status: null, body: null });
+  expect(result).toEqual({ ok: false, status: null, body: null, cancelled: true });
 });
 
 test("onEnd still fires after subscriber-triggered abort", async () => {
@@ -400,7 +400,56 @@ test("onEnd still fires after subscriber-triggered abort", async () => {
   });
   await api.add({ id: 1 });
   expect(endCalled).toBe(true);
-  expect(endResult).toEqual({ ok: false, status: null, body: null });
+  expect(endResult).toEqual({ ok: false, status: null, body: null, cancelled: true });
+});
+
+// The two failures below are byte-identical apart from `cancelled`, which is the
+// whole point of the flag: modules that show errors to shoppers must report the
+// network failure and stay silent on the cancellation.
+test("cancelled separates a called-off request from a network failure", async () => {
+  fetchMock.mockRejectedValue(new TypeError("network"));
+  const networkFailure = await new CartApi().add({ id: 1 });
+
+  const controller = new AbortController();
+  controller.abort();
+  const cancelled = await new CartApi().add({ id: 1 }, { signal: controller.signal });
+
+  expect(networkFailure.cancelled).toBe(false);
+  expect(cancelled.cancelled).toBe(true);
+  expect({ ...networkFailure, cancelled: true }).toEqual(cancelled);
+});
+
+// A timeout aborts the signal exactly like a cancellation does, so `signal.aborted`
+// alone cannot tell them apart — but a request that ran out of time IS a failure
+// the shopper should hear about. These two tests are what stop the flag drifting
+// back to a bare `signal.aborted` read.
+test("a timeout is not a cancellation — it is a real failure", async () => {
+  const signal = AbortSignal.timeout(0);
+  await new Promise((resolve) => setTimeout(resolve, 5));
+  expect(signal.aborted).toBe(true);
+  fetchMock.mockResolvedValue(mockResponse());
+
+  const result = await new CartApi().add({ id: 1 }, { signal });
+
+  expect(fetchMock).not.toHaveBeenCalled();
+  expect(result).toEqual({ ok: false, status: null, body: null, cancelled: false });
+});
+
+test("a timeout landing mid-flight is not a cancellation either", async () => {
+  const controller = new AbortController();
+  fetchMock.mockImplementation((_url, init: RequestInit) => {
+    return new Promise((_, reject) => {
+      (init.signal as AbortSignal).addEventListener("abort", () => {
+        reject(new DOMException("timed out", "TimeoutError"));
+      });
+    });
+  });
+
+  const promise = new CartApi().add({ id: 1 }, { signal: controller.signal });
+  await Promise.resolve();
+  controller.abort(new DOMException("timed out", "TimeoutError"));
+
+  expect(await promise).toEqual({ ok: false, status: null, body: null, cancelled: false });
 });
 
 test("caller-signal listener is removed after request completes", async () => {

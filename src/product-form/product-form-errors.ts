@@ -101,8 +101,23 @@ export function clearErrors(element: HTMLElement): void {
   });
 }
 
+/**
+ * Paints whatever errors `result` implies. Safe to call with any result — a
+ * result with nothing to report renders nothing.
+ *
+ * The two gates below live here rather than at the call site because they hold
+ * for every caller: a success has no errors to show, and a cancellation is a
+ * request the merchant's own code called off, so the shopper must not be told it
+ * failed. A caller that had to remember them could forget — and did, which is
+ * how cancelled `add.js` requests briefly rendered an error. Timeouts are not
+ * cancellations (see `cancelled` in core/api.ts), so they still report.
+ *
+ * `clearErrors` runs before the request, so an early return here leaves the
+ * slots clean rather than stale.
+ */
 export function renderErrors(element: HTMLElement, result: RequestResult): void {
   if (!element.isConnected) return;
+  if (result.ok || result.cancelled) return;
 
   const formId = formIdOf(element);
   const { keyed, catchAll } = splitSlots(collectSlots(element, formId));

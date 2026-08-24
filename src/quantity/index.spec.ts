@@ -14,7 +14,7 @@ const isProcessingMock = vi.mocked(isProcessing);
 
 beforeEach(() => {
   changeMock.mockReset();
-  changeMock.mockResolvedValue({ ok: true, status: 200, body: {} });
+  changeMock.mockResolvedValue({ ok: true, status: 200, body: {}, cancelled: false });
   isProcessingMock.mockReset();
   isProcessingMock.mockReturnValue(false);
 });

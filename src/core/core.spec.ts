@@ -129,13 +129,13 @@ test("add() forwards options to the api — a pre-aborted signal skips fetch", a
   const result = await add({ id: 1 }, { signal: controller.signal });
 
   expect(fetchMock).not.toHaveBeenCalled();
-  expect(result).toEqual({ ok: false, status: null, body: null });
+  expect(result).toEqual({ ok: false, status: null, body: null, cancelled: true });
 });
 
 test("add() resolves to the RequestResult produced by the api", async () => {
   fetchMock.mockResolvedValue(mockResponse({ status: 200, body: { token: "abc" } }));
   const result = await add({ id: 1 });
-  expect(result).toEqual({ ok: true, status: 200, body: { token: "abc" } });
+  expect(result).toEqual({ ok: true, status: 200, body: { token: "abc" }, cancelled: false });
 });
 
 test("queued cart methods run through the queue, so they never overlap", async () => {
@@ -282,7 +282,7 @@ test("a task that throws rejects, yet still drains the queue for the next caller
   // A thrown task must not strand the queue: it still closes out cleanly...
   expect(seen).toEqual(["queue-end", "queue-idle"]);
   // ...and the next request goes through as normal.
-  expect(await add({ id: 1 })).toEqual({ ok: true, status: 200, body: null });
+  expect(await add({ id: 1 })).toEqual({ ok: true, status: 200, body: null, cancelled: false });
 });
 
 test("a network failure resolves to a failed result and still emits both request events", async () => {
@@ -294,7 +294,7 @@ test("a network failure resolves to a failed result and still emits both request
   // The api swallows network errors, so the queued method resolves, never rejects.
   const result = await add({ id: 1 });
 
-  expect(result).toEqual({ ok: false, status: null, body: null });
+  expect(result).toEqual({ ok: false, status: null, body: null, cancelled: false });
   expect(seen).toEqual(["start", "end"]);
 });
 
@@ -323,7 +323,7 @@ test("a request-start listener can abort the request before fetch is reached", a
   const result = await add({ id: 1 });
 
   expect(fetchMock).not.toHaveBeenCalled();
-  expect(result).toEqual({ ok: false, status: null, body: null });
+  expect(result).toEqual({ ok: false, status: null, body: null, cancelled: true });
 });
 
 test("a request-start waitUntil callback blocks fetch until it settles", async () => {

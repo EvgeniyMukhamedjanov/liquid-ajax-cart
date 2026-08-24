@@ -23,6 +23,40 @@ export type RequestResult = {
   ok: boolean;
   status: number | null;
   body: Record<string, unknown> | null;
+  /**
+   * The request was deliberately called off — by a caller's `signal` or by a
+   * `request-start` subscriber calling `abort()` — rather than failing.
+   *
+   * Exists so modules that surface errors to shoppers can stay silent: nobody
+   * needs to be told about a request they themselves cancelled. Without it a
+   * cancellation is indistinguishable from a network failure, since both
+   * produce `{ok: false, status: null, body: null}`. v2 carried the same
+   * distinction as `info.cancel` and checked it before rendering
+   * (`_src-old/messages.ts:113`).
+   *
+   * **A timeout is not a cancellation.** `AbortSignal.timeout()` aborts the
+   * signal too, but a request that ran out of time is a real failure the
+   * shopper should hear about, exactly like a dropped connection. So this is
+   * `false` for timeouts, and they fall in with network failures.
+   *
+   * This is one bit rather than an outcome enum because one bit is all any
+   * consumer branches on: suppress, or report. Timeouts and network failures
+   * are treated identically, so naming them apart would expose a distinction
+   * nothing acts on.
+   *
+   * **Neither the signal nor the abort reason is carried**, and neither is the
+   * decision left to whoever aborted. `request-end` is a broadcast event, so
+   * the party that aborts is not the party that renders — a merchant calling
+   * `detail.abort()` from a `request-start` listener has no handle on the error
+   * modules downstream. The decision has to travel with the result. Carrying
+   * the signal instead would also publish this internal controller as contract,
+   * make an otherwise inert result non-cloneable, and make the wrong check
+   * (`signal.aborted`, which mis-reports timeouts) the easiest one to write.
+   *
+   * If a module ever needs to know *why* a request was called off, add
+   * `cause?: unknown` — additive and non-breaking — rather than the signal.
+   */
+  cancelled: boolean;
 };
 
 /**
@@ -33,6 +67,22 @@ export type RequestResult = {
  */
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Whether an aborted signal represents a deliberate cancellation rather than a
+ * timeout.
+ *
+ * `AbortSignal.timeout()` aborts with a `TimeoutError` DOMException, while
+ * `controller.abort()` aborts with an `AbortError` (or whatever reason the
+ * caller passed). Reading `signal.reason` is the only way to tell them apart —
+ * `signal.aborted` is `true` for both. The check lives here, once, rather than
+ * at every consumer that would otherwise have to sniff the reason itself.
+ */
+function isCancellation(signal: AbortSignal): boolean {
+  if (!signal.aborted) return false;
+  const reason: unknown = signal.reason;
+  return !(reason instanceof DOMException && reason.name === "TimeoutError");
 }
 
 const ENDPOINTS = {
@@ -147,7 +197,7 @@ export class CartApi {
     let result: RequestResult;
 
     if (signal.aborted) {
-      result = { ok: false, status: null, body: null };
+      result = { ok: false, status: null, body: null, cancelled: isCancellation(signal) };
     } else {
       try {
         const root = window.Shopify?.routes?.root ?? "/";
@@ -167,11 +217,15 @@ export class CartApi {
           ok: response.ok,
           status: response.status,
           body: responseBody,
+          cancelled: false,
         };
       } catch {
-        // Network error or abort
-        // TODO: handle abort differently, add error, abort info
-        result = { ok: false, status: null, body: null };
+        // Network error, or an abort that landed after fetch was already in
+        // flight. isCancellation() reads the signal rather than sniffing the
+        // rejection: fetch rejects with an AbortError only once the signal is
+        // aborted, a network failure leaves it untouched, and a timeout aborts
+        // it with a TimeoutError that must NOT count as a cancellation.
+        result = { ok: false, status: null, body: null, cancelled: isCancellation(signal) };
       }
     }
 

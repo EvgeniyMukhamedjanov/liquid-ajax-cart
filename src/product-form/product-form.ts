@@ -69,7 +69,10 @@ export class ProductFormElement extends HTMLElement {
     // throw — which keeps `processing` from ever sticking without a try/finally.
     const result = await add(formData, { trigger: { source: ELEMENT_TAG, initiator: this } });
     this.removeAttribute(ATTR_PROCESSING);
-    if (!result.ok) renderErrors(this, result);
+
+    // Unconditional: renderErrors decides what a result is worth showing, so a
+    // success or a cancellation renders nothing without a guard here.
+    renderErrors(this, result);
   };
 }
 

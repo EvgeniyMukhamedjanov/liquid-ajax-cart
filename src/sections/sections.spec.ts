@@ -325,7 +325,7 @@ describe("reconcile", () => {
   it("does nothing when status is null (abort/network)", async () => {
     const root = mount(`<div data-ajax-cart-fragment="cart/x">keep</div>`);
     const fetchMissing = vi.fn();
-    await reconcile({ ok: false, status: null, body: null } as RequestResult, fetchMissing, root);
+    await reconcile({ ok: false, status: null, body: null, cancelled: false } as RequestResult, fetchMissing, root);
     expect(fetchMissing).not.toHaveBeenCalled();
     expect(root.querySelector('[data-ajax-cart-fragment="cart/x"]')!.textContent).toBe("keep");
   });
@@ -337,6 +337,7 @@ describe("reconcile", () => {
       {
         ok: true,
         status: 200,
+        cancelled: false,
         body: { sections: { cart: `<div data-ajax-cart-fragment="cart/x">new</div>` } },
       } as RequestResult,
       fetchMissing,
@@ -358,6 +359,7 @@ describe("reconcile", () => {
       {
         ok: true,
         status: 200,
+        cancelled: false,
         body: { sections: { cart: `<div data-ajax-cart-fragment="cart/x">new</div>` } },
       } as RequestResult,
       fetchMissing,
@@ -374,7 +376,7 @@ describe("reconcile", () => {
       cart: `<div data-ajax-cart-fragment="cart/x">truth</div>`,
     }));
     await reconcile(
-      { ok: false, status: 422, body: { message: "nope" } } as RequestResult,
+      { ok: false, status: 422, body: { message: "nope" }, cancelled: false } as RequestResult,
       fetchMissing,
       root,
     );
@@ -395,6 +397,7 @@ describe("reconcile", () => {
       {
         ok: true,
         status: 200,
+        cancelled: false,
         body: {
           sections: {
             cart: `<div data-ajax-cart-fragment="cart/x">new</div>`,
@@ -418,7 +421,7 @@ describe("reconcile", () => {
     const fetchMissing = vi.fn();
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     await reconcile(
-      { ok: true, status: 200, body: { sections: { cart: "" } } } as RequestResult,
+      { ok: true, status: 200, body: { sections: { cart: "" } }, cancelled: false } as RequestResult,
       fetchMissing,
       root,
     );
@@ -433,7 +436,7 @@ describe("reconcile", () => {
     const root = mount(`<div data-ajax-cart-fragment="cart/x">keep</div>`);
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const fetchMissing = vi.fn(async () => ({})); // fetch returned nothing for cart
-    await reconcile({ ok: false, status: 422, body: {} } as RequestResult, fetchMissing, root);
+    await reconcile({ ok: false, status: 422, body: {}, cancelled: false } as RequestResult, fetchMissing, root);
     expect(root.querySelector('[data-ajax-cart-fragment="cart/x"]')!.textContent).toBe("keep");
     // Silently leaving stale markup on screen is the failure this warn exists to
     // surface; without asserting it, the warn could be deleted and stay green.
@@ -490,6 +493,7 @@ describe("handleRequestEnd", () => {
       endContext({
         ok: true,
         status: 200,
+        cancelled: false,
         body: { sections: { cart: `<div data-ajax-cart-fragment="cart/x">new</div>` } },
       }),
     );
