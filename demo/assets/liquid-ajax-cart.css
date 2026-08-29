@@ -102,7 +102,7 @@
 #shopify-section-my-cart > form > div:first-child h2 {
 	margin-bottom: 0;
 }
-.js-ajax-cart-processing #shopify-section-my-cart > form > div:first-child:before {
+.js-ajax-cart-busy #shopify-section-my-cart > form > div:first-child:before {
 	content: '';
     position: absolute;
     top: 46px;
@@ -148,7 +148,7 @@
 #shopify-section-my-cart > form > div:nth-child(2)::-webkit-scrollbar-thumb {
     background: #757575;
 }
-.js-ajax-cart-processing #shopify-section-my-cart > form > div:nth-child(2) {
+.js-ajax-cart-busy #shopify-section-my-cart > form > div:nth-child(2) {
 	opacity: .6;
 }
 
@@ -200,7 +200,7 @@ ajax-cart-product-form[processing] [type="submit"]:after {
 	position: relative;
 }
 
-.js-ajax-cart-processing .cart-page-link:after {
+.js-ajax-cart-busy .cart-page-link:after {
     content: '';
     position: absolute;
     border-radius: 100%;
@@ -249,4 +249,16 @@ ajax-cart-product-form[processing] [type="submit"]:after {
 	.product-single__prop > select {
 		width: 50%;
 	}
+}
+/* Per-line-item state, written by the css-classes module. */
+[data-ajax-cart-item-css] {
+	transition: opacity .2s;
+}
+.js-ajax-cart-item-busy {
+	opacity: .5;
+}
+.js-ajax-cart-item-removing {
+	opacity: 0;
+	transform: translateX(2em);
+	transition: opacity .25s, transform .25s;
 }

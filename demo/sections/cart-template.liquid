@@ -34,7 +34,7 @@
         Loop through products in the cart
       {% endcomment %}
       {% for item in cart.items %}
-        <div class="cart__row">
+        <div class="cart__row" data-ajax-cart-item-css="{{ forloop.index }} {{ item.key }} {{ item.variant_id }}">
           <div class="grid--full cart__row--table-large">
 
             <div class="grid__item post-large--one-half">

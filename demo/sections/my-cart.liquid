@@ -17,7 +17,7 @@
   </div>
   <div data-ajax-cart-section-scroll>
     {% for item in cart.items %}
-      <div class="ajax-cart__line-item" >
+      <div class="ajax-cart__line-item" data-ajax-cart-item-css="{{ forloop.index }} {{ item.key }} {{ item.variant_id }}">
         <div><a class="h3" href="{{ item.url }}">{{ item.product.title }}</a></div>
         {% unless item.product.has_only_default_variant %}
           <div><small>{{ item.variant.title }}</small></div>
