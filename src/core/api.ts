@@ -209,8 +209,12 @@ export class CartApi {
         try {
           const raw: unknown = await response.json();
           responseBody = isRecord(raw) ? raw : null;
-        } catch {
-          // Some responses may not have JSON body
+        } catch (err) {
+          // An abort landing while the body is still streaming rejects
+          // response.json() too — rethrow so the outer catch classifies it
+          // via isCancellation() instead of this reporting a false success.
+          if (signal.aborted) throw err;
+          // Otherwise: some responses may not have a JSON body.
         }
 
         result = {

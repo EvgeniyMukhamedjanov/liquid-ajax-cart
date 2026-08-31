@@ -339,6 +339,19 @@ describe("commit", () => {
     expect(el.value).toBe("2");
   });
 
+  // A cancelled request means a request-start listener vetoed it before it
+  // reached the server — the cart never moved, and nothing else is coming to
+  // reconcile the display. Treated the same as an ordinary failure.
+  it("restores when the request was cancelled, not only when it failed", async () => {
+    changeMock.mockResolvedValue({ ok: false, status: null, body: null, cancelled: true });
+    const el = mount(
+      `<input type="number" data-ajax-cart-quantity-input="3" value="2">`,
+    ) as HTMLInputElement;
+    el.value = "5";
+    await commit(el);
+    expect(el.value).toBe("2");
+  });
+
   it("leaves a detached control alone when the request fails", async () => {
     changeMock.mockResolvedValue({ ok: false, status: null, body: null, cancelled: false });
     const el = mount(
@@ -376,9 +389,11 @@ function flush(): Promise<void> {
 }
 
 describe("resync after a failed request", () => {
-  function endRequest(ok: boolean, status: number | null): void {
+  function endRequest(ok: boolean, status: number | null, cancelled = false): void {
     document.dispatchEvent(
-      new CustomEvent(EVENTS.REQUEST_END, { detail: { result: { ok, status, body: null } } }),
+      new CustomEvent(EVENTS.REQUEST_END, {
+        detail: { result: { ok, status, body: null, cancelled } },
+      }),
     );
   }
 
@@ -432,6 +447,18 @@ describe("resync after a failed request", () => {
     endRequest(false, null);
     expect(focused.value).toBe("7"); // still being edited
     expect(other.value).toBe("5"); // resynced
+  });
+
+  // A cancelled request means a request-start listener vetoed it — the cart
+  // never moved, and nothing else is coming to reconcile the display.
+  it("resyncs on a cancelled request too, not only a failed one", () => {
+    const el = mount(
+      `<input type="number" data-ajax-cart-quantity-input="3" value="2">`,
+    ) as HTMLInputElement;
+    el.value = "9";
+
+    endRequest(false, null, true);
+    expect(el.value).toBe("2");
   });
 
   it("restores every marked control, not only the one that requested", () => {

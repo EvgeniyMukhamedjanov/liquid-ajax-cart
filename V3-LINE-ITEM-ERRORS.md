@@ -32,20 +32,14 @@ Either token alone is valid and matches only requests using that grammar. **An e
 ### Matching
 
 ```ts
-function slotsFor(identity: string): Element[] {
-  // `"".split(/s+/)` is `[""]`, not `[]` — without this an empty attribute
-  // would match an empty identity, breaking the inert-slot promise above.
-  if (identity === "") return [];
-
-  return [...document.querySelectorAll(ATTR_SELECTOR)].filter((el) =>
-    (el.getAttribute(ATTR) ?? "").split(/\s+/).includes(identity),
-  );
+function slotsFor(identity: string, root: ParentNode = document): Element[] {
+  return [...root.querySelectorAll(`[${ATTR}~="${CSS.escape(identity)}"]`)];
 }
 ```
 
-**The identity is never interpolated into a selector.** It comes from the request body, so a merchant's `change({ id: 'weird"value' })` would otherwise break the selector string and throw a `SyntaxError` out of the `REQUEST_END` handler. Matching by attribute presence and filtering in JS is injection-proof by construction and needs no escaping — which is why there is no escaping helper in this module. Slot count is one per cart line, so the filter is not a cost.
+Uses the CSS `~=` (whitespace-separated token list) operator directly — its semantics already match the markup contract: empty and whitespace-bearing values never match (`~=` never matches an empty attribute or a value containing whitespace), and NBSP is not a separator. No hand-written filter needed.
 
-The CSS `~=` operator has these exact semantics and was the original design. It was dropped because it requires escaping the interpolated value, and an escaping bug is a silent correctness hazard where a `.split()` cannot be one. `~=` remains a valid way for *merchants* to target slots in their own CSS; the token-list markup is unchanged either way.
+**`CSS.escape()` is required, not defensive.** The identity is interpolated into the selector string and comes from the request body, so a merchant's `change({ id: 'weird"value' })` would otherwise close the quote and throw a `SyntaxError` out of the `REQUEST_END` handler. An earlier draft of this design avoided the selector entirely (JS `.split()` + array filter, "injection-proof by construction, no escaping helper needed") specifically to dodge that hazard — superseded once `CSS.escape()` was confirmed to close it cleanly, at less code than a hand-rolled filter. `~=` remains a valid way for *merchants* to target slots in their own CSS; the token-list markup is unchanged either way.
 
 Rule: **senders carry one identifier, receivers accept a set.** `data-ajax-cart-quantity-input` stays single-valued because it must send one identity; the slot only receives.
 
@@ -216,7 +210,7 @@ The merchant writes every static attribute — `aria-live`, `aria-atomic`, `id`,
 </div>
 ```
 
-The slot must sit inside the fragment so it is regenerated on every render. Minimum markup is the slot alone. `demo/sections/my-cart.liquid:123` still carries v2's `data-ajax-cart-errors="{{ item.key }}"` and is the first migration target.
+The slot must sit inside the fragment so it is regenerated on every render. Minimum markup is the slot alone. `demo/sections/my-cart.liquid:123` carries `data-ajax-cart-item-error="{{ forloop.index }} {{ item.key }}"` — both identifiers, per the "write both" rule above.
 
 ## Dev warnings
 

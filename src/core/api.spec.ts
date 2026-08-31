@@ -419,6 +419,33 @@ test("cancelled separates a called-off request from a network failure", async ()
   expect({ ...networkFailure, cancelled: true }).toEqual(cancelled);
 });
 
+test("abort landing while response.json() is still reading is reported as cancelled, not a false success", async () => {
+  const callerController = new AbortController();
+  fetchMock.mockImplementation((_url, init: RequestInit) => {
+    const sig = init.signal as AbortSignal;
+    return Promise.resolve({
+      ok: true,
+      status: 200,
+      json: () =>
+        new Promise((_, reject) => {
+          const onAbort = () => reject(new DOMException("aborted", "AbortError"));
+          if (sig.aborted) onAbort();
+          else sig.addEventListener("abort", onAbort, { once: true });
+        }),
+    } as unknown as Response);
+  });
+
+  const promise = new CartApi().add({ id: 1 }, { signal: callerController.signal });
+  // Let fetch() resolve and response.json() start reading (and subscribe to the signal)
+  // before the abort lands.
+  await Promise.resolve();
+  await Promise.resolve();
+  callerController.abort("user");
+
+  const result = await promise;
+  expect(result).toEqual({ ok: false, status: null, body: null, cancelled: true });
+});
+
 // A timeout aborts the signal exactly like a cancellation does, so `signal.aborted`
 // alone cannot tell them apart — but a request that ran out of time IS a failure
 // the shopper should hear about. These two tests are what stop the flag drifting

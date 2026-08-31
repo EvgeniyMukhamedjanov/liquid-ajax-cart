@@ -130,8 +130,13 @@ export async function commit(control: HTMLInputElement): Promise<void> {
   });
 
   // Still connected means no render replaced this node — api.ts awaits the end
-  // hooks (including the sections render) before resolving. The only failure
-  // that leaves the node in place is one that rendered nothing.
+  // hooks (including the sections render) before resolving. The only outcome
+  // that leaves the node in place without a render is one where the server
+  // never saw the request — a genuine failure, or a `request-start` listener
+  // that vetoed it via `abort()`. Both are treated the same: a veto is not
+  // "another request will land and fix this" the way a superseding request
+  // would be — nothing lands, the cart is unchanged, and leaving the display
+  // showing the rejected value would be indistinguishable from success.
   if (!result.ok && control.isConnected) restore(control);
 }
 
@@ -265,7 +270,7 @@ export function applyBusyState(): void {
 
 /**
  * Puts every control back to the last quantity the server confirmed, after a
- * request that failed.
+ * request that did not update the cart.
  *
  * A commit made while the queue is busy is dropped rather than queued —
  * deliberately, because a request built from a `line` index and sent after
@@ -275,16 +280,26 @@ export function applyBusyState(): void {
  * without rendering when `status === null`. That leaves a quantity on screen
  * that the cart never received, with nothing scheduled to reconcile it.
  *
- * ONLY on failure. After a success the cart has moved and the `value` attribute
- * may be behind it — if that request rendered, the nodes were replaced and this
- * would be a no-op anyway; if it did not, restoring would repaint a correct
- * display with a stale attribute and *create* the divergence. A failure is
- * precisely the case where no render happened AND the attribute is still the
- * last confirmed truth.
+ * NEVER on success. After a success the cart has moved and the `value`
+ * attribute may be behind it — if that request rendered, the nodes were
+ * replaced and this would be a no-op anyway; if it did not, restoring would
+ * repaint a correct display with a stale attribute and *create* the
+ * divergence. A non-success is precisely the case where no render happened AND
+ * the attribute is still the last confirmed truth.
  *
  * This is v2's `processingHandler` (`_src-old/controls/quantity-input.ts:55-63`)
  * with the `value` attribute standing in for `getCartState()`. v2 could resync
  * unconditionally because it held the cart; reading a per-node attribute cannot.
+ *
+ * Runs on a cancelled request too, not only a failed one. `cancelled` exists so
+ * error-rendering modules can stay silent about a request nobody wants reported
+ * — it does not promise anything else will correct the display. The one caller
+ * of `abort()` this library exposes is a `request-start` listener, and the
+ * natural use of that hook is a merchant vetoing a request outright: the server
+ * never saw it, the cart did not move, and nothing else is coming to reconcile
+ * this control. Skipping the restore there would leave the field showing a
+ * value the cart rejected, indistinguishable from a value it accepted — worse
+ * than an ordinary failure, which does restore.
  */
 function restoreAfterFailure(event: WaitUntilEvent<RequestEndContext>): void {
   // Reached without a cast because core/events.d.ts maps this event name onto
