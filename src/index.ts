@@ -12,3 +12,4 @@ import "./quantity";
 // Position-independent: css-classes subscribes on the DOM event path, which
 // always runs after the internal listeners sections renders from.
 import "./css-classes";
+import "./remove";

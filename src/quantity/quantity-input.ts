@@ -1,4 +1,11 @@
-import { change, isProcessing, EVENTS, type WaitUntilEvent, type RequestEndContext } from "../core";
+import {
+  change,
+  isProcessing,
+  EVENTS,
+  parseIdentity,
+  type WaitUntilEvent,
+  type RequestEndContext,
+} from "../core";
 
 /**
  * The marker that binds a control to a cart line — and the definition of
@@ -11,18 +18,6 @@ import { change, isProcessing, EVENTS, type WaitUntilEvent, type RequestEndConte
  * a synthetic `change` event, not by calling each other.
  */
 export const ATTR = "data-ajax-cart-quantity-input";
-
-export type Identity = { key: "line" | "id"; value: string };
-
-// Shopify line indices are 1-based integers; item keys are always
-// `variantId:hash`. The two languages are disjoint, so the check is decidable —
-// unlike v2's `length > 3` heuristic, under which line="1000" became a key.
-export function parseIdentity(raw: string): Identity | null {
-  const value = raw.trim();
-  if (/^[1-9][0-9]*$/.test(value)) return { key: "line", value };
-  if (value.includes(":")) return { key: "id", value };
-  return null;
-}
 
 /**
  * Puts back the quantity the cart holds, as Liquid rendered it.

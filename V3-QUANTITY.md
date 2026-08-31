@@ -35,12 +35,14 @@ One import crosses, in one direction: the element takes the identity attribute's
 ### Identity
 
 ```
-^[1-9][0-9]*$   →  change.js  line=<n>
-contains ":"    →  change.js  id=<key>
-anything else   →  console error, no request
+[0-9]+, not all zero   →  change.js  line=<n>   (a leading zero is normalized away: "007" → line=7)
+contains ":"            →  change.js  id=<key>
+anything else           →  console error, no request
 ```
 
 Line indices and item keys (`variantId:hash`) are disjoint languages, so this is decidable — unlike v2's `length > 3` heuristic (`_src-old/controls/quantity-input.ts:100`), under which `line="1000"` became a key. An empty value falls into the error branch; no separate case.
+
+**A leading zero is accepted, not rejected** (revised after `V3-REMOVE.md` found Shopify's `cart/change.js` treats `line=01` the same as `line=1`): `parseIdentity` now lives in `src/core/identity.ts`, shared with `remove.ts`, and normalizes a leading zero away rather than erroring — rejecting it would be stricter than the server for no reason. `"0"`/`"00"` still fail; there is no line 0.
 
 `line` is the documented default (Horizon sends only `line`). `id` covers fragments rendering a *subset* of the cart, where `forloop.index` would address the wrong lines, and staleness, where a stale index silently hits the wrong item while a stale key fails harmlessly.
 

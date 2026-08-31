@@ -8,7 +8,7 @@ vi.mock("../core", async (importOriginal) => {
 });
 
 import { change, isProcessing, EVENTS } from "../core";
-import { parseIdentity, restore, commit, applyBusyState, initInputBinding } from "./quantity-input";
+import { restore, commit, applyBusyState, initInputBinding } from "./quantity-input";
 
 const changeMock = vi.mocked(change);
 const isProcessingMock = vi.mocked(isProcessing);
@@ -43,32 +43,6 @@ afterEach(() => {
   // would otherwise leave console.error spied and corrupt every test after it —
   // turning one real failure into a cascade of phantom ones.
   vi.restoreAllMocks();
-});
-
-describe("parseIdentity", () => {
-  it("reads a positive integer as a line index", () => {
-    expect(parseIdentity("3")).toEqual({ key: "line", value: "3" });
-    expect(parseIdentity("1000")).toEqual({ key: "line", value: "1000" });
-  });
-
-  it("reads a value containing a colon as an item key", () => {
-    expect(parseIdentity("39897499729974:d0e2a4")).toEqual({
-      key: "id",
-      value: "39897499729974:d0e2a4",
-    });
-  });
-
-  it("trims surrounding whitespace", () => {
-    expect(parseIdentity("  4  ")).toEqual({ key: "line", value: "4" });
-  });
-
-  it("rejects empty, zero, and anything else", () => {
-    expect(parseIdentity("")).toBeNull();
-    expect(parseIdentity("   ")).toBeNull();
-    expect(parseIdentity("0")).toBeNull();
-    expect(parseIdentity("-2")).toBeNull();
-    expect(parseIdentity("abc")).toBeNull();
-  });
 });
 
 describe("restore", () => {

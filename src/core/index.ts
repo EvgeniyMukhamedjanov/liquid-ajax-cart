@@ -8,3 +8,5 @@ export type {
   RequestStartContext,
   RequestEndContext,
 } from "./api";
+export { parseIdentity } from "./identity";
+export type { Identity } from "./identity";

@@ -110,7 +110,11 @@
                   {% endif %}
 
                   {% unless item.properties._autoadded == 'Yes' %}
-                    <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0" class="cart__remove">
+                    <a
+                      href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0"
+                      class="cart__remove"
+                      data-ajax-cart-remove="{{ forloop.index }}"
+                    >
                       <small>{{ 'cart.general.remove' | t }}</small>
                     </a>
                   {% endunless %}

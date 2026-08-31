@@ -133,10 +133,10 @@
         </strong> </div>
         <div>
           {% unless item.properties._autoadded == 'Yes' %}
-            <a 
-              href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" 
+            <a
+              href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
               class="ajax-cart__remove-button"
-              data-ajax-cart-request-button
+              data-ajax-cart-remove="{{ forloop.index }}"
             >
               <small>Remove</small>
             </a>
