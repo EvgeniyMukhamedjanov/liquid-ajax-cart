@@ -2,25 +2,23 @@
 
 Decided architecture for the core layer (`src/core/`). Covers the queue, task system, state, events, and public API — the foundation that all modules depend on.
 
-## 1. State from Section HTML
+## 1. No Core State Module — Read the Result You Already Have
 
-Cart state is no longer fetched from Cart API JSON responses. Instead, merchants embed state inside a `<script type="application/json" data-ajax-cart-state>` tag within a Shopify section. The core module finds this section on page load, remembers its section ID, and automatically includes it in every cart API request. After each response, core extracts fresh state from the returned section HTML.
+Cart state is not tracked, cached, or fetched by core. `add`, `change`, `update`, `clear`, and `get` all return `Promise<RequestResult>`, and `result.body` already **is** the full cart for every endpoint except `add.js` (Shopify's `add.js` response is only the added line item(s), not the cart). A `request-end` listener receives that same `result` in `detail`, whether or not it made the request itself.
 
-**Why**: Eliminates the extra request after `add.js` (which doesn't return full cart state in v2). Section HTML is rendered server-side after the cart operation completes, so the embedded state is always fresh.
+Code that needs the cart and has neither of those in hand — running at an arbitrary time, or right after an `add` — calls `get()` itself.
 
-**Replaces**: `data-ajax-cart-initial-state` from v2.
+**Replaces**: v2's `data-ajax-cart-initial-state`, and an earlier v3 plan considered here (state extracted from a `<script data-ajax-cart-state>` tag embedded in a section, auto-injected into every request).
 
-## 2. Liquid-Side Custom State
+**Why**: v2 sent an unconditional extra request after every `add.js` to recover full cart state, which slowed the library down. A cache built on top of `add`'s response would have to solve request-ordering races against the queue, coalescing concurrent readers, and staleness from cart mutations made outside this library (another tab, a third-party app) — for a saving that only matters when a caller has no result and no event `detail` to read from. Making `get()` the answer for that case means the extra request only happens when a caller explicitly opts into it, never implicitly inside the library.
 
-Since state lives in a Liquid-rendered `<script>` tag, merchants can include arbitrary computed properties alongside `cart`. For example, a gift product variant ID that depends on cart total, or a free shipping threshold remainder — all computed in Liquid rather than JavaScript.
+**Dropped along with this**: the "Liquid-side custom state" idea — merchant-computed properties (a gift variant ID, a free-shipping remainder) living beside `cart` in that same script tag. There's no state-extraction pass left for it to ride on. That kind of logic now falls to user JS reacting to `request-end`.
 
-**Why**: Moves business logic to Liquid where it naturally belongs (server-rendered, no JS needed). Partially replaces v2's JavaScript-based mutations module for many use cases. JS code can still react to custom state changes via events and trigger cart operations when needed.
-
-## 3. Simplified Request Queue
+## 2. Simplified Request Queue
 
 Flat queue instead of v2's 2D array structure. Runs async functions sequentially, one at a time. The queue itself has no knowledge of cart requests, signals, or priorities — it's a pure sequencing primitive. AbortSignal handling belongs in the request execution layer (passed to `fetch()`). Priority is unnecessary — direct methods inside `task()` / `detail.await()` bypass the queue entirely.
 
-## 4. Queue Timing: Promise + `task()` for Queue-Holding
+## 3. Queue Timing: Promise + `task()` for Queue-Holding
 
 Cart methods return Promises. Queue advances immediately after the Promise resolves.
 
@@ -40,7 +38,7 @@ Calling `liquidAjaxCart.add()` (queued methods) inside `task()` instead of `cart
 - **`toString()` warning**: on `task()` call, the callback source is checked for `liquidAjaxCart.add/change/update/clear/get` references and a console warning is logged if found.
 - **Timeout warning**: if a queued request hasn't started executing within a few seconds, a console warning suggests possible deadlock.
 
-## 5. Event System: Internal Async + Public DOM with `detail.await()`
+## 4. Event System: Internal Async + Public DOM with `detail.await()`
 
 **Two layers**, both async-capable, both run inside the task boundary so the queue blocks until all subscribers finish.
 
@@ -84,20 +82,20 @@ document.addEventListener('liquid-ajax-cart:request-end', (e) => {
 
 **Why not `liquidAjaxCart.on()`**: A dedicated subscription method would require the library to be loaded first. DOM events work immediately — user code can subscribe in a `<script>` tag before the library's `<script>` tag. No load-order dependency.
 
-## 6. Individual Cart API Methods
+## 5. Individual Cart API Methods
 
 Individual methods per Shopify Cart API endpoint: `liquidAjaxCart.get(options?)`, `.add(body, options?)`, `.change(body, options?)`, `.update(body, options?)`, `.clear(options?)`. No single generic `request()` method.
 
-## 7. Promise-Based Methods with Typed Bodies
+## 6. Promise-Based Methods with Typed Bodies
 
 All cart methods return `Promise<RequestResult>`. Typed request body per method (`AddBody`, `ChangeBody`, `UpdateBody`), `FormData`, or `URLSearchParams`. When `FormData`/`URLSearchParams` is passed, it's sent directly to `fetch()`. When a typed object is passed, it's JSON-stringified with `Content-Type: application/json`.
 
 Options: `{ signal?: AbortSignal, meta?: Record<string, unknown> }`.
 
-Result: `{ ok: boolean, status: number | null, body: object | null }`. Cart state is not in the result — accessible via `liquidAjaxCart.cart`/`liquidAjaxCart.state`, already updated when the Promise resolves.
+Result: `{ ok: boolean, status: number | null, body: object | null, cancelled: boolean }`. `body` **is** the cart for every endpoint except `add` — see §1. There is no separate `liquidAjaxCart.cart`/`.state` accessor.
 
 **Replaces** v2's `void` return, `firstCallback`/`lastCallback`, `important` flag, and `info.cancel`.
 
-## 8. Fully Independent Modules
+## 7. Fully Independent Modules
 
 All modules are completely decoupled. Each module depends only on core events and core's public getters — modules never import from each other. Users can import only the modules they need to minimize bundle size. Each module auto-initializes on import (side-effect import pattern).wi

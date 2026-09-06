@@ -86,9 +86,9 @@ Elements would also need `data-ajax-cart-item="{{ item.key }}"` to identify whic
 
 ### C. Mutations Module: Keep, Drop, or Replace?
 
-v2 has a mutations middleware system that can inject cart requests. v3's Liquid-side custom state partially replaces this. Should v3 keep a formal mutations/reactor module, or rely on user-written event listener code?
+v2 has a mutations middleware system that can inject cart requests. v3 has no state layer for it to build on (see `V3-CORE.md` §1) — the state-reactor idea floated alongside it (a declarative module watching custom state keys to auto-trigger cart actions) is dropped with it. Should v3 keep a formal mutations module, or rely on user-written event listener code reacting to `request-end`?
 
-A "State Reactor" concept was discussed — a declarative module that watches custom state keys and automatically triggers cart actions — but the current lean is to keep it as user JS for now and consider adding it later if demand warrants.
+Current lean: keep it as user JS for now, and consider a formal module later if demand warrants.
 
 ### D. Section Rendering API Endpoint Freshness
 
