@@ -96,7 +96,7 @@ On `REQUEST_START`, clear only the slots matching the identity being requested �
 
 1. string `body.description`
 2. string `body.message`
-3. fallback constant — `"We couldn't update your cart. Please try again."`
+3. fallback constant — `"Couldn't update cart. Try again."`
 
 Both rungs read strings only; a non-string falls through. Rendered **verbatim**, no filtering.
 

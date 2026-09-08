@@ -103,3 +103,9 @@ export function on<K extends keyof CartEventDetailMap>(
 ): void {
   emitter.on(event, fn);
 }
+
+// Shown when a failed request carries no usable error text of its own. Lives
+// here, not in either error module: product-form-errors.ts and
+// line-item-errors.ts never import each other, but both already depend on
+// core.
+export const FALLBACK_ERROR_TEXT = "Couldn't update cart. Try again.";

@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { clearErrors, renderErrors } from "./product-form-errors";
-import type { RequestResult } from "../core";
+import { FALLBACK_ERROR_TEXT, type RequestResult } from "../core";
 
 import missingEmail from "./fixtures/missing-email.json";
 import invalidEmail from "./fixtures/invalid-email.json";
@@ -13,8 +13,6 @@ import variantNotFound from "./fixtures/variant-not-found.json";
 import variantSoldOut from "./fixtures/variant-sold-out.json";
 import variantNotSent from "./fixtures/variant-not-sent.json";
 
-// Must match the FALLBACK_TEXT constant inside product-form-errors.ts.
-const FALLBACK_TEXT = "We couldn't update your cart. Please try again.";
 
 // ---- helpers ---------------------------------------------------------------
 
@@ -231,14 +229,14 @@ describe("renderErrors — synthetic precedence & fallback", () => {
   it("falls back to default text on a network failure (null body)", () => {
     const el = mount(`<div data-ajax-cart-product-form-error></div>`);
     renderErrors(el, { ok: false, status: null, body: null, cancelled: false });
-    expect(messages(errorSlot(el))).toEqual([FALLBACK_TEXT]);
+    expect(messages(errorSlot(el))).toEqual([FALLBACK_ERROR_TEXT]);
   });
 
   // Case 13
   it("falls back to default text on an empty body", () => {
     const el = mount(`<div data-ajax-cart-product-form-error></div>`);
     renderErrors(el, { ok: false, status: 500, body: {}, cancelled: false });
-    expect(messages(errorSlot(el))).toEqual([FALLBACK_TEXT]);
+    expect(messages(errorSlot(el))).toEqual([FALLBACK_ERROR_TEXT]);
   });
 
   it("uses string `errors` ahead of string `message`", () => {
@@ -502,7 +500,7 @@ describe("renderErrors / clearErrors — out-of-tree association", () => {
 // make the source unambiguous.
 //
 // Decided behaviour: an empty object ({}) is NOT usable — the chain falls
-// through to the next property, and to FALLBACK_TEXT if none remain.
+// through to the next property, and to FALLBACK_ERROR_TEXT if none remain.
 
 describe("renderErrors — precedence & shape matrix", () => {
   const E_OBJ = { email: ["E_obj"] };
@@ -541,8 +539,8 @@ describe("renderErrors — precedence & shape matrix", () => {
     { name: "rung3 — string errors only", body: { errors: E_STR }, catchAll: ["E_str"] },
     { name: "rung4 — string description only", body: { description: D_STR }, catchAll: ["D_str"] },
     { name: "rung5 — string message only", body: { message: M_STR }, catchAll: ["M_str"] },
-    { name: "rung6 — empty body falls back", body: {}, catchAll: [FALLBACK_TEXT] },
-    { name: "rung6 — null body falls back", body: null, catchAll: [FALLBACK_TEXT] },
+    { name: "rung6 — empty body falls back", body: {}, catchAll: [FALLBACK_ERROR_TEXT] },
+    { name: "rung6 — null body falls back", body: null, catchAll: [FALLBACK_ERROR_TEXT] },
 
     // B. pairwise precedence (distinct content; loser must be absent)
     {
@@ -611,7 +609,7 @@ describe("renderErrors — precedence & shape matrix", () => {
     {
       name: "empty {} errors and description falls back",
       body: { errors: {}, description: {} },
-      catchAll: [FALLBACK_TEXT],
+      catchAll: [FALLBACK_ERROR_TEXT],
     },
     {
       name: "empty {} errors lets object description win",
@@ -668,7 +666,7 @@ describe("renderErrors — result gating", () => {
   });
 
   // Without this gate a successful cart body walks the whole precedence chain —
-  // it carries no errors/description/message — and paints FALLBACK_TEXT after a
+  // it carries no errors/description/message — and paints FALLBACK_ERROR_TEXT after a
   // request that actually worked.
   it("renders nothing for a successful request", () => {
     const el = mount(`<div data-ajax-cart-product-form-error></div>`);
@@ -690,7 +688,7 @@ describe("renderErrors — result gating", () => {
     const el = mount(`<div data-ajax-cart-product-form-error></div>`);
     // AbortSignal.timeout() aborts the signal, but core reports cancelled:false.
     renderErrors(el, { ok: false, status: null, body: null, cancelled: false });
-    expect(messages(errorSlot(el))).toEqual([FALLBACK_TEXT]);
+    expect(messages(errorSlot(el))).toEqual([FALLBACK_ERROR_TEXT]);
   });
 });
 

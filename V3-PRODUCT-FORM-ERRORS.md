@@ -179,7 +179,7 @@ The library fully owns `aria-invalid` on marked inputs (see the a11y section), s
    - **String errors:** else if `result.body.errors` is a non-empty string, catch-all only.
    - **String description:** else if `result.body.description` is a non-empty string, catch-all only.
    - **String message:** else if `result.body.message` is a non-empty string, catch-all only. Note: Shopify's gift-card `message` field has an awkward field-name duplication (e.g., `"Validation failed: Email Email can't be blank"`); using it last keeps it as a true last-resort over the cleaner `errors` / `description` content.
-   - **No info:** hardcoded English default (`"We couldn't update your cart. Please try again."`). Catch-all only.
+   - **No info:** hardcoded English default (`"Couldn't update cart. Try again."`). Catch-all only.
 4. For object errors:
    - For each `(key, messages: string[])`:
      - **Slot rendering:** if `keyed.has(key)`, write `messages` into all matching slots via the shared `renderMessages` helper (see Render shape); otherwise push every entry of `messages` onto an `unmatched: string[]` accumulator. Keys themselves are not rendered — only the message texts.
@@ -265,14 +265,14 @@ src/product-form/
   index.ts                    ← unchanged
 ```
 
-`product-form-errors.ts` exports two functions and holds one internal constant:
+`product-form-errors.ts` exports two functions:
 
 ```ts
 export function clearErrors(element: HTMLElement): void
 export function renderErrors(element: HTMLElement, result: RequestResult): void
-
-const FALLBACK_TEXT = "We couldn't update your cart. Please try again.";
 ```
+
+The fallback text shown when a failed request carries no usable error text is `FALLBACK_ERROR_TEXT`, in `core/core.ts` — shared with `line-item-errors.ts` rather than a local constant. It lives in `core` rather than a settings module: a single knob doesn't justify one, and the modules that read it never import each other.
 
 No hardcoded Shopify-key → input-name map. The library routes purely by attribute value matching the response key. The set of known Shopify response keys lives in merchant-facing documentation, not in the library code — when Shopify ships new validated property fields, merchants can adopt them immediately without waiting for a library release.
 

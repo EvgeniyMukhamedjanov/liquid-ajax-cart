@@ -1,4 +1,15 @@
-export { task, add, change, update, clear, get, isProcessing, on, EVENTS } from "./core";
+export {
+  task,
+  add,
+  change,
+  update,
+  clear,
+  get,
+  isProcessing,
+  on,
+  EVENTS,
+  FALLBACK_ERROR_TEXT,
+} from "./core";
 export { WaitUntilEvent } from "./emitter";
 export type {
   RequestBody,

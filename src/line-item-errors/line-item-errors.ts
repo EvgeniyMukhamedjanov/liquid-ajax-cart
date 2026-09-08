@@ -1,12 +1,13 @@
-import type { RequestBody, RequestResult, RequestStartContext, RequestEndContext } from "../core";
+import {
+  FALLBACK_ERROR_TEXT,
+  type RequestBody,
+  type RequestResult,
+  type RequestStartContext,
+  type RequestEndContext,
+} from "../core";
 
 const ATTR = "data-ajax-cart-item-error";
 const SELECTOR = `[${ATTR}]`;
-
-// Shown when a failed request carries no usable error text. Duplicated from
-// product-form-errors.ts rather than shared: modules never import each other.
-// When a settings module exists, both become defaults reading one override.
-const FALLBACK_TEXT = "We couldn't update your cart. Please try again.";
 
 /**
  * The identifier the request addressed the line by — `line` index or `id` key,
@@ -79,7 +80,7 @@ function asText(value: unknown): string | null {
  */
 export function errorTextFrom(result: RequestResult): string {
   const body = result.body;
-  return asText(body?.description) ?? asText(body?.message) ?? FALLBACK_TEXT;
+  return asText(body?.description) ?? asText(body?.message) ?? FALLBACK_ERROR_TEXT;
 }
 
 export function handleRequestStart(detail: RequestStartContext): void {

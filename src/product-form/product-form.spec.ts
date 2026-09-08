@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 
 // Stub the core module so submissions are observable without hitting fetch/the queue.
-vi.mock("../core", () => ({
-  add: vi.fn(),
-}));
+vi.mock("../core", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../core")>();
+  return { ...actual, add: vi.fn() };
+});
 
 import type { RequestResult } from "../core";
 import { add } from "../core";

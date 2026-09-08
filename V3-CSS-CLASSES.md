@@ -215,5 +215,5 @@ Two stale v2 hooks were found in that stylesheet. `.js-ajax-cart-processing` (3 
 - **Optimistic UI for an `add` of a variant not in the cart.** No element exists to class; belongs to the template-based optimistic UI (`V3-ARCHITECTURE.md:19`).
 - **Removal animations longer than the request.** The row is destroyed by the re-render before any DOM listener runs. `waitUntil` does not fix this — it delays the queue advancing, not the render, and runs after it. Do not reach for it.
 - **Queued-but-not-in-flight lines.** `queue.ts:1-5` holds opaque `fn`s with no identity; exposing them is a core change.
-- **Class-name overrides.** Settings module, alongside the fallback text `line-item-errors.ts:9` anticipates.
+- **Class-name overrides.** No settings module exists or is planned for one knob; if this is ever wanted, revisit then.
 - **`aria-busy`.** Merchant-written; a live region must exist at page load and fragments re-render on every mutation.

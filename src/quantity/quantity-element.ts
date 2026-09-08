@@ -37,8 +37,7 @@ const MINUS = "data-ajax-cart-quantity-minus";
 const REMOVE_AT_MIN = "remove-at-min";
 // Not configurable per element: debounce length only governs how long the user
 // waits after their LAST click before the request fires — rapid clicking is
-// coalesced regardless — so it is a store-wide preference at most. If one is
-// ever wanted, it belongs in the settings module, not on every stepper.
+// coalesced regardless — so it is a store-wide preference at most.
 const DEBOUNCE_MS = 300;
 
 /** Reads a numeric attribute for button state only; never for a request. */

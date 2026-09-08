@@ -6,9 +6,13 @@ import {
   handleRequestStart,
   handleRequestEnd,
 } from "./line-item-errors";
-import type { RequestResult, RequestStartContext, RequestEndContext } from "../core";
+import {
+  FALLBACK_ERROR_TEXT,
+  type RequestResult,
+  type RequestStartContext,
+  type RequestEndContext,
+} from "../core";
 
-const FALLBACK = "We couldn't update your cart. Please try again.";
 const ATTR = "data-ajax-cart-item-error";
 
 let mounted: HTMLElement[] = [];
@@ -267,12 +271,12 @@ describe("errorTextFrom", () => {
   });
 
   it("falls through empty strings rather than blanking the slot", () => {
-    expect(errorTextFrom(result({ body: { description: "", message: "" } }))).toBe(FALLBACK);
+    expect(errorTextFrom(result({ body: { description: "", message: "" } }))).toBe(FALLBACK_ERROR_TEXT);
     expect(errorTextFrom(result({ body: { description: "", message: "used" } }))).toBe("used");
   });
 
   it("falls through non-string values", () => {
-    expect(errorTextFrom(result({ body: { description: { email: ["nope"] } } }))).toBe(FALLBACK);
+    expect(errorTextFrom(result({ body: { description: { email: ["nope"] } } }))).toBe(FALLBACK_ERROR_TEXT);
     expect(errorTextFrom(result({ body: { description: 42, message: "used" } }))).toBe("used");
   });
 
@@ -280,11 +284,11 @@ describe("errorTextFrom", () => {
     expect(errorTextFrom(result({ body: { errors: "ignored", description: "used" } }))).toBe(
       "used",
     );
-    expect(errorTextFrom(result({ body: { errors: "ignored" } }))).toBe(FALLBACK);
+    expect(errorTextFrom(result({ body: { errors: "ignored" } }))).toBe(FALLBACK_ERROR_TEXT);
   });
 
   it("uses the fallback for a null body", () => {
-    expect(errorTextFrom(result({ body: null, status: null }))).toBe(FALLBACK);
+    expect(errorTextFrom(result({ body: null, status: null }))).toBe(FALLBACK_ERROR_TEXT);
   });
 });
 
@@ -378,7 +382,7 @@ describe("handleRequestEnd", () => {
         result: result({ status: null, body: null, cancelled: false }),
       }),
     );
-    expect(root.firstElementChild!.textContent).toBe(FALLBACK);
+    expect(root.firstElementChild!.textContent).toBe(FALLBACK_ERROR_TEXT);
   });
 
   it("stays silent on a cancelled request", () => {

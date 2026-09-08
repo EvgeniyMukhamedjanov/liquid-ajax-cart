@@ -1,8 +1,4 @@
-import type { RequestResult } from "../core";
-
-// Default shown when a failed request carries no usable error text.
-// When a settings source exists, this becomes the fallback default.
-const FALLBACK_TEXT = "We couldn't update your cart. Please try again.";
+import { FALLBACK_ERROR_TEXT, type RequestResult } from "../core";
 
 const SLOT_ATTR = "data-ajax-cart-product-form-error";
 const SLOT_FOR_ATTR = "data-ajax-cart-product-form-error-for";
@@ -155,7 +151,7 @@ export function renderErrors(element: HTMLElement, result: RequestResult): void 
     asStringSource(body?.errors) ??
     asStringSource(body?.description) ??
     asStringSource(body?.message) ??
-    FALLBACK_TEXT;
+    FALLBACK_ERROR_TEXT;
 
   catchAll.forEach((slot) => renderMessages(slot, [text]));
 }
